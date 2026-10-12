@@ -51,3 +51,8 @@ if (process.argv[1] && process.argv[1].endsWith('index.js')) {
 // export default باش يخدم مع require و import
 export default { getDialect, getAllDialects, dialects }
 export const kab = getDialect('kab')
+export const dz = getDialect('dz')
+export const tn = getDialect('tn-latn')
+export const dzLatn = getDialect('dz-latn')
+export const ma = getDialect('mr')
+export const ly = getDialect('ly')
