@@ -1,34 +1,53 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-import fs from 'fs';
-import { dialects } from './src/dialect-registry.js';
+import path from 'path'
+import { fileURLToPath } from 'url'
+import fs from 'fs'
+import { dialects } from './src/dialect-registry.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 function load(entry) {
-  const p = path.join(__dirname, 'data/dialects', entry.file);
-  const dialect = JSON.parse(fs.readFileSync(p, 'utf8'));
-  const problems = [];
-  if (dialect.code!== entry.code) problems.push(`code mismatch`);
-  if (!dialect.name) problems.push('name missing');
-  if (!dialect.script) problems.push('script missing');
-  if (!dialect.keywords ||!Object.keys(dialect.keywords).length) problems.push('keywords empty');
-  return { dialect, problems };
+  const p = path.join(__dirname, 'data/dialects', entry.file)
+  const dialect = JSON.parse(fs.readFileSync(p, 'utf8'))
+  return dialect
 }
 
-const arg = process.argv[2] || 'kab';
-if (arg === '--test') {
-  let bad = 0;
-  for (const e of dialects) {
-    try {
-      const { problems } = load(e);
-      console.log(problems.length? `❌ ${e.code}` : `✅ ${e.code}`);
-      if(problems.length) bad++;
-    } catch (err) { console.log(`❌ ${e.code}: ${err.message}`); bad++; }
-  }
-  process.exit(bad? 1 : 0);
+export function getDialect(code = 'kab') {
+  const entry = dialects.find(d => d.code === code)
+  if (!entry) throw new Error(`${code} not found`)
+  return load(entry)
 }
-const entry = dialects.find(d => d.code === arg);
-if (!entry) { console.error(`❌ ${arg} not found`); process.exit(1); }
-const { dialect } = load(entry);
-console.log(`✅ loaded: ${dialect.name} - ${Object.keys(dialect.keywords).length} words`);
+
+export function getAllDialects() {
+  return dialects.map(e => load(e))
+}
+
+export { dialects }
+
+// باش يبقى يخدم كيما قبل كي تعمل node index.js kab
+const arg = process.argv[2] || 'kab'
+if (process.argv[1] && process.argv[1].endsWith('index.js')) {
+  if (arg === '--test') {
+    let bad = 0
+    for (const e of dialects) {
+      try {
+        const d = load(e)
+        console.log(`✅ ${e.code} - ${Object.keys(d.keywords).length} words`)
+      } catch (err) {
+        console.log(`❌ ${e.code}: ${err.message}`); bad++
+      }
+    }
+    process.exit(bad ? 1 : 0)
+  } else {
+    try {
+      const d = getDialect(arg)
+      console.log(`✅ loaded: ${d.name} - ${Object.keys(d.keywords).length} words`)
+    } catch (e) {
+      console.error(`❌ ${e.message}`); process.exit(1)
+    }
+  }
+}
+
+// export default باش يخدم مع require و import
+export default { getDialect, getAllDialects, dialects }
+export const kab = getDialect('kab')

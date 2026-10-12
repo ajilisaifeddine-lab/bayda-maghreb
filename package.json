@@ -1,6 +1,6 @@
 {
   "name": "bayda-maghreb",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Bayda Maghreb - Tunisian, Algerian, Moroccan, Libyan, Mauritanian Arabic and Franco transliteration",
   "type": "module",
   "main": "index.js",
@@ -18,3 +18,4 @@
     "test": "node index.js --test"
   }
 }
+
