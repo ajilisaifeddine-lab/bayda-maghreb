@@ -1,0 +1,174 @@
+mkdir -p lahjat/dzair
+cat > lahjat/dzair/dzair1.bayda << 'EOF'
+If / Else - إذا / إلا / لوكان ماشي
+While - طول ما / مادام / كي راهو
+Break - حبّس / قطّع / بركا
+Continue - فوّت / كمّل / جوز
+Variable - حاجة تتبدل / متغيّرة
+Constant - حاجة ثابتة / ما تتبدلش
+Array / List - ليستا / طابلة / قائمة
+Null / Empty - فارغة / ما كاين والو / خاوية
+Clear / Delete - فاصي / نحّي / مسح
+Function / Method - خدمة / فونكسيون / صنيعة
+Run / Execute - خدّم / شغّل / نوّض
+Print - ورّي / طبّع / أفيشي
+Save / Commit - خبّي / سجّل / حافظ
+Debug - حوّس على الباغ / فركت / نقّب
+Error / Bug - غلطة / باغ / زلة / تخلاط
+Crash - طاحت / تبلوكات / تفركتت
+Success - مشات مليح / صلحت / تريڨلات
+Class - قالب / كلاس / مودال
+Object - نسخة / كعبة / أوبجكت
+Inheritance - وراثة / يورث
+Garbage Collector - لمّام / ينقّي الزبل
+API / Endpoint - باب / مدخل / نقطة
+Request - طلب / بعث / سقسي
+Response - جواب / رد
+Timeout - فات الوقت / طولت
+Server - سيرفور / خدام كبير
+Asynchronous - كل واحد وحدو / ما يستناش
+Deploy - طلّعها لايف / نشر
+Backup - نسخة احتياط / كوپي / دوبل
+Update / Upgrade - ميزاجور / جدّد / حسّن
+Merge - لصّق / خلّط / جمّع
+Push - دزّ / دفع / سيّب
+Pull - جبّد / أجبد
+Infinite Loop - بوكلة ما تحبسش / دور بلا حبس
+Loading / Spinner - راهي تشرجي / استنى شوية
+Authorized - عندو الحق / مسموح
+Blocked / Banned - مبلوكي / مسكّر عليه
+Progress Bar - بار تتعمر / خطوة بخطوة
+Spinner / Loader - دوّارة تدور
+Freeze / Not Responding - تبلوكات / جمّدت / حبست
+Delay / Sleep - استنى شوية / رقّدها
+Encryption - تشفير / تغمّ / شفرة
+Password - كلمة سر / موتپاس
+Hacker - هاكر / سرّاق
+Token - تيكي / جيتون / ورقة
+Database - قاعدة بيانات / خزنة
+Query - سقسي / حوّس / لوّج
+Index - دليل / فهرس
+Primary Key - مفتاح رئيسي / كلي أساسية
+Refactoring - نظّم / رتّب الكود / عاود صايغ
+Framework - هيكل / فريم وورك
+Open Source - مفتوح / محلول للجميع
+Localhost - عندي / لوكال / في الميكرو تاعي
+Cloud - سحابة / كلاود / الفوق
+IP Address - عنوان آي بي / نميرو
+Port - باب / پور
+Bandwidth - دéبي / سرعة الكونيكسيون
+Branch - فرع / برونش
+Clone - كوپي / نسخة / كلوني
+Staging Area - بلاصة التحضير / ستاجينغ
+Conflict - تعاركو / تضاربو / كونفلي
+Rollback - رجّع اللور / روّل باك
+Responsive Design - يتبدل حسب الإكران / ريسبونسيف
+Dark Mode - مود نوي / مظلم / كحل
+Button - بطونة / بوتون
+Padding - حشوة / فراغ لداخل
+Margin - فراغ لبرا / هامش
+Recursion - تعيّط لروحها / روكيرسيون
+Boolean - صح ولا غلط / بوليون
+Sort - رتّب / صافي / تري
+Filter - غرّبل / صفّي / فلتري
+Bug tracking - تبّع الباغ / تتبع الأخطاء
+Linting - نقي / نظّف الشوائب
+Deprecation - ما بقاش صالح / قديم / طاح وقتو
+Production - برودكسيون / لايف / خدامة حية
+Hotfix - رقعة سخونة / فيكس تم تم
+Overloading - معمّر بزاف / شارشي
+Mocking - تمثيل / فايك / موك
+State Management - تحكم في الحالة / جيسيون دي تا
+Event listener - يسمع الحدث / يستنى في الحركة
+Payload - حمولة / شحنة
+Routing - توجيه / روتاج
+Session - جلسة / سيسيون
+Cookies - كوكيز / فتات
+Cache - كاش / مخبأ مؤقت
+Load balancer - يفرّق الخدمة / لود بالانسور
+Proxy - وسيط / بروكسي
+Firewall - حيط ناري / فايرول
+DNS - دليل العناوين / DNS
+Authentication - شكون أنت / تأكد من الهوية
+Authorization - عندك الإذن / أوتوريزاسيون
+Brute force - بالسيف / بالقوة / فورصاج
+Phishing - صيد / فيشينغ / تصياد
+Encryption key - مفتاح تشفير / كلي
+Decryption - فك التشفير / حل الشفرة
+Sanitization - تنظيف / نقي المدخلات
+Injection - زرّق / حقن / دخل كود
+Environment - بيئة / بلاصة / اونفيرونمون
+Build - ابني / جمّع / بيلد
+Migration - نقلة / ترحيل / ميغراسيون
+Seed - زرّيعة / بذرة / سيد
+Trigger - مفجّر / تريڤر / زناد
+Concurrency - خدمة مع بعض / كونكيرونسي
+Thread - خيط / تريـد / فرع خدمة
+Deadlock - تبلوكاو مع بعض / ديدلوك
+Race condition - سباق / شكون يوصل اللول
+Queue - طابور / فيل / صف
+Stack - كومة / پيل / ستاك
+Heap - كومة كبيرة / هيب / عرام
+Pointer - مؤشر / يشير / پوانتور
+Array index - رقم الخانة / انديكس
+String - سلسلة حروف / شين / كلمة طويلة
+Integer - رقم صحيح / عدد صحيح
+Float - رقم بفاصلة / فلوت
+Null pointer - مؤشر فارغ / پوانتور خاوي
+Compiler - مترجم / كومبيلاتور
+Interpreter - مفسر فوري / انتارپريتور
+Binary - ثنائي / باينار / زيرو و واحد
+Hexadecimal - ستاشي / إكسا
+Script - سكريبت / ورقة أوامر
+Cron job - خدمة بالوقت / كرون
+Webhook - تنبيه فوري / ويب هوك
+Scalability - يكبر / قابل للتوسع / سكالابل
+Latency - تأخير / لاتونس / روتار
+Throughput - إنتاجية / دéبي / شحال يخرّج
+Uptime - وقت الخدمة / أپتايم / شحال خدام
+Downtime - وقت الطيحة / داون تايم / پان
+Logs - سجل / لوج / جورنال
+Telemetry - تتبع عن بعد / تيليمتري
+Monitoring - مراقبة / مونيتورينغ / عسّة
+Dashboard - لوحة تحكم / داشبورد / طابلو
+Plugin - إضافة / پلاغين
+Extension - توسيعة / إكستونسيون
+Library - مكتبة / ليبراري
+Dependency - معتمد عليه / ديپوندونسي
+Package - باكو / پاكاج / رزمة
+Repository - مستودع / ريپو / دépو
+Fork - فرّع / فورك / نسخ و بدّل
+Pull request - طلب دمج / پول ريكواست / PR
+Code review - مراجعة كود / روفي / فحص
+Continuous Integration - تجميع مستمر / CI
+Continuous Deployment - نشر مستمر / CD
+Beta Version - نسخة تجريبية / بيتا
+Legacy code - كود قديم / ليڨاسي / كلاه الدهر
+Spaghetti code - كود مخربط / سباڤيتي / معجّن
+Technical debt - دين تقني / كريدي تكنيك
+For Loop - حلقة فور / بوكلة فور / لوپ فور
+Do / Do-While - دير و من بعد شوف / دو وايل
+Switch / Case - حسب الحالة / سويتش كاز
+Return - رجّع / روتور / عاود
+Comment - تعليق / فسّر / كومونتار
+Input / Read - دخّل / اقرا / واش كاين
+Operator - علامة حساب / أوبيراتور
+Data Type - نوع البيانات / نوع الحاجة
+Char - حرف واحد / كاراكتار
+Syntax - كتابة الكود / سينتاكس / كيفاش تكتب
+Algorithm - خريطة طريق / ألغوريتم / خوارزمية
+Parameter / Argument - واش جبت معاك / پاراميتر
+Interface - واجهة / كونترا / انتارفيس
+Encapsulation - لمو و كمّو / انكابسيلاسيون / سكّر عليه
+Polymorphism - يتشكل / بولي مورفيزم / يتبدل
+Constructor - بنّاي / كونستريكتور / فاتح الدار
+Public / Private / Protected - برا / داخل / للعايلة برك / پابليك پرايفي
+Scope - وين يوصل صوتو / سكوپ / حدودو
+Try / Catch / Exception - جرّب / إذا شدت / إكسيپسيون / طيحة
+Callback - عيّطلي من بعد / كولباك / ناديني
+Promise - وعد / كلمة / پروميس / نرجعلك
+JSON - جيسون / علبة مرتبة
+GET / POST / PUT / DELETE - جيب / دز / بدّل / فاصي
+Regex - غربال متقدم / ريڤاكس / فلتر قوي
+Unit Test - جرّب حاجة وحدة / تيست وحدو
+EOF
