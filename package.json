@@ -1,1 +1,20 @@
-{"type":"module","scripts":{"test":"node index.js --test"}}
+{
+  "name": "bayda-maghreb",
+  "version": "1.0.1",
+  "description": "Bayda Maghreb - Tunisian, Algerian, Moroccan, Libyan, Mauritanian Arabic and Franco transliteration",
+  "type": "module",
+  "main": "index.js",
+  "keywords": [
+    "arabic",
+    "darija",
+    "tunisian",
+    "maghreb",
+    "transliteration",
+    "franco"
+  ],
+  "author": "ajilis",
+  "license": "MIT",
+  "scripts": {
+    "test": "node index.js --test"
+  }
+}
