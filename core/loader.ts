@@ -1,0 +1,1 @@
+import fs from 'fs'; import path from 'path'; export function loadDialect(name:string){const p=path.join(process.cwd(),'data','dialects',`${name}.json`);if(fs.existsSync(p))return JSON.parse(fs.readFileSync(p,'utf-8'));return null;}
