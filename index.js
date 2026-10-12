@@ -29,7 +29,6 @@ export const kabLatn = getDialect('kab-lat')
 export const dz = getDialect('dz')
 export const dzLatn = getDialect('dz-latn')
 export const tnLatn = getDialect('tn-latn')
-export const ma = getDialect('mr')
 export const ly = getDialect('ly')
 export default { getDialect, getAllDialects, dialects, kab, dz, ly, }
 
