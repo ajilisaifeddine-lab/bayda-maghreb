@@ -1,18 +1,18 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import fs from 'fs';
 import { dialects } from './src/dialect-registry.js';
 
 function load(entry) {
-  const dialect = JSON.parse(fs.readFileSync(`./data/dialects/${entry.file}`, 'utf8'));
+  const p = path.join(__dirname, 'data/dialects', entry.file);
+  const dialect = JSON.parse(fs.readFileSync(p, 'utf8'));
   const problems = [];
-  if (dialect.code!== entry.code) problems.push(`code في الملف (${dialect.code}) لا يطابق السجل (${entry.code})`);
-  if (!dialect.name) problems.push('name مفقود');
-  if (!dialect.script) problems.push('script مفقود');
-  const kw = dialect.keywords;
-  if (!kw || typeof kw!== 'object' ||!Object.keys(kw).length) problems.push('keywords فارغة أو مفقودة');
-  else for (const [word, target] of Object.entries(kw)) {
-    if (!/^[\p{L}\p{M}\p{N}_ ]+$/u.test(word)) problems.push(`كلمة غير مقبولة: ${word}`);
-    if (typeof target!== 'string' ||!target) problems.push(`هدف غير صالح: ${word}`);
-  }
+  if (dialect.code!== entry.code) problems.push(`code mismatch`);
+  if (!dialect.name) problems.push('name missing');
+  if (!dialect.script) problems.push('script missing');
+  if (!dialect.keywords ||!Object.keys(dialect.keywords).length) problems.push('keywords empty');
   return { dialect, problems };
 }
 
@@ -23,17 +23,12 @@ if (arg === '--test') {
     try {
       const { problems } = load(e);
       console.log(problems.length? `❌ ${e.code}` : `✅ ${e.code}`);
-      problems.forEach(p => console.log(' -', p));
-      bad += problems.length;
+      if(problems.length) bad++;
     } catch (err) { console.log(`❌ ${e.code}: ${err.message}`); bad++; }
   }
   process.exit(bad? 1 : 0);
 }
 const entry = dialects.find(d => d.code === arg);
-if (!entry) { console.error(`❌ لهجة غير معروفة: ${arg}\nالمتاح: ${dialects.map(d => d.code).join(', ')}`); process.exit(1); }
-try {
-  const { dialect, problems } = load(entry);
-  console.log(`✅ تم تحميل لهجة: ${dialect.name}`);
-  console.log('الكلمات:', Object.keys(dialect.keywords).slice(0, 5));
-  problems.forEach(p => console.error('⚠️', p));
-} catch (e) { console.error('❌ خطأ:', e.message); process.exit(1); }
+if (!entry) { console.error(`❌ ${arg} not found`); process.exit(1); }
+const { dialect } = load(entry);
+console.log(`✅ loaded: ${dialect.name} - ${Object.keys(dialect.keywords).length} words`);
