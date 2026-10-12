@@ -31,8 +31,6 @@ export const dzLatn = getDialect('dz-latn')
 export const tnLatn = getDialect('tn-latn')
 export const ma = getDialect('mr')
 export const ly = getDialect('ly')
-export const tif = getDialect('tif')
-
 export default { getDialect, getAllDialects, dialects, kab, dz, ly, ma, tif }
 
 const arg = process.argv[2] || 'kab'
