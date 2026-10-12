@@ -1,12 +1,11 @@
 {
   "name": "bayda-maghreb",
-  "version": "1.1.0",
-  "description": "Bayda Maghreb - Tunisian, Algerian, Kabyle, Libyan",
+  "version": "1.1.1",
+  "description": "Bayda Maghreb - 6 dialects clean",
   "type": "module",
   "main": "index.js",
   "bin": { "bayda-maghreb": "index.js" },
   "keywords": ["arabic","darija","kabyle"],
   "author": "ajilis",
-  "license": "MIT",
-  "scripts": { "test": "node index.js --test" }
+  "license": "MIT"
 }

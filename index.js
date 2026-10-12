@@ -31,7 +31,7 @@ export const dzLatn = getDialect('dz-latn')
 export const tnLatn = getDialect('tn-latn')
 export const ma = getDialect('mr')
 export const ly = getDialect('ly')
-export default { getDialect, getAllDialects, dialects, kab, dz, ly, ma, tif }
+export default { getDialect, getAllDialects, dialects, kab, dz, ly, }
 
 const arg = process.argv[2] || 'kab'
 if (process.argv[1] && process.argv[1].endsWith('index.js')) {
