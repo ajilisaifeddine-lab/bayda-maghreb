@@ -1,0 +1,173 @@
+cat > lahjat/tounsi/tounsi.franko.bayda << 'EOF'
+If / Else - ken / ken le / sinon / ken la
+While - toul ma / ma dem
+Break - 9oss / o9ef / a9ta3
+Continue - 3addi / fout / dipassi
+Variable - 7aja tetbadel / chagleba
+Constant - 7aja fixe ma tetbadelch / msmar f 7it
+Array / List - lista / tabla
+Null / Empty - fergha / ma famma chay / fer8a / ba77
+Clear / Delete - fassa5 / na7i / emsa7 / emsah / nahi
+Function / Method - fonction / 5edma
+Run / Execute - 5addem / ye5dm / ya5dm  
+Print - wari / afficher / 4awini / dhawini 
+Save / Commit - sajjel / 5abbi
+Debug - farkes / lawej 3al bug / ejbed l3za 
+Error / Bug - ghalta / bug / 8alta
+Crash - crashet / ta7et / lbess
+Success - mchet mrigla / mna4ma /  mrigel / chay kbir / malla jaw
+Class - classe / 9aleb
+Object - objet / nos5a
+Inheritance - wiratha / ywereth
+Garbage Collector - bribech
+API / Endpoint - biben 
+Request - talba / ab3ath
+Response - jweb / réponse
+Timeout - fet l wa9t wfa akaho 
+Server - serveur
+Asynchronous - kol wa7ed wa7dou / chakanet 
+Deploy - habet live
+Backup - copie / backup
+Update / Upgrade - mise à jour
+Merge - la77em /  5allet
+Push - dezz
+Pull - ejbed
+Infinite Loop - boucla infinie
+Loading / Spinner - tchargi / loading
+Authorized - 3andou l 7a9
+Blocked / Banned - mbloki / mkattef
+Progress Bar - barre te3abba
+Spinner / Loader - dawwara tdour
+Freeze / Not Responding - bloka / jmed / ybess
+Delay / Sleep - osbor chwaya
+Encryption - cryptage / mchafra
+Password - mot de passe
+Hacker - hacker
+Token - token / ticket
+Database - base de données
+Query - requête / lawej
+Index - index
+Primary Key - clé primaire
+Refactoring - refactorer
+Framework - framework
+Open Source - open source
+Localhost - local / 3andi
+Cloud - cloud
+IP Address - adresse IP
+Port - port
+Bandwidth - débit
+Branch - branche / far3a
+Clone - cloner / nos5a
+Staging Area - staging
+Conflict - conflit / t5al9ou
+Rollback - raja3 l teli
+Responsive Design - responsive
+Dark Mode - mode sombre / d7is / dhlem
+Button - bouton / battouna
+Padding - padding / faragh da5lani
+Margin - margin / faragh barra
+Recursion - récursivité / t3ayet l rou7ha
+Boolean - booléen / s7i7 walla ghalet
+Sort - trier / rtab
+Filter - filtrer / gharbel
+Bug tracking - suivi bugs
+Linting - nettoyage
+Deprecation - deprecated
+Production - prod / live
+Hotfix - hotfix
+Overloading - surcharge
+Mocking - mock / fake
+State Management - gestion d'état
+Event listener - yasma3 l event
+Payload - payload / 7moula
+Routing - routage
+Session - session
+Cookies - cookies
+Cache - cache
+Load balancer - load balancer
+Proxy - proxy
+Firewall - firewall / 7it
+DNS - DNS
+Authentication - authentification / chkounek
+Authorization - autorisation / 3andou l 7a9
+Brute force - brute force
+Phishing - phishing
+Encryption key - clé
+Decryption - déchiffrer
+Sanitization - nettoyage
+Injection - injection
+Environment - env / blasa
+Build - build / ibni
+Migration - migration
+Seed - seed / zri3a
+Trigger - trigger
+Concurrency - concurrence / za7ma
+Thread - thread / 5it
+Deadlock - deadlock / tbloqua
+Race condition - race / sba9
+Queue - queue / tabour
+Stack - stack / tas
+Heap - heap / kouma
+Pointer - pointeur
+Array index - index / ra9m
+String - chaine / string
+Integer - entier / s7i7
+Float - float / b virgule
+Null pointer - pointeur vide
+Compiler - compilateur
+Interpreter - interpréteur
+Binary - binaire / 0 w 1
+Hexadecimal - hexa
+Script - script
+Cron job - cron / tache
+Webhook - webhook
+Scalability - scalable
+Latency - latence / retard
+Throughput - débit
+Uptime - uptime
+Downtime - downtime / panne
+Logs - logs / journal
+Telemetry - télémétrie
+Monitoring - monitoring
+Dashboard - dashboard
+Plugin - plugin
+Extension - extension
+Library - bibliothèque / maktba
+Dependency - dépendance
+Package - package
+Repository - repo
+Fork - fork / farra3
+Pull request - PR / pull request
+Code review - code review
+Continuous Integration - CI
+Continuous Deployment - CD
+Beta Version - beta
+Legacy code - code 9dim
+Spaghetti code - code m3ajjen
+Technical debt - dette technique
+For Loop - for / lawza
+Do / Do-While - do while / a3mel w chouf
+Switch / Case - switch / ken jet hekka
+Return - return / rajja3
+Comment - commentaire / fasser
+Input / Read - input / da5el
+Operator - opérateur
+Data Type - type
+Char - caractère / 7arf
+Syntax - syntaxe
+Algorithm - algorithme / algo
+Parameter / Argument - paramètre / argument
+Interface - interface
+Encapsulation - encapsulation / sakkar 3liha
+Polymorphism - polymorphisme / ytchakkel
+Constructor - constructeur / bannay
+Public / Private / Protected - public / privé / protégé
+Scope - scope / portée
+Try / Catch / Exception - try catch / jarreb
+Callback - callback / 3ayetli ba3d
+Promise - promise / wa3d
+JSON - JSON
+GET / POST / PUT / DELETE - GET POST PUT DELETE / jib dezz badel fassa5
+Regex - regex / ghorbel
+Unit Test - test unitaire / test
+EOF
