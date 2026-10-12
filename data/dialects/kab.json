@@ -1,1 +1,10 @@
-{"code":"kab","name":"Kabyle","script":"Latin","keywords":{"if":"ma"}}
+{
+  "name": "kab",
+  "keywords": {
+    "ila": "if",
+    "awla": "else"
+  },
+  "symbols": {},
+  "code": "kab",
+  "script": "Latin"
+}

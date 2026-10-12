@@ -1,1 +1,17 @@
-{"code":"tif","name":"Tifinagh","script":"Tifinagh","keywords":{"if":"test"}}
+{
+  "name": "tifinagh",
+  "keywords": {
+    "ila": "if",
+    "awla": "else",
+    "wila": "elif",
+    "hata": "while",
+    "dir": "do",
+    "safi": "end",
+    "ktab": "print",
+    "jib": "input",
+    "khrej": "return"
+  },
+  "symbols": {},
+  "code": "tif",
+  "script": "Tifinagh"
+}

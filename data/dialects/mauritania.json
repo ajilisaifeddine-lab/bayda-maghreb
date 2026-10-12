@@ -1,1 +1,17 @@
-{"code":"mr","name":"Mauritania","script":"Arabic","keywords":{"if":"ida"}}
+{
+  "name": "mauritania",
+  "keywords": {
+    "ila": "if",
+    "awla": "else",
+    "wila": "elif",
+    "hata": "while",
+    "dir": "do",
+    "safi": "end",
+    "ktab": "print",
+    "jib": "input",
+    "khrej": "return"
+  },
+  "symbols": {},
+  "code": "mr",
+  "script": "Arabic"
+}
