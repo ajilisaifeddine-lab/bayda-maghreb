@@ -1,7 +1,7 @@
 {
   "name": "bayda-maghreb",
-  "version": "1.0.7",
-  "description": "Bayda Maghreb - Tunisian, Algerian, Kabyle, Libyan, Mauritanian Arabic and Franco transliteration",
+  "version": "1.0.8",
+  "description": "Bayda Maghreb - Tunisian, Algerian, Kabyle, Libyan Arabic and Franco transliteration",
   "type": "module",
   "main": "index.js",
   "bin": {
@@ -9,7 +9,7 @@
   },
   "keywords": [
     "arabic",
-    "darijo",
+    "darija",
     "tunisian",
     "maghreb",
     "transliteration",
