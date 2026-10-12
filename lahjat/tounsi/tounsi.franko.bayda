@@ -1,173 +1,203 @@
 cat > lahjat/tounsi/tounsi.franko.bayda << 'EOF'
-If / Else - ken / ken le / sinon / ken la
-While - toul ma / ma dem
-Break - 9oss / o9ef / a9ta3
-Continue - 3addi / fout / dipassi
-Variable - 7aja tetbadel / chagleba
-Constant - 7aja fixe ma tetbadelch / msmar f 7it
-Array / List - lista / tabla
-Null / Empty - fergha / ma famma chay / fer8a / ba77
-Clear / Delete - fassa5 / na7i / emsa7 / emsah / nahi
-Function / Method - fonction / 5edma
-Run / Execute - 5addem / ye5dm / ya5dm  
-Print - wari / afficher / 4awini / dhawini 
-Save / Commit - sajjel / 5abbi
-Debug - farkes / lawej 3al bug / ejbed l3za 
-Error / Bug - ghalta / bug / 8alta
-Crash - crashet / ta7et / lbess
-Success - mchet mrigla / mna4ma /  mrigel / chay kbir / malla jaw
-Class - classe / 9aleb
-Object - objet / nos5a
-Inheritance - wiratha / ywereth
-Garbage Collector - bribech
-API / Endpoint - biben 
-Request - talba / ab3ath
-Response - jweb / réponse
-Timeout - fet l wa9t wfa akaho 
-Server - serveur
-Asynchronous - kol wa7ed wa7dou / chakanet 
-Deploy - habet live
-Backup - copie / backup
-Update / Upgrade - mise à jour
-Merge - la77em /  5allet
-Push - dezz
-Pull - ejbed
-Infinite Loop - boucla infinie
-Loading / Spinner - tchargi / loading
-Authorized - 3andou l 7a9
-Blocked / Banned - mbloki / mkattef
-Progress Bar - barre te3abba
-Spinner / Loader - dawwara tdour
-Freeze / Not Responding - bloka / jmed / ybess
-Delay / Sleep - osbor chwaya
-Encryption - cryptage / mchafra
-Password - mot de passe
-Hacker - hacker
-Token - token / ticket
-Database - base de données
-Query - requête / lawej
-Index - index
-Primary Key - clé primaire
-Refactoring - refactorer
-Framework - framework
-Open Source - open source
-Localhost - local / 3andi
-Cloud - cloud
-IP Address - adresse IP
-Port - port
-Bandwidth - débit
-Branch - branche / far3a
-Clone - cloner / nos5a
-Staging Area - staging
-Conflict - conflit / t5al9ou
-Rollback - raja3 l teli
-Responsive Design - responsive
-Dark Mode - mode sombre / d7is / dhlem
-Button - bouton / battouna
-Padding - padding / faragh da5lani
-Margin - margin / faragh barra
-Recursion - récursivité / t3ayet l rou7ha
-Boolean - booléen / s7i7 walla ghalet
-Sort - trier / rtab
-Filter - filtrer / gharbel
-Bug tracking - suivi bugs
-Linting - nettoyage
-Deprecation - deprecated
-Production - prod / live
-Hotfix - hotfix
-Overloading - surcharge
-Mocking - mock / fake
-State Management - gestion d'état
-Event listener - yasma3 l event
-Payload - payload / 7moula
-Routing - routage
-Session - session
-Cookies - cookies
-Cache - cache
-Load balancer - load balancer
-Proxy - proxy
-Firewall - firewall / 7it
-DNS - DNS
-Authentication - authentification / chkounek
-Authorization - autorisation / 3andou l 7a9
-Brute force - brute force
-Phishing - phishing
-Encryption key - clé
-Decryption - déchiffrer
-Sanitization - nettoyage
-Injection - injection
-Environment - env / blasa
-Build - build / ibni
-Migration - migration
-Seed - seed / zri3a
-Trigger - trigger
-Concurrency - concurrence / za7ma
-Thread - thread / 5it
-Deadlock - deadlock / tbloqua
-Race condition - race / sba9
-Queue - queue / tabour
-Stack - stack / tas
-Heap - heap / kouma
-Pointer - pointeur
-Array index - index / ra9m
-String - chaine / string
-Integer - entier / s7i7
-Float - float / b virgule
-Null pointer - pointeur vide
-Compiler - compilateur
-Interpreter - interpréteur
+3aslema = slem - ahla
+slem / aslema = Hello
+chbik = chnoua bik - chfama?
+labes = cv - mrigel - lebes 3lik?
+bahi = behi - mli7 - cava
+barcha = yesser - barcha barcha
+chwaya = shwiya - titfa - chwaya bark
+yezzi = kahaw - fih lbarka - yezziw - sayeb
+taw = tawwa - tawa
+houni = hne - houni
+ghadi = l ghadi - ghadi
+win = winik - fin
+wa9tech = wa9tach - wa9tch
+kifech = kifach - kifeh
+3lech = alech - 3leh
+chnoua = chnowa - chnouwa
+9adech = gedech - 9adech men
+chkoun = chkounou - chkoun enti
+m3ak = m3ak - m3aya
+ijja = ija - arwah - hayya
+o9o3d = e93ed - o93od - rivez
+imchi = bara - 9oum - emchi
+chbih = chbih - chnoua fih
+fama = famachi - fama haja
+ma famach = ma famach chay - feragh
+akha = akhaw - kahaw - c bon - w barra
+hayya = yalla - hayya bina
+sahha = saha - ya3tik saha
+aychek / 3aychek = merci - rabbi yfadhlek
+samahni = excuse - désolé
+belek = peut etre - belekchi
+zama = zama? - s7i7?
+walah = wallah - wlh
+belha9 = bsara7a - sérieux
+fisa3 = vite - fisa3 fisa3 - azreb
+b chwaya = doucement - b chwaya b chwaya
+taw taw = tout de suite - tawa tawa
+If / Else - ken / ila / ken mech / sinon
+While - toul ma / madem / wa9telli mazel
+Break - 9os / habbes / gta3 / yezzi
+Continue - kamel / fout / 3addi / jouz
+Variable - variable / haja tetbadel / var
+Constant - constante / ma tetbadelch / thenya
+Array / List - lista / tableau / 9offa / liste
+Null / Empty - feragh / ma famach / vide / khawya
+Clear / Delete - fassakh / nahi / imsa7 / fassakhha
+Function / Method - fonction / khadma / 5edma / san3a
+Run / Execute - 5adem / chaghal / 5arejha / runi
+Print - warri / afficher / talel / ech3el
+Save / Commit - sajel / khabbi / 7ott / save
+Debug - lawej 3al bug / farkes / debugi / 7awes
+Error / Bug - bug / ghalta / trabka / fasda
+Crash - tahit / tblockat / tfar9et / plantet
+Success - mchet mrigla / sal7et / c bon / rigkeit
+Class - classe / 9aleb / moula / model
+Object - objet / ka3ba / haja / instance
+Inheritance - wirtha / ywarreth - men bouh
+API / Endpoint - beb / madkhal / endpoint / bouchon
+Request - demande / talab / sa9si / request
+Response - réponse / jaweb / radd
+Timeout - fet wa9t / tawlet / timeout
+Server - serveur / khadem kbir / serveur
+Deploy - tala3ha live / deploi / 5arejha prod
+Backup - copie / backup / nos5a o5ra
+Update / Upgrade - mise a jour / jadded / update
+Merge - lasa9 / khallet / jama3 / merge
+Push - dez / sayeb / pousi / edfe3
+Pull - ejbed / jib / pulli
+Loading - tchargi / stanna / loading / osbor
+Authorized - 3andou l7a9 / autorisé / mrigel
+Blocked - mblocki / bloqué / msakker
+Freeze - tblockat / jmedet / freezat / we7let
+Password - mot de passe / code / kelmet sir
+Database - base / 9a3da / khazna / db
+Query - requete / lawej / sa9si
+Index - index / dalil / numero
+Branch - branche / far3 / tri9
+Clone - clone / copie / photocopie
+Conflict - conflit / t3arkou / tdarbou
+Rollback - rajja3 loura / rollback / rja3
+Button - bouton / battona / fassa
+Recursion - recursion / t3ayet l rou7ha
+Boolean - boolean / s7i7 walla ghalet / vrai faux
+Sort - tri / rateb / sayer
+Filter - filtre / gharbel / saffi
+Bug tracking - suivi bug / taba3 bug
+Production - prod / live / production
+Hotfix - hotfix / ro9o3 s5ouna / fis3a
+Thread - thread / 5it / tri9
+Queue - file / tabour / sfa
+Stack - pile / kouma / fou9 ba3dhou
+String - chaine / kelma twila / string
+Integer - int / ra9m s7i7
+Compiler - compilateur / motarjem
 Binary - binaire / 0 w 1
-Hexadecimal - hexa
-Script - script
-Cron job - cron / tache
-Webhook - webhook
-Scalability - scalable
-Latency - latence / retard
-Throughput - débit
-Uptime - uptime
-Downtime - downtime / panne
-Logs - logs / journal
-Telemetry - télémétrie
-Monitoring - monitoring
-Dashboard - dashboard
-Plugin - plugin
-Extension - extension
-Library - bibliothèque / maktba
-Dependency - dépendance
-Package - package
-Repository - repo
-Fork - fork / farra3
-Pull request - PR / pull request
-Code review - code review
-Continuous Integration - CI
-Continuous Deployment - CD
-Beta Version - beta
-Legacy code - code 9dim
-Spaghetti code - code m3ajjen
-Technical debt - dette technique
-For Loop - for / lawza
-Do / Do-While - do while / a3mel w chouf
-Switch / Case - switch / ken jet hekka
-Return - return / rajja3
-Comment - commentaire / fasser
-Input / Read - input / da5el
-Operator - opérateur
-Data Type - type
-Char - caractère / 7arf
-Syntax - syntaxe
-Algorithm - algorithme / algo
-Parameter / Argument - paramètre / argument
-Interface - interface
-Encapsulation - encapsulation / sakkar 3liha
-Polymorphism - polymorphisme / ytchakkel
-Constructor - constructeur / bannay
-Public / Private / Protected - public / privé / protégé
-Scope - scope / portée
-Try / Catch / Exception - try catch / jarreb
-Callback - callback / 3ayetli ba3d
-Promise - promise / wa3d
-JSON - JSON
-GET / POST / PUT / DELETE - GET POST PUT DELETE / jib dezz badel fassa5
-Regex - regex / ghorbel
-Unit Test - test unitaire / test
+Script - script / war9a
+Scalability - scalable / yekber / yitwasa3
+Logs - log / sijel / journal
+Dashboard - dashboard / tableau / law7a
+Library - librairie / maktba / biblio
+Repository - repo / ma5zen / depot
+Pull request - PR / talab damj / pull request
+Code review - revi / chouf code / review
+Legacy code - code 9dim / legacy / 9dim barcha
+Spaghetti code - code m5alwat / spaghetti / mla5bat
+For Loop - boucle for / for / dour
+Return - return / rajja3 / radd
+Comment - commentaire / ta3li9 / faser
+Input - input / da5el / a3ti
+Algorithm - algo / 5arita / tri9 / GPS
+Interface - interface / wejha
+Polymorphism - polymorphisme / yetchakkal
+Constructor - constructeur / bannay / yebni
+Public / Private - public privé / barra dakhel
+Try / Catch - try catch / jarreb ken cheddet
+Callback - callback / 3ayetli mba3ed
+Promise - promise / wa3d / kelma
+JSON - JSON / 3alba / sandou9
+GET / POST - GET POST / jib dez
+Regex - regex / ghorbal 9wi
+Unit Test - test / test wa7dou / jarreb haja bark
+Like - j'aime / 3ejbetni / like
+Comment - commentaire / ta3li9 / komenti
+Share / Partage - partage / partagi / barteji
+Story - story / 7keya / storyet
+Reel - reel / video 9sira / reel
+Live - live / direct / live
+Follower - follower / ytabba3 fik / abonné
+Following - abonnement / taba3 fih
+Hashtag - hashtag / # / tag
+Trending - tendance / tale3 / trending
+Viral - viral / dayer / mche barcha
+Post - post / publication / habet post
+Feed - feed / fil d'actualité / fil
+DM / Message privé - MP / message privé / prv
+Notification - notif / notification / tanbih
+Tag - tagi / tag / 3allem
+Mention - mention / jbed / mentioni
+Block - blocki / block / bloqué
+Unfollow - unfollow / nahi abonnement
+Spam - spam / tfoul / pub barcha
+Bug / Glitch - bug / glitch / trabka
+Update app - mise a jour / update / jadded app
+Download - telecharger / habet / download
+Upload - uploader / tala3 / uploadi
+Link - lien / lien / lien
+WiFi - wifi / wifi
+Password WiFi - code wifi / mot de passe wifi
+Connexion - connexion / cnx / internet
+Offline - offline / ma famaech cnx / 9as
+Online - online / connecté / en ligne
+Screenshot - capture / screenshot / taswira ecran
+Video call - appel video / video call
+Group - groupe / groupe / jma3a
+Admin - admin / admin / m3allem groupe
+AI / Artificial Intelligence - AI / dhke istina3i / intello
+Machine Learning - machine learning / ta3allom automatique / l machine tet3allem
+Deep Learning - deep learning / ta3allom 3ami9 / ghare9
+Prompt - prompt / chnoua t9ollou lil AI / sou2al lil AI / prompt
+Chatbot - chatbot / robot yahki / bot yjawbek
+LLM / Large Language Model - LLM / model kbir / model yahki barcha / moukha kbir
+Training / Train model - entrainement / tadrib / 3allem l model / dresser
+Dataset - dataset / base mta3 ma3loumet / data / ma3loumet
+Token - token / kelma / 9at3a / jeton
+Embedding - embedding / tarjma l ar9am / vector
+Hallucination - hallucination / yahlem / yahki feragh / y5aref / yebda3 men rassou
+Fine-tuning - fine-tuning / tahsin / s9alha / 3awed 3allemha
+Inference - inference / ijaba / l model yjawbek / execution
+Model - model / moukha / model AI
+Neural Network - réseau neuronal / chabka 3asabia / réseau / 5yout
+Parameter - paramètre / parametre / 3adad / var mta3 model
+Bias - bias / mayel / moch neutre / y7eb jiha
+Overfitting - overfitting / 7fadh bla fehm / 9ra b zeyed
+API AI - API AI / beb mta3 AI / clé AI
+OpenAI / ChatGPT - ChatGPT / chat / gpt / l robot mta3 openai
+Generative AI - generative / y5alla9 / ysawer / generative AI
+Image Generation - generation image / taswira bil AI / yrasem bil AI / y5arej taswira
+Voice / Speech to Text - sot lil kteb / yasma3 w yekteb / transcription
+Text to Speech - kteb lil sot / yekteb w yahki / y9ari kteb
+RAG - RAG / ylawej w ba3ed yjawbek / recherche + réponse
+Vector DB - base vecteur / khazna mta3 ar9am / vector db
+Dossier - dossier / wri9a / fichier
+Reunion - reunion / jtima3 / réunion
+Projet - projet / projet / 5edma kbira
+Deadline - deadline / e5er ajal / wa9t le5er
+Budget - budget / flous / mizania
+Client - client / client / 7rif
+Facture - facture / fatoura / 7sab
+Signature - signature / sahha / signa
+Cachet - cachet / tab3a / 5atem
+Demande - demande / talab / wri9a
+Attestation - attestation / chhada / war9a tochhed
+Congé - congé / conge / 3otla
+Télétravail - teletravail / 5edma men dar / remote
+Freelance - freelance / 5adem hor / free
+Contrat - contrat / 3a9d / contrat
+Salaire - salaire / chahria / flous
+Augmentation - augmentation / zeyada / tal3a
+Démission - démission / 5rouj / btalt
+Stage - stage / stage / tadrib
+CV - CV / CV / awra9ek
 EOF
