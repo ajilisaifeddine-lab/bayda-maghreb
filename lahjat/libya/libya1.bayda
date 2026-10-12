@@ -1,1 +1,172 @@
 لوّح في الشاشة "ألو ليبيا 230 🇱🇾"
+If / Else - كان طارت / وإلاّ
+While - طول ما هي او طالما
+Break - فرينو او قص عليها
+Continue - فوتها أو خطّم
+Variable - حاجة وتخلاص
+Constant - مسمار في حيط
+Array / List - سلاّط أو ستيكة
+Null / Empty - مفلس أو مفيش صبع
+Clear / Delete - امسح الحكاكة أو قربع
+Function / Method - الصنعة
+Run / Execute - ولّع أو اضغط الزر
+Print - لوّح في الشاشة أو ورّينا
+Save / Commit - أقفل عليها أو دسّها
+Debug - نبّش أو دور السريب
+Error / Bug - عكّة أو السيستم خش في حيط
+Crash - طاح السيرفر أو تفشفش
+Success - تمت بجودة أو أمورها لوز
+Class - الفورمة أو الفصّالة
+Object - النسخة أو الفرخ
+Inheritance - طالع لبوة أو مورّث
+Garbage Collector - الكنّاس أو لمّام الفضلة
+API / Endpoint - الروشن
+Request - نخس أو دزّلي
+Response - رجعلي الجواب
+Timeout - فات الميعاد أو ملّينا
+Server - الحوش الكبير أو الرأس الكبيرة
+Asynchronous - كل حد برأسه
+Deploy - أطلق في السوق أو طلعها للضوء
+Backup - الضمّان أو الخزين
+Update / Upgrade - نفّض غباره أو ديرله لقطة جديدة
+Merge - خلّطهم أو صُبّ الحمول على بعضها
+Push - دفّ الكود
+Pull - اجبده
+Infinite Loop - ساقية تدور أو متاهة غرقنا فيها
+Loading / Spinner - راجي شوية أو يبرم
+Authorized - عنده الضي الأخضر
+Blocked / Banned - صكّروا عليه السكة
+Progress Bar - المسطرة تعبّي أو خط الخطوات
+Spinner / Loader - الدوارة، العجلة تبرم، أو يخض في اللبن
+Freeze / Not Responding - كَبَّش، حَصَل، أو الكمبيوتر جمّد
+Delay / Sleep - خود نَفَس أو ارقد شوية
+Encryption - تغميق السريب أو حطّه في قزّير
+Password - الكلمة السرانية أو الشفرة
+Hacker - السرّاق أو مخربش السيستم
+Token - التذكرة أو الورقة
+Database - الخزينة أو الدفتر الكبير
+Query - نبش في الدفاتر أو دورلي على
+Index - العلامات أو رأس الخيط
+Primary Key - البصمة
+Refactoring - ماكياج للكود أو تعديل وتستيف
+Framework - الساس أو الركيزة
+Open Source - سبيل أو متاح للجميع
+Localhost - في جهازي أو عندي هنا
+Cloud - فوق أو سيرفرات برّة
+IP Address - رقم العنوان أو عنوان الجهاز
+Port - المدخل أو الباب
+Bandwidth - وسع الخط أو سعة الشبكة
+Branch - فرع أو تفريعة
+Clone - اسحب نسخة أو نزّله عندي
+Staging Area - على جنب أو مرحلة التجهيز
+Conflict - تداخل أو خشت بعضها
+Rollback - ارجع للتالي أو ردّه زي ما كان
+Responsive Design - يمشي مع كل شاشة أو يتشكل حسب الجهاز
+Dark Mode - الوضع المعتم أو الخلفية الكحلة
+Button - الكبسة أو القرصة
+Padding - الحاشية أو الفراغ الداخلي
+Margin - البعد أو الفراغ الخارجي
+Recursion - تنادي روحها أو تكرار ذاتي
+Boolean - صح وإلا خطأ أو إي وإلا لا
+Sort - ستّف أو فرّز
+Filter - صفّي أو عزّل
+Bug tracking - تتبع الجرة
+Linting - تصفية الشوائب
+Deprecation - صلاحيتها تمت
+Production - الخدمة الحية
+Hotfix - رقعة سريعة
+Overloading - تحميل زايد
+Mocking - تمثيل وتجريب
+State Management - ضبط الحال
+Event listener - عاس على الحركة
+Payload - الحِمْل
+Routing - توجيه السكة
+Session - الجلسة
+Cookies - الفتافيت
+Cache - المخبأ المؤقت
+Load balancer - موزع الجهد
+Proxy - الوسيط
+Firewall - حيط الصد
+DNS - دليل العناوين
+Authentication - التثبت من الهوية
+Authorization - إذن الصلاحية
+Brute force - خبط عمياني
+Phishing - اصطياد الصيد
+Encryption key - مفتاح القفل
+Decryption - فتح الرموز
+Sanitization - تنظيف المدخلات
+Injection - زرق كود
+Environment - المتجر والوسط
+Build - جهّز للخدمة
+Migration - رحيل البيانات
+Seed - تعبئة مبدئية
+Trigger - لقطة البداية
+Concurrency - زحمة في وقت واحد
+Thread - عرق الخدمة
+Deadlock - التسكيرة الميتة
+Race condition - سباق الخطوات
+Queue - الطابور
+Stack - المكدس
+Heap - الكومة
+Pointer - المؤشر
+Array index - رقم الخانة
+String - سلسلة الحروف
+Integer - الرقم الصحيح
+Float - الرقم المكسور
+Null pointer - مؤشر الفراغ
+Compiler - المترجم
+Interpreter - المفسر الفوري
+Binary - ثنائي الأرقام
+Hexadecimal - نظام الستة عشر
+Script - شريط الأوامر
+Cron job - موعد وتوقيت
+Webhook - إشعار فوري
+Scalability - قدرة التوسع
+Latency - التعطيل
+Throughput - الإنتاجية
+Uptime - وقت النشاط
+Downtime - وقت الطيحة
+Logs - مسجل الأحداث
+Telemetry - تتبع عن بعد
+Monitoring - مراقبة الوضع
+Dashboard - لوحة التحكم
+Plugin - الإضافة
+Extension - التوسعة
+Library - المكتبة
+Dependency - المعتمد عليه
+Package - الصرة
+Repository - المستودع
+Fork - تفريع المشروع
+Pull request - طلب دمج
+Code review - فحص الشفرة
+Continuous Integration - تجميع مستمر
+Continuous Deployment - تجهيز مستمر
+Beta Version - نسخة تجريبية
+Legacy code - كود قديم
+Spaghetti code - كود مخبل
+Technical debt - سلف تقني
+For Loop - لفة / برمة عد
+Do / Do-While - دير وبعدين شوف / دير طول ما
+Switch / Case - حوّل / كان جت هكي
+Return - رد / رجّع
+Comment - فسّر / دوّة عالجنب
+Input / Read - دخّل / شن عندك
+Operator - علامة الحساب
+Data Type - نوع الحاجة
+Char - حرف واحد
+Syntax - رصفة الكود / سبك الدوّة
+Algorithm - خريطة الطريق
+Parameter / Argument - اللي جايبه معاك
+Interface - عقد / واجهة الحوش
+Encapsulation - لفها وكمّها
+Polymorphism - يتشكل / يلبس أشكال
+Constructor - البنّاي / فاتح الحوش
+Public / Private / Protected - برا للحوش / جوا الحوش / للعيلة بس
+Scope - وين يوصل صوته
+Try / Catch / Exception - جرّب / كان شدت فيك / الطيحة
+Callback - ناديني بعدين
+Promise - كلمة / وعد
+JSON - صندوقة مرتّبة
+GET / POST / PUT / DELETE - جيب / دز / غيّر / لوّح
+Regex - المنقاش / غربال الدوّة
+Unit Test - جرّب حاجة بروحها
