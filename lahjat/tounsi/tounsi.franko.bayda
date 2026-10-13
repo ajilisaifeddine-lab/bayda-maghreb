@@ -1,4 +1,3 @@
-cat > lahjat/tounsi/tounsi.franko.bayda << 'EOF'
 3aslema = slem - ahla
 slem / aslema = Hello
 chbik = chnoua bik - chfama?
@@ -200,4 +199,3 @@ Augmentation - augmentation / zeyada / tal3a
 Démission - démission / 5rouj / btalt
 Stage - stage / stage / tadrib
 CV - CV / CV / awra9ek
-EOF

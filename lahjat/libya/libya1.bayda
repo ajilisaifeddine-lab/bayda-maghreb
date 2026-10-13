@@ -170,7 +170,6 @@ JSON - صندوقة مرتّبة
 GET / POST / PUT / DELETE - جيب / دز / غيّر / لوّح
 Regex - المنقاش / غربال الدوّة
 Unit Test - جرّب حاجة بروحها
-cat > lahjat/libya/libya1.bayda << 'EOF'
 لباس = لاباس عليك؟ | كيف حالك
 شن الجو = شن الجو توا؟ | what's up
 كويس = مية مية | good
