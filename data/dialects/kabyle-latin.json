@@ -1,11 +1,11 @@
 {
-  "code": "kab",
+  "code": "kab-lat",
   "name": "Kabyle",
   "keywords": {
     "ila": "if",
     "ma_yella": "if",
     "awla": "else",
-    "neɣ": "else",
+    "neɣ": "or",
     "ma_ulac": "else",
     "ma_yella_ur": "else if",
     "i": "for",
@@ -21,7 +21,7 @@
     "rra_d": "return",
     "tidet": "true",
     "tikerkas": "false",
-    "ulac": "null",
+    "ulac": "empty",
     "ulac_akra": "null",
     "sider": "import",
     "sufɣ": "export",
@@ -58,16 +58,14 @@
     "awal": "log",
     "seqdec": "sort",
     "beddel": "replace",
-    "ferren": "split",
+    "ferren": "parse",
     "seddukel": "join",
     "semsawi": "equal",
     "ameqqran": "greater",
     "ameẓyan": "less",
     "amar": "and",
-    "neɣ": "or",
     "ur": "not",
     "yella": "exists",
-    "ulac": "empty",
     "seg": "from",
     "ɣer": "to",
     "di": "in",
@@ -106,7 +104,6 @@
     "ini": "say",
     "steqsi": "prompt",
     "wali": "check",
-    "ferren": "parse",
     "suɣel": "stringify"
   }
 }

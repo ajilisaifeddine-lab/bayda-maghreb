@@ -3,7 +3,6 @@ const {execSync}=require('child_process');
 const files=[
   'data/dialects/algeria.json',
   'data/dialects/algeria_franco.json',
-  'data/dialects/kab.json',
   'data/dialects/kabyle.json',
   'data/dialects/kabyle-latin.json',
   'data/dialects/libya.json',

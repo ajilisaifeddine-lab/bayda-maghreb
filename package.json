@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "audit": "node audit.cjs"
   },
   "repository": {
     "type": "git",
@@ -32,7 +33,7 @@
   "files": [
     "index.js",
     "src",
-    "dialects",
-    "lahjat"
+    "lahjat",
+    "data"
   ]
 }

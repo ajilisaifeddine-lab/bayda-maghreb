@@ -34,7 +34,7 @@ export const ma = getDialect("mauritania")
 export default { getDialect, getAllDialects, dialects, kab, dz, ly, ma, kabLatn, dzLatn, tnLatn }
 
 const arg = process.argv[2] || "kab"
-if (process.argv[1] && process.argv[1].endsWith("index.js")) {
+if ((()=>{try{return fs.realpathSync(process.argv[1])===fs.realpathSync(__filename)}catch{return false}})()) {
   if (arg === "--test") {
     let bad = 0
     for (const e of dialects) {

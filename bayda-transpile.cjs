@@ -1,37 +1,27 @@
 const fs=require('fs');
-function cleanLayers(file){
-  const j=JSON.parse(fs.readFileSync(file,'utf8'));
-  for(const k of ['core','library','dictionary']){
-    if(!j[k]) continue;
-    for(const js in j[k]){
-      j[k][js]=j[k][js].map(w=>w.replace(/[!،.]+$/g,'').trim()).filter(Boolean);
-    }
+const _cache=new Map();
+const _esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const _skip=/("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|`(?:\\.|[^`\\])*`|\/\/[^\n]*|\/\*[\s\S]*?\*\/)/;
+function _load(file){
+  const key=file+':'+fs.statSync(file).mtimeMs;
+  if(_cache.has(key)) return _cache.get(key);
+  const data=JSON.parse(fs.readFileSync(file,'utf8'));
+  const map=new Map();
+  for(const k of ['core','library']){
+    const sec=data[k];
+    if(!sec) continue;
+    for(const js in sec) for(const w of sec[js]) if(w&&w.length>1&&!map.has(w)) map.set(w,js);
   }
-  fs.writeFileSync(file, JSON.stringify(j,null,2),'utf8');
+  if(!map.size) throw new Error('no core/library words in '+file);
+  const alt=[...map.keys()].sort((a,b)=>b.length-a.length).map(_esc).join('|');
+  const re=new RegExp('(?<![\\p{L}\\p{N}_])('+alt+')(?![\\p{L}\\p{N}_])','gu');
+  const r={map,re};
+  _cache.set(key,r);
+  return r;
 }
-["dz.layers.json","kab.layers.json"].forEach(cleanLayers);
-
-function transpile(code, file){
-  const {core,library}=JSON.parse(fs.readFileSync(file,'utf8'));
-  let out=' '+code+' '; // مسافات للحدود
-  const all=[];
-  for(const [js,words] of Object.entries(core))
-    for(const w of words) if(w.length>1) all.push([w,js,'core']);
-  for(const [js,words] of Object.entries(library))
-    for(const w of words) if(w.length>1) all.push([w,js,'lib']);
-  // الأطول أولا باش "لوكان" قبل "كان"
-  all.sort((a,b)=>b[0].length-a[0].length);
-
-  for(const [w,js,type] of all){
-    if(type==='core'){
-      const re=new RegExp('(^|\\s|\\{|\\}|\\(|\\))'+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?=\\s|\\{|\\}|\\(|\\))','g');
-      out=out.replace(re, (m,p1)=>p1+js);
-    } else {
-      out=out.replaceAll('.'+w, '.'+js);
-    }
-  }
-  return out.trim();
+function transpile(code,file){
+  const {map,re}=_load(file);
+  return String(code).split(_skip).map((p,i)=>i%2?p:p.replace(re,m=>map.get(m))).join('').trim();
 }
-
-console.log("DZ:", transpile("ايلا x دور list { list.دفع 1 }", "dz.layers.json"));
-console.log("KAB:", transpile("ila x af list { list.arnu 1 }", "kab.layers.json"));
+module.exports=transpile;
+module.exports.transpile=transpile;
