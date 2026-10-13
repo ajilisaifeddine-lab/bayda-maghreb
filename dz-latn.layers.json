@@ -1,0 +1,292 @@
+{
+  "code": "dz-latn",
+  "name": "algeria_franco",
+  "core": {
+    "if": [
+      "ila",
+      "loukan",
+      "kan",
+      "ki"
+    ],
+    "else": [
+      "bsah",
+      "w_ila",
+      "ella"
+    ],
+    "while": [
+      "toul_ma",
+      "madaam"
+    ],
+    "for": [
+      "dour",
+      "lef"
+    ],
+    "break": [
+      "7abbes",
+      "9oss"
+    ],
+    "continue": [
+      "fawet",
+      "jouz"
+    ],
+    "true": [
+      "s7i7",
+      "sah"
+    ],
+    "false": [
+      "ghalet"
+    ],
+    "return": [
+      "raja3",
+      "welli"
+    ],
+    "class": [
+      "forma",
+      "9aleb"
+    ],
+    "function": [
+      "دالة"
+    ],
+    "null": [
+      "والو"
+    ],
+    "let": [
+      "خلي"
+    ],
+    "const": [
+      "ثابت"
+    ],
+    "switch": [
+      "بدل"
+    ],
+    "import": [
+      "جيب"
+    ],
+    "export": [
+      "خرج"
+    ],
+    "new": [
+      "جديد"
+    ],
+    "try": [
+      "جرب"
+    ],
+    "catch": [
+      "شد"
+    ],
+    "finally": [
+      "فالاخر"
+    ],
+    "throw": [
+      "ارمي"
+    ],
+    "await": [
+      "استنى"
+    ],
+    "async": [
+      "مهل"
+    ]
+  },
+  "library": {
+    "push": [
+      "dfa3"
+    ],
+    "sort": [
+      "rateb"
+    ],
+    "filter": [
+      "safi"
+    ]
+  },
+  "vocabulary": {
+    "elif": [
+      "w_ila_kan",
+      "ella_kan"
+    ],
+    "do": [
+      "dir"
+    ],
+    "end": [
+      "khlas",
+      "kamal"
+    ],
+    "and": [
+      "w"
+    ],
+    "or": [
+      "wella"
+    ],
+    "not": [
+      "machi"
+    ],
+    "print": [
+      "bayen",
+      "wari",
+      "tba3"
+    ],
+    "input": [
+      "jib",
+      "da5al",
+      "a9ra"
+    ],
+    "variable": [
+      "7aja",
+      "3afsa"
+    ],
+    "constant": [
+      "tabet",
+      "mssamar"
+    ],
+    "array_list": [
+      "lista"
+    ],
+    "null_empty": [
+      "5awi",
+      "makach",
+      "walou",
+      "fargh"
+    ],
+    "clear_delete": [
+      "msa7",
+      "n9i"
+    ],
+    "function_method": [
+      "khedma",
+      "fonction"
+    ],
+    "run_execute": [
+      "ch3al",
+      "5adem"
+    ],
+    "save_commit": [
+      "sajal",
+      "5abi"
+    ],
+    "debug": [
+      "7awes"
+    ],
+    "error_bug": [
+      "bag"
+    ],
+    "crash": [
+      "ta7"
+    ],
+    "success": [
+      "tamet",
+      "sal7at",
+      "naja7"
+    ],
+    "clone": [
+      "noskha"
+    ],
+    "object": [
+      "ferkh"
+    ],
+    "inheritance": [
+      "wart"
+    ],
+    "garbage_collector": [
+      "zbel"
+    ],
+    "port": [
+      "bab"
+    ],
+    "api_endpoint": [
+      "rawchen"
+    ],
+    "request": [
+      "ab3at",
+      "dez"
+    ],
+    "response": [
+      "jawb"
+    ],
+    "timeout": [
+      "fet_lwa9t"
+    ],
+    "server": [
+      "sirfer"
+    ],
+    "deploy": [
+      "tla9"
+    ],
+    "backup": [
+      "5azen"
+    ],
+    "merge": [
+      "khalat"
+    ],
+    "pull": [
+      "jbad"
+    ],
+    "infinite_loop": [
+      "dour_bla_7sab"
+    ],
+    "loading_spinner": [
+      "estana"
+    ],
+    "authorized": [
+      "3ando_daw_a5dar"
+    ],
+    "blocked_banned": [
+      "mbloki"
+    ],
+    "freeze_not_responding": [
+      "m7abbes"
+    ],
+    "delay_sleep": [
+      "or9od"
+    ],
+    "password": [
+      "chifra"
+    ],
+    "hacker": [
+      "sara9"
+    ],
+    "database": [
+      "5azna"
+    ],
+    "query": [
+      "7awes_fi_dfater"
+    ],
+    "primary_key": [
+      "basma"
+    ],
+    "framework": [
+      "sas"
+    ],
+    "open_source": [
+      "fabor"
+    ],
+    "localhost": [
+      "3andi"
+    ],
+    "cloud": [
+      "lfoug"
+    ],
+    "branch": [
+      "far3"
+    ],
+    "conflict": [
+      "tkhalatet"
+    ],
+    "rollback": [
+      "welli_kima_kan"
+    ],
+    "button": [
+      "batma"
+    ],
+    "padding": [
+      "da5el"
+    ],
+    "margin": [
+      "barra"
+    ],
+    "recursion": [
+      "t3ayet_lro7ha"
+    ],
+    "boolean": [
+      "s7i7_wla_la"
+    ]
+  }
+}

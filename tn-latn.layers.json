@@ -1,0 +1,301 @@
+{
+  "code": "tn-latn",
+  "name": "tunisia_franco",
+  "core": {
+    "if": [
+      "ila",
+      "ken",
+      "ki"
+    ],
+    "else": [
+      "illa",
+      "w_illa",
+      "ama"
+    ],
+    "while": [
+      "toul_ma",
+      "madam",
+      "wa9tli"
+    ],
+    "for": [
+      "dour"
+    ],
+    "break": [
+      "9os",
+      "yezi",
+      "7abbes"
+    ],
+    "continue": [
+      "fout",
+      "jouz"
+    ],
+    "true": [
+      "s7i7",
+      "sah"
+    ],
+    "false": [
+      "ghalet"
+    ],
+    "return": [
+      "rajja3",
+      "rawa7"
+    ],
+    "class": [
+      "forma",
+      "9aleb"
+    ],
+    "function": [
+      "دالة"
+    ],
+    "null": [
+      "والو"
+    ],
+    "let": [
+      "خلي"
+    ],
+    "const": [
+      "ثابت"
+    ],
+    "switch": [
+      "بدل"
+    ],
+    "import": [
+      "جيب"
+    ],
+    "export": [
+      "خرج"
+    ],
+    "new": [
+      "جديد"
+    ],
+    "try": [
+      "جرب"
+    ],
+    "catch": [
+      "شد"
+    ],
+    "finally": [
+      "فالاخر"
+    ],
+    "throw": [
+      "ارمي"
+    ],
+    "await": [
+      "استنى"
+    ],
+    "async": [
+      "مهل"
+    ]
+  },
+  "library": {
+    "push": [
+      "dez"
+    ],
+    "sort": [
+      "rattab"
+    ],
+    "filter": [
+      "saffi"
+    ]
+  },
+  "vocabulary": {
+    "elif": [
+      "w_illa_ken"
+    ],
+    "do": [
+      "a3mel",
+      "dir"
+    ],
+    "end": [
+      "saye",
+      "akaho",
+      "wfa"
+    ],
+    "and": [
+      "w",
+      "zada"
+    ],
+    "or": [
+      "walla"
+    ],
+    "not": [
+      "moush",
+      "mech",
+      "mawech"
+    ],
+    "print": [
+      "warri",
+      "affichi",
+      "otba3"
+    ],
+    "input": [
+      "jib",
+      "da5el",
+      "a9ra"
+    ],
+    "variable": [
+      "7aja",
+      "7kaya",
+      "faza"
+    ],
+    "constant": [
+      "thebet"
+    ],
+    "array_list": [
+      "lista"
+    ],
+    "null_empty": [
+      "feregh",
+      "5awi",
+      "mafamech",
+      "walou"
+    ],
+    "clear_delete": [
+      "fasa5",
+      "nadhaf"
+    ],
+    "function_method": [
+      "5edma",
+      "fonction"
+    ],
+    "run_execute": [
+      "cha8el",
+      "e5dem"
+    ],
+    "save_commit": [
+      "sajel",
+      "5abbi"
+    ],
+    "debug": [
+      "thabbet",
+      "lawaj"
+    ],
+    "error_bug": [
+      "bag",
+      "3athra"
+    ],
+    "crash": [
+      "ta7",
+      "tfarek"
+    ],
+    "success": [
+      "tammet",
+      "mrigla",
+      "sal7et"
+    ],
+    "clone": [
+      "nos5a"
+    ],
+    "object": [
+      "ka3ba"
+    ],
+    "inheritance": [
+      "wort"
+    ],
+    "garbage_collector": [
+      "zabbal"
+    ],
+    "port": [
+      "beb"
+    ],
+    "api_endpoint": [
+      "rawchan"
+    ],
+    "request": [
+      "ab3ath"
+    ],
+    "response": [
+      "jaweb"
+    ],
+    "timeout": [
+      "fet_lwa9et"
+    ],
+    "server": [
+      "sirfer"
+    ],
+    "deploy": [
+      "sayyeb"
+    ],
+    "backup": [
+      "5azin"
+    ],
+    "merge": [
+      "5alet"
+    ],
+    "pull": [
+      "ejbed"
+    ],
+    "infinite_loop": [
+      "dour_ble_7seb"
+    ],
+    "loading_spinner": [
+      "estanna"
+    ],
+    "authorized": [
+      "3ando_dhaw_a5dher"
+    ],
+    "blocked_banned": [
+      "bloki"
+    ],
+    "freeze_not_responding": [
+      "7bes"
+    ],
+    "delay_sleep": [
+      "or9od"
+    ],
+    "password": [
+      "chifra"
+    ],
+    "hacker": [
+      "sarre9"
+    ],
+    "database": [
+      "5azna"
+    ],
+    "query": [
+      "lawaj_fi_daftar"
+    ],
+    "primary_key": [
+      "basma"
+    ],
+    "framework": [
+      "ses"
+    ],
+    "open_source": [
+      "fabor"
+    ],
+    "localhost": [
+      "3andi"
+    ],
+    "cloud": [
+      "lfou9"
+    ],
+    "branch": [
+      "far3"
+    ],
+    "conflict": [
+      "t5altet"
+    ],
+    "rollback": [
+      "arja3_kima_ken"
+    ],
+    "button": [
+      "batma"
+    ],
+    "padding": [
+      "da5el2"
+    ],
+    "margin": [
+      "barra"
+    ],
+    "recursion": [
+      "t3ayet_lrou7ha"
+    ],
+    "boolean": [
+      "s7i7_walla_la"
+    ],
+    "many": [
+      "barcha"
+    ]
+  }
+}
