@@ -10,7 +10,8 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "audit": "node audit.cjs"
+    "audit": "node audit.cjs",
+    "prepublishOnly": "npm test"
   },
   "repository": {
     "type": "git",
