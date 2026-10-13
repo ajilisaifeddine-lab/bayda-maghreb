@@ -2,6 +2,7 @@ import path from "path"
 import { fileURLToPath } from "url"
 import fs from "fs"
 import { dialects } from "./src/dialect-registry.js"
+import { createRequire } from "module"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -22,6 +23,13 @@ export function getAllDialects() {
   return dialects.map(e => load(e))
 }
 
+const _transpile = createRequire(import.meta.url)("./bayda-transpile.cjs")
+export function transpile(code, dialect = "kab") {
+  const entry = dialects.find(d => d.code === dialect)
+  if (!entry) throw new Error(`${dialect} not found`)
+  return _transpile(code, path.join(__dirname, "data/dialects", entry.file))
+}
+
 export { dialects }
 
 export const kab = getDialect("kab")
@@ -31,7 +39,7 @@ export const dzLatn = getDialect("dz-latn")
 export const tnLatn = getDialect("tn-latn")
 export const ly = getDialect("ly")
 export const ma = getDialect("mauritania")
-export default { getDialect, getAllDialects, dialects, kab, dz, ly, ma, kabLatn, dzLatn, tnLatn }
+export default { transpile, getDialect, getAllDialects, dialects, kab, dz, ly, ma, kabLatn, dzLatn, tnLatn }
 
 const arg = process.argv[2] || "kab"
 if ((()=>{try{return fs.realpathSync(process.argv[1])===fs.realpathSync(__filename)}catch{return false}})()) {
