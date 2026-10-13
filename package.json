@@ -1,20 +1,32 @@
+cd ~/bayda-maghreb
+
+cat > package.json << 'EOF'
 {
   "name": "bayda-maghreb",
   "version": "1.1.4",
-  "description": "Bayda Maghreb - 6 dialects clean",
+  "description": "Bayda Maghreb - 7 dialects clean + Gen Z Tech",
   "type": "module",
   "main": "index.js",
   "bin": {
     "bayda-maghreb": "index.js"
   },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
   "keywords": [
     "arabic",
     "darija",
-    "kabyle"
+    "kabyle",
+    "amazigh",
+    "maghreb"
   ],
   "author": "ajilis",
   "license": "MIT",
   "dependencies": {
-    "bayda-maghreb": "^1.1.4"
   }
 }
+EOF
+
+cat package.json
+npm test
