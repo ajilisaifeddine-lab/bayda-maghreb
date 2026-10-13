@@ -1,6 +1,4 @@
 {
-  "code": "dz-latn",
-  "name": "algeria_franco",
   "core": {
     "if": [
       "ila",
@@ -98,7 +96,7 @@
       "safi"
     ]
   },
-  "vocabulary": {
+  "dictionary": {
     "elif": [
       "w_ila_kan",
       "ella_kan"

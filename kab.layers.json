@@ -1,6 +1,4 @@
 {
-  "code": "kab",
-  "name": "Kabyle",
   "core": {
     "if": [
       "ila",
@@ -161,7 +159,7 @@
       "suɣel"
     ]
   },
-  "vocabulary": {
+  "dictionary": {
     "equal": [
       "semsawi"
     ],

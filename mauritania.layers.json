@@ -1,6 +1,4 @@
 {
-  "code": "mauritania",
-  "name": "Mauritanian Hassaniya",
   "core": {
     "if": [
       "إلا"
@@ -76,7 +74,7 @@
     ]
   },
   "library": {},
-  "vocabulary": {
+  "dictionary": {
     "أهلا": [
       "hello"
     ],

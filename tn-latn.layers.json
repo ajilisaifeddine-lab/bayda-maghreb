@@ -1,6 +1,4 @@
 {
-  "code": "tn-latn",
-  "name": "tunisia_franco",
   "core": {
     "if": [
       "ila",
@@ -98,7 +96,7 @@
       "saffi"
     ]
   },
-  "vocabulary": {
+  "dictionary": {
     "elif": [
       "w_illa_ken"
     ],

@@ -1,6 +1,4 @@
 {
-  "code": "dz",
-  "name": "algeria",
   "core": {
     "else": [
       "إلا",
@@ -97,7 +95,7 @@
       "صفّي"
     ]
   },
-  "vocabulary": {
+  "dictionary": {
     "do": [
       "دير"
     ],
