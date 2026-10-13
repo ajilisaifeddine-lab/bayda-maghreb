@@ -1,32 +1,30 @@
-cd ~/bayda-maghreb
-
-cat > package.json << 'EOF'
 {
   "name": "bayda-maghreb",
-  "version": "1.1.4",
-  "description": "Bayda Maghreb - 7 dialects clean + Gen Z Tech",
-  "type": "module",
+  "version": "1.1.5",
+  "description": "North African dialect transliteration library - Kabyle, Libya, Tunisia, Algeria, Mauritania, Tifinagh.",
   "main": "index.js",
-  "bin": {
-    "bayda-maghreb": "index.js"
-  },
   "scripts": {
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajilisaifeddine-lab/bayda-maghreb.git"
   },
   "keywords": [
     "arabic",
     "darija",
     "kabyle",
-    "amazigh",
     "maghreb"
   ],
   "author": "ajilis",
   "license": "MIT",
-  "dependencies": {
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/ajilisaifeddine-lab/bayda-maghreb/issues"
+  },
+  "homepage": "https://github.com/ajilisaifeddine-lab/bayda-maghreb#readme",
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.4"
   }
 }
-EOF
-
-cat package.json
-npm test
