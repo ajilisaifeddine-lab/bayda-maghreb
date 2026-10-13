@@ -1,17 +1,17 @@
 {
   "core": {
     "if": [
-      "ila",
+      "idha",
       "ken",
       "ki"
     ],
     "else": [
-      "illa",
-      "w_illa",
+      "ella",
+      "wella",
       "ama"
     ],
     "while": [
-      "toul_ma",
+      "toulma",
       "madam",
       "wa9tli"
     ],
@@ -25,18 +25,18 @@
     ],
     "continue": [
       "fout",
-      "jouz"
+      "kammel"
     ],
     "true": [
       "s7i7",
-      "sah"
+      "mrigl"
     ],
     "false": [
       "ghalet"
     ],
     "return": [
       "rajja3",
-      "rawa7"
+      "dour"
     ],
     "class": [
       "forma",
@@ -46,37 +46,37 @@
       "function"
     ],
     "null": [
-      "null"
+      "7atchay"
     ],
     "let": [
-      "let"
+      "5alli"
     ],
     "const": [
       "const"
     ],
     "switch": [
-      "switch"
+      "baddel"
     ],
     "import": [
-      "import"
+      "ejbed"
     ],
     "export": [
-      "export"
+      "5arrej"
     ],
     "new": [
-      "new"
+      "jdid"
     ],
     "try": [
-      "try"
+      "jarreb"
     ],
     "catch": [
-      "catch"
+      "chedd"
     ],
     "finally": [
-      "finally"
+      "a5iran"
     ],
     "throw": [
-      "throw"
+      "lawa7"
     ],
     "await": [
       "await"
@@ -143,9 +143,9 @@
     ],
     "null_empty": [
       "feregh",
-      "5awi",
+      "7atchay",
       "mafamech",
-      "walou"
+      "ndiif"
     ],
     "clear_delete": [
       "fasa5",
@@ -156,7 +156,7 @@
       "fonction"
     ],
     "run_execute": [
-      "cha8el",
+      "dimari",
       "e5dem"
     ],
     "save_commit": [
@@ -190,43 +190,43 @@
       "wort"
     ],
     "garbage_collector": [
-      "zabbal"
+      "bribech"
     ],
     "port": [
-      "beb"
+      "lbeb"
     ],
     "api_endpoint": [
-      "rawchan"
+      "kteff"
     ],
     "request": [
-      "ab3ath"
+      "ab3th"
     ],
     "response": [
-      "jaweb"
+      "jewb"
     ],
     "timeout": [
-      "fet_lwa9et"
+      "fetlfut"
     ],
     "server": [
-      "sirfer"
+      "srvr"
     ],
     "deploy": [
       "sayyeb"
     ],
     "backup": [
-      "5azin"
+      "5azzen"
     ],
     "merge": [
-      "5alet"
+      "5allet"
     ],
     "pull": [
       "ejbed"
     ],
     "infinite_loop": [
-      "dour_ble_7seb"
+      "dour_dima"
     ],
     "loading_spinner": [
-      "estanna"
+      "essabr"
     ],
     "authorized": [
       "3ando_dhaw_a5dher"
@@ -235,13 +235,13 @@
       "bloki"
     ],
     "freeze_not_responding": [
-      "7bes"
+      "jmedd"
     ],
     "delay_sleep": [
       "or9od"
     ],
     "password": [
-      "chifra"
+      "lcode"
     ],
     "hacker": [
       "sarre9"
@@ -250,46 +250,46 @@
       "5azna"
     ],
     "query": [
-      "lawaj_fi_daftar"
+      "lawj_f_dusi"
     ],
     "primary_key": [
-      "basma"
+      "lbasma"
     ],
     "framework": [
-      "ses"
+      "l9aaleb"
     ],
     "open_source": [
-      "fabor"
+      "7ell_esurs"
     ],
     "localhost": [
       "3andi"
     ],
     "cloud": [
-      "lfou9"
+      "fes7aab"
     ],
     "branch": [
       "far3"
     ],
     "conflict": [
-      "t5altet"
+      "t5alwid"
     ],
     "rollback": [
-      "arja3_kima_ken"
+      "rajja3"
     ],
     "button": [
-      "batma"
+      "felsa"
     ],
     "padding": [
-      "da5el2"
+      "f4a_d5leni"
     ],
     "margin": [
-      "barra"
+      "f4a_barani"
     ],
     "recursion": [
-      "t3ayet_lrou7ha"
+      "gedd_ro7k"
     ],
     "boolean": [
-      "s7i7_walla_la"
+      "ess7i7"
     ],
     "many": [
       "barcha"
