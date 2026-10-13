@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-#!/usr/bin/env node
 const fs=require('fs');
 const _cache=new Map();
 const _esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
