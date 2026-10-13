@@ -43,46 +43,46 @@
       "9aleb"
     ],
     "function": [
-      "دالة"
+      "function"
     ],
     "null": [
-      "والو"
+      "null"
     ],
     "let": [
-      "خلي"
+      "let"
     ],
     "const": [
-      "ثابت"
+      "const"
     ],
     "switch": [
-      "بدل"
+      "switch"
     ],
     "import": [
-      "جيب"
+      "import"
     ],
     "export": [
-      "خرج"
+      "export"
     ],
     "new": [
-      "جديد"
+      "new"
     ],
     "try": [
-      "جرب"
+      "try"
     ],
     "catch": [
-      "شد"
+      "catch"
     ],
     "finally": [
-      "فالاخر"
+      "finally"
     ],
     "throw": [
-      "ارمي"
+      "throw"
     ],
     "await": [
-      "استنى"
+      "await"
     ],
     "async": [
-      "مهل"
+      "async"
     ]
   },
   "library": {
