@@ -4,8 +4,17 @@
   "description": "Bayda Maghreb - 6 dialects clean",
   "type": "module",
   "main": "index.js",
-  "bin": { "bayda-maghreb": "index.js" },
-  "keywords": ["arabic","darija","kabyle"],
+  "bin": {
+    "bayda-maghreb": "index.js"
+  },
+  "keywords": [
+    "arabic",
+    "darija",
+    "kabyle"
+  ],
   "author": "ajilis",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "bayda-maghreb": "^1.1.4"
+  }
 }
