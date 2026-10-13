@@ -3,53 +3,118 @@
     "if": [
       "idha",
       "ken",
-      "ki"
+      "ki",
+      "idhaa",
+      "lkn",
+      "itha",
+      "edha",
+      "louken",
+      "idh",
+      "ida",
+      "eda",
+      "idha ken",
+      "kene"
     ],
     "else": [
       "ella",
       "wella",
-      "ama"
+      "ama",
+      "snn",
+      "wela",
+      "wla",
+      "mouch haka",
+      "mch haka",
+      "akeka le"
     ],
     "while": [
       "toulma",
       "madam",
-      "wa9tli"
+      "wa9tli",
+      "toul",
+      "leen",
+      "7ata lin",
+      "wa9teli",
+      "wakteli",
+      "tama ken"
     ],
     "for": [
-      "dour"
+      "dour",
+      "bsh",
+      "7ata",
+      "hata",
+      "taw bech",
+      "bch ta3mel",
+      "3la 5ater"
     ],
     "break": [
       "9os",
       "yezi",
-      "7abbes"
+      "7abbes",
+      "9oss",
+      "o9ef",
+      "ogf",
+      "ogef",
+      "gos",
+      "ougef",
+      "e9f"
     ],
     "continue": [
       "fout",
-      "kammel"
+      "kammel",
+      "kamel",
+      "wasil",
+      "kaml",
+      "kml"
     ],
     "true": [
       "s7i7",
-      "mrigl"
+      "mrigl",
+      "sah",
+      "sa7",
+      "shih"
     ],
     "false": [
-      "ghalet"
+      "ghalet",
+      "8alet",
+      "8alt",
+      "8lt",
+      "mch s7i7"
     ],
     "return": [
       "rajja3",
-      "dour"
+      "dour",
+      "rj3",
+      "raj3",
+      "rj3li",
+      "raja3li"
     ],
     "class": [
       "forma",
       "9aleb"
     ],
     "function": [
-      "function"
+      "function",
+      "fct",
+      "fonct",
+      "5edma",
+      "5dma",
+      "khedmaa",
+      "khedma"
     ],
     "null": [
-      "7atchay"
+      "7atchay",
+      "fer8",
+      "mfamach",
+      "fr8",
+      "mfmch"
     ],
     "let": [
-      "5alli"
+      "5alli",
+      "7ott",
+      "a3mel",
+      "ged",
+      "7ot",
+      "a3ml"
     ],
     "const": [
       "const"
@@ -87,7 +152,11 @@
   },
   "library": {
     "push": [
-      "dez"
+      "dez",
+      "zid",
+      "zidli",
+      "da5l",
+      "da5al"
     ],
     "sort": [
       "rattab"
@@ -123,7 +192,15 @@
     "print": [
       "warri",
       "affichi",
-      "otba3"
+      "otba3",
+      "9oull",
+      "9olo",
+      "9ol",
+      "a7ki",
+      "9oulou",
+      "golo",
+      "goul",
+      "golih"
     ],
     "input": [
       "jib",
