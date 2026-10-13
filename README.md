@@ -19,3 +19,16 @@ North African dialect transliteration library - Kabyle, Libya, Tunisia, Algeria,
 
 ```bash
 npm install bayda-maghreb
+
+## Usage
+
+CLI:
+
+    npx bayda-maghreb file.bayda tn-latn
+
+Code:
+
+    import { transpile } from "bayda-maghreb";
+    console.log(transpile(source, "tn-latn"));
+
+Dialects: kab, kab-lat, ly, mauritania, tn-latn, dz, dz-latn
