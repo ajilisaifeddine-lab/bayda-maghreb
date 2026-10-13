@@ -1,9 +1,0 @@
-afecku azul() {
-  meslay("Azul fell-awen!")
-  ila (tidet) {
-    meslay("Nekk d aqbayli, code-agi s teqbaylit!")
-  } awla {
-    meslay("Ulac")
-  }
-}
-azul()
