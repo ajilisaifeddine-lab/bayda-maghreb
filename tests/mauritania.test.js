@@ -1,4 +1,4 @@
-import { getDialect } from './index.js'
+import { getDialect } from '../index.js'
 import { test, expect } from 'vitest'
 
 test('mauritania has 176w Gen Z', () => {

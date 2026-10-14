@@ -9,5 +9,5 @@ jobs:
         with:
           node-version: '20'
       - run: npm install
-      - run: node audit.cjs
+      - run: node scripts/audit.cjs
       - run: npm test
