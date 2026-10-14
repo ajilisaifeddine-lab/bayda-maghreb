@@ -1,9 +1,7 @@
-# كيفاش تقترح كلمة بلهجتك؟
+# 🤝 كـيـفـاش تـقـتـرح تــعديـل/إضـافـة كــلـمـة بــلــهـجـتـك؟
 
-1. اعمل Fork للمشروع
-2. ادخل لـ `data/dialects/algeria.json` مثلا
-3. زيد الكلمة: "اطبع": "print"
-4. اعمل Pull Request
-5. الـ audit يفحصها، وانا نوافق وننشرها في npm
+## الـخــطـوات
 
-القانون: اي كلمة جديدة لازم يراجعها @ajilisaifeddine-lab
+### 1. اعـمـل Fork للـمشـروع
+```bash
+git clone https://github.com/ajilisaifeddine-lab/bayda-maghreb
