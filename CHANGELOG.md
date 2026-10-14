@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.20 - 2026-10-14
+
+### Changed
+- Removed old reversed dialects/mauritania.json (all 176 words are already in data/dialects/mauritania.json).
+- Moved lahjat vocabulary notes to docs/vocabulary (no longer published to npm).
+- README: replaced broken links with a dialect table that links to the real dictionaries.
+
 ## 1.1.19 - 2026-10-14
 
 ### Changed
