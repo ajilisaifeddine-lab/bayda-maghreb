@@ -23,4 +23,3 @@
 ```bash
 npm install bayda-maghreb
 npm install -g bayda-maghreb
-EOF
