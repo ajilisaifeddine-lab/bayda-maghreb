@@ -8,15 +8,7 @@
 
 ### Supported Dialects
 
-| Code | Name | Words | Type |
-| :--- | :--- | :---: | :--- |
-| kab | Kabyle | 72 | Code |
-| kab-lat | Kabyle Latin | 104 | Code |
-| ly | Libya | 337 | Code |
-| tn-latn | Tounsi Franco | 205 | Code |
-| dz | Dzair Arabic | 110 | Code |
-| dz-latn | Dzair Franco | 114 | Code |
-| mauritania | Mauritania Gen Z | 177 | Vocabulary |
+![Supported Dialects](https://raw.githubusercontent.com/ajilisaifeddine-lab/bayda-maghreb/main/dialects.png)
 
 ### Install
 
