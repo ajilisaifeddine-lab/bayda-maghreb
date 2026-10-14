@@ -178,7 +178,9 @@
     "أبغريد": "upgrade",
     "فيتشور": "feature",
     "فيكس بغ": "bug_fix",
-    "حسانية - لغة الشباب و التقنية": "nativeName"
+    "حسانية - لغة الشباب و التقنية": "nativeName",
+    "قول": "print",
+    "اطبع": "print"
   },
   "script": "Arabic",
   "kind": "vocabulary"
