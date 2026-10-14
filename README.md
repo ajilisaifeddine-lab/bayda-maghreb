@@ -14,9 +14,7 @@
 ## Install
 
 ```
-git clone https://github.com/ajilisaifeddine-lab/bayda-maghreb.git
-cd bayda-maghreb
-npm install
+npm i -g bayda-maghreb
 ```
 
 ## Quick start
@@ -30,8 +28,8 @@ ken (s7i7) { goul("ila") } wella { goul("no") }
 Run it, or print the JavaScript:
 
 ```
-node bayda-bin hello.tn-latn.bayda
-node bayda-bin hello.tn-latn.bayda --js
+bayda hello.tn-latn.bayda
+bayda hello.tn-latn.bayda --js
 ```
 
 Output:
