@@ -31,7 +31,7 @@ describe("cli", () => {
   it("transpiles a file", () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "bayda-"));
     const f = path.join(dir, "s.txt");
-    fs.writeFileSync(f, 'ila (s7i7) { warri("ila") } illa { warri("no") }');
+    fs.writeFileSync(f, 'ken (s7i7) { goul("ila") } wella { goul("no") }');
     const r = run(f, "--dialect", "tn-latn", "--js");
     expect(r.status).toBe(0);
     expect(r.stdout.trim()).toBe('if (true) { console.log("ila") } else { console.log("no") }');

@@ -7,7 +7,7 @@
 
 ### Supported Dialects
 
-![Supported Dialects](https://raw.githubusercontent.com/ajilisaifeddine-lab/bayda-maghreb/main/dialects.png)
+![Supported Dialects](https://raw.githubusercontent.com/ajilisaifeddine-lab/bayda-maghreb/main/docs/dialects.png)
 
 
 

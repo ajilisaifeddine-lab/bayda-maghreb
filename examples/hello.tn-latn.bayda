@@ -1,0 +1,6 @@
+khalli ism = "Tounes"
+idha ism == "Tounes" {
+  itba3("sahha " + ism + " !")
+} sinon {
+  itba3("marhbe")
+}

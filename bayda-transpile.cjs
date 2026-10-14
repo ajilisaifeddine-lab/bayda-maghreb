@@ -40,7 +40,7 @@ function _load(file){
 function transpile(code,file){
   const {map,re}=_load(file);
   let out = String(code).split(_skip).map((p,i)=>i%2?p:p.replace(re,m=>map.get(m))).join('').trim();
-  out = out.replace(/\b(if|while|for)\s+([^\n]+?)\s*\{/g, ' $1 ($2) {');
+  out = out.replace(/\b(if|while|for)\s+([^\n]+?)\s*\{/g, (m,k,c)=>{let d=0,w=c[0]==='(';for(let i=0;i<c.length;i++){if(c[i]==='(')d++;else if(c[i]===')'){d--;if(d===0&&i<c.length-1){w=false;break;}}}return k+' '+(w&&c.endsWith(')')?c:'('+c+')')+' {';});
   out = out.replace(/console\.log\s*(?!\()((?:[^\n:{}]+)+)/g, 'console.log($1)');
   let declared = new Set();
   out = out.split('\n').map(line=>{
@@ -52,7 +52,7 @@ function transpile(code,file){
     }
     return line;
   }).join('\n');
-  return out;
+  return out.trim();
 }
 module.exports=transpile;
 module.exports.transpile=transpile;
