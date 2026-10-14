@@ -8,7 +8,7 @@ function _load(file){
   if(_cache.has(key)) return _cache.get(key);
   const data=JSON.parse(fs.readFileSync(file,'utf8'));
   const map=new Map();
-  const CORE=new Set('if else while for break continue function return true false null let const switch import export class new try catch finally throw await async'.split(' '));
+  const CORE=new Set('if else while do var this for break continue function return true false null let const switch import export class new try catch finally throw await async'.split(' '));
   const LIB=new Set('Array String Number Object Boolean filter map reduce find push pop console.log sort replace split join stringify promise error call apply bind global module process prompt length'.split(' '));
   const ALIAS={print:'console.log',log:'console.log'};
   if(data.keywords) for(const [w,c] of Object.entries(data.keywords)){

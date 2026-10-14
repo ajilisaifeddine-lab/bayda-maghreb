@@ -4,7 +4,7 @@ North African dialect transliteration library - Kabyle, Libya, Tunisia, Algeria,
 
 ## v1.0 - 7 dialects green ✅
 
-| Code | Name | File | Words |
+| Code | Name | File | Entries |
 |------|------|------|-------|
 | kab | Kabyle | kabyle.json | 68 |
 | kab-lat | Kabyle Latin | kabyle-latin.json | 103 |
