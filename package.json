@@ -4,8 +4,8 @@
   "description": "Bayda Maghreb - 7 dialects clean + Gen 2 Tech",
   "main": "index.js",
   "bin": {
-    "bayda": "./cli.js",
-    "bayda-maghreb": "./cli.js"
+    "bayda": "./bayda-transpile.cjs",
+    "bayda-maghreb": "./bayda-transpile.cjs"
   },
   "scripts": {
     "test": "vitest run",
