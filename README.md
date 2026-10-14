@@ -45,10 +45,6 @@ Franco dialects: `tn-latn` (Tunisian), `dz-latn` (Algerian).
 
 ### Supported Dialects
 
-![Supported Dialects](https://raw.githubusercontent.com/ajilisaifeddine-lab/bayda-maghreb/main/docs/dialects.png)
-
-
-
 | Code | Name | Dictionary |
 |---|---|---|
 | `kab` | Kabyle | [data/dialects/kabyle.json](data/dialects/kabyle.json) |
