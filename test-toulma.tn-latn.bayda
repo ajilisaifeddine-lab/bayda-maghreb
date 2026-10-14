@@ -1,5 +1,0 @@
-ged x = 0
-toulma x < 3 {
-  goul x
-  ged x = x + 1
-}
