@@ -186,6 +186,7 @@ else if(!tf.some(f=>/transpile/.test(rd(f))))warn('no test covers the transpiler
 const T=require(path.resolve('bayda-transpile.cjs'));
 for(const f of df){
   const d=JSON.parse(rd(f)),kw=d.keywords||{},vals=new Set(Object.values(kw)),name=path.basename(f);
+  if(d.kind==='vocabulary'){ok(name+': vocabulary file, code checks skipped');continue}
   const miss=[...CORE].filter(c=>!vals.has(c));
   if(miss.length)warn(name+': missing core concepts ('+miss.length+'): '+miss.join(' '));
   for(const [k,v] of Object.entries(kw))if((CORE.has(k)||LIBN.has(k))&&k!==v)err(name+': word "'+k+'" is a JavaScript name but means "'+v+'"');

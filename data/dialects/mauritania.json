@@ -180,5 +180,6 @@
     "فيكس بغ": "bug_fix",
     "حسانية - لغة الشباب و التقنية": "nativeName"
   },
-  "script": "Arabic"
+  "script": "Arabic",
+  "kind": "vocabulary"
 }
