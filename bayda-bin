@@ -46,7 +46,7 @@ const di = args.indexOf("--dialect");
 let code = di >= 0 ? args[di + 1] : null;
 const skip = di >= 0 ? di + 1 : -1;
 const cmd = args.find((a, i) => !a.startsWith("-") && i !== skip);
-if (!cmd) { console.log("bayda --help"); process.exit(1); }
+if (!cmd) { console.error("usage: bayda <file> [--dialect code] [--js] | bayda init [--dialect code]"); process.exit(1); }
 const pick = c => dialects.find(d => d.code === c);
 const dataFile = d => join(__dirname, "data/dialects", d.file);
 if (cmd === "init") {

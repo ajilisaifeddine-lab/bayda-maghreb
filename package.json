@@ -41,7 +41,6 @@
     "lahjat",
     "data",
     "bayda-transpile.cjs",
-    "cli.js",
     "bayda-bin"
   ],
   "engines": {
