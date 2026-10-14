@@ -39,7 +39,6 @@
   "files": [
     "index.js",
     "src",
-    "lahjat",
     "data",
     "bayda-transpile.cjs",
     "bayda-bin"

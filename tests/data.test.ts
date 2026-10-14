@@ -6,7 +6,7 @@ const walk = (d: string): string[] =>
   fs.readdirSync(d, { withFileTypes: true }).flatMap((e) =>
     e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]
   );
-const files = [...walk("data"), ...walk("lahjat")];
+const files = [...walk("data")];
 
 describe("data files", () => {
   it.each(files)("%s has no pasted shell lines", (f) => {
