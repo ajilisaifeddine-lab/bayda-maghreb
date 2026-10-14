@@ -2,15 +2,15 @@
 const fs=require('fs');
 const _cache=new Map();
 const _esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-const _skip=/("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|`(?:\\.|[^`\\])*`|\/\/[^\n]*|\/\*[\s\S]*?\*\/)/;
+const _skip=/("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|(?:\\.|[^'"`])*'|\/\/[^\n]*|\/\*[^]*?\*\/)/;
 function _load(file){
   const key=file+':'+fs.statSync(file).mtimeMs;
   if(_cache.has(key)) return _cache.get(key);
   const data=JSON.parse(fs.readFileSync(file,'utf8'));
   const map=new Map();
-  const CORE=new Set('if else while do var this for break continue function return true false null let const switch import export class new try catch finally throw await async'.split(' '));
+  const CORE=new Set('if else while do var switch import export function return true false null let const switch import export class new try catch finally throw await async'.split(' '));
   const LIB=new Set('Array String Number Object Boolean filter map reduce find push pop console.log sort replace split join stringify promise error call apply bind global module process prompt length'.split(' '));
-  const ALIAS={print:'console.log',log:'console.log'};
+  const ALIAS={print:'console.log', log:'console.log'};
   if(data.keywords) for(const [w,c] of Object.entries(data.keywords)){
     const js=ALIAS[c]||c;
     if(w.length>1&&(CORE.has(js)||LIB.has(js))&&!map.has(w)) map.set(w,js);
@@ -18,7 +18,8 @@ function _load(file){
   for(const k of ['core','library']){
     const sec=data[k];
     if(!sec) continue;
-    for(const js in sec) for(const w of sec[js]) if(w&&w.length>1&&!map.has(w)) map.set(w,js);
+    for(const js in sec) for(const w of sec[js])
+      if(w&&w.length>1&&!map.has(w)) map.set(w,js);
   }
   if(!map.size) throw new Error('no core/library words in '+file);
   const alt=[...map.keys()].sort((a,b)=>b.length-a.length).map(_esc).join('|');
@@ -29,7 +30,24 @@ function _load(file){
 }
 function transpile(code,file){
   const {map,re}=_load(file);
-  return String(code).split(_skip).map((p,i)=>i%2?p:p.replace(re,m=>map.get(m))).join('').trim();
+  let out = String(code).split(_skip).map((p,i)=>i%2?p:p.replace(re,m=>map.get(m))).join('').trim();
+  out = out.replace(/\b(if|while|for)\s+([^{\n]+?)\s*\{/g, '$1 ($2) {');
+  out = out.replace(/console\.log\s+(?!\()([^\n;{}]+)/g, 'console.log($1)');
+  // fix re-declaration: let x = x+1 -> x = x+1 if x already declared
+  const declared = new Set();
+  out = out.split('\n').map(line=>{
+    const m = line.match(/^\s*let\s+([A-Za-z_]\w*)\s*=/);
+    if(m){
+      const v = m[1];
+      if(declared.has(v)){
+        return line.replace(/^\s*let\s+/, '');
+      } else {
+        declared.add(v);
+      }
+    }
+    return line;
+  }).join('\n');
+  return out;
 }
 module.exports=transpile;
 module.exports.transpile=transpile;
