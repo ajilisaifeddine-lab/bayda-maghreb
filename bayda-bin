@@ -1,4 +1,35 @@
 #!/usr/bin/env node
 import { createRequire } from 'module';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const args = process.argv.slice(2);
+
+if (args.includes('--version') || args.includes('-v') || args.includes('version')) {
+  try {
+    const pkg = JSON.parse(readFileSync(join(__dirname, 'package.json'), 'utf8'));
+    console.log(pkg.version);
+  } catch {
+    console.log('1.1.12');
+  }
+  process.exit(0);
+}
+
+if (args.includes('--help') || args.includes('-h')) {
+  console.log(`
+  bayda-maghreb - لغة برمجة بيضاء مغاربية
+
+  Usage:
+    bayda <file>          شغل ملف
+    bayda init            انشاء مشروع جديد
+    bayda --version       عرض النسخة
+    bayda --help          المساعدة
+  `);
+  process.exit(0);
+}
+
 const require = createRequire(import.meta.url);
 require('./bayda-transpile.cjs');
