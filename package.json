@@ -11,7 +11,7 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "audit": "node audit.cjs",
+    "audit": "node scripts/audit.cjs",
     "prepublishOnly": "npm test"
   },
   "repository": {
