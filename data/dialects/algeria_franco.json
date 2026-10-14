@@ -102,7 +102,21 @@
     "t3ayet_lro7ha": "recursion",
     "s7i7_wla_la": "boolean",
     "rateb": "sort",
-    "safi": "filter"
+    "safi": "filter",
+    "دالة": "function",
+    "والو": "null",
+    "خلي": "let",
+    "ثابت": "const",
+    "بدل": "switch",
+    "جيب": "import",
+    "خرج": "export",
+    "جديد": "new",
+    "جرب": "try",
+    "شد": "catch",
+    "فالاخر": "finally",
+    "ارمي": "throw",
+    "استنى": "await",
+    "مهل": "async"
   },
   "symbols": {}
 }

@@ -190,7 +190,23 @@
     "n7i": "pop",
     "hezz": "pop",
     "9adech": "length",
-    "9dchfih": "length"
+    "9dchfih": "length",
+    "idha": "if",
+    "ella": "else",
+    "toulma": "while",
+    "mrigl": "true",
+    "function": "function",
+    "7atchay": "null",
+    "const": "const",
+    "baddel": "switch",
+    "5arrej": "export",
+    "jdid": "new",
+    "jarreb": "try",
+    "chedd": "catch",
+    "a5iran": "finally",
+    "lawa7": "throw",
+    "await": "await",
+    "async": "async"
   },
   "symbols": {}
 }

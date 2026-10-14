@@ -105,5 +105,6 @@
     "steqsi": "prompt",
     "wali": "check",
     "suɣel": "stringify"
-  }
+  },
+  "script": "Latin"
 }

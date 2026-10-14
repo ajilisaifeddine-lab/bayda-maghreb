@@ -3,33 +3,71 @@ import { createRequire } from 'module';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const args = process.argv.slice(2);
+const isTermux = !!process.env.TERMUX_VERSION || (process.env.PREFIX && process.env.PREFIX.includes('com.termux'));
+if (args.includes('--version') || args.includes('-v')) {
+  try { const pkg = JSON.parse(readFileSync(join(__dirname, 'package.json'), 'utf8')); console.log(pkg.version); } catch { console.log("unknown"); }
+  process.exit(0);
+}
+if (args.includes('--help') || args.includes('-h')) {
+  if (isTermux) {
+    console.log(`
+bayda-maghreb - logha bayda b-darja
 
-if (args.includes('--version') || args.includes('-v') || args.includes('version')) {
-  try {
-    const pkg = JSON.parse(readFileSync(join(__dirname, 'package.json'), 'utf8'));
-    console.log(pkg.version);
-  } catch {
-    console.log('1.1.12');
+Haw kifach:
+  bayda <file>     khaddem dossi l-bayda
+  bayda init       7el proji jdid
+  bayda --version  warri l-copy
+  bayda --help     warri s-support
+`);
+  } else {
+    console.log(`
+bayda-maghreb - لغة بيضا بالدارجة
+
+هــاو كــيـفــاش:
+  bayda <file>     خـدّم دوسـي لـبـيـضـا
+  bayda init       حـل پـروجـي جـديـد
+  bayda --version  ورّي لـكـوپـي
+  bayda --help     ورّي الـسّوپـور
+`);
   }
   process.exit(0);
 }
-
-if (args.includes('--help') || args.includes('-h')) {
-  console.log(`
-  bayda-maghreb - لغة برمجة بيضاء مغاربية
-
-  Usage:
-    bayda <file>          شغل ملف
-    bayda init            انشاء مشروع جديد
-    bayda --version       عرض النسخة
-    bayda --help          المساعدة
-  `);
+const require = createRequire(import.meta.url);
+const transpile = require("./bayda-transpile.cjs");
+const { dialects } = await import("./src/dialect-registry.js");
+const { writeFileSync, existsSync, mkdtempSync, rmSync } = await import("fs");
+const { basename } = await import("path");
+const { tmpdir } = await import("os");
+const { execFileSync } = await import("child_process");
+const di = args.indexOf("--dialect");
+let code = di >= 0 ? args[di + 1] : null;
+const skip = di >= 0 ? di + 1 : -1;
+const cmd = args.find((a, i) => !a.startsWith("-") && i !== skip);
+if (!cmd) { console.log("bayda --help"); process.exit(1); }
+const pick = c => dialects.find(d => d.code === c);
+const dataFile = d => join(__dirname, "data/dialects", d.file);
+if (cmd === "init") {
+  const d = pick(code || "kab");
+  if (!d) { console.error("unknown dialect: " + code); process.exit(1); }
+  const kw = JSON.parse(readFileSync(dataFile(d), "utf8")).keywords;
+  const first = (...vs) => Object.keys(kw).find(k => vs.includes(kw[k]));
+  const fn = first("function"), pr = first("console.log", "print", "log");
+  if (!fn || !pr) { console.error("this dialect has no function/print word"); process.exit(1); }
+  const out = "hello." + d.code + ".bayda";
+  if (existsSync(out)) { console.error(out + " already exists"); process.exit(1); }
+  writeFileSync(out, fn + " hello() {\n  " + pr + '("hello")\n}\nhello()\n');
+  console.log("created " + out);
   process.exit(0);
 }
+if (!existsSync(cmd)) { console.error("file not found: " + cmd); process.exit(1); }
+if (!code) { const parts = basename(cmd).split("."); code = parts.length > 2 ? parts[parts.length - 2] : "kab"; }
+const dia = pick(code);
+if (!dia) { console.error("unknown dialect: " + code + " (" + dialects.map(x => x.code).join(", ") + ")"); process.exit(1); }
+const js = transpile(readFileSync(cmd, "utf8"), dataFile(dia));
+if (args.includes("--js")) { console.log(js); process.exit(0); }
+try { execFileSync(process.execPath, ["--input-type=module", "-e", js], { stdio: "inherit" }); }
+catch (e) { process.exitCode = e.status || 1; }
 
-const require = createRequire(import.meta.url);
-require('./bayda-transpile.cjs');

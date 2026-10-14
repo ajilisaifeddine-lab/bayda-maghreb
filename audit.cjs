@@ -134,5 +134,97 @@ if(fs.existsSync('check-layers.cjs')){
   catch(e){err('layers check failed:\n'+String(e.stdout).trim())}
 }
 
+sec('project health');
+const os=require('os');
+const CORE=new Set('if else while for break continue function return true false null let const switch import export class new try catch finally throw await async'.split(' '));
+const LIBN=new Set('Array String Number Object Boolean filter map reduce find push pop console.log sort replace split join stringify promise error call apply bind global module process prompt length'.split(' '));
+const sh=(c,a,o={})=>cp.execFileSync(c,a,{stdio:['ignore','pipe','pipe'],...o}).toString();
+for(const f of fs.readdirSync('.')){
+  if(f==='node_modules'||f==='.git')continue;
+  if(/[^\x00-\x7F]/.test(f)||(f.length<=2&&!f.startsWith('.'))||/\.bak$|\.log$/.test(f)||/^(bayda-bi|\.gitignor|h)$/.test(f))warn('suspicious file in root: '+f);
+}
+try{
+  const u=sh('git',['ls-files','-o','--exclude-standard']).split('\n').filter(Boolean);
+  if(u.length)warn('untracked files: '+u.join(', '));
+  const dirty=sh('git',['status','--porcelain','--untracked-files=no']).split('\n').filter(Boolean);
+  if(dirty.length)warn(dirty.length+' tracked files have uncommitted changes');
+  const tr=sh('git',['ls-files']).split('\n').filter(f=>/(^|\/)(run-kab\.js|translate\.cjs|move-concept\.cjs|full-audit\.cjs)$|\.layers\.json$/.test(f));
+  if(tr.length)warn('tracked files the package no longer needs: '+tr.join(', '));
+}catch(e){warn('git not available')}
+for(const f of js){
+  const t=rd(f);
+  for(const m of t.matchAll(/node\s+([\w.\/-]+\.(?:c|m)?js)/g)){
+    const p=path.resolve(path.dirname(f),m[1]);
+    if(!fs.existsSync(p))err(f+': calls a script that does not exist: '+m[1]);
+  }
+}
+for(const f of js.concat(['bayda-bin'].filter(x=>fs.existsSync(x)))){
+  const t=rd(f);
+  for(const m of t.matchAll(/["'](\d+\.\d+\.\d+)["']/g))
+    if(pkg&&m[1]!==pkg.version&&/version|ver/i.test(t.slice(Math.max(0,m.index-60),m.index)))warn(f+': hard-coded version '+m[1]+' differs from package.json '+pkg.version);
+}
+if(pkg&&pkg.bin){
+  for(const [n,f] of Object.entries(typeof pkg.bin==='string'?{bin:pkg.bin}:pkg.bin)){
+    if(!fs.existsSync(f))continue;
+    if(!rd(f).startsWith('#!'))err(n+': '+f+' has no #! first line');
+    if(!(fs.statSync(f).mode&0o111))warn(n+': '+f+' is not executable (chmod +x)');
+  }
+}
+const dcodes=rf?[...rd(rf).matchAll(/code:\s*["']([^"']+)["']/g)].map(m=>m[1]):[];
+if(fs.existsSync('README.md')){
+  const r=rd('README.md');
+  if(r.length<500)warn('README.md is very short ('+r.length+' chars)');
+  const miss=dcodes.filter(c=>!r.includes(c));
+  if(miss.length)warn('README does not mention dialects: '+miss.join(', '));
+  if(!/npm (i|install)/.test(r))warn('README has no install instruction');
+}else err('README.md missing');
+if(!fs.existsSync('LICENSE'))warn('LICENSE missing');
+if(pkg&&!pkg.engines)warn('package.json has no "engines" (for example {"node":">=18"})');
+const tf=all.filter(f=>/(\.test\.|\.spec\.)/.test(f)||/^tests?[\/\\]/.test(f));
+if(!tf.length)warn('no test files');
+else if(!tf.some(f=>/transpile/.test(rd(f))))warn('no test covers the transpiler or the bayda command');
+const T=require(path.resolve('bayda-transpile.cjs'));
+for(const f of df){
+  const d=JSON.parse(rd(f)),kw=d.keywords||{},vals=new Set(Object.values(kw)),name=path.basename(f);
+  const miss=[...CORE].filter(c=>!vals.has(c));
+  if(miss.length)warn(name+': missing core concepts ('+miss.length+'): '+miss.join(' '));
+  for(const [k,v] of Object.entries(kw))if((CORE.has(k)||LIBN.has(k))&&k!==v)err(name+': word "'+k+'" is a JavaScript name but means "'+v+'"');
+  const first=(...vs)=>Object.keys(kw).find(k=>vs.includes(kw[k]));
+  const fn=first('function'),pr=first('console.log','print','log'),wi=first('if'),wt=first('true'),we=first('else');
+  if(fn&&pr&&wi&&wt&&we){
+    const src=fn+' f() {\n  '+wi+' ('+wt+') {\n    '+pr+'("x")\n  } '+we+' {\n    '+pr+'("y")\n  }\n}\nf()\n';
+    try{
+      const out=T(src,f),tmp=path.join(os.tmpdir(),'chk-'+process.pid+'.mjs');
+      fs.writeFileSync(tmp,out);
+      try{cp.execFileSync(process.execPath,['--check',tmp],{stdio:'pipe'})}catch(x){err(name+': sample program does not compile after translation')}
+      fs.unlinkSync(tmp);
+    }catch(x){err(name+': transpile threw: '+x.message)}
+  }else warn(name+': cannot build a sample program (needs function, print, if, true, else)');
+}
+if(df[0]){
+  const kw0=JSON.parse(rd(df[0])).keywords,w0=Object.keys(kw0)[0];
+  const big=Array(20000).fill(w0+'("x") // '+w0).join('\n'),t0=Date.now();
+  T(big,df[0]);
+  const ms=Date.now()-t0;
+  ms>1000?warn('transpile of 20000 lines took '+ms+' ms'):ok('transpile of 20000 lines: '+ms+' ms');
+}
+if(pkg&&pkg.bin){
+  const b=path.resolve(Object.values(typeof pkg.bin==='string'?{x:pkg.bin}:pkg.bin)[0]);
+  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'bayda-chk-'));
+  for(const c of dcodes){
+    try{
+      sh(process.execPath,[b,'init','--dialect',c],{cwd:dir});
+      const o=sh(process.execPath,[b,'hello.'+c+'.bayda'],{cwd:dir});
+      if(!/hello/.test(o))err('bayda command, dialect '+c+': unexpected output');
+    }catch(x){
+      const m=String(x.stderr||x.message).split('\n')[0];
+      /no function\/print/.test(m)?warn('bayda command, dialect '+c+': '+m):err('bayda command, dialect '+c+' failed: '+m);
+    }
+  }
+  fs.rmSync(dir,{recursive:true,force:true});
+  ok('bayda command checked for '+dcodes.length+' dialects');
+}
+for(const f of all){const z=fs.statSync(f).size;if(z>300000)warn('large file ('+Math.round(z/1024)+' KB): '+f)}
+
 console.log('\n=== '+E+' errors, '+W+' warnings ===');
 process.exit(E?1:0);

@@ -69,6 +69,10 @@
     "ini": "say",
     "steqsi": "prompt",
     "wali": "check",
-    "suɣel": "stringify"
-  }
+    "suɣel": "stringify",
+    "af": "for",
+    "sbedd": "let",
+    "sbedd_ur_nbeddal": "const"
+  },
+  "script": "Latin"
 }
