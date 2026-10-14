@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.19 - 2026-10-14
+
+### Changed
+- audit.cjs moved to scripts/.
+- mauritania test moved to tests/; the test runner now also finds .js tests in tests/ (6 more tests run).
+- Removed stale test.mjs.
+
 ## 1.1.18 - 2026-10-14
 
 ### Fixed
