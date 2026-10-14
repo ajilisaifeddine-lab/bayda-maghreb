@@ -51,11 +51,12 @@ Franco dialects: `tn-latn` (Tunisian), `dz-latn` (Algerian).
 
 
 
-<p align="center" • 
-<a href="./lahjat/kab.js" • 
-<a href="./lahjat/kab-lat.js" • 
-<a href="./lahjat/ly.js" • 
-<a href="./lahjat/tn-latin.js" • 
-<a href="./lahjat/dz.js" • 
-<a href="./lahjat/dz-latin.js" • 
-<a href="./lahjat/mauritania.js" • 
+| Code | Name | Dictionary |
+|---|---|---|
+| `kab` | Kabyle | [data/dialects/kabyle.json](data/dialects/kabyle.json) |
+| `kab-lat` | Kabyle Latin | [data/dialects/kabyle-latin.json](data/dialects/kabyle-latin.json) |
+| `ly` | Libya | [data/dialects/libya.json](data/dialects/libya.json) |
+| `mauritania` | Mauritania Gen Z | [data/dialects/mauritania.json](data/dialects/mauritania.json) |
+| `tn-latn` | Tounsi Franco | [data/dialects/tunisia_franco.json](data/dialects/tunisia_franco.json) |
+| `dz` | Dzair | [data/dialects/algeria.json](data/dialects/algeria.json) |
+| `dz-latn` | Dzair Franco | [data/dialects/algeria_franco.json](data/dialects/algeria_franco.json) |
