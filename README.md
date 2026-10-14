@@ -1,39 +1,29 @@
 # Bayda Maghreb 🌙 - Franco & Arabic Dialects
 
-North African dialect transliteration library - Kabyle, Libya, Tunisia, Algeria, Mauritania.
+[![npm](https://img.shields.io/npm/v/bayda-maghreb)](https://www.npmjs.com/package/bayda-maghreb)
+[![MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Dialects
+Write code in your own dialect. North African transpiler - Kabyle, Libya, Tunisia, Algeria, Mauritania.
 
-| Code | Name | File | Words |
-|------|------|------|-------|
-| kab | Kabyle | kabyle.json | 72 |
-| kab-lat | Kabyle Latin | kabyle-latin.json | 104 |
-| ly | Libya | libya.json | 337 |
-| mauritania | Mauritania Gen Z | mauritania.json | 177 |
-| tn-latn | Tounsi Franco | tunisia_franco.json | 205 |
-| dz | Dzair | algeria.json | 110 |
-| dz-latn | Dzair Franco | algeria_franco.json | 114 |
+### Supported Dialects
 
-## Install
+| Code | Name | Words | Type |
+| :--- | :--- | :---: | :--- |
+| kab | Kabyle | 72 | Code |
+| kab-lat | Kabyle Latin | 104 | Code |
+| ly | Libya | 337 | Code |
+| tn-latn | Tounsi Franco | 205 | Code |
+| dz | Dzair Arabic | 110 | Code |
+| dz-latn | Dzair Franco | 114 | Code |
+| mauritania | Mauritania Gen Z | 177 | Vocabulary |
+
+### Install
 
 ```bash
 npm install bayda-maghreb
-
-## Usage
-
-Command line. The dialect comes from the file name (hello.kab.bayda), or from --dialect:
-
-    bayda init                      create hello.kab.bayda
-    bayda init --dialect tn-latn    create hello.tn-latn.bayda
-    bayda hello.kab.bayda           translate and run
-    bayda hello.kab.bayda --js      print the JavaScript only
-    bayda prog.bayda --dialect ly   choose the dialect by hand
-
-If the file name has no dialect code, kab is used.
-
-Code:
-
-    import { transpile } from "bayda-maghreb";
-    console.log(transpile(source, "tn-latn"));
-
-Only language words (if, else, function, console.log and so on) are translated. Text in quotes and comments stay as they are. The mauritania file is a word list, so it does not translate code.
+npm install -g bayda-maghreb
+npx bayda init --dialect tn-latn
+npx bayda hello.tn-latn.bayda
+npx bayda hello.tn-latn.bayda --js
+import { transpile } from "bayda-maghreb";
+const js = transpile(source, "dz-latn");
