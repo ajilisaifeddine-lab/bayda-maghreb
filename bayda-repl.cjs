@@ -2,7 +2,7 @@
 const fs = require('fs');
 const readline = require('readline');
 const transpile = require('./bayda-transpile.cjs');
-const DIALECT = 'data/dialects/tunisia_franco.json';
+const DIALECT = require('path').join(__dirname, 'data/dialects/tunisia_franco.json');
 const vm = require('vm');
 const context = { console, setTimeout, setInterval };
 vm.createContext(context);
