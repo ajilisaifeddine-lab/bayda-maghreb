@@ -72,7 +72,8 @@
     "suɣel": "stringify",
     "af": "for",
     "sbedd": "let",
-    "sbedd_ur_nbeddal": "const"
+    "sbedd_ur_nbeddal": "const",
+    "بدل": "switch"
   },
   "script": "Latin"
 }

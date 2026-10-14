@@ -104,7 +104,8 @@
     "ini": "say",
     "steqsi": "prompt",
     "wali": "check",
-    "suɣel": "stringify"
+    "suɣel": "stringify",
+    "asbeddel": "switch"
   },
   "script": "Latin"
 }

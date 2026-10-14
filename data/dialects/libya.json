@@ -338,7 +338,8 @@
     "صقع": "hard",
     "حاجة صقع": "hard",
     "دزلي طلب": "request",
-    "رد": "response"
+    "رد": "response",
+    "طيش": "throw"
   },
   "symbols": {}
 }

@@ -206,7 +206,8 @@
     "a5iran": "finally",
     "lawa7": "throw",
     "await": "await",
-    "async": "async"
+    "async": "async",
+    "jib_import": "import"
   },
   "symbols": {}
 }

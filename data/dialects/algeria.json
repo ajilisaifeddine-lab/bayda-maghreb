@@ -111,7 +111,8 @@
     "فالاخر": "finally",
     "ارمي": "throw",
     "استنى": "await",
-    "مهل": "async"
+    "مهل": "async",
+    "مستورد": "import"
   },
   "symbols": {}
 }
