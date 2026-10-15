@@ -73,7 +73,8 @@
     "af": "for",
     "sbedd": "let",
     "sbedd_ur_nbeddal": "const",
-    "بدل": "switch"
+    "بدل": "switch",
+    "azul": "console.log"
   },
   "script": "Latin"
 }
