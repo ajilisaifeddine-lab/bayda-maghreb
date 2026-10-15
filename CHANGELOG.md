@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.2.0 - 2026-10-15
+
+### Added
+- Tunisian Franco dictionary expanded from 33 to 148 words: many more spellings for if, else, while, for, break, continue, return, function, import and export.
+- Compound words work with or without a space (`idha ken` / `idhaken`, `7ata lin` / `7atalin`).
+- New words: `khalli`, `itba3`, `sinon`, `diz` / `dezz` / `dizz` (push), `zeed` / `ziid` (add).
+
+### Changed
+- `zid` now means `add` (it was `+`).
+
+### Removed
+- `na9es`, `zawzi`, `zwzi`, `fardi`, `frdi`: symbols stay symbols, so write `-`, `% 2 == 0` and `% 2 != 0` directly.
+
 ## 1.1.20 - 2026-10-14
 
 ### Changed
