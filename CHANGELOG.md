@@ -13,6 +13,16 @@
 ### Removed
 - `na9es`, `zawzi`, `zwzi`, `fardi`, `frdi`: symbols stay symbols, so write `-`, `% 2 == 0` and `% 2 != 0` directly.
 
+## 1.1.22 - 2026-10-14
+
+### Changed
+- No code changes (version bump only).
+
+## 1.1.21 - 2026-10-14
+
+### Fixed
+- `bayda-repl` now finds its dictionary relative to the package, so it runs from any directory (it failed with ENOENT outside the repo).
+
 ## 1.1.20 - 2026-10-14
 
 ### Changed
