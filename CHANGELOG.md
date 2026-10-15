@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.3.0 - 2026-10-15
+
+### Added
+- Libyan: `لو لا` (and `لولا`) now mean `else if`.
+- Kabyle: `azul` now maps to `console.log`.
+- Mauritanian: new `vocabulary` section (English terms for reading and learning, not used in code).
+- Dialect files now follow a schema, checked by the tests.
+
+### Changed
+- `elif` is now written as `else if` in the generated JavaScript (Algerian and Libyan dialects).
+- Libyan: `لو` now means `if` (it was `elif`).
+
+### Removed
+- `and`, `or`, `not` and `end` no longer map to code in the Algerian, Libyan and Kabyle Latin dialects. They never produced valid JavaScript and now live in `vocabulary`.
+
 ## 1.2.1 - 2026-10-15
 
 ### Changed
