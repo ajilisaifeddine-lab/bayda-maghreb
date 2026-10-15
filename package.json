@@ -1,6 +1,6 @@
 {
   "name": "bayda-maghreb",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Write JavaScript in your North African dialect: Tunisian, Libyan, Algerian, Kabyle, Mauritanian",
   "main": "index.js",
   "bin": {
