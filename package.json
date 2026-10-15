@@ -40,7 +40,8 @@
   "homepage": "https://github.com/ajilisaifeddine-lab/bayda-maghreb#readme",
   "devDependencies": {
     "typescript": "^7.0.2",
-    "vitest": "^5.0.4"
+    "vitest": "^5.0.4",
+    "zod": "^4.6.7"
   },
   "files": [
     "index.js",

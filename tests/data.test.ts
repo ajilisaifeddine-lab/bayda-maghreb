@@ -16,3 +16,11 @@ describe("data files", () => {
     expect(() => JSON.parse(fs.readFileSync(f, "utf8"))).not.toThrow();
   });
 });
+
+describe("dialect schema", () => {
+  const dialectFiles = files.filter((f) => f.endsWith(".json") && f.includes("dialects"));
+  it.each(dialectFiles)("%s matches DialectSchema", async (f) => {
+    const { DialectSchema } = await import("../core/schema");
+    expect(() => DialectSchema.parse(JSON.parse(fs.readFileSync(f, "utf8")))).not.toThrow();
+  });
+});
