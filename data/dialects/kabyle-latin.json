@@ -5,7 +5,6 @@
     "ila": "if",
     "ma_yella": "if",
     "awla": "else",
-    "neɣ": "or",
     "ma_ulac": "else",
     "ma_yella_ur": "else if",
     "i": "for",
@@ -63,8 +62,6 @@
     "semsawi": "equal",
     "ameqqran": "greater",
     "ameẓyan": "less",
-    "amar": "and",
-    "ur": "not",
     "yella": "exists",
     "seg": "from",
     "ɣer": "to",
@@ -107,5 +104,10 @@
     "suɣel": "stringify",
     "asbeddel": "switch"
   },
-  "script": "Latin"
+  "script": "Latin",
+  "vocabulary": {
+    "neɣ": "or",
+    "amar": "and",
+    "ur": "not"
+  }
 }
