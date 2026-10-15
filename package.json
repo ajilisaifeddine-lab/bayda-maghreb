@@ -1,7 +1,7 @@
 {
   "name": "bayda-maghreb",
   "version": "1.2.0",
-  "description": "Bayda Maghreb - 7 dialects clean + Gen 2 Tech",
+  "description": "Write JavaScript in your North African dialect: Tunisian, Libyan, Algerian, Kabyle, Mauritanian",
   "main": "index.js",
   "bin": {
     "bayda": "bayda-bin",
@@ -23,7 +23,13 @@
     "darija",
     "kabyle",
     "amazigh",
-    "maghreb"
+    "maghreb",
+    "tunisian",
+    "libyan",
+    "algerian",
+    "mauritanian",
+    "dialect",
+    "transpiler"
   ],
   "author": "ajilis",
   "license": "MIT",
@@ -41,9 +47,10 @@
     "src",
     "data",
     "bayda-transpile.cjs",
-    "bayda-bin"
+    "bayda-bin",
+    "bayda-repl.cjs"
   ],
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   }
 }
