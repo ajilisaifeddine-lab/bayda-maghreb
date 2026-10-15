@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.1 - 2026-10-15
+
+### Changed
+- package.json: `engines` now needs Node >=20. Description and keywords updated.
+- CI now tests on Node 20, 22 and 24.
+- Added a test that runs `bayda` and `bayda-repl` from another directory.
+- Added changelog entries for 1.1.21 and 1.1.22.
+
 ## 1.2.0 - 2026-10-15
 
 ### Added
