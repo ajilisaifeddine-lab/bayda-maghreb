@@ -65,6 +65,7 @@ if(!risk)ok('none found');
 sec('dialect files');
 const df=all.filter(f=>/data[\\\/]dialects[\\\/].+\.json$/.test(f));
 if(!df.length)err('no dialect files found in data/dialects');
+const kwBlock=raw=>{const i=raw.search(/^ {2}"keywords"\s*:/m);if(i<0)return raw;const t=raw.slice(i);const e=t.search(/^ {2}\}/m);return e<0?t:t.slice(0,e)};
 const codes={};
 for(const f of df){
   const raw=rd(f);let d;
@@ -75,7 +76,7 @@ for(const f of df){
   const kw=d.keywords;
   if(!kw||typeof kw!=='object'||Array.isArray(kw)){err(f+': keywords must be an object');continue}
   const cnt={};
-  for(const m of raw.matchAll(/^ {4}"((?:[^"\\]|\\.)*)"\s*:/gm))cnt[m[1]]=(cnt[m[1]]||0)+1;
+  for(const m of kwBlock(raw).matchAll(/^ {4}"((?:[^"\\]|\\.)*)"\s*:/gm))cnt[m[1]]=(cnt[m[1]]||0)+1;
   for(const [k,n] of Object.entries(cnt))if(n>1)err(f+': duplicate key "'+k+'" x'+n+' (JSON silently keeps only the last)');
   let nonjs=0;const total=Object.keys(kw).length;
   for(const [k,v] of Object.entries(kw)){
