@@ -10,8 +10,8 @@
     "bsah": "else",
     "w_ila": "else",
     "ella": "else",
-    "w_ila_kan": "elif",
-    "ella_kan": "elif",
+    "w_ila_kan": "else if",
+    "ella_kan": "else if",
     "toul_ma": "while",
     "madaam": "while",
     "dir": "do",
@@ -21,14 +21,9 @@
     "9oss": "break",
     "fawet": "continue",
     "jouz": "continue",
-    "khlas": "end",
-    "kamal": "end",
     "s7i7": "true",
     "sah": "true",
     "ghalet": "false",
-    "w": "and",
-    "wella": "or",
-    "machi": "not",
     "bayen": "print",
     "wari": "print",
     "tba3": "print",
@@ -118,5 +113,12 @@
     "استنى": "await",
     "مهل": "async"
   },
-  "symbols": {}
+  "symbols": {},
+  "vocabulary": {
+    "khlas": "end",
+    "kamal": "end",
+    "w": "and",
+    "wella": "or",
+    "machi": "not"
+  }
 }
