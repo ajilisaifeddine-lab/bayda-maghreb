@@ -7,7 +7,6 @@
     "awla": "else",
     "ma_ulac": "else",
     "ma_yella_ur": "else if",
-    "i": "for",
     "deg": "for",
     "asmi": "while",
     "armi": "while",
@@ -108,6 +107,7 @@
     "dukel": "concat",
     "ini": "say",
     "steqsi": "prompt",
-    "wali": "check"
+    "wali": "check",
+    "i": "for"
   }
 }
