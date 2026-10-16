@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
+    "target": "ES2020",
+    "module": "commonjs",
     "moduleResolution": "node",
-    "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "outDir": "dist"
   },
-  "include": ["core/**/*.ts","writers/**/*.ts","tests/**/*.ts"]
+  "include": ["core/**/*.ts", "cli/**/*.ts", "index.ts"]
 }

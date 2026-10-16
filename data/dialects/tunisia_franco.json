@@ -150,6 +150,28 @@
     "diz": "push",
     "zid": "add",
     "zeed": "add",
-    "ziid": "add"
+    "ziid": "add",
+    "let": [
+      "khali",
+      "7ot",
+      "khalli"
+    ],
+    "print": [
+      "itba3",
+      "etba3",
+      "itbaa",
+      "bayen"
+    ],
+    "if": [
+      "itha",
+      "ila",
+      "ken",
+      "idha"
+    ],
+    "else": [
+      "sinon",
+      "wella",
+      "mela"
+    ]
   }
 }

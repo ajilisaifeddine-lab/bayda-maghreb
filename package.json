@@ -1,58 +1,24 @@
 {
   "name": "bayda-maghreb",
-  "version": "1.4.0",
-  "description": "Write JavaScript in your North African dialect: Tunisian, Libyan, Algerian, Kabyle, Mauritanian",
-  "main": "index.js",
+  "version": "1.5.0",
+  "description": "Bayda programming language - Tounsi Franco, Kabyle, Dzair, Libya, Mauritania dialects",
+  "type": "module",
+  "main": "dist/index.js",
   "bin": {
-    "bayda": "bayda-bin",
-    "bayda-maghreb": "bayda-bin",
-    "bayda-repl": "bayda-repl.cjs"
+    "bayda": "./bayda-bin"
   },
   "scripts": {
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "audit": "node scripts/audit.cjs",
-    "prepublishOnly": "npm test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ajilisaifeddine-lab/bayda-maghreb.git"
+    "build": "tsc",
+    "start": "./bayda-bin",
+    "repl": "node bayda-repl.cjs"
   },
   "keywords": [
-    "arabic",
-    "darija",
+    "bayda",
+    "tunisia",
     "kabyle",
-    "amazigh",
-    "maghreb",
-    "tunisian",
-    "libyan",
-    "algerian",
-    "mauritanian",
-    "dialect",
-    "transpiler"
+    "franco",
+    "darja",
+    "maghreb"
   ],
-  "author": "ajilis",
-  "license": "MIT",
-  "type": "module",
-  "bugs": {
-    "url": "https://github.com/ajilisaifeddine-lab/bayda-maghreb/issues"
-  },
-  "homepage": "https://github.com/ajilisaifeddine-lab/bayda-maghreb#readme",
-  "devDependencies": {
-    "@types/node": "^26.6.5",
-    "typescript": "^5.3.3",
-    "vitest": "^5.0.4",
-    "zod": "^4.6.7"
-  },
-  "files": [
-    "index.js",
-    "src",
-    "data",
-    "bayda-transpile.cjs",
-    "bayda-bin",
-    "bayda-repl.cjs"
-  ],
-  "engines": {
-    "node": ">=20"
-  }
+  "license": "MIT"
 }
