@@ -1,0 +1,11 @@
+{
+  "id": "dzair",
+  "name": "Dzair - دزاير",
+  "version": "1.0.0",
+  "requiresConsent": true,
+  "description": "حزمة اللهجة الجزائرية - تتطلب موافقة المستخدم",
+  "detection": {
+    "mode": "suggestion",
+    "message": "يقترح كخيار أول"
+  }
+}
