@@ -1,62 +1,47 @@
 import fs from 'fs';
 import path from 'path';
-
-const PACKAGES_ROOT = path.join(process.cwd(), 'packages');
-
-// يقرا الفولدرات طول - ما عادش hard-coded
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const PACKAGES_ROOT = path.join(__dirname, '..', 'packages');
 function loadDialects() {
-  const dialects = {};
-  try {
-    const dirs = fs.readdirSync(PACKAGES_ROOT, { withFileTypes: true })
-     .filter(d => d.isDirectory())
-     .map(d => d.name);
-
-    for (const dir of dirs) {
-      const manifestPath = path.join(PACKAGES_ROOT, dir, 'manifest.json');
-      if (fs.existsSync(manifestPath)) {
-        const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-        const code = manifest.id || dir;
-        // code هو نفسه اسم الفولدر توة: tn-latn, kab-latn...
-        dialects[code] = manifest;
-        // زيد alias للاسم القديم باش ما يتكسرش
-        if (dir!== code) dialects[dir] = manifest;
-      }
+  const map = {};
+  const dirs = fs.readdirSync(PACKAGES_ROOT, { withFileTypes: true }).filter(d => d.isDirectory()).map(d => d.name);
+  for (const dir of dirs) {
+    const mf = path.join(PACKAGES_ROOT, dir, 'manifest.json');
+    if (fs.existsSync(mf)) {
+      const manifest = JSON.parse(fs.readFileSync(mf, 'utf8'));
+      map[dir] = { id: manifest.id || dir,...manifest };
     }
-  } catch {}
-  return dialects;
+  }
+  return map;
 }
-
-const DIALECTS = loadDialects();
-
-// aliases إضافية للتوافق
+export const DIALECTS = loadDialects();
 const ALIASES = {
-  "tounsi": "tn-latn", "tn": "tn-latn", "tunisia_franco": "tn-latn",
-  "kab": "kab-latn", "kab-lat": "kab-latn", "kabyle": "kab-latn",
-  "ly": "ly-latn", "libya": "ly-latn", "libya.franko": "ly-latn",
-  "dz": "dz-latn", "dzair": "dz-latn",
-  "mr": "mr-latn", "hassani": "mr-latn", "mauritania": "mr-latn",
-  "mauritania.franko": "mr-latn"
+  "tounsi": "tn-latn",
+  "tn": "tn-latn",
+  "tunisia_franco": "tn-latn",
+  "algeria_franco": "dz-latn",
+  "dz": "dz-latn",
+  "kabyle": "kab-latn",
+  "kabyle-latin": "kab-latn",
+  "kab": "kab-latn",
+  "libya": "ly-latn",
+  "ly": "ly-latn",
+  "mauritania": "mr-latn",
+  "mr": "mr-latn"
 };
-
 export function resolveDialect(input) {
-  let clean = String(input).toLowerCase().trim()
-   .replace(/^.*hello\./, '') // hello.kab-latn.bayda -> kab-latn.bayda
-   .replace(/\.bayda$/, '')
-   .replace(/^\./, '');
-
-  // مباشر
+  let clean = String(input).toLowerCase().trim().replace(/^.*hello\./, '').replace(/\.bayda$/, '').replace(/^\./, '');
   if (DIALECTS[clean]) return DIALECTS[clean].id || clean;
-  // alias
   if (ALIASES[clean]) return ALIASES[clean];
-  // جرب يلقى فولدر
-  if (fs.existsSync(path.join(PACKAGES_ROOT, clean))) return clean;
-
-  throw new Error(`unknown dialect: ${clean} (${Object.keys({...DIALECTS,...ALIASES}).join(', ')})`);
+  return clean;
 }
-
-export function getDialect(code) {
+export function getDialect(code = "tn-latn") {
   const resolved = resolveDialect(code);
-  return DIALECTS[resolved];
+  return DIALECTS[resolved] || null;
 }
-
-export default { resolveDialect, getDialect, DIALECTS };
+export function getAllDialects() {
+  return Object.values(DIALECTS);
+}
+export default { DIALECTS, resolveDialect, getDialect, getAllDialects };
