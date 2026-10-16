@@ -5,58 +5,89 @@
 ## العربية
 
 ### المبدأ القانوني
-هذا المشروع لا ينسخ أي محتوى محمي. كل المعاجم مبنية على **ملاحظة لغوية** (Linguistic Observation) - الحقائق اللغوية غير محمية بحقوق المؤلف.
+هذا المشروع لا ينسخ اي محتوى محمي. كل المعاجم مبنية على ملاحظة لغوية (Linguistic Observation) - الحقائق اللغوية غير محمية.
 
 ### المصادر الفعلية
+#### 1. ملاحظة الاستعمال العام
+المنصات:
+- FB - التعليقات العامة
+- TikTok - تعليقات فيديوهات لهجات
+- Instagram - تعليقات Reels
+- YouTube - تعليقات تعليم اللهجات
+- X - منشورات Franco-Arabic
+- Telegram - قنوات عامة فقط
 
-#### 1. ملاحظة الاستعمال العام على مواقع التواصل الاجتماعي
-**المنصات التي تمت الملاحظة منها:**
-- **【entity-Facebook¦canonical_name=Facebook】** - المنصة الأولى في المغرب الكبير (تعليقات عامة، صفحات عامة)
-- **TikTok** - تعليقات فيديوهات لهجات (قبايلي، حساني، تونسي، دزيري)
-- **Instagram** - تعليقات Reels لهجات شمال إفريقيا
-- **YouTube** - تعليقات فيديوهات تعليم اللهجات
-- **X (Twitter سابقا)** - منشورات عامة بـ Franco-Arabic
-- **Telegram** - قنوات عامة Public Channels فقط
+الطريقة: قراءة عامة، لا بيانات شخصية، استخراج النمط فقط (achou -> acu, 7ag -> hag)
 
-**الطريقة:**
-- قراءة منشورات عامة Public فقط (بدون تسجيل دخول خاص)
-- عدم حفظ أي بيانات شخصية (لا أسماء، لا روابط، لا صور، لا IDs)
-- استخراج النمط الإملائي فقط: كيف تُكتب الكلمة
-- مثال: `achou -> acu` و `7ag -> حق` و `oulach -> ulac`
-
-**النتيجة:** جدول تحويل مجرد `franco -> latin -> tifinagh -> arabic`
-**الحالة القانونية:** ملاحظة لغوية + استخدام تحويلي Transformative Use
+النتيجة: تحويل مجرد franco -> latin -> tifinagh -> arabic
+الحالة: Transformative Use
 
 #### 2. معرفة مجتمعية
-متحدثون أصليون للهجات: تونسي، جزائري، ليبي، حساني، قبايلي
+متحدثون اصليون: تونسي، جزائري، ليبي، حساني، قبايلي
 
 ### ما لا نفعله
-- ❌ لا scraping مخالف لشروط المنصات
-- ❌ لا تخزين محتوى منسوخ من مستخدمين
-- ❌ لا تخزين بيانات شخصية
+- لا scraping مخالف
+- لا تخزين محتوى منسوخ
+- لا بيانات شخصية
 
-### الضمان الأخلاقي
-```json
-"requiresConsent": true
+### الضمان
+requiresConsent: true
 
-Legal Principle
-This project does not copy protected content. All dictionaries are built on Linguistic Observation - linguistic facts are not copyrightable.
-Actual Sources 1. Observation of Public Usage on Social Media
-Platforms observed from:
-• Facebook - Main platform in Maghreb (public comments, public pages) • TikTok - Comments on dialect videos (Kabyle, Hassani, Tunisian, Algerian) • Instagram - Reels comments North Africa • YouTube - Comments on dialect teaching videos • X (Twitter) - Public posts in Franco-Arabic • Telegram - Public Channels only 
-Method:
-• Read public posts only (no private login) • No personal data saved (no names, links, photos, IDs) • Extract spelling pattern only: how word is written • Example: achou -> acu and 7ag -> hag and oulach -> ulac 
-Result: Abstract mapping franco -> latin -> tifinagh -> arabic
-Legal Status: Linguistic Observation + Transformative Use
-2. Community Knowledge
-Native speakers of dialects: Tunisian, Algerian, Libyan, Hassani, Kabyle
-What We Don't Do • ❌ No scraping violating platform terms • ❌ No storing copied user content • ❌ No personal data  Ethical Guarantee
+---
 
+## English
 
- / Open For Contribution
-العربية: هذا المعجم مفتوح للملاحظة، الإضافة، أو التعديل من طرف المجتمع.
+### Legal Principle
+No protected content copied. Built on Linguistic Observation - facts not copyrightable.
 
-English: This dictionary is open for observation, addition, or modification by community.
+### Sources
+#### 1. Public Usage Observation
+Platforms: FB, TikTok, IG, YT, X, Telegram Public only
 
-Request Link / رابط الطلب:
-1. Issues: https://github.com/ajilisaifeddine-lab/bayda-maghreb/issues/new 2. Pull Requests: https://github.com/ajilisaifeddine-lab/bayda-maghreb/pulls
+Method: Public posts only, no personal data, extract pattern only (achou -> acu)
+
+Result: franco -> latin -> tifinagh -> arabic
+Status: Transformative Use
+
+#### 2. Community Knowledge
+Native speakers: Tunisian, Algerian, Libyan, Hassani, Kabyle
+
+### What We Don't Do
+- No violating scraping
+- No copied content
+- No personal data
+
+### Guarantee
+requiresConsent: true
+
+---
+
+## مفتوح للمساهمة / Open For Contribution
+
+عربي: مفتوح للملاحظة، الاضافة، التعديل عبر المجتمع.
+English: Open for observation, addition, modification.
+
+Request Link:
+1. Issues: https://github.com/ajilisaifeddine-lab/bayda-maghreb/issues/new
+2. Pulls: https://github.com/ajilisaifeddine-lab/bayda-maghreb/pulls
+
+---
+
+## الامتثال القانوني / Legal Compliance
+
+ToS Compliance: Human Observation only, no bypass tools, public view as any user.
+
+GDPR Compliance: No collection of personal data (names, emails, photos, IDs). Only abstract rule.
+
+Copyright Doctrine: Feist v. Rural (US Supreme Court) - Facts not protected.
+
+Disclaimer: For linguistic research only. Platforms not affiliated.
+
+## الربط التقني / Technical Link
+
+- core/detector.ts -> Franco-Arabic detection
+- core/transliterator.ts -> franco -> latin / arabic / tifinagh
+- data/dialects/*.json -> Dictionaries (62 entries) - rule-based
+
+## الترخيص / License
+MIT License - Copyright (c) 2026 ajilisaifeddine-lab
