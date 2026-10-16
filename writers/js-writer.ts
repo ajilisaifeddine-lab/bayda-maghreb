@@ -1,7 +1,7 @@
 import type { Call, If, Program, Stmt } from "../core/program.js";
-import { LOG, arg, renderTokens } from "./common.js";
+import { LOG, arg, jsWord, renderTokens } from "./common.js";
 
-const call = (n: Call) => `${LOG.has(n.name) ? "console.log" : n.name}(${n.args.map(arg).join(", ")})`;
+const call = (n: Call) => `${LOG.has(n.name) ? "console.log" : n.name}(${n.args.map((a) => arg(a, jsWord)).join(", ")})`;
 
 function block(list: Stmt[], ind: string): string {
   const body = list.map((s) => stmt(s, ind + "  ")).join("\n");
