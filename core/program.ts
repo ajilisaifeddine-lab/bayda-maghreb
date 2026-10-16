@@ -1,5 +1,5 @@
 import { Token } from "./lexer.js";
-export type Arg = { type: "String" | "Number" | "Ident"; value: string };
+export type Arg = { type: "String" | "Number" | "Ident"; value: string } | { type: "Raw"; tokens: Token[] };
 export type Call = { type: "Call"; name: string; args: Arg[] };
 export type Expr = { type: "Raw"; tokens: Token[] };
 export type If = { type: "If"; test: Expr; then: Stmt[]; else: Stmt[] | null };
@@ -19,16 +19,29 @@ export function parseProgram(tokens: Token[]): Program {
     if (!open || open.type !== "SYMBOL" || open.value !== "(") fail(open || t);
     i += 2;
     const args: Arg[] = [];
-    while (tokens[i] && !(tokens[i].type === "SYMBOL" && tokens[i].value === ")")) {
+    let cur: Token[] = [];
+    let depth = 0;
+    const flush = () => {
+      if (!cur.length) return;
+      const one = cur.length === 1 ? cur[0] : null;
+      if (one && one.type === "STRING") args.push({ type: "String", value: one.value });
+      else if (one && one.type === "NUMBER") args.push({ type: "Number", value: one.value });
+      else if (one && one.type === "IDENT") args.push({ type: "Ident", value: one.value });
+      else args.push({ type: "Raw", tokens: cur });
+      cur = [];
+    };
+    while (true) {
       const a = tokens[i];
-      if (a.type === "SYMBOL" && a.value === ",") { i++; continue; }
-      if (a.type === "STRING") args.push({ type: "String", value: a.value });
-      else if (a.type === "NUMBER") args.push({ type: "Number", value: a.value });
-      else if (a.type === "IDENT") args.push({ type: "Ident", value: a.value });
-      else fail(a);
+      if (!a || a.type === "EOF") fail(a || tokens[i - 1]);
+      if (a.type === "NEWLINE") { i++; continue; }
+      if (isSym(a, ")") && depth === 0) break;
+      if (isSym(a, ",") && depth === 0) { flush(); i++; continue; }
+      if (isSym(a, "(")) depth++;
+      else if (isSym(a, ")")) depth--;
+      cur.push(a);
       i++;
     }
-    if (!tokens[i]) fail(tokens[i - 1]);
+    flush();
     i++;
     return { type: "Call", name: t.value, args };
   };

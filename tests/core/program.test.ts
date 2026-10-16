@@ -44,3 +44,41 @@ describe("parseProgram if", () => {
     expect(n.else[0].else).toEqual([log("c")])
   })
 })
+
+describe("parseProgram call arguments", () => {
+  const kw3 = { goul: "log", haqq: "true" }
+  const parse3 = (src: string) => parseProgram(normalize(lex(src, new Set()), kw3))
+  const call = (src: string): any => parse3(src).body[0]
+  const text = (a: any) => a.tokens.map((t: any) => t.value).join("")
+
+  it("keeps simple arguments as before", () => {
+    expect(call('goul("a", 2, x)').args).toEqual([
+      { type: "String", value: "a" },
+      { type: "Number", value: "2" },
+      { type: "Ident", value: "x" },
+    ])
+  })
+  it("reads an expression as a raw argument", () => {
+    const a = call('goul("a" + x, 2)').args
+    expect(a).toHaveLength(2)
+    expect(a[0].type).toBe("Raw")
+    expect(text(a[0])).toBe("a+x")
+    expect(a[1]).toEqual({ type: "Number", value: "2" })
+  })
+  it("does not split on commas inside parentheses", () => {
+    const a = call("goul(f(1, 2), 3)").args
+    expect(a).toHaveLength(2)
+    expect(text(a[0])).toBe("f(1,2)")
+  })
+  it("reads a keyword argument as raw", () => {
+    const a = call("goul(haqq)").args
+    expect(a[0].type).toBe("Raw")
+    expect(text(a[0])).toBe("true")
+  })
+  it("throws on an unclosed call", () => {
+    expect(() => parse3('goul("a"')).toThrow()
+  })
+  it("reads an empty call", () => {
+    expect(call("goul()").args).toEqual([])
+  })
+})

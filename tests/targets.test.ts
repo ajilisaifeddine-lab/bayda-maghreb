@@ -49,3 +49,23 @@ describe("target layer: core vs regex (Libyan)", () => {
     expect(toTarget(`${word("if")} (x) { }`, file, "py")).toBe("if x:\n    pass")
   })
 })
+
+describe("target layer: call arguments (Libyan)", () => {
+  const flat = (s: string) => s.replace(/\s+/g, "")
+  const src = `${word("print")}("a" + total, f(1, 2), 3)`
+  it("JavaScript matches the regex transpiler", async () => {
+    const { toTarget } = await import("../core/targets.js")
+    expect(flat(toTarget(src, file, "js"))).toBe(flat(transpile(src, file)))
+  })
+  it("writes Python", async () => {
+    const { toTarget } = await import("../core/targets.js")
+    expect(flat(toTarget(src, file, "py"))).toBe(flat('print("a" + total, f(1, 2), 3)'))
+  })
+  it("writes true as a Python constant", async () => {
+    const { toTarget } = await import("../core/targets.js")
+    expect(word("true")).toBeDefined()
+    const t = `${word("print")}(${word("true")})`
+    expect(toTarget(t, file, "js")).toBe("console.log(true)")
+    expect(toTarget(t, file, "py")).toBe("print(True)")
+  })
+})
