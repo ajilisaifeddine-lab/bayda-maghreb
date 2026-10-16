@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.4.0 - 2026-10-16
+
+### Added
+- `core/concepts.json`: the list of JavaScript words that a dialect's `keywords` may map to. A test checks every dialect against it.
+
+### Fixed
+- Transpiler: a repeated `let` is now turned into an assignment only inside the same block. Before, the same variable name in two functions caused a ReferenceError.
+- Transpiler: text inside backticks (template strings) is no longer changed.
+
+### Removed
+- Words that are not JavaScript moved from `keywords` to `vocabulary`, so they no longer change the generated code: Algerian (56), Algerian Franco (64), Kabyle Latin (37), Kabyle (23), Libyan (235), Mauritanian (173, they were already copied to `vocabulary`).
+
 ## 1.3.0 - 2026-10-15
 
 ### Added
