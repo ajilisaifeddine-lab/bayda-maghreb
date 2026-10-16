@@ -41,6 +41,20 @@
     "beddel": "replace",
     "ferren": "split",
     "seddukel": "join",
+    "asumer": "await",
+    "raǧu": "async",
+    "tiɣri": "call",
+    "asali": "apply",
+    "tuqqna": "bind",
+    "suɣel": "stringify",
+    "af": "for",
+    "sbedd": "let",
+    "sbedd_ur_nbeddal": "const",
+    "بدل": "switch",
+    "azul": "console.log"
+  },
+  "script": "Latin",
+  "vocabulary": {
     "semsawi": "equal",
     "ameqqran": "greater",
     "ameẓyan": "less",
@@ -51,13 +65,8 @@
     "isem": "name",
     "azal": "value",
     "tamawt": "type",
-    "asumer": "await",
-    "raǧu": "async",
     "tazmert": "promise",
     "tuccḍa": "error",
-    "tiɣri": "call",
-    "asali": "apply",
-    "tuqqna": "bind",
     "akal": "global",
     "agmam": "module",
     "tawuri": "process",
@@ -68,13 +77,6 @@
     "talemmast": "middle",
     "ini": "say",
     "steqsi": "prompt",
-    "wali": "check",
-    "suɣel": "stringify",
-    "af": "for",
-    "sbedd": "let",
-    "sbedd_ur_nbeddal": "const",
-    "بدل": "switch",
-    "azul": "console.log"
-  },
-  "script": "Latin"
+    "wali": "check"
+  }
 }
