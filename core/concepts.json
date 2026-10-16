@@ -1,0 +1,4 @@
+{
+  "core": ["if","else","else if","while","do","for","in","break","continue","return","true","false","null","class","function","let","const","var","this","new","typeof","delete","void","switch","import","export","try","catch","finally","throw","await","async"],
+  "library": ["add","push","pop","sort","filter","map","join","find","reduce","replace","split","parse","stringify","apply","bind","call","length","get","set","print","log","console.log","Array","Boolean","Number","Object","String","Map","Set"]
+}

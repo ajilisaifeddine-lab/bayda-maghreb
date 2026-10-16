@@ -24,3 +24,14 @@ describe("dialect schema", () => {
     expect(() => DialectSchema.parse(JSON.parse(fs.readFileSync(f, "utf8")))).not.toThrow();
   });
 });
+
+describe("dialect concepts", () => {
+  const concepts = JSON.parse(fs.readFileSync("core/concepts.json", "utf8"))
+  const allowed = new Set([...concepts.core, ...concepts.library])
+  const dialectFiles = files.filter((f) => f.endsWith(".json") && f.includes("dialects"))
+  it.each(dialectFiles)("%s keywords only use allowed values", (f) => {
+    const kw = JSON.parse(fs.readFileSync(f, "utf8")).keywords
+    const bad = [...new Set(Object.values(kw))].filter((v) => !allowed.has(v as string))
+    expect(bad).toEqual([])
+  })
+})
