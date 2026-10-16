@@ -2,7 +2,7 @@
 const fs=require('fs');
 const _cache=new Map();
 const _esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-const _skip=/("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|(?:\/\/[^\n]*|\/\*[^]*?\*\/))/;
+const _skip=/("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|`(?:\\.|[^`\\])*`|(?:\/\/[^\n]*|\/\*[^]*?\*\/))/;
 function _load(file){
   const key=file+':'+fs.statSync(file).mtimeMs;
   if(_cache.has(key)) return _cache.get(key);
@@ -42,15 +42,20 @@ function transpile(code,file){
   let out = String(code).split(_skip).map((p,i)=>i%2?p:p.replace(re,m=>map.get(m))).join('').trim();
   out = out.replace(/\b(if|while|for)\s+([^\n]+?)\s*\{/g, (m,k,c)=>{let d=0,w=c[0]==='(';for(let i=0;i<c.length;i++){if(c[i]==='(')d++;else if(c[i]===')'){d--;if(d===0&&i<c.length-1){w=false;break;}}}return k+' '+(w&&c.endsWith(')')?c:'('+c+')')+' {';});
   out = out.replace(/console\.log\s*(?!\()((?:[^\n:{}]+)+)/g, 'console.log($1)');
-  let declared = new Set();
+  const scopes = [new Set()];
   out = out.split('\n').map(line=>{
     const m = line.match(/^\s*let\s+([A-Za-z_\w]+)\s*=/);
+    let res = line;
     if(m){
       const v = m[1];
-      if(declared.has(v)) return line.replace(/^\s*let\s+/, ' ');
-      else declared.add(v);
+      if(scopes.some(s=>s.has(v))) res = line.replace(/^\s*let\s+/, ' ');
+      else scopes[scopes.length-1].add(v);
     }
-    return line;
+    for(const ch of line.replace(/"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`/g,'')){
+      if(ch==='{') scopes.push(new Set());
+      else if(ch==='}' && scopes.length>1) scopes.pop();
+    }
+    return res;
   }).join('\n');
   return out.trim();
 }
