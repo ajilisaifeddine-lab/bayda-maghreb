@@ -1,11 +1,11 @@
 {
   "id": "kab-latn",
-  "name": "Kabyle - ⵝⴰⵇⵠⴰⵢⵍⵉⵝ",
+  "name": "Kabyle",
   "version": "1.0.0",
   "requiresConsent": true,
   "description": "حزمة اللغة القبايلية الأمازيغية - تتطلب موافقة صريحة",
   "language": "berber",
-  "script": "latin-tifinagh-arabic",
+  "script": "Latin",
   "region": [
     "Kabylia",
     "Algeria"
@@ -13,5 +13,6 @@
   "detection": {
     "mode": "suggestion",
     "message": "يقترح كخيار - لغة أمازيغية"
-  }
+  },
+  "code": "kab-lat"
 }

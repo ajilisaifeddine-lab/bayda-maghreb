@@ -74,3 +74,4 @@ MIT License - Copyright (c) 2026 ajilisaifeddine-lab
 
 For linguistic research and educational purposes only.
 للأغراض البحثية اللغوية والتعليمية فقط.
+

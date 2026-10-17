@@ -1,11 +1,13 @@
 {
   "id": "tn-latn",
-  "name": "Tounsi - تونسي",
+  "name": "Tounsi Franco",
   "version": "1.0.0",
   "requiresConsent": true,
   "description": "حزمة اللهجة التونسية - تتطلب موافقة المستخدم قبل التنزيل",
   "detection": {
     "mode": "suggestion",
     "message": "الكشف التلقائي يقترح هذه الحزمة كخيار أول، لا يفرضها"
-  }
+  },
+  "code": "tn-latn",
+  "script": "latin"
 }

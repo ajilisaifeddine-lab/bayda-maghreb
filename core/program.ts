@@ -1,4 +1,5 @@
-import { Token } from "./lexer.js";
+import { Token } from "./lexer";
+
 export type Arg = { type: "String" | "Number" | "Ident"; value: string } | { type: "Raw"; tokens: Token[] };
 export type Call = { type: "Call"; name: string; args: Arg[] };
 export type Expr = { type: "Raw"; tokens: Token[] };
@@ -10,7 +11,7 @@ export function parseProgram(tokens: Token[]): Program {
   let i = 0;
   const fail = (t: Token) => { throw new Error(`Unexpected "${t.value}" at line ${t.line}, col ${t.col}`); };
   const isSym = (t: Token | undefined, v: string) => !!t && t.type === "SYMBOL" && t.value === v;
-  const skip = () => { while (tokens[i] && (tokens[i].type === "NEWLINE" || isSym(tokens[i], ":"))) i++; };
+  const skip = () => { while (tokens[i] && (tokens[i].type === "NEWLINE" || isSym(tokens[i], ";"))) i++; };
 
   const parseCall = (): Call => {
     const t = tokens[i];
@@ -21,19 +22,31 @@ export function parseProgram(tokens: Token[]): Program {
     const args: Arg[] = [];
     let cur: Token[] = [];
     let depth = 0;
+    
     const flush = () => {
       if (!cur.length) return;
       const one = cur.length === 1 ? cur[0] : null;
       if (one && one.type === "STRING") args.push({ type: "String", value: one.value });
       else if (one && one.type === "NUMBER") args.push({ type: "Number", value: one.value });
-      else if (one && one.type === "IDENT") args.push({ type: "Ident", value: one.value });
+      else if (one && one.type === "IDENT") {
+         if (one.value === "haqq") {
+             args.push({ type: "Raw", tokens: [{ ...one, value: "true" }] });
+         } else {
+             args.push({ type: "Raw", tokens: cur });
+         }
+      }
       else args.push({ type: "Raw", tokens: cur });
       cur = [];
     };
+
     while (true) {
       const a = tokens[i];
       if (!a || a.type === "EOF") fail(a || tokens[i - 1]);
       if (a.type === "NEWLINE") { i++; continue; }
+      
+      // تجاهل المسافات الزائدة
+      if (a.type === "SYMBOL" && a.value === " ") { i++; continue; }
+
       if (isSym(a, ")") && depth === 0) break;
       if (isSym(a, ",") && depth === 0) { flush(); i++; continue; }
       if (isSym(a, "(")) depth++;
@@ -54,8 +67,9 @@ export function parseProgram(tokens: Token[]): Program {
     }
     return -1;
   };
+
   const stripParens = (list: Token[]): Token[] => {
-    while (list.length > 1 && isSym(list[0], "(") && closeOf(list) === list.length - 1) list = list.slice(1, -1);
+    while (list.length > 1 && isSym(list[0], "(") && closeOf(list) === list.length - 1) return list.slice(1, -1);
     return list;
   };
 

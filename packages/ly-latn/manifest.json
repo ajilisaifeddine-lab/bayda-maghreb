@@ -1,3 +1,9 @@
 {
-  "daily": ["haq", "tawa", "shenu"]
+  "id": "ly-latn",
+  "name": "Libya",
+  "version": "1.0.0",
+  "requiresConsent": true,
+  "description": "اللهجة الليبية بالفرانكو",
+  "code": "ly",
+  "script": "Arabic"
 }
