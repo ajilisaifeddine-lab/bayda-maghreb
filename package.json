@@ -10,7 +10,6 @@
   "scripts": {
     "build": "tsc",
     "start": "./bayda-bin",
-    "repl": "node bayda-repl.cjs",
     "test": "vitest run"
   },
   "keywords": [
