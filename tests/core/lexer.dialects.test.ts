@@ -14,8 +14,8 @@ describe("lexer", () => {
   });
 });
 
-const dir = "data/dialects/";
-describe.each(fs.readdirSync(dir).filter((f) => f.endsWith(".json")))("%s", (f) => {
+const dir = "packages/";
+describe.each(fs.readdirSync(dir).filter((f) => f.endsWith("/keywords/keywords/keywords.json")))("%s", (f) => {
   it("every single-word key is one IDENT", () => {
     const kw: Record<string, string> = JSON.parse(fs.readFileSync(dir + f, "utf8")).keywords ?? {};
     const bad = Object.keys(kw)

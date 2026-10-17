@@ -4,7 +4,7 @@ import { normalize } from "../../core/normalizer.js";
 
 const kw = { idha: "if", ken: "if", "idha ken": "else if", goul: "log" };
 const run = (src: string) =>
-  normalize(lex(src, new Set()), kw).filter((t) => t.type !== "EOF").map((t) => t.type + ":" + t.value);
+  Object.values(normalize(lex(src, new Set()), kw)).filter((t) => t.type !== "EOF").map((t) => t.type + ":" + t.value);
 
 describe("normalizer", () => {
   it("turns a dialect word into its concept", () => {

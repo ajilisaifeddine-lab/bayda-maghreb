@@ -10,7 +10,8 @@
   "scripts": {
     "build": "tsc",
     "start": "./bayda-bin",
-    "repl": "node bayda-repl.cjs"
+    "repl": "node bayda-repl.cjs",
+    "test": "vitest run"
   },
   "keywords": [
     "bayda",
@@ -20,5 +21,8 @@
     "darja",
     "maghreb"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "zod": "^4.6.7"
+  }
 }

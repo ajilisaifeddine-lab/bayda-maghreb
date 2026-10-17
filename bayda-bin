@@ -1,20 +1,20 @@
 #!/usr/bin/env node
+
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { DIALECTS, resolveDialect } from './src/dialect-registry.js';
-import { fileURLToPath as f2 } from 'url';
+import { resolveDialect, DIALECTS } from './src/dialect-registry.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-let args = process.argv.slice(2);
-let code = args[0] &&!args[0].startsWith('-')? args[0] : null;
-if (code && code.endsWith('.bayda')) {
-  code = resolveDialect(path.basename(code));
-}
+const args = process.argv.slice(2);
+const code = args[0] && !args[0].startsWith('--') ? args[0] : null;
+
+// تعريف واحد فقط لدالة pick
 const pick = (c) => {
-  const resolved = resolveDialect(c);
-  return DIALECTS[resolved] || null;
+  const r = resolveDialect(c);
+  return DIALECTS[r] || null;
 };
 
 if (!code || args.includes('--help') || args.includes('-h')) {
@@ -24,7 +24,7 @@ if (!code || args.includes('--help') || args.includes('-h')) {
 
 if (code === 'init') {
   const dArgIndex = args.indexOf('--dialect');
-  const dCode = dArgIndex!== -1? args[dArgIndex+1] : 'tn-latn';
+  const dCode = dArgIndex !== -1 ? args[dArgIndex + 1] : 'tn-latn';
   const d = pick(dCode) || pick('tn-latn');
   console.log(`init ${d.id}`);
   process.exit(0);
@@ -35,9 +35,13 @@ if (!file) {
   console.error('usage: bayda <file>');
   process.exit(1);
 }
-const dialect = pick(code || path.basename(file).split('.')[1] || 'tn-latn');
+
+const dialectCode = args.find(a => !a.endsWith('.bayda') && a !== code) || path.basename(file).split('.')[1] || 'tn-latn';
+const dialect = pick(dialectCode);
+
 if (!dialect) {
-  console.error(`unknown dialect ${code}`);
+  console.error(`unknown dialect ${dialectCode}`);
   process.exit(1);
 }
+
 console.log(`running with ${dialect.id}`);
