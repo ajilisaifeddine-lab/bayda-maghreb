@@ -125,8 +125,9 @@
   "tidukla": "Map",
   "agraw": "Set",
   "ɣer_teɣzi": "length",
-  "print": "log",
+  "print": "ktab",
   "awal": "log",
   "di": "in",
-  "asbeddel": "switch"
+  "asbeddel": "switch",
+  "ktab": "print"
 }

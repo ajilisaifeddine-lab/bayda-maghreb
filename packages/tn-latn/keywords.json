@@ -14,7 +14,7 @@
   "a3mel": "let",
   "a3ml": "let",
   "khalli": "let",
-  "goul": "log",
+  "goul": "print",
   "9oul": "log",
   "gul": "log",
   "warri": "log",
@@ -158,12 +158,7 @@
     "7ot",
     "khalli"
   ],
-  "print": [
-    "itba3",
-    "etba3",
-    "itbaa",
-    "bayen"
-  ],
+  "print": "goul",
   "if": [
     "itha",
     "ila",

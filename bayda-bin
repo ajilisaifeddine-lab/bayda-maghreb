@@ -1,47 +1,41 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { resolveDialect, DIALECTS } from './src/dialect-registry.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { loadDialect } from "./dist/core/loader.js";
+import fs from "fs";
+import path from "path";
 
 const args = process.argv.slice(2);
-const code = args[0] && !args[0].startsWith('--') ? args[0] : null;
+const code = args[0] && !args[0].startsWith("--") ? args[0] : null;
 
-// تعريف واحد فقط لدالة pick
-const pick = (c) => {
-  const r = resolveDialect(c);
-  return DIALECTS[r] || null;
-};
-
-if (!code || args.includes('--help') || args.includes('-h')) {
-  console.error('usage: bayda <file> [dialect code] | bayda init [--dialect code]');
+if (!code || args.includes("--help") || args.includes("-h")) {
+  console.error("usage: bayda <file> [--dialect code]");
   process.exit(1);
 }
 
-if (code === 'init') {
-  const dArgIndex = args.indexOf('--dialect');
-  const dCode = dArgIndex !== -1 ? args[dArgIndex + 1] : 'tn-latn';
-  const d = pick(dCode) || pick('tn-latn');
-  console.log(`init ${d.id}`);
+if (code === "init") {
+  console.log("init command not implemented yet.");
   process.exit(0);
 }
 
-const file = args.find(a => a.endsWith('.bayda'));
+const file = args.find((a) => a.endsWith(".bayda"));
 if (!file) {
-  console.error('usage: bayda <file>');
+  console.error("usage: bayda <file>");
   process.exit(1);
 }
 
-const dialectCode = args.find(a => !a.endsWith('.bayda') && a !== code) || path.basename(file).split('.')[1] || 'tn-latn';
-const dialect = pick(dialectCode);
+const dialectArgIndex = args.indexOf("--dialect");
+const dialectCode = dialectArgIndex !== -1 ? args[dialectArgIndex + 1] : "tn-latn";
 
-if (!dialect) {
-  console.error(`unknown dialect ${dialectCode}`);
+try {
+  const dialect = loadDialect(dialectCode, { consent: true });
+  if (!dialect) {
+    console.error(`Unknown dialect: ${dialectCode}`);
+    process.exit(1);
+  }
+  
+  console.log(`running with ${dialect.id}`);
+  
+} catch (e) {
+  console.error(`Error: ${e.message}`);
   process.exit(1);
 }
-
-console.log(`running with ${dialect.id}`);

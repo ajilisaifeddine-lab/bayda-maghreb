@@ -1,0 +1,15 @@
+{
+  "header": "==================================================",
+  "title": "📦 Auditing Bayda-Maghreb Dialect Packages",
+  "missingPackages": "❌ packages directory not found!",
+  "missingManifest": "Missing manifest.json",
+  "missingKeywords": "Missing keywords.json",
+  "success": "✅",
+  "error": "❌",
+  "summary": "📊 Total",
+  "totalKeywords": "🔑 Total Keywords",
+  "totalVocab": "📖 Total Vocabulary",
+  "packagesCount": "packages",
+  "successCount": "Success",
+  "errorCount": "Errors"
+}

@@ -190,5 +190,15 @@
   "فونكسيون": "function",
   "كلاس": "class",
   "قول": "print",
-  "اطبع": "print"
+  "اطبع": "print",
+  "if": "idha",
+  "else": "wella",
+  "while": "tawa",
+  "true": "haqq",
+  "false": "bla",
+  "idha": "if",
+  "wella": "else",
+  "tawa": "while",
+  "haqq": "true",
+  "bla": "false"
 }
