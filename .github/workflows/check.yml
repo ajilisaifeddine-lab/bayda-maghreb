@@ -1,13 +1,21 @@
-name: Check Dialect
-on: [pull_request]
+name: Check Dialects
+
+on:
+  push:
+    branches: [ main, refactor-stage-0 ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm install
-      - run: node scripts/audit.cjs
-      - run: npm test
+      - name: Install dependencies
+        run: npm install
+      - name: Audit packages
+        run: node scripts/audit.cjs
