@@ -1,77 +1,87 @@
-# Bayda Maghreb 🌙 - Franco & Arabic Dialects
+# Bayda Maghreb 🌙
 
-> Write code in your own dialect. North African transpiler - Kabyle, Libya, Tunisia, Algeria, Mauritania.
-> اكتب كود بلهجتك. محول لهجات شمال افريقيا - قبايلي، ليبي، تونسي، جزائري، حساني.
+**A programming language for North African dialects.**
+**لغة برمجة بلهجات شمال إفريقيا.**
 
-![license](https://img.shields.io/badge/license-MIT-green)
-![legal](https://img.shields.io/badge/legal-GDPR%20%2B%20ToS%20Compliant-blue)
-![status](https://img.shields.io/badge/status-Open%20For%20Contribution-orange)
-
----
-
-## What is this? / ما هذا؟
-
-**English:** Bayda is a programming language that lets you code in Franco-Arabic (Arabizi). It transpiles your dialect to JavaScript. Supports Tifinagh, Arabic, and Latin.
-
-**عربي:** بيضاء لغة برمجة تكتب بلهجتك بالفرانكو-عربي. تحول كودك الى JavaScript. تدعم تيفيناغ، عربي، لاتيني.
-
-**Example:** `achou -> acu / ⴰⵛⵓ / واشو` - one word, all scripts.
+Write code in your own dialect. Transpile to JavaScript & Python.
+اكتب كود بلهجتك. تحول إلى JavaScript و Python.
 
 ---
 
-## Legal & Sources / قانوني ومصادر
+## Features / 
 
-This project is **100% legal and ethical**.
-
-- No copied content / لا نسخ محتوى
-- No personal data / لا بيانات شخصية  
-- Based on Linguistic Observation / مبني على ملاحظة لغوية
-- Transformative Use / استخدام تحويلي
-
-**Full legal methodology:** See [docs/SOURCES.md](docs/SOURCES.md)
-
-**Compliance:** ToS Compliant, GDPR Compliant, Feist v. Rural Doctrine, MIT License.
+*   **7 Supported Dialects / 7 لهجات مدعومة:** 
+    Tunisian, Algerian, Libyan, Mauritanian, Kabyle (Latin/Tifinagh), and         Shilha.
+    تونسي، جزائري، ليبي، موريتاني، قبائلي (لاتيني/تيفيناغ)، وتشلحيت.
+*   **Multi-Target Transpiler / مترجم متعدد الأهداف:** 
+    Transpiles to JavaScript and Python.
+    يحول إلى JavaScript و Python.
+*   **Smart Lexer / محلل لغوي ذكي:** 
+    Handles Franco-Arabic digits (e.g., 5ayb, 3lik) as letters, not numbers.
+    يتعامل مع أرقام الفرانكو (مثل 5ayb، 3lik) كحروف، وليس كأرقام.
+*   **Fully Tested / مختبر بالكامل:** 
+    30+ unit tests ensuring core stability.
+    أكثر من 30 اختباراً لضمان استقرار النواة.
 
 ---
 
-## Install / تثبيت
+## Supported Dialects / اللهجات المدعومة
 
-```bash
-npm i -g bayda-maghreb
+| Dialect     | Code          | Script   |
+| :---        | :---          | :---     |
+| Tunisian    | tn-latn       | Franco   |
+| Algerian    | dz-latn       | Franco   |
+| Libyan      | ly-latn       | Franco   |
+| Mauritanian | mr-latn       | Franco   |
+| Kabyle      | kab-latn      | Latin    |
+| Kabyle      | kab-tifinagh  | Tifinagh |
+| Shilha      | shi-latn      | Latin    |
 
+---
 
+## Install & Usage / التثبيت والاستخدام
 
-Quick Start / بداية سريعة
-Create a file hello.tn-latn.bayda (Tunisian Franco):
-ken (s7i7) { goul("ila") } wella { goul("no") }
+Install globally:
+    npm i -g bayda-maghreb
 
-Run it, or print the JavaScript:
-bayda hello.tn-latn.bayda
-bayda hello.tn-latn.bayda --js
+Create a file hello.tn-latn.bayda:
+    ktab("salam")
+    idha (haqq) {
+        ktab("Hello World")
+    }
 
-Output
-if (true) { console.log("ila") } else { console.log("no") }
+Run it (Default: JavaScript):
+    bayda hello.tn-latn.bayda
 
-The dialect is read from the file name (.tn-latn.bayda), or pass --dialect tn-latn.
-Franco dialects: tn-latn (Tunisian), dz-latn (Algerian).
+Transpile to Python:
+    bayda hello.tn-latn.bayda --py
 
-Core files:
-core/detector.ts -> Franco detection / كشف الفرانكو • core/transliterator.ts -> achou -> acu / ⴰⵛⵓ / واشو 
+---
 
+## Legal & License / قانوني والترخيص
 
-Open For Contribution / مفتوح للمساهمة والدعم
-This project is open for observation, support, and modification.
+This project is 100% legal and ethical.
+هذا المشروع قانوني وأخلاقي 100%.
 
-عربي: هذا المشروع مفتوح للملاحظة، الدعم، والتعديل من المجتمع.
+*   **No copied content:** Built on linguistic observation.
+*   **No personal data:** We do not scrape or store user data.
+*   **License:** **AGPL-3.0**.
 
-We welcome:
-• ملاحظة لغوية / Linguistic observation • اضافة لهجات / New dialects • تصحيح ترجمة / Fix transliteration • تحسين كود / Code improvement 
-How to contribute / كيف تساهم:
-1. Issues (ملاحظة): https://github.com/ajilisaifeddine-lab/bayda-maghreb/issues/new 2. Pull Requests (تعديل): https://github.com/ajilisaifeddine-lab/bayda-maghreb/pulls  • All contributions require requiresConsent: true / كل المساهمات تتطلب موافقة • Please read docs/SOURCES.md before contributing • No personal data, public observation only 
+**Commercial Use:** If you wish to use this project in a closed-source commercial product, you must contact the author for a separate commercial license. This protects the project from exploitation.
 
-License / الترخيص
-MIT License - Copyright (c) 2026 ajilisaifeddine-lab
+**الاستخدام التجاري:** إذا كنت ترغب في استخدام هذا المشروع في منتج تجاري مغلق المصدر، يجب عليك التواصل مع المؤلف للحصول على ترخيص تجاري منفصل. هذا يحمي المشروع من الاستغلال.
 
-For linguistic research and educational purposes only.
-للأغراض البحثية اللغوية والتعليمية فقط.
+---
 
+## Contributing / المساهمة
+
+We welcome linguistic observations and code improvements.
+نرحب بالملاحظات اللغوية والتحسينات البرمجية.
+
+1.  **Issues:**           Report bugs or suggest new dialects.
+2.  **Pull Requests:**    Submit improvements. Note: All contributions                                  require requiresConsent: true.
+
+Please read docs/SOURCES.md before contributing.
+
+---
+*Copyright (c) 2026 ajilisaifeddine-lab. Built for the next generation of North African developers.*
