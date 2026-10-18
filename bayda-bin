@@ -33,9 +33,11 @@ try {
     process.exit(1);
   }
   
-  console.log(`running with ${dialect.id}`);
+  const targetArg = args.find(a => a === '--py' || a === '--python') ? 'py' : 'js';
+  console.log(`running with ${dialect.id} -> target: ${targetArg}`);
   
-} catch (e) {
+}
+ catch (e) {
   console.error(`Error: ${e.message}`);
   process.exit(1);
 }

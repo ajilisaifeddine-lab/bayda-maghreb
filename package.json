@@ -5,7 +5,7 @@
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "bayda": "./bayda-bin"
+    "bayda": "bayda-bin"
   },
   "scripts": {
     "build": "tsc",

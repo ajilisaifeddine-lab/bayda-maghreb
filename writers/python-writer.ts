@@ -1,29 +1,55 @@
-import type { Call, If, Program, Stmt } from "../core/program.js";
-import { LOG, arg, renderTokens } from "./common.js";
-export function toPython(node:any):string{ if(node.type==="Program") return node.body.map(toPython).join("\n"); if(node.type==="Print") return `print("${node.value}")`; return ""; }
+import { AstNode } from '../core/types.js';
 
-const PY = new Map([["true", "True"], ["false", "False"], ["null", "None"]]);
-const pyWord = (t: { type: string; value: string }) => (t.type === "KEYWORD" ? PY.get(t.value) ?? t.value : t.value);
-const pyCall = (n: Call) => `${LOG.has(n.name) ? "print" : n.name}(${n.args.map((a) => arg(a, pyWord)).join(", ")})`;
-
-function pyBlock(list: Stmt[], ind: string): string {
-  return list.length ? list.map((s) => pyStmt(s, ind)).join("\n") : `${ind}pass`;
+export function toPython(node: AstNode): string {
+  return compileNode(node, 0);
 }
 
-function pyIf(n: If, ind: string, lead: string): string {
-  const test = renderTokens(n.test.tokens, pyWord);
-  let out = `${ind}${lead} ${test}:\n${pyBlock(n.then, ind + "    ")}`;
-  if (n.else) {
-    const only = n.else[0];
-    out += n.else.length === 1 && only.type === "If" ? `\n${pyIf(only, ind, "elif")}` : `\n${ind}else:\n${pyBlock(n.else, ind + "    ")}`;
+function compileNode(node: AstNode, indentLevel: number): string {
+  const indent = '    '.repeat(indentLevel);  
+
+  switch (node.type) {
+    case 'Program':
+      return node.body.map(n => compileNode(n, indentLevel)).join('\n');
+
+    case 'Call': {
+      
+      let funcName = node.name;
+      if (funcName === 'ktab' || funcName === 'goul') {
+        funcName = 'print';
+      }
+      
+      const args = node.args.map(arg => compileNode(arg, 0)).join(', ');
+      return `${indent}${funcName}(${args})`; // 
+    }
+
+    case 'If': {
+      const test = compileNode(node.test, 0);
+
+      let code = `${indent}if ${test}:\n`;
+      const thenBody = node.then.map(n => compileNode(n, indentLevel + 1)).join('\n');
+      code += thenBody || `${indent}    pass`; 
+      
+      if (node.else && node.else.length > 0) {
+        code += `\n${indent}else:\n`;
+        const elseBody = node.else.map(n => compileNode(n, indentLevel + 1)).join('\n');
+        code += elseBody || `${indent}    pass`;
+      }
+      return code;
+    }
+
+    case 'StringLiteral':
+      return `"${node.value}"`;
+
+    case 'NumberLiteral':
+      return String(node.value);
+
+    case 'Identifier':
+      
+      if (node.name === 'haqq') return 'True';
+      if (node.name === 'bla') return 'False';
+      return node.name;
+
+    default:
+      return '';
   }
-  return out;
-}
-
-function pyStmt(s: Stmt, ind: string): string {
-  return s.type === "If" ? pyIf(s, ind, "if") : ind + pyCall(s);
-}
-
-export function writePython(p: Program): string {
-  return p.body.map((s) => pyStmt(s, "")).join("\n");
 }

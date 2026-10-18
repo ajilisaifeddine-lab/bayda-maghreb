@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bayda Maghreb 🌙 | اكتب كود بلهجتك</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0a0a0a;
+            --bg-surface: #121212;
+            --bg-glass: rgba(25, 25, 25, 0.6);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-neon: #d946ef;
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --font-heading: 'Cairo', sans-serif;
+            --font-code: 'Fira Code', monospace;
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        [data-theme="light"] {
+            --bg-base: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-glass: rgba(255, 255, 255, 0.7);
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border-glass: rgba(0, 0, 0, 0.1);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        /* Kids Mode Theme */
+        [data-kids="true"] {
+            --bg-base: #fef08a; /* Light playful yellow */
+            --bg-surface: #ffffff;
+            --bg-glass: rgba(255, 255, 255, 0.9);
+            --text-primary: #1e1b4b; /* Dark purple */
+            --text-secondary: #4338ca;
+            --accent-blue: #ec4899; /* Pink */
+            --accent-purple: #8b5cf6;
+            --border-glass: #1e1b4b;
+            --shadow: 4px 4px 0px 0px #1e1b4b; /* Comic book shadow */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-heading);
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes pulse-glow { 0%, 100% { filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.4)); } 50% { filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.8)); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* Components */
+        .glass-card {
+            background: var(--bg-glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 2px solid var(--border-glass); border-radius: 24px; padding: 1.5rem;
+            box-shadow: var(--shadow); transition: transform 0.3s;
+        }
+        [data-kids="true"] .glass-card:hover { transform: translateY(-5px) rotate(-2deg); }
+        .glass-card:hover { transform: translateY(-5px); border-color: var(--accent-purple); }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+            padding: 0.8rem 1.5rem; border-radius: 12px; font-weight: 700; font-family: var(--font-heading);
+            text-decoration: none; cursor: pointer; border: 2px solid transparent; font-size: 1.1rem; transition: 0.2s;
+        }
+        .btn-primary { background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); color: white; }
+        [data-kids="true"] .btn-primary { background: var(--accent-blue); border-color: var(--border-glass); color: white; }
+
+        .section-title { font-size: 2rem; font-weight: 900; text-align: center; margin-bottom: 2rem; }
+
+        /* Nav */
+        nav { position: fixed; top: 0; width: 100%; z-index: 100; background: var(--bg-glass); backdrop-filter: blur(12px); border-bottom: 2px solid var(--border-glass); }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1.5rem; max-width: 1200px; margin: 0 auto; }
+        
+        .logo-container { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text-primary); font-weight: 900; font-size: 1.3rem; }
+        
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--accent-purple); }
+        .toggle-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-primary); transition: 0.2s; }
+        .toggle-btn:hover { transform: scale(1.2); }
+
+        /* Hero */
+        .hero { min-height: 75vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 100px 1.5rem 20px; }
+        
+        /* Big Logo Centered & Spinning */
+        .hero-logo { 
+            width: 140px; height: 140px; 
+            margin-bottom: 1rem; 
+            animation: spin 20s linear infinite, pulse-glow 3s ease-in-out infinite; 
+            object-fit: contain; 
+        }
+        [data-kids="true"] .hero-logo { animation: bounce 2s ease-in-out infinite; }
+
+        .hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; line-height: 1.2; margin-bottom: 1rem; }
+        .hero h1 span { background: linear-gradient(135deg, var(--accent-blue), var(--accent-neon)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; margin-bottom: 1.5rem; }
+        [data-kids="true"] .hero p { color: var(--text-primary); font-weight: 600; }
+
+        /* Playground */
+        .playground { padding: 2rem 1.5rem; max-width: 1000px; margin: 0 auto; }
+        .playground-container { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .editor-window, .output-window { background: #0f0f0f; border: 2px solid var(--border-glass); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+        .window-header { padding: 8px 12px; background: #1a1a1a; border-bottom: 1px solid #333; font-size: 0.8rem; color: #888; display: flex; gap: 6px; align-items: center; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot.r { background: #ff5f56; } .dot.y { background: #ffbd2e; } .dot.g { background: #27c93f; }
+        .playground textarea { width: 100%; height: 200px; background: transparent; border: none; color: #a78bfa; padding: 1rem; font-family: var(--font-code); font-size: 0.9rem; resize: none; outline: none; }
+        .playground .output-code { padding: 1rem; color: #fbbf24; font-family: var(--font-code); font-size: 0.9rem; white-space: pre-wrap; }
+        .run-btn { margin: 0 1rem 1rem; padding: 0.6rem; background: var(--accent-blue); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: var(--font-heading); transition: 0.2s; }
+        .run-btn:hover { opacity: 0.8; }
+
+        /* Features & Dialects Grids */
+        .features, .dialects { padding: 2rem 1.5rem; max-width: 1200px; margin: 0 auto; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .dialects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.8rem; }
+        
+        .dialect-item { background: var(--bg-surface); border: 2px solid var(--border-glass); padding: 1rem; border-radius: 12px; text-align: center; transition: 0.3s; }
+        .dialect-item:hover { border-color: var(--accent-blue); transform: translateY(-3px); }
+        [data-kids="true"] .dialect-item { background: #fff; border-radius: 20px; box-shadow: 2px 2px 0px #1e1b4b; }
+        .code { font-family: var(--font-code); color: var(--accent-blue); font-weight: bold; }
+
+        /* Badges Section (Kids Mode Only) */
+        #badges { display: none; padding: 2rem 1.5rem; max-width: 1200px; margin: 0 auto; }
+        [data-kids="true"] #badges { display: block; }
+        
+        .badges-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 2rem; }
+        .badge-card { background: #fff; border: 3px solid #1e1b4b; border-radius: 30px; padding: 1.5rem; text-align: center; box-shadow: 4px 4px 0px #1e1b4b; transition: 0.2s; cursor: pointer; }
+        .badge-card:hover { transform: translateY(-5px) rotate(3deg); }
+        .badge-icon { font-size: 3rem; margin-bottom: 0.5rem; display: block; }
+        .badge-name { font-weight: 900; color: #1e1b4b; }
+        
+        footer { text-align: center; padding: 2rem; border-top: 2px solid var(--border-glass); color: var(--text-secondary); margin-top: 2rem; }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .playground-container { grid-template-columns: 1fr; }
+            .hero { padding-top: 80px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-content">
+            <!-- Removed the small logo as requested -->
+            <a href="#" class="logo-container">
+                <span>Bayda Maghreb 🌙</span>
+            </a>
+            <div class="nav-links">
+                <a href="#playground">الملعب</a>
+                <a href="#features">الميزات</a>
+                <a href="#dialects">اللهجات</a>
+                <a href="https://github.com/ajilisaifeddine-lab/bayda-maghreb" target="_blank">GitHub</a>
+                <button class="toggle-btn" onclick="toggleTheme()" title="تغيير الوضع">🌙</button>
+                <button class="toggle-btn" onclick="toggleKidsMode()" title="وضع الأطفال">🧸</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <!-- Large Logo Centered -->
+        <img src="logo.png" alt="Bayda Logo" class="hero-logo">
+        <h1>اكتب كود <span>بلهجتك.</span></h1>
+        <p>لغة برمجة جديدة تحول لهجات شمال إفريقيا إلى JavaScript و Python. مفتوحة المصدر، مجانية، ومصممة لجيل Z والأطفال.</p>
+        <div>
+            <a href="#playground" class="btn btn-primary">جرب الآن في المتصفح</a>
+        </div>
+    </section>
+
+    <section id="playground" class="playground reveal">
+        <h2 class="section-title">الملعب التفاعلي</h2>
+        <div class="playground-container">
+            <div class="editor-window">
+                <div class="window-header">
+                    <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+                    <span style="margin-right:auto;">code.bayda</span>
+                </div>
+                <textarea id="code-input" spellcheck="false">ktab("salam")
+idha (haqq) {
+    ktab("Hello World")
+}</textarea>
+                <button class="run-btn" onclick="runCode()">▶ تشغيل (محاكاة)</button>
+            </div>
+            <div class="output-window">
+                <div class="window-header">
+                    <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+                    <span style="margin-right:auto;">output.js</span>
+                </div>
+                <div id="code-output" class="output-code">// النتيجة ستظهر هنا...</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features reveal">
+        <h2 class="section-title">لماذا بيضاء مغرب؟</h2>
+        <div class="features-grid">
+            <div class="glass-card"><h3>🌍 7 لهجات</h3><p>تونسي، جزائري، ليبي، موريتاني، قبائلي، وتشلحيت.</p></div>
+            <div class="glass-card"><h3>⚙️ مترجم متعدد</h3><p>حول الكود إلى JavaScript أو Python.</p></div>
+            <div class="glass-card"><h3>🧠 محلل ذكي</h3><p>يفهم أرقام الفرانكو (مثل 5ayb) كحروف.</p></div>
+            <div class="glass-card"><h3>🛡️ مفتوح قانونياً</h3><p>مرخص AGPL-3.0. مجاني للتعليم.</p></div>
+        </div>
+    </section>
+
+    <section id="dialects" class="dialects reveal">
+        <h2 class="section-title">اللهجات المدعومة</h2>
+        <div class="dialects-grid">
+            <div class="dialect-item"><div class="code">tn-latn</div><div>تونسي</div></div>
+            <div class="dialect-item"><div class="code">dz-latn</div><div>جزائري</div></div>
+            <div class="dialect-item"><div class="code">ly-latn</div><div>ليبي</div></div>
+            <div class="dialect-item"><div class="code">mr-latn</div><div>موريتاني</div></div>
+            <div class="dialect-item"><div class="code">kab-latn</div><div>قبائلي</div></div>
+            <div class="dialect-item"><div class="code">kab-tifinagh</div><div>تيفيناغ</div></div>
+            <div class="dialect-item"><div class="code">shi-latn</div><div>تشلحيت</div></div>
+        </div>
+    </section>
+
+    <!-- Badges Section (Only visible in Kids Mode) -->
+    <section id="badges" class="reveal">
+        <h2 class="section-title">🏆 شارات الإنجاز (Kids Mode)</h2>
+        <div class="badges-grid">
+            <div class="badge-card">
+                <span class="badge-icon">👀💻</span>
+                <div class="badge-name">المبرمج الصغير</div>
+                <p style="font-size:0.8rem; margin-top:5px;">أول كلمة تطبعها!</p>
+            </div>
+            <div class="badge-card">
+                <span class="badge-icon">👀🤖</span>
+                <div class="badge-name">صانع القرار</div>
+                <p style="font-size:0.8rem; margin-top:5px;">استخدمت أول شرط!</p>
+            </div>
+            <div class="badge-card">
+                <span class="badge-icon">👀🐿️</span>
+                <div class="badge-name">المكرر</div>
+                <p style="font-size:0.8rem; margin-top:5px;">أول حلقة تكرار!</p>
+            </div>
+            <div class="badge-card">
+                <span class="badge-icon">👀🐛</span>
+                <div class="badge-name">صائد الأخطاء</div>
+                <p style="font-size:0.8rem; margin-top:5px;">أصلحت أول خطأ!</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>صُنع بشغف لجيل Z في شمال إفريقيا. © 2026 ajilisaifeddine-lab.</p>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            if (body.getAttribute('data-theme') === 'light') {
+                body.removeAttribute('data-theme');
+                document.querySelectorAll('.toggle-btn')[0].innerText = '🌙';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                document.querySelectorAll('.toggle-btn')[0].innerText = '☀️';
+            }
+        }
+
+        // Kids Mode Toggle
+        function toggleKidsMode() {
+            const body = document.body;
+            if (body.getAttribute('data-kids') === 'true') {
+                body.removeAttribute('data-kids');
+                document.querySelectorAll('.toggle-btn')[1].innerText = '🧸';
+            } else {
+                body.setAttribute('data-kids', 'true');
+                document.querySelectorAll('.toggle-btn')[1].innerText = '👨‍💻';
+                // Ensure light theme is active for kids mode
+                if(body.getAttribute('data-theme') !== 'light') {
+                    toggleTheme();
+                }
+            }
+        }
+
+        // Scroll Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+        // Live Playground Mock
+        function runCode() {
+            const input = document.getElementById('code-input').value;
+            const outputDiv = document.getElementById('code-output');
+            let jsCode = input.replace(/ktab\(/g, 'console.log(').replace(/idha\s*\(/g, 'if (').replace(/haqq/g, 'true').replace(/bla/g, 'false');
+            outputDiv.style.opacity = 0;
+            setTimeout(() => { outputDiv.innerText = jsCode; outputDiv.style.opacity = 1; }, 300);
+        }
+    </script>
+</body>
+</html>

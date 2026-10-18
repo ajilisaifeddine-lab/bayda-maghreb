@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bayda Lab 2026 | مختبر البرمجة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* 🎨 2026 Theme Variables */
+        :root {
+            --bg: #070b14; --panel: rgba(16, 25, 40, 0.7);
+            --border: rgba(255, 255, 255, 0.08); --border-glow: rgba(0, 240, 255, 0.3);
+            --text: #e2e8f0; --text-muted: #94a3b8;
+            --primary: #00f0ff; --secondary: #b000ff; --success: #10b981; --error: #ef4444;
+            --font-ui: 'Cairo', sans-serif; --font-code: 'Fira Code', monospace;
+            --glass-blur: blur(20px); --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        /* ☀️ Light Mode */
+        [data-theme="light"] {
+            --bg: #f1f5f9; --panel: rgba(255, 255, 255, 0.8);
+            --border: rgba(0, 0, 0, 0.1); --border-glow: rgba(0, 120, 255, 0.3);
+            --text: #0f172a; --text-muted: #64748b;
+            --primary: #0070f3; --secondary: #8b5cf6; --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        /* 🧸 Kids Mode (Comic & Playful) */
+        [data-mode="kid"] {
+            --bg: #fef08a; --panel: #ffffff;
+            --border: #1e1b4b; --text: #1e1b4b; --text-muted: #4338ca;
+            --primary: #ec4899; --secondary: #8b5cf6; --success: #22c55e;
+            --shadow: 4px 4px 0px 0px #1e1b4b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: var(--font-ui); background: var(--bg); color: var(--text);
+            height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+            transition: background 0.4s ease, color 0.4s ease;
+            background-image: radial-gradient(circle at 15% 50%, rgba(0, 240, 255, 0.05), transparent 40%),
+                              radial-gradient(circle at 85% 30%, rgba(176, 0, 255, 0.05), transparent 40%);
+        }
+
+        /* ✨ Animations */
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes glow { 0%, 100% { filter: drop-shadow(0 0 8px var(--primary)); } 50% { filter: drop-shadow(0 0 20px var(--secondary)); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 🧭 Navbar */
+        header {
+            height: 70px; background: var(--panel); backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;
+            align-items: center; padding: 0 1.5rem; z-index: 10; box-shadow: var(--shadow);
+        }
+        
+        .logo-group { display: flex; align-items: center; gap: 12px; font-weight: 900; font-size: 1.4rem; letter-spacing: -0.5px; }
+        .logo-img { width: 45px; height: 45px; animation: spin 15s linear infinite, glow 3s ease-in-out infinite; object-fit: contain; }
+        [data-mode="kid"] .logo-img { animation: float 3s ease-in-out infinite; }
+
+        .controls { display: flex; gap: 12px; align-items: center; }
+        
+        .segmented { display: flex; background: var(--bg); border-radius: 8px; padding: 3px; border: 1px solid var(--border); }
+        .segmented button {
+            font-family: var(--font-ui); background: transparent; color: var(--text-muted);
+            border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: 700; transition: 0.3s;
+        }
+        .segmented button.active { background: var(--panel); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        [data-mode="kid"] .segmented button.active { background: var(--primary); color: white; border: 2px solid var(--border); }
+
+        select, .icon-btn {
+            font-family: var(--font-ui); background: var(--bg); color: var(--text);
+            border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px;
+            cursor: pointer; font-weight: 700; outline: none; transition: 0.2s;
+        }
+        .icon-btn { padding: 8px 10px; font-size: 1.2rem; }
+        .icon-btn:hover { background: var(--primary); color: #000; }
+
+        /* 🖥️ Workspace */
+        .workspace { display: flex; flex: 1; overflow: hidden; padding: 12px; gap: 12px; }
+        
+        .pane {
+            background: var(--panel); backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border); border-radius: 16px;
+            display: flex; flex-direction: column; box-shadow: var(--shadow); overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        .pane:focus-within { border-color: var(--primary); }
+        [data-mode="kid"] .pane { border: 3px solid var(--border); }
+
+        .pane-header {
+            padding: 12px 16px; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--border);
+            font-size: 0.9rem; font-weight: 700; color: var(--text-muted);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        
+        /* Editor */
+        .editor-pane { flex: 1.2; }
+        textarea {
+            flex: 1; width: 100%; background: transparent; color: var(--text); border: none;
+            padding: 16px; font-family: var(--font-code); font-size: 1.05rem;
+            resize: none; outline: none; line-height: 1.6; caret-color: var(--primary);
+        }
+
+        /* Dictionary */
+        .dict-pane { flex: 0.8; }
+        .dict-content { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .dict-word {
+            display: inline-block; padding: 4px 10px; background: var(--bg); border: 1px solid var(--border);
+            border-radius: 8px; cursor: pointer; font-family: var(--font-code); transition: 0.2s;
+        }
+        .dict-word:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,240,255,0.1); }
+        .dict-detail { display: none; margin-top: 10px; padding: 16px; background: var(--bg); border-radius: 12px; border-left: 4px solid var(--primary); animation: slideIn 0.3s ease; }
+        .dict-detail h4 { font-size: 1.2rem; margin-bottom: 5px; color: var(--primary); }
+        .dict-detail p { font-size: 0.95rem; margin-bottom: 8px; color: var(--text-muted); }
+        .dict-detail code { font-family: var(--font-code); background: var(--panel); padding: 2px 6px; border-radius: 4px; color: var(--secondary); }
+
+        /* Output */
+        .output-pane { flex: 1.2; }
+        .output-code {
+            flex: 1; padding: 16px; font-family: var(--font-code); font-size: 1.05rem;
+            white-space: pre-wrap; overflow-y: auto; background: rgba(0,0,0,0.3); color: var(--success);
+        }
+        [data-mode="kid"] .output-code { background: #f8fafc; color: #0f172a; }
+
+        /* 🚀 Floating Action Button (Run) */
+        .fab {
+            position: fixed; bottom: 30px; left: 30px; z-index: 100;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #000; font-weight: 900; font-family: var(--font-ui); font-size: 1.1rem;
+            border: none; border-radius: 50px; padding: 16px 32px; cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.3); transition: 0.3s; display: flex; align-items: center; gap: 8px;
+        }
+        .fab:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 15px 40px rgba(0, 240, 255, 0.5); }
+        .fab:active { transform: translateY(0) scale(0.95); }
+        [data-mode="kid"] .fab { background: var(--primary); color: white; border: 3px solid var(--border); box-shadow: var(--shadow); }
+
+        /* 🔔 Toast Notifications */
+        #toast-container { position: fixed; top: 90px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; }
+        .toast {
+            background: var(--panel); backdrop-filter: var(--glass-blur); color: var(--text);
+            padding: 15px 20px; border-radius: 12px; border-left: 4px solid var(--primary);
+            box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px;
+            animation: slideIn 0.3s ease forwards; font-weight: 700;
+        }
+        .toast.error { border-left-color: var(--error); }
+        .toast.success { border-left-color: var(--success); }
+
+        /* 🏆 Badges Bar (Kids Mode) */
+        .badges-bar {
+            height: 0; overflow: hidden; background: var(--panel); border-top: 1px solid var(--border);
+            transition: height 0.4s ease; display: flex; gap: 15px; padding: 0 20px; align-items: center;
+        }
+        [data-mode="kid"] .badges-bar { height: 90px; padding: 10px 20px; }
+        .badge {
+            min-width: 80px; height: 80px; background: #fff; border: 3px solid var(--border);
+            border-radius: 16px; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; box-shadow: 2px 2px 0px var(--border); transition: 0.2s; cursor: pointer;
+        }
+        .badge:hover { transform: translateY(-5px) rotate(5deg); }
+        .badge span { font-size: 2rem; }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .workspace { flex-direction: column; overflow-y: auto; }
+            .pane { min-height: 250px; flex: none; }
+            header { height: auto; flex-wrap: wrap; padding: 10px; gap: 10px; }
+            .controls { flex-wrap: wrap; justify-content: center; width: 100%; }
+            .fab { bottom: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; }
+        }
+    </style>
+</head>
+<body data-mode="beginner" data-theme="dark">
+
+    <!-- Navbar -->
+    <header>
+        <div class="logo-group">
+            <img src="logo.png" alt="Logo" class="logo-img">
+            <span>Bayda Lab</span>
+        </div>
+        <div class="controls">
+            <div class="segmented">
+                <button onclick="setMode('kid')" id="btn-kid">🧸 طفل</button>
+                <button onclick="setMode('beginner')" id="btn-beginner" class="active">🌱 مبتدئ</button>
+                <button onclick="setMode('pro')" id="btn-pro">👨‍💻 محترف</button>
+            </div>
+            <select id="dialect-select">
+                <option value="tn-latn">🇹🇳 تونسي</option>
+                <option value="dz-latn">🇩🇿 جزائري</option>
+                <option value="ly-latn">🇱🇾 ليبي</option>
+            </select>
+            <select id="target-select">
+                <option value="js">JS</option>
+                <option value="py">Python</option>
+            </select>
+            <button class="icon-btn" id="sound-btn" onclick="toggleSound()" title="الصوت">🔊</button>
+            <button class="icon-btn" onclick="toggleTheme()" id="theme-btn">☀️</button>
+        </div>
+    </header>
+
+    <!-- Workspace -->
+    <div class="workspace">
+        <!-- Pane 1: Editor -->
+        <div class="pane editor-pane">
+            <div class="pane-header">المحرر (Franco)</div>
+            <textarea id="editor" spellcheck="false">ktab("salam")
+idha (haqq) {
+    ktab("Hello World")
+}</textarea>
+        </div>
+
+        <!-- Pane 2: Dictionary -->
+        <div class="pane dict-pane">
+            <div class="pane-header">القاموس التفاعلي</div>
+            <div class="dict-content" id="dict-pane">
+                <p style="color:var(--text-muted); font-size:0.9rem;">اضغط على أي كلمة لاستكشاف معناها البرمجي:</p>
+                <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;">
+                    <span class="dict-word" onclick="showWord('ktab', 'اطبع / سجل', 'log', 'print')">ktab</span>
+                    <span class="dict-word" onclick="showWord('idha', 'إذا / شرط', 'if', 'if')">idha</span>
+                    <span class="dict-word" onclick="showWord('haqq', 'صحيح / حقيقة', 'true', 'True')">haqq</span>
+                    <span class="dict-word" onclick="showWord('bla', 'خطأ / باطل', 'false', 'False')">bla</span>
+                </div>
+                <div class="dict-detail" id="dict-detail">
+                    <h4 id="dw-word"></h4>
+                    <p id="dw-ar"></p>
+                    <p>JavaScript: <code id="dw-js"></code></p>
+                    <p>Python: <code id="dw-py"></code></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pane 3: Output -->
+        <div class="pane output-pane">
+            <div class="pane-header">النتيجة (Output)</div>
+            <div class="output-code" id="output">// شغل الكود لترى النتيجة هنا...</div>
+        </div>
+    </div>
+
+    <!-- Badges (Kids Mode Only) -->
+    <div class="badges-bar">
+        <div class="badge" title="المبرمج الصغير"><span>👀💻</span></div>
+        <div class="badge" title="صانع القرار"><span>👀🤖</span></div>
+        <div class="badge" title="المكرر"><span>👀🐿️</span></div>
+        <div class="badge" title="صائد الأخطاء"><span>👀🐛</span></div>
+    </div>
+
+    <!-- Floating Run Button -->
+    <button class="fab" onclick="runCode()">
+        <span>▶</span> تشغيل الكود
+    </button>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <script>
+        // 🎵 Audio Context for UI Sounds
+        let audioCtx;
+        let soundEnabled = true;
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            if (type === 'click') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            } else if (type === 'success') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime + 0.1);
+                osc.frequency.setValueAtTime(1200, audioCtx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+            } else if (type === 'error') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.2);
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('sound-btn').innerText = soundEnabled ? '🔊' : '🔇';
+            playSound('click');
+        }
+
+        // 🌗 Theme & Mode Toggles
+        function toggleTheme() {
+            playSound('click');
+            const body = document.body;
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                document.getElementById('theme-btn').innerText = '🌙';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                document.getElementById('theme-btn').innerText = '☀️';
+            }
+        }
+
+        function setMode(mode) {
+            playSound('click');
+            document.body.setAttribute('data-mode', mode);
+            document.querySelectorAll('.segmented button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + mode).classList.add('active');
+        }
+
+        // 📖 Dictionary Interaction
+        function showWord(word, ar, js, py) {
+            playSound('click');
+            document.getElementById('dict-detail').style.display = 'block';
+            document.getElementById('dw-word').innerText = word;
+            document.getElementById('dw-ar').innerText = ar;
+            document.getElementById('dw-js').innerText = js;
+            document.getElementById('dw-py').innerText = py;
+        }
+
+        // 🔔 Toast Notifications
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerText = message;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+
+        // 🚀 Mock Transpiler
+        function runCode() {
+            playSound('click');
+            const code = document.getElementById('editor').value;
+            const target = document.getElementById('target-select').value;
+            const outputDiv = document.getElementById('output');
+            
+            // Socratic Error Simulation
+            if (code.includes('(') && !code.includes(')')) {
+                playSound('error');
+                showToast("أوه! يبدو أنك نسيت إغلاق القوس. جرب مرة أخرى!", "error");
+                return; // Stop execution
+            }
+
+            // Mock Translation
+            let result = code;
+            try {
+                if (target === 'js') {
+                    result = code.replace(/ktab\(/g, 'console.log(')
+                                 .replace(/idha\s*\(/g, 'if (')
+                                 .replace(/haqq/g, 'true')
+                                 .replace(/bla/g, 'false');
+                } else if (target === 'py') {
+                    result = code.replace(/ktab\(/g, 'print(')
+                                 .replace(/idha\s*\(/g, 'if ')
+                                 .replace(/haqq/g, 'True')
+                                 .replace(/bla/g, 'False')
+                                 .replace(/\{/g, ':')
+                                 .replace(/\}/g, '');
+                }
+                
+                outputDiv.innerText = result;
+                playSound('success');
+                showToast("تم تشغيل الكود بنجاح!", "success");
+                
+            } catch (e) {
+                playSound('error');
+                showToast("حدث خطأ غير متوقع.", "error");
+            }
+        }
+    </script>
+</body>
+</html>
