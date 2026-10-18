@@ -3,9 +3,11 @@ import { Token, AstNode } from './types.js';
 export class Parser {
   private tokens: Token[];
   private current: number = 0;
+  private ifKeyword: string;
 
-  constructor(tokens: Token[]) {
+  constructor(tokens: Token[], ifKeyword: string = 'idha') {
     this.tokens = tokens;
+    this.ifKeyword = ifKeyword;
   }
 
   private peek(): Token {
@@ -44,8 +46,7 @@ export class Parser {
   }
 
   private statement(): AstNode {
-    // التعامل مع الشروط (If)
-    if (this.match('KEYWORD', 'idha')) { 
+    if (this.match('KEYWORD', this.ifKeyword) || this.match('KEYWORD', 'idha') || this.match('KEYWORD', 'ken') || this.match('KEYWORD', 'kima')) { 
       this.expect('SYMBOL', '(');
       const test = this.expression();
       this.expect('SYMBOL', ')');
@@ -68,7 +69,6 @@ export class Parser {
       return { type: 'If', test, then: thenBranch, else: elseBranch };
     }
 
-    // التعامل مع استدعاء الدوال (Calls)
     if (this.peek().type === 'KEYWORD' || this.peek().type === 'IDENT') {
       const name = this.advance().value;
       this.expect('SYMBOL', '(');

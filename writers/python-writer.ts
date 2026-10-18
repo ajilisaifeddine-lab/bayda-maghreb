@@ -1,37 +1,34 @@
 import { AstNode } from '../core/types.js';
 
-export function toPython(node: AstNode): string {
-  return compileNode(node, 0);
+export function toPython(node: AstNode, keywords: Record<string, string>): string {
+  return compileNode(node, 0, keywords);
 }
 
-function compileNode(node: AstNode, indentLevel: number): string {
-  const indent = '    '.repeat(indentLevel);  
+function compileNode(node: AstNode, indentLevel: number, keywords: Record<string, string>): string {
+  const indent = '    '.repeat(indentLevel);
 
   switch (node.type) {
     case 'Program':
-      return node.body.map(n => compileNode(n, indentLevel)).join('\n');
+      return node.body.map(n => compileNode(n, indentLevel, keywords)).join('\n');
 
     case 'Call': {
-      
       let funcName = node.name;
-      if (funcName === 'ktab' || funcName === 'goul') {
+      if (keywords[funcName] === 'print' || keywords[funcName] === 'log') {
         funcName = 'print';
       }
-      
-      const args = node.args.map(arg => compileNode(arg, 0)).join(', ');
-      return `${indent}${funcName}(${args})`; // 
+      const args = node.args.map(arg => compileNode(arg, 0, keywords)).join(', ');
+      return `${indent}${funcName}(${args})`;
     }
 
     case 'If': {
-      const test = compileNode(node.test, 0);
-
+      const test = compileNode(node.test, 0, keywords);
       let code = `${indent}if ${test}:\n`;
-      const thenBody = node.then.map(n => compileNode(n, indentLevel + 1)).join('\n');
+      const thenBody = node.then.map(n => compileNode(n, indentLevel + 1, keywords)).join('\n');
       code += thenBody || `${indent}    pass`; 
       
       if (node.else && node.else.length > 0) {
         code += `\n${indent}else:\n`;
-        const elseBody = node.else.map(n => compileNode(n, indentLevel + 1)).join('\n');
+        const elseBody = node.else.map(n => compileNode(n, indentLevel + 1, keywords)).join('\n');
         code += elseBody || `${indent}    pass`;
       }
       return code;
@@ -44,9 +41,8 @@ function compileNode(node: AstNode, indentLevel: number): string {
       return String(node.value);
 
     case 'Identifier':
-      
-      if (node.name === 'haqq') return 'True';
-      if (node.name === 'bla') return 'False';
+      if (keywords[node.name] === 'true') return 'True';
+      if (keywords[node.name] === 'false') return 'False';
       return node.name;
 
     default:
