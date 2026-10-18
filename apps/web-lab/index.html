@@ -11,12 +11,23 @@
         <span>🧪 Bayda Lab (نسخة المتصفح)</span>
     </header>
     <div style="padding: 0 1rem; display: flex; justify-content: flex-end; gap: 1rem; align-items: center;">
+        <label>اللهجة:</label>
+        <select id="dialect-select" class="target-select">
+            <option value="tn-latn">التونسية</option>
+            <option value="dz-latn">الجزائرية</option>
+            <option value="ly-latn">الليبية</option>
+            <option value="mr-latn">الموريتانية</option>
+            <option value="kab-latn">القبائلية</option>
+            <option value="shi-latn">الشلحية</option>
+        </select>
+        </select>
         <label>لغة الإخراج:</label>
         <select id="target-lang" class="target-select">
             <option value="js">JavaScript</option>
             <option value="py">Python</option>
         </select>
     </div>
+
     <div class="workspace">
         <div class="pane">
             <div class="pane-header">المحرر (اكتب كودك هنا)</div>

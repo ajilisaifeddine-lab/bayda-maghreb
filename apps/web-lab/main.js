@@ -76,10 +76,17 @@
 
   // ../../core/parser.ts
   var Parser = class {
-    constructor(tokens, ifKeyword = "idha") {
+    constructor(tokens, keywordsMap = {}) {
       this.current = 0;
+      this.ifKeywords = [];
+      this.elseKeywords = [];
       this.tokens = tokens;
-      this.ifKeyword = ifKeyword;
+      for (const [key, val] of Object.entries(keywordsMap)) {
+        if (val === "if") this.ifKeywords.push(key);
+        if (val === "else") this.elseKeywords.push(key);
+      }
+      if (this.ifKeywords.length === 0) this.ifKeywords.push("idha");
+      if (this.elseKeywords.length === 0) this.elseKeywords.push("bla");
     }
     peek() {
       return this.tokens[this.current];
@@ -99,6 +106,14 @@
       }
       return false;
     }
+    matchKeyword(keywords) {
+      const token = this.peek();
+      if (token.type === "KEYWORD" && keywords.includes(token.value)) {
+        this.advance();
+        return true;
+      }
+      return false;
+    }
     expect(type, errorMsg) {
       if (this.match(type)) return this.tokens[this.current - 1];
       throw new Error(`${errorMsg} (\u0627\u0644\u0633\u0637\u0631 ${this.peek().line})`);
@@ -111,7 +126,7 @@
       return { type: "Program", body };
     }
     statement() {
-      if (this.match("KEYWORD", this.ifKeyword) || this.match("KEYWORD", "idha") || this.match("KEYWORD", "ken") || this.match("KEYWORD", "kima")) {
+      if (this.matchKeyword(this.ifKeywords)) {
         this.expect("SYMBOL", "(");
         const test = this.expression();
         this.expect("SYMBOL", ")");
@@ -121,7 +136,7 @@
           thenBranch.push(this.statement());
         }
         let elseBranch = void 0;
-        if (this.match("KEYWORD", "bla")) {
+        if (this.matchKeyword(this.elseKeywords)) {
           this.expect("SYMBOL", "{");
           elseBranch = [];
           while (!this.match("SYMBOL", "}") && !this.isAtEnd()) {
@@ -250,178 +265,103 @@ ${indent}else:
   }
 
   // dialects.ts
-  var tnKeywords = {
-    "daily": [
-      "barra",
-      "behi",
-      "tawa"
-    ],
-    "note": "\u0643\u0644\u0645\u0627\u062A \u064A\u0648\u0645\u064A\u0629 \u0644\u0644\u0639\u0631\u0636 \u0641\u0642\u0637 - \u0644\u064A\u0633\u062A \u0643\u0644\u0645\u0627\u062A \u0628\u0631\u0645\u062C\u064A\u0629",
-    "ged": "let",
-    "ektb": "let",
-    "7ot": "let",
-    "hott": "let",
-    "5alli": "let",
-    "7ott": "let",
-    "a3mel": "let",
-    "a3ml": "let",
-    "khalli": "let",
-    "goul": "print",
-    "9oul": "log",
-    "gul": "log",
-    "warri": "log",
-    "affichi": "log",
-    "otba3": "log",
-    "9oull": "log",
-    "9olo": "log",
-    "9ol": "log",
-    "a7ki": "log",
-    "9oulou": "log",
-    "golo": "log",
-    "golih": "log",
-    "itba3": "log",
-    "toulma": "while",
-    "lin": "while",
-    "len": "while",
-    "tulma": "while",
-    "tolma": "while",
-    "madam": "while",
-    "wa9tli": "while",
-    "toul": "while",
-    "leen": "while",
-    "7ata lin": "while",
-    "7atalin": "while",
-    "wa9teli": "while",
-    "wakteli": "while",
-    "tama ken": "while",
-    "tamaken": "while",
-    "ken": "if",
-    "ki": "if",
-    "idha": "if",
-    "kan": "if",
-    "idhaa": "if",
-    "lkn": "if",
-    "itha": "if",
-    "edha": "if",
-    "louken": "if",
-    "idh": "if",
-    "ida": "if",
-    "eda": "if",
-    "idha ken": "if",
-    "idhaken": "if",
-    "kene": "if",
-    "wella": "else",
-    "walla": "else",
-    "sinn": "else",
-    "ella": "else",
-    "ama": "else",
-    "snn": "else",
+  var dz_latn_kw = {
+    "kteb": "print",
+    "ila": "if",
+    "sah": "true",
+    "ghalt": "false",
+    "wela": "else",
+    "reviewStatus": "pending"
+  };
+  var kab_latn_kw = {
+    "aru": "print",
+    "ma": "if",
+    "tidett": "true",
+    "tidtt": "true",
+    "tdt": "true",
+    "mtu": "true",
+    "amtu": "true",
+    "sahih": "true",
+    "shih": "true",
+    "sa7i7": "true",
+    "mgaz": "false",
+    "amgaz": "false",
+    "ghalat": "false",
     "wela": "else",
     "wla": "else",
-    "mouch haka": "else",
-    "mouchhaka": "else",
-    "mch haka": "else",
-    "mchhaka": "else",
-    "akeka le": "else",
-    "akekale": "else",
-    "sinon": "else",
-    "makench": "else if",
-    "mknch": "else if",
+    "reviewStatus": "pending"
+  };
+  var kab_tifinagh_kw = {
+    "\u2D49\u2D37\u2D40\u2D30": "if",
+    "\u2D61\u2D3B\u2D4D\u2D4D\u2D30": "else",
+    "\u2D59\u2D49\u2D4F\u2D53\u2D4F": "else",
+    "\u2D3D\u2D5C\u2D30\u2D31": "print",
+    "\u2D33\u2D53\u2D4D": "print",
+    "\u2D40\u2D30\u2D47\u2D47": "true",
+    "\u2D31\u2D4D\u2D30": "false",
+    "\u2D5C\u2D30\u2D61\u2D30": "while",
+    "\u2D49\u2D3D\u2D3B\u2D4D": "for",
+    "\u2D4E\u2D30": "if",
+    "\u2D4E\u2D30\u2D5B\u2D30": "else"
+  };
+  var ly_latn_kw = {
+    "kteb": "print",
+    "kan": "if",
+    "sahih": "true",
+    "ghalet": "false",
+    "wela": "else",
+    "reviewStatus": "pending"
+  };
+  var mr_latn_kw = {
+    "ktab": "print",
+    "idha": "if",
+    "haqq": "true",
+    "bla": "false",
+    "wela": "else",
+    "reviewStatus": "pending"
+  };
+  var shi_latn_kw = {
+    "aru": "print",
+    "skr": "print",
+    "ma": "if",
+    "ila": "if",
+    "tidett": "true",
+    "tidtt": "true",
+    "tdt": "true",
+    "amgaz": "false",
+    "mgaz": "false",
+    "wela": "else",
+    "wla": "else",
+    "maulac": "else",
+    "mlac": "else",
+    "reviewStatus": "pending"
+  };
+  var tn_latn_kw = {
+    "ekteb": "print",
+    "ektb": "print",
+    "goul": "print",
+    "9oul": "print",
+    "9olli": "print",
+    "golli": "print",
+    "idha": "if",
+    "ida": "if",
     "s7i7": "true",
     "shih": "true",
-    "mrigl": "true",
-    "sah": "true",
-    "sa7": "true",
     "ghalet": "false",
     "ghalt": "false",
-    "8alet": "false",
     "8alt": "false",
-    "8lt": "false",
-    "mch s7i7": "false",
-    "mchs7i7": "false",
-    "fi": "in",
-    "lelkol": "for",
-    "dour": "for",
-    "bsh": "for",
-    "7ata": "for",
-    "hata": "for",
-    "taw bech": "for",
-    "tawbech": "for",
-    "bch ta3mel": "for",
-    "bchta3mel": "for",
-    "3la 5ater": "for",
-    "3la5ater": "for",
-    "9os": "break",
-    "yezi": "break",
-    "7abbes": "break",
-    "9oss": "break",
-    "o9ef": "break",
-    "ogf": "break",
-    "ogef": "break",
-    "gos": "break",
-    "ougef": "break",
-    "e9f": "break",
-    "fout": "continue",
-    "kammel": "continue",
-    "kamel": "continue",
-    "wasil": "continue",
-    "kaml": "continue",
-    "kml": "continue",
-    "rajja3": "return",
-    "rj3": "return",
-    "raj3": "return",
-    "rj3li": "return",
-    "raja3li": "return",
-    "forma": "class",
-    "9aleb": "class",
-    "fct": "function",
-    "fonct": "function",
-    "5edma": "function",
-    "5dma": "function",
-    "khedmaa": "function",
-    "khedma": "function",
-    "7atchay": "null",
-    "fer8": "null",
-    "mfamach": "null",
-    "fr8": "null",
-    "mfmch": "null",
-    "baddel": "switch",
-    "ejbed": "import",
-    "5arrej": "export",
-    "jdid": "new",
-    "jarreb": "try",
-    "chedd": "catch",
-    "a5iran": "finally",
-    "lawa7": "throw",
-    "dez": "push",
-    "zidli": "push",
-    "da5l": "push",
-    "da5al": "push",
-    "rattab": "sort",
-    "saffi": "filter",
-    "dezz": "push",
-    "dizz": "push",
-    "diz": "push",
-    "zid": "add",
-    "zeed": "add",
-    "ziid": "add",
-    "let": [
-      "khali",
-      "7ot",
-      "khalli"
-    ],
-    "print": "goul",
-    "if": [
-      "itha",
-      "ila",
-      "ken",
-      "idha"
-    ],
-    "else": [
-      "sinon",
-      "wella",
-      "mela"
-    ]
+    "wella": "else",
+    "wlla": "else",
+    "reviewStatus": "pending"
+  };
+  var allKeywords = {
+    "dz-latn": dz_latn_kw,
+    "kab-latn": kab_latn_kw,
+    "kab-tifinagh": kab_tifinagh_kw,
+    "ly-latn": ly_latn_kw,
+    "mr-latn": mr_latn_kw,
+    "shi-latn": shi_latn_kw,
+    "tn-latn": tn_latn_kw
   };
 
   // main.ts
@@ -429,15 +369,19 @@ ${indent}else:
   var output = document.getElementById("output");
   var runBtn = document.getElementById("run-btn");
   var targetLang = document.getElementById("target-lang");
+  var dialectSelect = document.getElementById("dialect-select");
   runBtn.addEventListener("click", () => {
     const code = editor.value;
     output.innerHTML = "";
     try {
-      const keywordsMap = tnKeywords;
-      const ifKeyword = "idha";
+      const selectedDialect = dialectSelect.value;
+      const keywordsMap = allKeywords[selectedDialect];
+      if (!keywordsMap) {
+        throw new Error("Dialect dictionary not found");
+      }
       const lexer = new Lexer(code, keywordsMap);
       const tokens = lexer.tokenize();
-      const parser = new Parser(tokens, ifKeyword);
+      const parser = new Parser(tokens, keywordsMap);
       const ast = parser.parse();
       let result = "";
       if (targetLang.value === "js") {
@@ -448,7 +392,7 @@ ${indent}else:
       output.textContent = result;
       output.style.color = "var(--success)";
     } catch (error) {
-      output.textContent = "\u062E\u0637\u0623: " + error.message;
+      output.textContent = "Error: " + error.message;
       output.style.color = "var(--error)";
     }
   });

@@ -3,11 +3,19 @@ import { Token, AstNode } from './types.js';
 export class Parser {
   private tokens: Token[];
   private current: number = 0;
-  private ifKeyword: string;
+  private ifKeywords: string[] = [];
+  private elseKeywords: string[] = [];
 
-  constructor(tokens: Token[], ifKeyword: string = 'idha') {
+  constructor(tokens: Token[], keywordsMap: Record<string, string> = {}) {
     this.tokens = tokens;
-    this.ifKeyword = ifKeyword;
+    
+    for (const [key, val] of Object.entries(keywordsMap)) {
+      if (val === 'if') this.ifKeywords.push(key);
+      if (val === 'else') this.elseKeywords.push(key);
+    }
+   
+    if (this.ifKeywords.length === 0) this.ifKeywords.push('idha');
+    if (this.elseKeywords.length === 0) this.elseKeywords.push('bla');
   }
 
   private peek(): Token {
@@ -32,6 +40,15 @@ export class Parser {
     return false;
   }
 
+  private matchKeyword(keywords: string[]): boolean {
+    const token = this.peek();
+    if (token.type === 'KEYWORD' && keywords.includes(token.value)) {
+      this.advance();
+      return true;
+    }
+    return false;
+  }
+
   private expect(type: string, errorMsg: string): Token {
     if (this.match(type)) return this.tokens[this.current - 1];
     throw new Error(`${errorMsg} (السطر ${this.peek().line})`);
@@ -46,7 +63,8 @@ export class Parser {
   }
 
   private statement(): AstNode {
-    if (this.match('KEYWORD', this.ifKeyword) || this.match('KEYWORD', 'idha') || this.match('KEYWORD', 'ken') || this.match('KEYWORD', 'kima')) { 
+    // 1. Check if it's an IF statement
+    if (this.matchKeyword(this.ifKeywords)) { 
       this.expect('SYMBOL', '(');
       const test = this.expression();
       this.expect('SYMBOL', ')');
@@ -58,7 +76,8 @@ export class Parser {
       }
 
       let elseBranch: AstNode[] | undefined = undefined;
-      if (this.match('KEYWORD', 'bla')) { 
+      // 2. Check if it's an ELSE statement
+      if (this.matchKeyword(this.elseKeywords)) { 
          this.expect('SYMBOL', '{');
          elseBranch = [];
          while (!this.match('SYMBOL', '}') && !this.isAtEnd()) {
