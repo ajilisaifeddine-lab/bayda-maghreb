@@ -15,11 +15,12 @@ const dictPopup = document.getElementById('dict-popup') as HTMLElement;
 const notesEditor = document.getElementById('notes-editor') as HTMLDivElement;
 const noteSelector = document.getElementById('note-selector') as HTMLSelectElement;
 const notesPane = document.getElementById('notes-pane') as HTMLElement;
+const lineNumbers = document.getElementById('line-numbers') as HTMLDivElement;
 
 let currentDialect = 'tn-latn';
 let isLayoutRow = false;
 
-// ================= SOUND ENGINE (FIXED) =================
+// ================= SOUND ENGINE =================
 let soundEnabled = localStorage.getItem('baydaSound') !== 'false';
 let audioCtx: AudioContext | null = null;
 
@@ -32,66 +33,29 @@ function playSound(type: 'click' | 'success' | 'error') {
     const gain = audioCtx.createGain();
     osc.connect(gain); gain.connect(audioCtx.destination);
     
-    if (type === 'click') { 
-        osc.frequency.setValueAtTime(600, audioCtx.currentTime); 
-        gain.gain.setValueAtTime(0.05, audioCtx.currentTime); 
-        osc.start(); osc.stop(audioCtx.currentTime + 0.05); 
-    } else if (type === 'success') { 
-        osc.frequency.setValueAtTime(400, audioCtx.currentTime); 
-        osc.frequency.setValueAtTime(600, audioCtx.currentTime + 0.1); 
-        gain.gain.setValueAtTime(0.05, audioCtx.currentTime); 
-        osc.start(); osc.stop(audioCtx.currentTime + 0.2); 
-    } else if (type === 'error') { 
-        osc.type = 'sawtooth'; 
-        osc.frequency.setValueAtTime(150, audioCtx.currentTime); 
-        gain.gain.setValueAtTime(0.05, audioCtx.currentTime); 
-        osc.start(); osc.stop(audioCtx.currentTime + 0.2); 
-    }
+    if (type === 'click') { osc.frequency.setValueAtTime(600, audioCtx.currentTime); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.05); }
+    else if (type === 'success') { osc.frequency.setValueAtTime(400, audioCtx.currentTime); osc.frequency.setValueAtTime(600, audioCtx.currentTime + 0.1); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.2); }
+    else if (type === 'error') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, audioCtx.currentTime); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.2); }
 }
 
-// إضافة الصوت لكل الأزرار
 document.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
-    if (target.tagName === 'BUTTON' || target.closest('button')) {
-        playSound('click');
-    }
+    if (target.tagName === 'BUTTON' || target.closest('button')) playSound('click');
 });
 
 // ================= SETTINGS MODAL =================
 (window as any).openSettings = () => { document.getElementById('settings-modal')?.classList.add('active'); updateSoundUI(); };
 (window as any).closeSettings = () => { document.getElementById('settings-modal')?.classList.remove('active'); };
 (window as any).changeFontSize = (val: string) => { document.documentElement.style.setProperty('--font-base', val + 'px'); localStorage.setItem('baydaFontSize', val); };
+function updateSoundUI() { const soundBtn = document.getElementById('toggle-sound-setting'); if (soundBtn) soundBtn.textContent = soundEnabled ? '🔊 مفعل' : '🔇 معطل'; }
+(window as any).toggleSoundFromSettings = () => { soundEnabled = !soundEnabled; localStorage.setItem('baydaSound', String(soundEnabled)); updateSoundUI(); };
+(window as any).clearAllData = () => { if (confirm("هل أنت متأكد من مسح كل البيانات؟")) { localStorage.clear(); location.reload(); } };
 
-function updateSoundUI() {
-    const soundBtn = document.getElementById('toggle-sound-setting');
-    if (soundBtn) soundBtn.textContent = soundEnabled ? '🔊 مفعل' : '🔇 معطل';
-}
-
-(window as any).toggleSoundFromSettings = () => {
-    soundEnabled = !soundEnabled;
-    localStorage.setItem('baydaSound', String(soundEnabled));
-    updateSoundUI();
-};
-
-(window as any).clearAllData = () => {
-    if (confirm("هل أنت متأكد من مسح كل البيانات؟ (الكود، الملاحظات، اللهجات المحفوظة)")) {
-        localStorage.clear();
-        location.reload();
-    }
-};
-
-// ================= THEME LOGIC (SINGLE BUTTON) =================
+// ================= THEME LOGIC =================
 const themes = ['light', 'dark', 'comfort'];
 const themeIcons: Record<string, string> = { light: '☀️', dark: '🌙', comfort: '👁️' };
 let currentThemeIndex = 0;
-
-(window as any).cycleTheme = () => {
-    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-    const newTheme = themes[currentThemeIndex];
-    document.body.setAttribute('data-theme', newTheme);
-    document.getElementById('theme-toggle-btn')!.innerText = themeIcons[newTheme];
-    saveState();
-};
+(window as any).cycleTheme = () => { currentThemeIndex = (currentThemeIndex + 1) % themes.length; const newTheme = themes[currentThemeIndex]; document.body.setAttribute('data-theme', newTheme); document.getElementById('theme-toggle-btn')!.innerText = themeIcons[newTheme]; saveState(); };
 
 // ================= UI & LAYOUT =================
 (window as any).toggleLayout = () => { isLayoutRow = !isLayoutRow; if (isLayoutRow) { workspace.classList.remove('layout-col'); workspace.classList.add('layout-row'); } else { workspace.classList.remove('layout-row'); workspace.classList.add('layout-col'); } };
@@ -107,13 +71,10 @@ let currentThemeIndex = 0;
 let kidThemeIndex = 0; const kidThemes = ['candy', 'jungle', 'ocean'];
 (window as any).changeKidTheme = () => { kidThemeIndex = (kidThemeIndex + 1) % kidThemes.length; document.body.setAttribute('data-kid-theme', kidThemes[kidThemeIndex]); };
 (window as any).readOutput = () => { const text = output.textContent || ""; if (!text || text === "// النتيجة هنا...") return; window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'ar-SA'; utterance.rate = 0.9; utterance.pitch = 1.2; window.speechSynthesis.speak(utterance); };
-(window as any).magicCode = () => { const magics = ['ktab("You are a superstar! ⭐")\nidha (haqq) {\n    ktab("Keep coding! 🚀")\n}', 'ktab("I love pizza! 🍕")', 'goul("Hello World! 🌍")', 'kteb("Bahja! 🎉")']; editor.value = magics[Math.floor(Math.random() * magics.length)]; saveState(); };
+(window as any).magicCode = () => { const magics = ['ktab("You are a superstar! ⭐")\nidha (haqq) {\n    ktab("Keep coding! 🚀")\n}', 'ktab("I love pizza! 🍕")', 'goul("Hello World! 🌍")', 'kteb("Bahja! 🎉")']; editor.value = magics[Math.floor(Math.random() * magics.length)]; saveState(); updateLineNumbers(); };
 
 // ================= STATE MANAGEMENT =================
-function saveState() {
-    const state = { code: editor.value, mode: document.body.getAttribute('data-mode'), theme: document.body.getAttribute('data-theme'), dialect: currentDialect };
-    localStorage.setItem('baydaLabState', JSON.stringify(state));
-}
+function saveState() { const state = { code: editor.value, mode: document.body.getAttribute('data-mode'), theme: document.body.getAttribute('data-theme'), dialect: currentDialect }; localStorage.setItem('baydaLabState', JSON.stringify(state)); }
 
 async function loadState() {
     const savedFontSize = localStorage.getItem('baydaFontSize');
@@ -126,12 +87,12 @@ async function loadState() {
             if (state.theme) { 
                 document.body.setAttribute('data-theme', state.theme); 
                 currentThemeIndex = themes.indexOf(state.theme); 
-                if(currentThemeIndex === -1) currentThemeIndex = 0; // fallback
+                if(currentThemeIndex === -1) currentThemeIndex = 0;
                 document.getElementById('theme-toggle-btn')!.innerText = themeIcons[themes[currentThemeIndex]]; 
             }
             if (state.mode) { document.body.setAttribute('data-mode', state.mode); modeSelect.value = state.mode; updateModeUI(state.mode); }
             if (state.dialect) await changeDialect(state.dialect);
-            if (state.code) editor.value = state.code;
+            if (state.code) { editor.value = state.code; updateLineNumbers(); }
         } catch (e) { console.error(e); }
     } else { await changeDialect('tn-latn'); document.getElementById('consent-modal')!.classList.add('active'); }
 }
@@ -161,7 +122,7 @@ async function changeDialect(dialectId: string) {
         let keywordsMap, vocabMap;
         if (cached) { const parsed = JSON.parse(cached); keywordsMap = parsed.keywords; vocabMap = parsed.vocab; }
         else { const [kwResponse, vocabResponse] = await Promise.all([ fetch(`packages/${dialectId}/keywords.json`), fetch(`packages/${dialectId}/vocabulary.json`) ]); keywordsMap = await kwResponse.json(); vocabMap = await vocabResponse.json(); localStorage.setItem(`baydaCache_${dialectId}`, JSON.stringify({ keywords: keywordsMap, vocab: vocabMap })); }
-        updateDictionary(vocabMap); editor.value = greetings[dialectId] || greetings['tn-latn']; (window as any).currentKeywordsMap = keywordsMap;
+        updateDictionary(vocabMap); editor.value = greetings[dialectId] || greetings['tn-latn']; (window as any).currentKeywordsMap = keywordsMap; updateLineNumbers();
     } catch (error) { console.error("Error loading dialect:", error); }
 }
 function updateDictionary(vocab: Record<string, string>) {
@@ -182,6 +143,18 @@ function updateModeUI(mode: string) {
 }
 modeSelect?.addEventListener('change', (e) => { const mode = (e.target as HTMLSelectElement).value; document.body.setAttribute('data-mode', mode); updateModeUI(mode); saveState(); });
 
+// ================= LINE NUMBERS LOGIC =================
+function updateLineNumbers() {
+    const lines = editor.value.split('\n').length;
+    if (lineNumbers) {
+        lineNumbers.innerHTML = Array.from({length: lines}, (_, i) => i + 1).join('<br>');
+    }
+}
+
+editor.addEventListener('scroll', () => {
+    if (lineNumbers) lineNumbers.scrollTop = editor.scrollTop;
+});
+
 // ================= RUN CODE =================
 document.getElementById('run-btn')?.addEventListener('click', () => {
     const code = editor.value; output.innerHTML = '';
@@ -191,11 +164,10 @@ document.getElementById('run-btn')?.addEventListener('click', () => {
         const lexer = new Lexer(code, keywordsMap); const tokens = lexer.tokenize();
         const parser = new Parser(tokens, keywordsMap); const ast = parser.parse();
         let result = targetLang.value === 'js' ? toJS(ast, keywordsMap) : toPython(ast, keywordsMap);
-        output.textContent = result; output.style.color = 'var(--primary)';
-        playSound('success');
+        output.textContent = result; output.style.color = 'var(--primary)'; playSound('success');
     } catch (error: any) { output.textContent = "Error: " + error.message; output.style.color = '#ef4444'; playSound('error'); }
 });
 
 // ================= INITIALIZATION =================
-if (editor) editor.addEventListener('input', saveState);
+if (editor) editor.addEventListener('input', () => { updateLineNumbers(); saveState(); });
 loadState();

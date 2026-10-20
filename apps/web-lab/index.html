@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bayda Lab 2026</title>
-    <link rel="stylesheet" href="style.css?v=601"> 
+    <link rel="stylesheet" href="style.css?v=602"> 
 </head>
 <body data-mode="beginner" data-theme="light">
     
@@ -78,12 +78,10 @@
                 <option value="pro">👨‍💻 محترف</option>
             </select>
             
-            <!-- زر السمة الموحد -->
             <div class="theme-controls" id="standard-theme-controls">
                 <button class="icon-btn" id="theme-toggle-btn" onclick="cycleTheme()">☀️</button>
             </div>
 
-            <!-- أزرار الطفل -->
             <div class="theme-controls hidden" id="kid-theme-controls">
                 <button class="icon-btn" onclick="changeKidTheme()" title="تغيير الألوان">🎨</button>
                 <button class="icon-btn" onclick="readOutput()" title="استمع للنتيجة">🗣️</button>
@@ -93,12 +91,16 @@
     </header>
 
     <main class="workspace layout-col" id="workspace">
+        <!-- المحرر مع أرقام الأسطر -->
         <div class="pane editor-pane" id="editor-pane">
             <div class="pane-header">
                 <span>المحرر (Franco)</span>
                 <button class="icon-btn" onclick="togglePane('editor-pane', this)">-</button>
             </div>
-            <textarea id="editor" spellcheck="false"></textarea>
+            <div class="editor-wrapper">
+                <div id="line-numbers" class="line-numbers">1</div>
+                <textarea id="editor" spellcheck="false"></textarea>
+            </div>
         </div>
 
         <div class="pane dict-pane" id="dict-pane">
@@ -140,6 +142,6 @@
         <button class="btn-run" id="run-btn">▶ تشغيل الكود</button>
     </footer>
     
-    <script src="main.js?v=601"></script>
+    <script src="main.js?v=602"></script>
 </body>
 </html>

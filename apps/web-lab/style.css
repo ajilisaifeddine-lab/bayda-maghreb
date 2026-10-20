@@ -47,7 +47,35 @@ header { padding: 8px 10px; display: flex; flex-direction: column; gap: 8px; fle
 .pane-minimized { flex: 0 0 auto !important; height: 45px !important; min-height: 45px !important; }
 .pane-minimized > *:not(.pane-header) { display: none !important; }
 
-textarea, pre { flex: 1; padding: 10px; background: transparent; color: var(--text); border: none; outline: none; font-family: var(--font-code); font-size: 1rem; direction: ltr; text-align: left; white-space: pre-wrap; resize: none; overflow-y: auto; }
+/* Editor Wrapper & Line Numbers */
+.editor-wrapper { display: flex; flex: 1; position: relative; overflow: hidden; background: transparent; }
+.line-numbers {
+    width: 35px;
+    padding: 10px 5px;
+    background: rgba(0,0,0,0.03);
+    border-right: 1px solid var(--border);
+    font-family: var(--font-code);
+    font-size: 1rem;
+    line-height: 1.5; /* يجب أن يطابق textarea */
+    color: #888;
+    text-align: right;
+    user-select: none;
+    overflow: hidden;
+    direction: ltr;
+}
+textarea { 
+    flex: 1; padding: 10px; background: transparent; color: var(--text); 
+    border: none; outline: none; font-family: var(--font-code); font-size: 1rem; 
+    direction: ltr; text-align: left; white-space: pre-wrap; resize: none; 
+    line-height: 1.5; /* يجب أن يطابق line-numbers */
+    overflow-y: auto; 
+}
+pre { 
+    flex: 1; padding: 10px; background: transparent; color: var(--text); 
+    border: none; outline: none; font-family: var(--font-code); font-size: 1rem; 
+    direction: ltr; text-align: left; white-space: pre-wrap; 
+    overflow-y: auto; 
+}
 
 /* Dictionary */
 .dict-content { padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
