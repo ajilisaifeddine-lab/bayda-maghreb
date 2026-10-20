@@ -117,3 +117,6 @@ export class Parser {
     throw new Error(`تعبير غير صالح في السطر ${this.peek().line}`);
   }
 }
+export function parse(tokens: Token[]): AstNode {
+  return new Parser(tokens).parse();
+} // إصلاح الخطأ 1

@@ -1,5 +1,5 @@
 import { Token, TokenType } from './types.js';
-
+export { Token }; // إصلاح الخطأ 2 و 3
 const WORD_REGEX = /[\p{L}\p{M}_]/u;
 const NUMBER_REGEX = /[0-9]/;
 

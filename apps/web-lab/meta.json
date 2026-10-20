@@ -1,0 +1,130 @@
+{
+  "inputs": {
+    "../../core/types.ts": {
+      "bytes": 636,
+      "imports": [],
+      "format": "esm"
+    },
+    "../../core/lexer.ts": {
+      "bytes": 2572,
+      "imports": [
+        {
+          "path": "../../core/types.ts",
+          "kind": "import-statement",
+          "original": "./types.js"
+        }
+      ],
+      "format": "esm"
+    },
+    "../../core/parser.ts": {
+      "bytes": 3710,
+      "imports": [
+        {
+          "path": "./types.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../writers/js-writer.ts": {
+      "bytes": 1549,
+      "imports": [
+        {
+          "path": "../core/types.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../writers/python-writer.ts": {
+      "bytes": 1600,
+      "imports": [
+        {
+          "path": "../core/types.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "dialects.ts": {
+      "bytes": 2018,
+      "imports": [],
+      "format": "esm"
+    },
+    "vocabularies.ts": {
+      "bytes": 17094,
+      "imports": [],
+      "format": "esm"
+    },
+    "main.ts": {
+      "bytes": 17424,
+      "imports": [
+        {
+          "path": "../../core/lexer.ts",
+          "kind": "import-statement",
+          "original": "../../core/lexer.js"
+        },
+        {
+          "path": "../../core/parser.ts",
+          "kind": "import-statement",
+          "original": "../../core/parser.js"
+        },
+        {
+          "path": "../../writers/js-writer.ts",
+          "kind": "import-statement",
+          "original": "../../writers/js-writer.js"
+        },
+        {
+          "path": "../../writers/python-writer.ts",
+          "kind": "import-statement",
+          "original": "../../writers/python-writer.js"
+        },
+        {
+          "path": "dialects.ts",
+          "kind": "import-statement",
+          "original": "./dialects.js"
+        },
+        {
+          "path": "vocabularies.ts",
+          "kind": "import-statement",
+          "original": "./vocabularies.js"
+        }
+      ],
+      "format": "esm"
+    }
+  },
+  "outputs": {
+    "main.js": {
+      "imports": [],
+      "exports": [],
+      "entryPoint": "main.ts",
+      "inputs": {
+        "../../core/lexer.ts": {
+          "bytesInOutput": 2405
+        },
+        "../../core/parser.ts": {
+          "bytesInOutput": 3460
+        },
+        "../../writers/js-writer.ts": {
+          "bytesInOutput": 1469
+        },
+        "../../writers/python-writer.ts": {
+          "bytesInOutput": 1534
+        },
+        "dialects.ts": {
+          "bytesInOutput": 2198
+        },
+        "vocabularies.ts": {
+          "bytesInOutput": 31322
+        },
+        "main.ts": {
+          "bytesInOutput": 17251
+        }
+      },
+      "bytes": 59830
+    }
+  }
+}

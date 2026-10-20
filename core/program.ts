@@ -11,8 +11,7 @@ export function parseProgram(tokens: Token[]): Program {
   let i = 0;
   const fail = (t: Token) => { throw new Error(`Unexpected "${t.value}" at line ${t.line}, col ${t.col}`); };
   const isSym = (t: Token | undefined, v: string) => !!t && t.type === "SYMBOL" && t.value === v;
-  const skip = () => { while (tokens[i] && (tokens[i].type === "NEWLINE" || isSym(tokens[i], ";"))) i++; };
-
+  const skip = () => { while (tokens[i] && (tokens[i].type === "SYMBOL" && ['\n', ';', ' '].includes(tokens[i].value))) i++; };
   const parseCall = (): Call => {
     const t = tokens[i];
     if (t.type !== "KEYWORD" && t.type !== "IDENT") fail(t);
@@ -42,8 +41,7 @@ export function parseProgram(tokens: Token[]): Program {
     while (true) {
       const a = tokens[i];
       if (!a || a.type === "EOF") fail(a || tokens[i - 1]);
-      if (a.type === "NEWLINE") { i++; continue; }
-      
+    if (a.type === "SYMBOL" && a.value === "\n") { i++; continue; }      
       // تجاهل المسافات الزائدة
       if (a.type === "SYMBOL" && a.value === " ") { i++; continue; }
 
@@ -69,7 +67,7 @@ export function parseProgram(tokens: Token[]): Program {
   };
 
   const stripParens = (list: Token[]): Token[] => {
-    while (list.length > 1 && isSym(list[0], "(") && closeOf(list) === list.length - 1) return list.slice(1, -1);
+  while (list.length > 1 && isSym(list[0], "(") && closeOf(list) === list.length - 1) return list.slice(1, -1);
     return list;
   };
 
@@ -101,7 +99,7 @@ export function parseProgram(tokens: Token[]): Program {
     if (!test.length) fail(tokens[i] || tokens[i - 1]);
     const then = parseBlock();
     let j = i;
-    while (tokens[j] && tokens[j].type === "NEWLINE") j++;
+while (tokens[j] && tokens[j].type === "SYMBOL" && tokens[j].value === "\n") j++;    
     const nx = tokens[j];
     let other: Stmt[] | null = null;
     if (nx && nx.type === "KEYWORD" && nx.value === "else if") { i = j; other = [parseIf()]; }

@@ -3,45 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bayda Lab - مختبر بايدا</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Bayda Lab 2026</title>
+    <link rel="stylesheet" href="style.css?v=300"> 
 </head>
-<body>
-    <header>
-        <span>🧪 Bayda Lab (نسخة المتصفح)</span>
-    </header>
-    <div style="padding: 0 1rem; display: flex; justify-content: flex-end; gap: 1rem; align-items: center;">
-        <label>اللهجة:</label>
-        <select id="dialect-select" class="target-select">
-            <option value="tn-latn">التونسية</option>
-            <option value="dz-latn">الجزائرية</option>
-            <option value="ly-latn">الليبية</option>
-            <option value="mr-latn">الموريتانية</option>
-            <option value="kab-latn">القبائلية</option>
-            <option value="shi-latn">الشلحية</option>
-        </select>
-        </select>
-        <label>لغة الإخراج:</label>
-        <select id="target-lang" class="target-select">
-            <option value="js">JavaScript</option>
-            <option value="py">Python</option>
-        </select>
+<body data-mode="beginner" data-theme="light">
+    
+    <!-- Consent Modal -->
+    <div class="modal-overlay" id="consent-modal">
+        <div class="modal-content">
+            <h2>👋 أهلاً بك في Bayda Lab</h2>
+            <p>هل تسمح لنا باكتشاف لهجتك تلقائياً لتقديم تجربة مخصصة لك؟</p>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="acceptConsent()">نعم، بالطبع</button>
+                <button class="btn-secondary" onclick="declineConsent()">لا، سأختار بنفسي</button>
+            </div>
+        </div>
     </div>
 
-    <div class="workspace">
-        <div class="pane">
-            <div class="pane-header">المحرر (اكتب كودك هنا)</div>
-            <textarea id="editor">ktab("salam 3alikom")
-idha (haqq) {
-    ktab("Hello World")
-}</textarea>
-        </div>
-        <div class="pane">
-            <div class="pane-header">النتيجة (الكود المترجم)</div>
-            <pre id="output">// اضغط على زر التشغيل...</pre>
+    <!-- Dictionary Popup -->
+    <div class="modal-overlay" id="dict-popup">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeDictPopup()">×</button>
+            <h4 id="dw-word" style="font-size: 1.5rem; color: var(--primary); margin-bottom: 10px;"></h4>
+            <p id="dw-ar" style="font-size: 1.1rem; font-weight: bold;"></p>
         </div>
     </div>
-    <button class="btn-run" id="run-btn">▶ تشغيل الكود (Run)</button>
-    <script type="module" src="main.js"></script>
+
+    <header>
+        <!-- الشعار والأعلام -->
+        <div class="hero-card">
+            <div class="flags-side">
+                <button class="flag-btn" data-dialect="tn-latn"><img src="https://flagcdn.com/w160/tn.png" class="flag-img" alt="TN"></button>
+                <button class="flag-btn" data-dialect="dz-latn"><img src="https://flagcdn.com/w160/dz.png" class="flag-img" alt="DZ"></button>
+                <button class="flag-btn" data-dialect="ly-latn"><img src="https://flagcdn.com/w160/ly.png" class="flag-img" alt="LY"></button>
+            </div>
+            <div class="logo-container">
+                <img src="assets/logo.png" id="main-logo" class="logo-img" alt="Logo">
+            </div>
+            <div class="flags-side">
+                <button class="flag-btn" data-dialect="mr-latn"><img src="https://flagcdn.com/w160/mr.png" class="flag-img" alt="MR"></button>
+                <button class="flag-btn" data-dialect="kab-latn"><img src="assets/kabyle.png" class="flag-img" alt="Kabyle"></button>
+                <button class="flag-btn" data-dialect="shi-latn"><img src="assets/amazigh.png" class="flag-img" alt="Shilha"></button>
+            </div>
+        </div>
+
+        <!-- أزرار التحكم -->
+        <div class="controls-card">
+            <button class="icon-btn" onclick="toggleDictionary()" title="إخفاء/إظهار القاموس">📖</button>
+            <button class="icon-btn" onclick="toggleLayout()" title="تغيير التخطيط">🖥️</button>
+            <div class="divider"></div>
+            <select id="target-lang" class="custom-select">
+                <option value="js">JS</option>
+                <option value="py">PY</option>
+            </select>
+            <select id="mode-select" class="custom-select">
+                <option value="kid">🧸 طفل</option>
+                <option value="beginner" selected>🌱 مبتدئ</option>
+                <option value="pro">👨‍💻 محترف</option>
+            </select>
+            <div class="theme-controls">
+                <button class="icon-btn active" id="btn-light" onclick="setTheme('light')">☀️</button>
+                <button class="icon-btn" id="btn-dark" onclick="setTheme('dark')">🌙</button>
+                <button class="icon-btn" id="btn-comfort" onclick="setTheme('comfort')">👁️</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- مساحة العمل -->
+    <main class="workspace layout-col" id="workspace">
+        <!-- المحرر -->
+        <div class="pane editor-pane" id="editor-pane">
+            <div class="pane-header">
+                <span>المحرر (Franco)</span>
+                <button class="icon-btn" onclick="togglePane('editor-pane', this)">-</button>
+            </div>
+            <textarea id="editor" spellcheck="false"></textarea>
+        </div>
+
+        <!-- القاموس -->
+        <div class="pane dict-pane" id="dict-pane">
+            <div class="pane-header">
+                <span>القاموس التفاعلي</span>
+                <button class="icon-btn" onclick="togglePane('dict-pane', this)">-</button>
+            </div>
+            <div class="dict-content">
+                <div class="dict-chips" id="dict-chips"></div>
+            </div>
+        </div>
+
+        <!-- النتيجة -->
+        <div class="pane output-pane" id="output-pane">
+            <div class="pane-header">
+                <span>النتيجة (Output)</span>
+                <button class="icon-btn" onclick="togglePane('output-pane', this)">-</button>
+            </div>
+            <pre id="output">// النتيجة هنا...</pre>
+        </div>
+    </main>
+
+    <footer class="footer-run">
+        <button class="btn-run" id="run-btn">▶ تشغيل الكود</button>
+    </footer>
+    
+    <script src="main.js?v=999"></script>
 </body>
 </html>

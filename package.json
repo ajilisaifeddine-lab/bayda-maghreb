@@ -1,32 +1,18 @@
 {
   "name": "bayda-maghreb",
   "version": "2.0.0",
-  "description": "Bayda programming language - Tounsi Franco, Kabyle, Dzair, Libya, Mauritania dialects",
+  "description": "Bayda programming language",
   "type": "module",
-  "main": "dist/index.js",
-  "bin": {
-    "bayda": "bayda-bin"
-  },
-  "scripts": {
-    "build": "tsc",
-    "start": "./bayda-bin",
-    "test": "vitest run"
-  },
-  "keywords": [
-    "bayda",
-    "tunisia",
-    "kabyle",
-    "franco",
-    "darja",
-    "maghreb"
-  ],
+  "author": "Ajili Saifeddine",
   "license": "AGPL-3.0",
+  "scripts": {
+    "test": "vitest run",
+    "sync": "node scripts/sync-packages.cjs"
+  },
   "dependencies": {
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "typescript": "^5.0.0",
-    "vitest": "^1.0.0"
+    "typescript": "^5.0.0"
   }
 }
