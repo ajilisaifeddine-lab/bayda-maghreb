@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bayda Lab 2026</title>
-    <link rel="stylesheet" href="style.css?v=500"> 
+    <link rel="stylesheet" href="style.css?v=601"> 
 </head>
 <body data-mode="beginner" data-theme="light">
     
@@ -15,6 +15,25 @@
             <div class="modal-actions">
                 <button class="btn-primary" onclick="acceptConsent()">نعم، بالطبع</button>
                 <button class="btn-secondary" onclick="declineConsent()">لا، سأختار بنفسي</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeSettings()">×</button>
+            <h2>⚙️ الإعدادات</h2>
+            <div class="setting-row">
+                <label>حجم الخط:</label>
+                <input type="range" id="font-size-slider" min="12" max="24" value="16" oninput="changeFontSize(this.value)">
+            </div>
+            <div class="setting-row">
+                <label>المؤثرات الصوتية:</label>
+                <button id="toggle-sound-setting" class="btn-secondary" onclick="toggleSoundFromSettings()">🔊 مفعل</button>
+            </div>
+            <div class="setting-row">
+                <label>مسح البيانات:</label>
+                <button class="btn-secondary" onclick="clearAllData()" style="color:#ef4444; border-color:#ef4444;">🗑️ مسح الكل</button>
             </div>
         </div>
     </div>
@@ -45,8 +64,9 @@
         </div>
 
         <div class="controls-card">
-            <button class="icon-btn"id="side-toggle-btn"   onclick="toggleDictionary()" title="إخفاء/إظهار">📖</button>
+            <button class="icon-btn" id="side-toggle-btn" onclick="toggleDictionary()" title="إخفاء/إظهار">📖</button>
             <button class="icon-btn" onclick="toggleLayout()" title="تغيير التخطيط">🖥️</button>
+            <button class="icon-btn" onclick="openSettings()" title="الإعدادات">⚙️</button>
             <div class="divider"></div>
             <select id="target-lang" class="custom-select">
                 <option value="js">JS</option>
@@ -58,14 +78,12 @@
                 <option value="pro">👨‍💻 محترف</option>
             </select>
             
-            <!-- أزرار السمات العادية -->
+            <!-- زر السمة الموحد -->
             <div class="theme-controls" id="standard-theme-controls">
-                <button class="icon-btn active" id="btn-light" onclick="setTheme('light')">☀️</button>
-                <button class="icon-btn" id="btn-dark" onclick="setTheme('dark')">🌙</button>
-                <button class="icon-btn" id="btn-comfort" onclick="setTheme('comfort')">👁️</button>
+                <button class="icon-btn" id="theme-toggle-btn" onclick="cycleTheme()">☀️</button>
             </div>
 
-            <!-- أزرار الطفل الخاصة (مخفية افتراضياً) -->
+            <!-- أزرار الطفل -->
             <div class="theme-controls hidden" id="kid-theme-controls">
                 <button class="icon-btn" onclick="changeKidTheme()" title="تغيير الألوان">🎨</button>
                 <button class="icon-btn" onclick="readOutput()" title="استمع للنتيجة">🗣️</button>
@@ -75,7 +93,6 @@
     </header>
 
     <main class="workspace layout-col" id="workspace">
-        <!-- المحرر -->
         <div class="pane editor-pane" id="editor-pane">
             <div class="pane-header">
                 <span>المحرر (Franco)</span>
@@ -84,7 +101,6 @@
             <textarea id="editor" spellcheck="false"></textarea>
         </div>
 
-        <!-- القاموس -->
         <div class="pane dict-pane" id="dict-pane">
             <div class="pane-header">
                 <span>القاموس التفاعلي</span>
@@ -95,8 +111,6 @@
             </div>
         </div>
 
-        <!-- النتيجة -->
-        <!-- الملاحظات -->
         <div class="pane notes-pane hidden" id="notes-pane">
             <div class="pane-header notes-header">
                 <span>الملاحظات</span>
@@ -112,8 +126,8 @@
             </div>
             <div id="notes-editor" class="notes-editor" contenteditable="true" dir="ltr" placeholder="اكتب ملاحظاتك هنا..."></div>
         </div>
-       
- <div class="pane output-pane" id="output-pane">
+
+        <div class="pane output-pane" id="output-pane">
             <div class="pane-header">
                 <span>النتيجة (Output)</span>
                 <button class="icon-btn" onclick="togglePane('output-pane', this)">-</button>
@@ -126,6 +140,6 @@
         <button class="btn-run" id="run-btn">▶ تشغيل الكود</button>
     </footer>
     
-    <script src="main.js?v=500"></script>
+    <script src="main.js?v=601"></script>
 </body>
 </html>
