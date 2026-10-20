@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bayda Lab 2026</title>
-    <link rel="stylesheet" href="style.css?v=300"> 
+    <link rel="stylesheet" href="style.css?v=500"> 
 </head>
 <body data-mode="beginner" data-theme="light">
     
-    <!-- Consent Modal -->
     <div class="modal-overlay" id="consent-modal">
         <div class="modal-content">
             <h2>👋 أهلاً بك في Bayda Lab</h2>
@@ -20,7 +19,6 @@
         </div>
     </div>
 
-    <!-- Dictionary Popup -->
     <div class="modal-overlay" id="dict-popup">
         <div class="modal-content">
             <button class="close-btn" onclick="closeDictPopup()">×</button>
@@ -30,7 +28,6 @@
     </div>
 
     <header>
-        <!-- الشعار والأعلام -->
         <div class="hero-card">
             <div class="flags-side">
                 <button class="flag-btn" data-dialect="tn-latn"><img src="https://flagcdn.com/w160/tn.png" class="flag-img" alt="TN"></button>
@@ -47,9 +44,8 @@
             </div>
         </div>
 
-        <!-- أزرار التحكم -->
         <div class="controls-card">
-            <button class="icon-btn" onclick="toggleDictionary()" title="إخفاء/إظهار القاموس">📖</button>
+            <button class="icon-btn"id="side-toggle-btn"   onclick="toggleDictionary()" title="إخفاء/إظهار">📖</button>
             <button class="icon-btn" onclick="toggleLayout()" title="تغيير التخطيط">🖥️</button>
             <div class="divider"></div>
             <select id="target-lang" class="custom-select">
@@ -61,15 +57,23 @@
                 <option value="beginner" selected>🌱 مبتدئ</option>
                 <option value="pro">👨‍💻 محترف</option>
             </select>
-            <div class="theme-controls">
+            
+            <!-- أزرار السمات العادية -->
+            <div class="theme-controls" id="standard-theme-controls">
                 <button class="icon-btn active" id="btn-light" onclick="setTheme('light')">☀️</button>
                 <button class="icon-btn" id="btn-dark" onclick="setTheme('dark')">🌙</button>
                 <button class="icon-btn" id="btn-comfort" onclick="setTheme('comfort')">👁️</button>
             </div>
+
+            <!-- أزرار الطفل الخاصة (مخفية افتراضياً) -->
+            <div class="theme-controls hidden" id="kid-theme-controls">
+                <button class="icon-btn" onclick="changeKidTheme()" title="تغيير الألوان">🎨</button>
+                <button class="icon-btn" onclick="readOutput()" title="استمع للنتيجة">🗣️</button>
+                <button class="icon-btn" onclick="magicCode()" title="كود سحري">🪄</button>
+            </div>
         </div>
     </header>
 
-    <!-- مساحة العمل -->
     <main class="workspace layout-col" id="workspace">
         <!-- المحرر -->
         <div class="pane editor-pane" id="editor-pane">
@@ -92,7 +96,24 @@
         </div>
 
         <!-- النتيجة -->
-        <div class="pane output-pane" id="output-pane">
+        <!-- الملاحظات -->
+        <div class="pane notes-pane hidden" id="notes-pane">
+            <div class="pane-header notes-header">
+                <span>الملاحظات</span>
+                <button class="icon-btn" onclick="togglePane('notes-pane', this)">-</button>
+            </div>
+            <div class="notes-toolbar">
+                <select id="note-selector" class="custom-select" onchange="loadSelectedNote()"></select>
+                <button class="icon-btn" onclick="createNewNote()" title="ملاحظة جديدة">➕</button>
+                <button class="icon-btn" onclick="deleteCurrentNote()" title="حذف">🗑️</button>
+                <div class="divider"></div>
+                <button class="icon-btn" onclick="formatDoc('bold')"><b>B</b></button>
+                <button class="icon-btn" onclick="formatDoc('italic')"><i>I</i></button>
+            </div>
+            <div id="notes-editor" class="notes-editor" contenteditable="true" dir="ltr" placeholder="اكتب ملاحظاتك هنا..."></div>
+        </div>
+       
+ <div class="pane output-pane" id="output-pane">
             <div class="pane-header">
                 <span>النتيجة (Output)</span>
                 <button class="icon-btn" onclick="togglePane('output-pane', this)">-</button>
@@ -105,6 +126,6 @@
         <button class="btn-run" id="run-btn">▶ تشغيل الكود</button>
     </footer>
     
-    <script src="main.js?v=999"></script>
+    <script src="main.js?v=500"></script>
 </body>
 </html>
