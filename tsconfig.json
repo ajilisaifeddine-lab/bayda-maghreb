@@ -5,8 +5,11 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "declaration": true,
+    "declarationMap": false,
+    "sourceMap": false,
     "outDir": "dist",
     "rootDir": "."
   },
-  "include": ["core/**/*.ts", "cli/**/*.ts", "index.ts", "writers/**/*.ts"]
+  "include": ["core/**/*.ts", "index.ts", "writers/**/*.ts"]
 }

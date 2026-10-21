@@ -34,9 +34,10 @@ const parseCall = (): Call => {
     const one = cur.length === 1 ? cur[0] : null;
     if (one && one.type === "STRING") args.push({ type: "String", value: one.value });
     else if (one && one.type === "NUMBER") args.push({ type: "Number", value: one.value });
-    else if (one && one.type === "IDENT") {
-      if (one.value === "haqq") {
-        args.push({ type: "Raw", tokens: [{ ...one, value: "true" }] });
+    else if (one && (one.type === "IDENT" || one.type === "KEYWORD")) {
+      // مفاهيم منطقية قياسية (بعد التطبيع): true / false
+      if (one.value === "true" || one.value === "false") {
+        args.push({ type: "Raw", tokens: [{ ...one, value: one.value }] });
       } else {
         args.push({ type: "Raw", tokens: cur });
       }

@@ -1,43 +1,71 @@
 #!/usr/bin/env node
-
-import { loadDialect } from "./dist/core/loader.js";
+/**
+ * bayda — واجهة سطر الأوامر.
+ * يقرأ ملف .bayda، يحمّل اللهجة، ويمرّر الكل عبر translate().
+ *
+ * الاستخدام:
+ *   bayda hello.tn-latn.bayda                 # يطبع JavaScript
+ *   bayda hello.tn-latn.bayda --py            # يطبع Python
+ *   bayda hello.tn-latn.bayda --dialect tn-latn
+ *   bayda hello.tn-latn.bayda --run           # ينفّذ JavaScript الناتج
+ *   bayda hello.tn-latn.bayda -o out.js       # يحفظ الناتج في ملف
+ */
 import fs from "fs";
 import path from "path";
+import { spawnSync } from "child_process";
+import { translateDialect } from "./dist/core/translate-node.js";
 
 const args = process.argv.slice(2);
-const code = args[0] && !args[0].startsWith("--") ? args[0] : null;
 
-if (!code || args.includes("--help") || args.includes("-h")) {
-  console.error("usage: bayda <file> [--dialect code]");
+if (!args.length || args.includes("--help") || args.includes("-h")) {
+  console.error("usage: bayda <file.bayda> [--dialect code] [--py] [--run] [-o out]");
   process.exit(1);
-}
-
-if (code === "init") {
-  console.log("init command not implemented yet.");
-  process.exit(0);
 }
 
 const file = args.find((a) => a.endsWith(".bayda"));
 if (!file) {
-  console.error("usage: bayda <file>");
+  console.error("usage: bayda <file.bayda> [--dialect code] [--py] [--run]");
   process.exit(1);
 }
 
-const dialectArgIndex = args.indexOf("--dialect");
-const dialectCode = dialectArgIndex !== -1 ? args[dialectArgIndex + 1] : "tn-latn";
+const dIdx = args.indexOf("--dialect");
+const dialect =
+  dIdx !== -1 && args[dIdx + 1]
+    ? args[dIdx + 1]
+    : path.basename(file).split(".")[1] || "tn-latn";
+
+const target = args.includes("--py") || args.includes("--python") ? "py" : "js";
+const oIdx = args.indexOf("-o");
+const outFile = oIdx !== -1 ? args[oIdx + 1] : null;
+const shouldRun = args.includes("--run");
 
 try {
-  const dialect = loadDialect(dialectCode, { consent: true });
-  if (!dialect) {
-    console.error(`Unknown dialect: ${dialectCode}`);
-    process.exit(1);
+  const src = fs.readFileSync(file, "utf8");
+  const result = translateDialect(src, { dialect, target, consent: true });
+
+  if (outFile) {
+    fs.writeFileSync(outFile, result.code + "\n", "utf8");
+    console.error(`✅ ${dialect} → ${target} : ${outFile}`);
+  } else {
+    console.log(result.code);
   }
-  
-  const targetArg = args.find(a => a === '--py' || a === '--python') ? 'py' : 'js';
-  console.log(`running with ${dialect.id} -> target: ${targetArg}`);
-  
-}
- catch (e) {
+
+  if (shouldRun) {
+    if (target === "js") {
+      const tmp = path.join(process.cwd(), ".bayda-run.mjs");
+      fs.writeFileSync(tmp, result.code + "\n", "utf8");
+      const r = spawnSync(process.execPath, [tmp], { stdio: "inherit" });
+      fs.rmSync(tmp, { force: true });
+      process.exit(r.status ?? 0);
+    } else {
+      const tmp = path.join(process.cwd(), ".bayda-run.py");
+      fs.writeFileSync(tmp, result.code + "\n", "utf8");
+      const r = spawnSync("python3", [tmp], { stdio: "inherit" });
+      fs.rmSync(tmp, { force: true });
+      process.exit(r.status ?? 0);
+    }
+  }
+} catch (e) {
   console.error(`Error: ${e.message}`);
   process.exit(1);
 }

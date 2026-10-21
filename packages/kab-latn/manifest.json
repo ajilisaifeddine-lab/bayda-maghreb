@@ -14,5 +14,6 @@
     "mode": "suggestion",
     "message": "يقترح كخيار - لغة أمازيغية"
   },
-  "code": "kab-lat"
+  "code": "kab-lat",
+  "reviewStatus": "pending"
 }

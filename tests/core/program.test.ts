@@ -4,7 +4,7 @@ import { normalize } from "../../core/normalizer";
 import { parseProgram } from "../../core/program";
 
 describe("parseProgram", () => {
-  const kw2 = { idha: "if", "idha ken": "else if", sinon: "else" };
+  const kw2 = { idha: "if", "idha ken": "else if", sinon: "else", goul: "log" };
   const parse2 = (src: string) => parseProgram(normalize(lex(src, new Set()), kw2 as any));
   const cond = (n: any) => n.test.tokens.map((t: any) => t.value).join(" ");
   const log = (v: string) => ({ type: "Call", name: "log", args: [{ type: "String", value: v }] });

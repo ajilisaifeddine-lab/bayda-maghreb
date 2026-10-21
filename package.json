@@ -1,18 +1,74 @@
 {
   "name": "bayda-maghreb",
-  "version": "2.0.0",
-  "description": "Bayda programming language",
+  "version": "2.1.0",
+  "description": "A programming language for North African dialects — transpiles to JavaScript & Python.",
   "type": "module",
   "author": "Ajili Saifeddine",
   "license": "AGPL-3.0",
+  "homepage": "https://github.com/ajilisaifeddine-lab/bayda-maghreb",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajilisaifeddine-lab/bayda-maghreb.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ajilisaifeddine-lab/bayda-maghreb/issues"
+  },
+  "keywords": [
+    "bayda",
+    "maghreb",
+    "dialect",
+    "transpiler",
+    "franco-arabic",
+    "tunisian",
+    "algerian",
+    "kabyle",
+    "amazigh",
+    "javascript",
+    "python"
+  ],
+  "bin": {
+    "bayda": "./bayda-bin"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./core/*": "./dist/core/*.js",
+    "./writers/*": "./dist/writers/*.js",
+    "./packages/*": "./packages/*",
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "core",
+    "writers",
+    "packages",
+    "index.ts",
+    "bayda-bin",
+    "README.md",
+    "ARCHITECTURE.md",
+    "LICENSE"
+  ],
   "scripts": {
     "test": "vitest run",
-    "sync": "node scripts/sync-packages.cjs"
+    "build": "tsc",
+    "dialects": "node scripts/build-dialects.cjs",
+    "audit": "node scripts/audit.cjs",
+    "lab:build": "npm run dialects && esbuild apps/web-lab/main.ts --bundle --format=esm --outfile=apps/web-lab/main.js --platform=browser",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@types/node": "^26.6.5",
+    "esbuild": "^0.28.2",
     "typescript": "^5.0.0",
     "vitest": "^5.0.5"
   }

@@ -1,9 +1,0 @@
-{
-  "id": "mr-latn",
-  "name": "Mauritanian Hassaniya",
-  "version": "1.0.0",
-  "requiresConsent": true,
-  "description": "اللهجة الموريتانية بالفرانكو",
-  "code": "mauritania",
-  "script": "Arabic"
-}

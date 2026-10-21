@@ -61,7 +61,21 @@ export class Lexer {
       }
 
       if (NUMBER_REGEX.test(char)) {
+        // فرانكو: رقم يتبعه حرف يعني كلمة (9oul, 3lik, 5ayb) لا عدداً
+        let j = this.position;
+        while (j < this.input.length && NUMBER_REGEX.test(this.input[j])) j++;
+        const francoWord = j < this.input.length && WORD_REGEX.test(this.input[j]);
+
         let value = '';
+        if (francoWord) {
+          while (WORD_REGEX.test(this.currentChar()) || NUMBER_REGEX.test(this.currentChar())) {
+            value += this.currentChar();
+            this.advance();
+          }
+          tokens.push({ type: 'IDENT', value, line: startLine, col: startCol });
+          continue;
+        }
+
         while (NUMBER_REGEX.test(this.currentChar()) || this.currentChar() === '.') {
           value += this.currentChar();
           this.advance();

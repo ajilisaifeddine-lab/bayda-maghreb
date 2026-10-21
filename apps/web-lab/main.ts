@@ -1,7 +1,8 @@
-import { Lexer } from '../../core/lexer.js';
-import { Parser } from '../../core/parser.js';
-import { toJS } from '../../writers/js-writer.js';
-import { toPython } from '../../writers/python-writer.js';
+import { translate } from '../../core/translate.js';
+// بيانات اللهجات مُولَّدة وقت البناء من الجذر (packages/) عبر scripts/build-dialects.cjs
+// → مصدر واحد للحقيقة، بلا نسخ مكرّرة ولا fetch وقت التشغيل.
+import { allKeywords } from './dialects.js';
+import { allVocabularies } from './vocabularies.js';
 
 // DOM Elements
 const editor = document.getElementById('editor') as HTMLTextAreaElement;
@@ -135,11 +136,13 @@ async function changeDialect(dialectId: string) {
     currentDialect = dialectId;
     dialectChips.forEach(chip => { if (chip.getAttribute('data-dialect') === dialectId) chip.classList.add('active'); else chip.classList.remove('active'); });
     try {
-        const cached = localStorage.getItem(`baydaCache_${dialectId}`);
-        let keywordsMap, vocabMap;
-        if (cached) { const parsed = JSON.parse(cached); keywordsMap = parsed.keywords; vocabMap = parsed.vocab; }
-        else { const [kwResponse, vocabResponse] = await Promise.all([ fetch(`packages/${dialectId}/keywords.json`), fetch(`packages/${dialectId}/vocabulary.json`) ]); keywordsMap = await kwResponse.json(); vocabMap = await vocabResponse.json(); localStorage.setItem(`baydaCache_${dialectId}`, JSON.stringify({ keywords: keywordsMap, vocab: vocabMap })); }
-        updateDictionary(vocabMap); editor.value = greetings[dialectId] || greetings['tn-latn']; (window as any).currentKeywordsMap = keywordsMap; updateLineNumbers();
+        // بيانات مضمّنة وقت البناء من الجذر (packages/) — لا شبكة، لا نسخ مكرّرة.
+        const keywordsMap = allKeywords[dialectId] || {};
+        const vocabMap = allVocabularies[dialectId] || {};
+        updateDictionary(vocabMap);
+        editor.value = greetings[dialectId] || greetings['tn-latn'];
+        (window as any).currentKeywordsMap = keywordsMap;
+        updateLineNumbers();
     } catch (error) { console.error("Error loading dialect:", error); }
 }
 function updateDictionary(vocab: Record<string, string>) {
@@ -220,6 +223,8 @@ editor.addEventListener('scroll', () => {
 function containsString(node: any, target: string): boolean {
     if (!node) return false;
     if (node.type === 'StringLiteral' && node.value === target) return true;
+    // شجرة program.ts: الوسائط من نوع { type: "String", value }
+    if (node.type === 'String' && node.value === target) return true;
     if (node.type === 'Program') {
         return node.body.some((child: any) => containsString(child, target));
     }
@@ -260,11 +265,8 @@ function containsString(node: any, target: string): boolean {
             return;
         }
 
-        // 1. التحقق من الصياغة (Syntax Check)
-        const lexer = new Lexer(code, keywordsMap);
-        const tokens = lexer.tokenize();
-        const parser = new Parser(tokens, keywordsMap);
-        const ast = parser.parse();
+        // 1. التحقق من الصياغة عبر translate() (lexer → normalizer → program)
+        const { ast } = translate(code, { keywords: keywordsMap, target: 'js' });
         
         // 2. التحقق من المهمة (Task Check)
         if (containsString(ast, 'salam')) {
@@ -288,9 +290,7 @@ document.getElementById('run-btn')?.addEventListener('click', () => {
     try {
         const keywordsMap = (window as any).currentKeywordsMap;
         if (!keywordsMap) return alert("جاري تحميل اللهجة...");
-        const lexer = new Lexer(code, keywordsMap); const tokens = lexer.tokenize();
-        const parser = new Parser(tokens, keywordsMap); const ast = parser.parse();
-        let result = targetLang.value === 'js' ? toJS(ast, keywordsMap) : toPython(ast, keywordsMap);
+        const { code: result } = translate(code, { keywords: keywordsMap, target: targetLang.value === 'js' ? 'js' : 'py' });
         output.textContent = result; output.style.color = 'var(--primary)'; playSound('success');
     } catch (error: any) { output.textContent = "Error: " + error.message; output.style.color = '#ef4444'; playSound('error'); }
 });

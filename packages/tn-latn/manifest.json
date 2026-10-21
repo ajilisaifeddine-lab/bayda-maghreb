@@ -9,5 +9,6 @@
     "message": "الكشف التلقائي يقترح هذه الحزمة كخيار أول، لا يفرضها"
   },
   "code": "tn-latn",
-  "script": "latin"
+  "script": "latin",
+  "reviewStatus": "pending"
 }

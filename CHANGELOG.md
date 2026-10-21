@@ -1,5 +1,42 @@
 # Changelog
 
+## 2.1.0 - 2026-10-21
+
+### Added
+- `core/translate.ts`: الرابط المركزي للمسار الكامل (نواة خالصة تعمل في Node والمتصفح).
+- `core/translate-node.ts`: غلاف Node يحمّل الحزمة من القرص ثم يفوّض إلى `translate()`.
+- `index.ts`: نقطة دخول المكتبة (translate, loadDialect, writers, detector...).
+- `tests/core/translate.test.ts`: ترجمة end-to-end لكل اللهجات السبعة (JS + Python).
+- `tests/core/concepts.test.ts`: تحقق أن كل كلمة لهجة تشير إلى مفهوم في `core/concepts.json`.
+- `scripts/migrate-reviewstatus.cjs`، وسكربتات `build` و`lab:build`.
+- `core/registry.ts`: مصدر الحقيقة الواحد للمستهلكين (`listDialects`، `getDialectInfo`، `getKeywords`).
+- `core/errors.ts`: نظام أخطاء موحّد `BaydaError` بكود ثابت (`[CODE] رسالة`) وحد حجم المصدر (`MAX_SOURCE_BYTES`).
+- `tests/core/loader.security.test.ts` و`tests/core/registry.test.ts`: تحصين path traversal والمدخلات.
+- حزمة npm كاملة: `bin` (`bayda`)، `main`/`module`/`types`/`exports`/`files`، وتوليد ملفات `.d.ts`.
+
+### Fixed
+- **normalizer**: كان يتجاهل خريطة كلمات اللهجة ويستخدم قائمة تونسية صلبة؛ الآن مدفوع بالخريطة ويدعم العبارات المركّبة (`idha ken` → `else if`) دون مطابقة عبر الأسطر.
+- **lexer**: أرقام الفرانكو (`9oul`, `3lik`, `5ayb`) تُعامل الآن كحروف لا كأرقام (كما يدّعي README).
+- **writers**: يترجمون الاسم إن كان كلمة لهجة أو مفهوماً قياسياً، ويدعمون سلاسل `else if` / `elif`.
+- **loader**: يحلّ مسار `packages/` نسبةً للوحدة (لا `cwd` فقط) ويجرّد البيانات الوصفية.
+- **targets**: لم يعد يستبدل بالـ regex الصلب؛ يمرّ عبر lexer → normalizer → program → writers.
+- **CLI `bayda-bin`**: يقرأ الملف ويترجم فعلياً (`--py`, `--run`, `-o`) بدل طباعة سطر فقط.
+- **المكتبة**: حُذف `src/index.js` القديم (كان يستورد `./dialect-registry.js` غير الموجود)؛ الواجهة الآن `index.ts` فقط.
+- **المختبر `main.ts`**: يستخدم `translate()` الآن.
+- اختبار معطوب: `lexer.dialects.test.ts` (مسار خاطئ) أُصلح.
+
+### Changed
+- `reviewStatus` انتقل من `keywords.json` إلى `manifest.json` (بيانات وصفية لا كلمات برمجية).
+- **المختبر رفيع**: بيانات اللهجات مُضمّنة وقت البناء من الجذر (`scripts/build-dialects.cjs` → `dialects.ts`/`vocabularies.ts`)، لا `fetch` وقت التشغيل ولا نسخة مكرّرة من `packages/`.
+- **loader**: تحصين الاسم (`SAFE_NAME`) و`assertInsideRoot` ضد path traversal، وتحقّق zod تحذيري.
+- النتيجة: **87/87 اختبار ناجح** (كان 29/30).
+
+### Removed
+- `bayda-bi`: كان مكسوراً (يستورد `./src/dialect-registry.js` غير الموجود) ومكرّراً لـ `bayda-bin`.
+- `scripts/sync-packages.cjs`: لم يعد لازماً (لا نسخ مكرّر للمختبر).
+- `audit_packages.cjs` (الجذر): نسخة قديمة مكرّرة من `scripts/audit.cjs`.
+- ملفات المسار القديم الميتة/المكرّرة (مسار واحد فقط الآن): `core/ast.ts`، `core/mapping.ts`، `core/compile.ts`، `core/parser.ts` (استُبدل بـ `program.ts`)، `core/transliterator.ts` (تكرار `detectScript`)، `src/index.js` (شيم قديم)، `index.htm` (صفحة هبوط قديمة)، `apps/web-lab/meta.json` (أثر بناء قديم).
+
 ## 1.4.0 - 2026-10-16
 
 ### Added

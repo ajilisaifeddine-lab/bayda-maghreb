@@ -20,8 +20,8 @@ Write code in your own dialect. Transpile to JavaScript & Python.
     Handles Franco-Arabic digits (e.g., 5ayb, 3lik) as letters, not numbers.
     يتعامل مع أرقام الفرانكو (مثل 5ayb، 3lik) كحروف، وليس كأرقام.
 *   **Fully Tested / مختبر بالكامل:** 
-    30+ unit tests ensuring core stability.
-    أكثر من 30 اختباراً لضمان استقرار النواة.
+    87 unit tests ensuring core stability.
+    أكثر من 87 اختباراً لضمان استقرار النواة.
 
 ---
 
@@ -55,6 +55,28 @@ Run it (Default: JavaScript):
 
 Transpile to Python:
     bayda hello.tn-latn.bayda --py
+
+---
+
+## Library API / واجهة المكتبة
+
+```js
+import { translate, translateDialect, listDialects, getDialectInfo } from "bayda-maghreb";
+
+// 1) ترجمة خالصة (تعمل في Node والمتصفح) — تمرّر خريطة كلمات اللهجة بنفسك
+translate('goul("salam")', { keywords: { goul: "print" }, target: "js" }).code;
+// => 'console.log("salam");'
+
+// 2) ترجمة عبر تحميل اللهجة من القرص (Node)
+translateDialect('idha (s7i7) { goul("a") }', { dialect: "tn-latn", target: "py" }).code;
+
+// 3) سرد اللهجات (مصدر الحقيقة الواحد)
+listDialects();          // [{ id, name, script, keywordCount, ... }, ...]
+getDialectInfo("tn-latn"); // { id, manifest, keywords, vocabulary }
+```
+
+كل المسار يمرّ عبر `translate()`: `packages/*.json → loader → lexer → normalizer → program.ts → writers`.
+راجع [`ARCHITECTURE.md`](./ARCHITECTURE.md) للتفاصيل.
 
 ---
 

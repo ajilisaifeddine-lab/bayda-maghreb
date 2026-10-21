@@ -1,1 +1,8 @@
-{"id": "shi-latn", "name": "Tashelhit - تشلحيت", "version": "1.0.0", "requiresConsent": true, "description": "اللغة التشلحيتية بالحروف اللاتينية"}
+{
+  "id": "shi-latn",
+  "name": "Tashelhit - تشلحيت",
+  "version": "1.0.0",
+  "requiresConsent": true,
+  "description": "اللغة التشلحيتية بالحروف اللاتينية",
+  "reviewStatus": "pending"
+}

@@ -5,9 +5,9 @@ export const dz_latn_kw = {
   "ila": "if",
   "sah": "true",
   "ghalt": "false",
-  "wela": "else",
-  "reviewStatus": "pending"
-};
+  "wela": "else"
+}
+;
 
 export const kab_latn_kw = {
   "aru": "print",
@@ -24,9 +24,9 @@ export const kab_latn_kw = {
   "amgaz": "false",
   "ghalat": "false",
   "wela": "else",
-  "wla": "else",
-  "reviewStatus": "pending"
-};
+  "wla": "else"
+}
+;
 
 export const kab_tifinagh_kw = {
   "ⵉⴷⵀⴰ": "if",
@@ -47,18 +47,18 @@ export const ly_latn_kw = {
   "kan": "if",
   "sahih": "true",
   "ghalet": "false",
-  "wela": "else",
-  "reviewStatus": "pending"
-};
+  "wela": "else"
+}
+;
 
 export const mr_latn_kw = {
   "ktab": "print",
   "idha": "if",
   "haqq": "true",
   "bla": "false",
-  "wela": "else",
-  "reviewStatus": "pending"
-};
+  "wela": "else"
+}
+;
 
 export const shi_latn_kw = {
   "aru": "print",
@@ -73,9 +73,9 @@ export const shi_latn_kw = {
   "wela": "else",
   "wla": "else",
   "maulac": "else",
-  "mlac": "else",
-  "reviewStatus": "pending"
-};
+  "mlac": "else"
+}
+;
 
 export const tn_latn_kw = {
   "ekteb": "print",
@@ -92,9 +92,9 @@ export const tn_latn_kw = {
   "ghalt": "false",
   "8alt": "false",
   "wella": "else",
-  "wlla": "else",
-  "reviewStatus": "pending"
-};
+  "wlla": "else"
+}
+;
 
 export const allKeywords: Record<string, any> = {
   'dz-latn': dz_latn_kw,

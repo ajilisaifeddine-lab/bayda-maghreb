@@ -1,44 +1,45 @@
+import { Lexer } from "./lexer.js";
+import { normalize } from "./normalizer.js";
+import { parseProgram } from "./program.js";
+import { toJS } from "../writers/js-writer.js";
+import { toPython } from "../writers/python-writer.js";
+
 export type Target = "js" | "py";
 
-export function transpileToTarget(src: string, _file: string, target: Target, keywords: Record<string, string> = {}): string {
-  let s = src;
+/**
+ * خريطة افتراضية صغيرة للتوافق مع الاستدعاءات القديمة التي لا تحدّد لهجة.
+ * عند استخدام translate() تُمرَّر خريطة اللهجة الحقيقية من الحزمة.
+ */
+const DEFAULT_KEYWORDS: Record<string, string> = {
+  // طباعة
+  ktab: "print", kteb: "print", goul: "print", ekteb: "print", ektb: "print", aru: "print", skr: "print",
+  // شرط
+  idha: "if", ida: "if", kan: "if", ila: "if", ma: "if",
+  // وإلا
+  wella: "else", wla: "else", wela: "else", sinon: "else", maulac: "else",
+  // صح
+  haqq: "true", sah: "true", sahih: "true", tidett: "true", tidtt: "true", s7i7: "true", shih: "true",
+  // خطأ
+  bla: "false", ghalt: "false", ghalet: "false", mgaz: "false", amgaz: "false",
+  // حلقة
+  while: "while", twala: "while", hata: "while",
+};
 
-
-  for (const [word, translation] of Object.entries(keywords)) {
-    const regex = new RegExp(`\\b${word}\\b`, "g");
-    s = s.replace(regex, translation);
-  }
-
-
-  s = s.replace(/\bktab\b/g, 'log')
-       .replace(/\bgoul\b/g, 'log')
-       .replace(/\bidha\b/g, 'if')
-       .replace(/\bwella\b/g, 'else')
-       .replace(/\bsinon\b/g, 'else')
-       .replace(/\bhaqq\b/g, 'true')
-       .replace(/\bbla\b/g, 'false');
-
-
-  if (target === "js") {
-    s = s.replace(/\blog\(/g, 'console.log(');
-    return s;
-  }
-
-
-  if (target === "py") {
-    s = s.replace(/console\.log/g, 'print');
-    s = s.replace(/\blog\(/g, 'print(');
-    s = s.replace(/\bif\s*\(/g, 'if ');
-    s = s.replace(/\)\s*\{/g, ':');
-    s = s.replace(/\}\s*else\s*\{/g, 'else:');
-    s = s.replace(/\}/g, '');
-    s = s.replace(/true/g, 'True');
-    s = s.replace(/false/g, 'False');
-    if (!s.trim()) s = 'pass';
-    return s;
-  }
-
-  return s;
+/**
+ * ترجمة نصّية عبر المسار الكامل: lexer → normalizer → program → writer.
+ * (بديل عن الاستبدال بالـ regex الصلب.)
+ */
+export function transpileToTarget(
+  src: string,
+  _file: string,
+  target: Target,
+  keywords: Record<string, string> = {}
+): string {
+  const map = { ...DEFAULT_KEYWORDS, ...keywords };
+  const tokens = new Lexer(src, map).tokenize();
+  const normalized = normalize(tokens, map);
+  const ast = parseProgram(normalized);
+  return target === "py" ? toPython(ast, map) : toJS(ast, map);
 }
 
 export function toTarget(src: string, file: string, target: Target): string {
