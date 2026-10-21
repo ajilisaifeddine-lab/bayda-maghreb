@@ -1,6 +1,6 @@
 {
   "name": "bayda-maghreb",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "A programming language for North African dialects — transpiles to JavaScript & Python.",
   "type": "module",
   "author": "Ajili Saifeddine",
