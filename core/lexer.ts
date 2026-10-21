@@ -89,3 +89,9 @@ export class Lexer {
     return tokens;
   }
 }
+
+export function lex(input: string, keywords: Set<string> = new Set()): Token[] {
+  const map: Record<string, string> = {};
+  for (const k of keywords) map[k] = k;
+  return new Lexer(input, map).tokenize();
+}
