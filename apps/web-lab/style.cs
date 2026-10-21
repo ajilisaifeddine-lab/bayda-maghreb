@@ -115,3 +115,76 @@ textarea, pre { flex: 1; padding: 10px; background: transparent; color: var(--te
 .btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
 
 @media (max-width: 768px) { .workspace.layout-row { flex-direction: column; } }
+/* ================= TABS NAVIGATION ================= */
+.tabs-nav {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 10px;
+    background: var(--panel);
+    padding: 5px;
+    border-radius: 30px;
+    border: 2px solid var(--border);
+    width: fit-content;
+    margin: 0 auto 10px auto;
+}
+.tab-btn {
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: var(--font-ui);
+    transition: 0.3s;
+}
+.tab-btn.active {
+    background: var(--primary);
+    color: #fff;
+}
+
+/* ================= LEARN VIEW ================= */
+.learn-container {
+    width: 100%;
+    max-width: 600px;
+    background: var(--panel);
+    padding: 30px;
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+.lesson-card {
+    background: var(--bg);
+    padding: 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    text-align: right;
+}
+.lesson-card h3 { margin-bottom: 10px; color: var(--primary); }
+.lesson-card p { margin-bottom: 15px; font-size: 0.95rem; line-height: 1.5; }
+.lesson-editor {
+    width: 100%;
+    height: 120px;
+    background: var(--panel);
+    color: var(--text);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    font-family: var(--font-code);
+    font-size: 1rem;
+    direction: ltr;
+    text-align: left;
+    resize: none;
+    outline: none;
+}
+.lesson-feedback {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+}
+.lesson-feedback.success { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid #10b981; }
+.lesson-feedback.error { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; }

@@ -17,6 +17,7 @@ export interface Token {
 export type AstNode =
   | { type: 'Program'; body: AstNode[] }
   | { type: 'Call'; name: string; args: AstNode[] }
+  | { type: "While"; test: AstNode; body: AstNode[] }
   | { type: 'If'; test: AstNode; then: AstNode[]; else?: AstNode[] }
   | { type: 'StringLiteral'; value: string }
   | { type: 'NumberLiteral'; value: number }

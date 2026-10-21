@@ -5,19 +5,21 @@
 [data-theme="dark"] { --bg: #0f172a; --panel: #1e293b; --border: #334155; --text: #f8fafc; --primary: #38bdf8; --shadow: 0 4px 6px -1px rgba(0,0,0,0.3); }
 [data-theme="comfort"] { --bg: #fdf6e3; --panel: #fdf6e3; --border: #d3cbb7; --text: #586e75; --primary: #268bd2; --shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
 
-/* Modes */
 [data-mode="beginner"] { --radius: 12px; }
 [data-mode="pro"] { --font-ui: system-ui, sans-serif; --radius: 0px; }
 [data-mode="kid"], [data-mode="kid"][data-kid-theme="candy"] { --bg: #ffe4e6; --panel: #ffffff; --border: #9f1239; --text: #881337; --primary: #f43f5e; --shadow: 0 8px 0 #9f1239; --font-ui: 'Comic Sans MS', 'Baloo Bhaijaan 2', cursive; --font-code: 'Comic Sans MS', cursive; --radius: 20px; }
 [data-mode="kid"][data-kid-theme="jungle"] { --bg: #dcfce7; --panel: #ffffff; --border: #166534; --text: #14532d; --primary: #22c55e; --shadow: 0 8px 0 #166534; }
 [data-mode="kid"][data-kid-theme="ocean"] { --bg: #e0f2fe; --panel: #ffffff; --border: #075985; --text: #0c4a6e; --primary: #0ea5e9; --shadow: 0 8px 0 #075985; }
 
-/* Global */
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-ui); outline: none; -webkit-tap-highlight-color: transparent; }
 body { background: var(--bg); color: var(--text); height: 100dvh; display: flex; flex-direction: column; overflow: hidden; transition: background 0.3s, color 0.3s; font-size: var(--font-base); }
 
 /* Header */
 header { padding: 8px 10px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+.tabs-nav { display: flex; gap: 10px; justify-content: center; margin-bottom: 5px; background: var(--panel); padding: 5px; border-radius: 30px; border: 2px solid var(--border); width: fit-content; margin: 0 auto; }
+.tab-btn { background: transparent; color: var(--text-muted); border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; font-family: var(--font-ui); transition: 0.3s; }
+.tab-btn.active { background: var(--primary); color: #fff; }
+
 .hero-card { display: flex; justify-content: space-between; align-items: center; padding: 8px 15px; background: var(--panel); border: 2px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); width: 100%; max-width: 600px; margin: 0 auto; height: 60px; }
 .flags-side { display: flex; gap: 6px; align-items: center; }
 .flag-btn { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border); background: #fff; cursor: pointer; overflow: hidden; padding: 0; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
@@ -42,40 +44,13 @@ header { padding: 8px 10px; display: flex; flex-direction: column; gap: 8px; fle
 .pane { flex: 1; background: var(--panel); border: 2px solid var(--border); border-radius: var(--radius); display: flex; flex-direction: column; overflow: hidden; min-height: 150px; box-shadow: var(--shadow); }
 .pane.hidden { display: none !important; }
 .pane-header { padding: 8px; background: rgba(0,0,0,0.05); border-bottom: 2px solid var(--border); font-weight: bold; text-align: center; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; }
-
-/* Minimize Panes */
 .pane-minimized { flex: 0 0 auto !important; height: 45px !important; min-height: 45px !important; }
 .pane-minimized > *:not(.pane-header) { display: none !important; }
 
-/* Editor Wrapper & Line Numbers */
 .editor-wrapper { display: flex; flex: 1; position: relative; overflow: hidden; background: transparent; }
-.line-numbers {
-    width: 35px;
-    padding: 10px 5px;
-    background: rgba(0,0,0,0.03);
-    border-right: 1px solid var(--border);
-    font-family: var(--font-code);
-    font-size: 1rem;
-    line-height: 1.5; /* يجب أن يطابق textarea */
-    color: #888;
-    text-align: right;
-    user-select: none;
-    overflow: hidden;
-    direction: ltr;
-}
-textarea { 
-    flex: 1; padding: 10px; background: transparent; color: var(--text); 
-    border: none; outline: none; font-family: var(--font-code); font-size: 1rem; 
-    direction: ltr; text-align: left; white-space: pre-wrap; resize: none; 
-    line-height: 1.5; /* يجب أن يطابق line-numbers */
-    overflow-y: auto; 
-}
-pre { 
-    flex: 1; padding: 10px; background: transparent; color: var(--text); 
-    border: none; outline: none; font-family: var(--font-code); font-size: 1rem; 
-    direction: ltr; text-align: left; white-space: pre-wrap; 
-    overflow-y: auto; 
-}
+.line-numbers { width: 35px; padding: 10px 5px; background: rgba(0,0,0,0.03); border-right: 1px solid var(--border); font-family: var(--font-code); font-size: 1rem; line-height: 1.5; color: #888; text-align: right; user-select: none; overflow: hidden; direction: ltr; }
+textarea { flex: 1; padding: 10px; background: transparent; color: var(--text); border: none; outline: none; font-family: var(--font-code); font-size: 1rem; direction: ltr; text-align: left; white-space: pre-wrap; resize: none; line-height: 1.5; overflow-y: auto; }
+pre { flex: 1; padding: 10px; background: transparent; color: var(--text); border: none; outline: none; font-family: var(--font-code); font-size: 1rem; direction: ltr; text-align: left; white-space: pre-wrap; overflow-y: auto; }
 
 /* Dictionary */
 .dict-content { padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
@@ -99,11 +74,75 @@ pre {
 .btn-primary, .btn-secondary { padding: 10px 15px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; font-family: var(--font-ui); }
 .btn-primary { background: var(--primary); color: #fff; }
 .btn-secondary { background: var(--bg); color: var(--text); border: 2px solid var(--border); }
-
-/* Settings Specific */
 .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
 .setting-row:last-child { border-bottom: none; }
 input[type="range"] { width: 100px; cursor: pointer; accent-color: var(--primary); }
 
-/* Helper */
+/* Learn View & Toasts */
+.toast-container { position: fixed; top: 120px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+.toast { background: var(--panel); color: var(--text); padding: 12px 24px; border-radius: 30px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); border: 2px solid var(--border); font-family: var(--font-ui); font-weight: bold; display: flex; align-items: center; gap: 8px; animation: toastSlideUp 0.3s ease forwards; }
+.toast.success { border-color: var(--primary); color: var(--primary); }
+.toast.error { border-color: #ef4444; color: #ef4444; }
+@keyframes toastSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes toastFadeOut { to { opacity: 0; transform: translateY(-20px); } }
+.toast.hiding { animation: toastFadeOut 0.3s ease forwards; }
+.learn-container { width: 100%; max-width: 600px; background: var(--panel); padding: 30px; border-radius: var(--radius); border: 2px solid var(--border); box-shadow: var(--shadow); text-align: center; }
+.lesson-card { background: var(--bg); padding: 20px; border-radius: var(--radius); border: 2px solid var(--border); text-align: right; }
+.lesson-card h3 { margin-bottom: 10px; color: var(--primary); }
+.lesson-card p { margin-bottom: 15px; font-size: 0.95rem; line-height: 1.5; }
+.lesson-editor { width: 100%; height: 120px; background: var(--panel); color: var(--text); border: 2px solid var(--border); border-radius: 8px; padding: 10px; font-family: var(--font-code); font-size: 1rem; direction: ltr; text-align: left; resize: none; outline: none; }
+.lesson-feedback { margin-top: 15px; padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; }
+.lesson-feedback.success { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid #10b981; }
+.lesson-feedback.error { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; }
 .hidden { display: none !important; }
+/* =========================================
+   تحسينات شريط الرموز - خاصة بواجهة الطفل فقط
+   ========================================= */
+
+/* الحاوية - تعمل فقط عندما يكون وضع التطبيق "kid" */
+[data-mode="kid"] .symbols-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; 
+    margin-top: 10px;
+    /* ألوان الروبوت (Robot Theme) المخصصة للطفل */
+    background-color: rgba(14, 14, 17, 0.5); /* خلفية داكنة شفافة */
+    border-radius: 16px;
+    border: 1px solid rgba(77, 124, 254, 0.3); /* حدود زرقاء تقنية */
+}
+
+[data-mode="kid"] .symbols-container::-webkit-scrollbar {
+    display: none; 
+}
+
+/* الأزرار - تعمل فقط في وضع الطفل */
+[data-mode="kid"] .symbol-btn {
+    flex-shrink: 0;
+    background-color: #1e1e24; 
+    color: #4D7CFE; /* لون النص أزرق روبوت */
+    border: 1px solid rgba(77, 124, 254, 0.2);
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 18px; /* خط أكبر قليلاً للأطفال */
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* تأثير عند ضغط الطفل على الزر */
+[data-mode="kid"] .symbol-btn:active {
+    background-color: #4D7CFE; /* يتحول للأزرق الكامل */
+    color: #ffffff;
+    transform: scale(0.95); /* تأثير ضغط ممتع للأطفال */
+}
+
+/* لمسة جمالية: تغيير لون أدوات التنسيق (B / I) في وضع الطفل لتناسب الروبوت */
+[data-mode="kid"] .standard-theme-controls button {
+    color: #4D7CFE;
+    border-color: rgba(77, 124, 254, 0.3);
+}

@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bayda Lab 2026</title>
-    <link rel="stylesheet" href="style.css?v=602"> 
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css?v=702"> 
 </head>
 <body data-mode="beginner" data-theme="light">
     
     <div class="modal-overlay" id="consent-modal">
         <div class="modal-content">
             <h2>👋 أهلاً بك في Bayda Lab</h2>
-            <p>هل تسمح لنا باكتشاف لهجتك تلقائياً لتقديم تجربة مخصصة لك؟</p>
+            <p>هل تسمح لنا باكتشاف لهجتك تلقائياً؟</p>
             <div class="modal-actions">
                 <button class="btn-primary" onclick="acceptConsent()">نعم، بالطبع</button>
                 <button class="btn-secondary" onclick="declineConsent()">لا، سأختار بنفسي</button>
@@ -46,7 +48,22 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal-content">
+            <h4 id="confirm-message" style="margin-bottom: 20px; font-size: 1.1rem; line-height: 1.5;"></h4>
+            <div class="modal-actions">
+                <button class="btn-primary" id="confirm-yes-btn" style="background: #ef4444; border-color: #ef4444;">نعم، احذف</button>
+                <button class="btn-secondary" id="confirm-no-btn">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
     <header>
+        <div class="tabs-nav">
+            <button class="tab-btn active" id="tab-lab-btn" onclick="switchTab('lab')">🧪 المختبر</button>
+            <button class="tab-btn" id="tab-learn-btn" onclick="switchTab('learn')">📚 التعلم</button>
+        </div>
+
         <div class="hero-card">
             <div class="flags-side">
                 <button class="flag-btn" data-dialect="tn-latn"><img src="https://flagcdn.com/w160/tn.png" class="flag-img" alt="TN"></button>
@@ -73,28 +90,26 @@
                 <option value="py">PY</option>
             </select>
             <select id="mode-select" class="custom-select">
-                <option value="kid">🧸 طفل</option>
-                <option value="beginner" selected>🌱 مبتدئ</option>
+                <option value="kid">🐻 طـفـل</option>
+                <option value="beginner" selected>🌱 مـبتدئ</option>
                 <option value="pro">👨‍💻 محترف</option>
             </select>
             
             <div class="theme-controls" id="standard-theme-controls">
                 <button class="icon-btn" id="theme-toggle-btn" onclick="cycleTheme()">☀️</button>
             </div>
-
             <div class="theme-controls hidden" id="kid-theme-controls">
-                <button class="icon-btn" onclick="changeKidTheme()" title="تغيير الألوان">🎨</button>
-                <button class="icon-btn" onclick="readOutput()" title="استمع للنتيجة">🗣️</button>
-                <button class="icon-btn" onclick="magicCode()" title="كود سحري">🪄</button>
+                <button class="icon-btn"  onclick="changeKidTheme()">🎨</button>
+                <button class="icon-btn" onclick="readOutput()">🗣️</button>
+                <button class="icon-btn" onclick="magicCode()">🪄</button>
             </div>
         </div>
     </header>
 
-    <main class="workspace layout-col" id="workspace">
-        <!-- المحرر مع أرقام الأسطر -->
+    <main class="workspace layout-col" id="view-lab" style="display: flex;">
         <div class="pane editor-pane" id="editor-pane">
             <div class="pane-header">
-                <span>المحرر (Franco)</span>
+                <span>المحرر</span>
                 <button class="icon-btn" onclick="togglePane('editor-pane', this)">-</button>
             </div>
             <div class="editor-wrapper">
@@ -108,10 +123,9 @@
                 <span>القاموس التفاعلي</span>
                 <button class="icon-btn" onclick="togglePane('dict-pane', this)">-</button>
             </div>
-            <div class="dict-content">
-                <div class="dict-chips" id="dict-chips"></div>
-            </div>
+            <div class="dict-content"><div class="dict-chips" id="dict-chips"></div></div>
         </div>
+
 
         <div class="pane notes-pane hidden" id="notes-pane">
             <div class="pane-header notes-header">
@@ -120,11 +134,23 @@
             </div>
             <div class="notes-toolbar">
                 <select id="note-selector" class="custom-select" onchange="loadSelectedNote()"></select>
-                <button class="icon-btn" onclick="createNewNote()" title="ملاحظة جديدة">➕</button>
-                <button class="icon-btn" onclick="deleteCurrentNote()" title="حذف">🗑️</button>
+                <button class="icon-btn" onclick="createNewNote()">➕</button>
+                <button class="icon-btn" onclick="deleteCurrentNote()">🗑️</button>
                 <div class="divider"></div>
                 <button class="icon-btn" onclick="formatDoc('bold')"><b>B</b></button>
                 <button class="icon-btn" onclick="formatDoc('italic')"><i>I</i></button>
+            </div>
+            <!-- هنا أضفنا شريط الرموز المفقود -->
+            <div class="symbols-container">
+                <div class="sym-row">
+                    <button class="sym-btn" onclick="insertSym('(')">(</button>
+                    <button class="sym-btn" onclick="insertSym(')')">)</button>
+                    <button class="sym-btn" onclick="insertSym('{')">{</button>
+                    <button class="sym-btn" onclick="insertSym('}')">}</button>
+                    <button class="sym-btn" onclick="insertSym('&quot;')">"</button>
+                    <button class="sym-btn" onclick="insertSym('=')">=</button>
+                    <button class="sym-btn" onclick="insertSym(';')">;</button>
+                </div>
             </div>
             <div id="notes-editor" class="notes-editor" contenteditable="true" dir="ltr" placeholder="اكتب ملاحظاتك هنا..."></div>
         </div>
@@ -132,16 +158,64 @@
         <div class="pane output-pane" id="output-pane">
             <div class="pane-header">
                 <span>النتيجة (Output)</span>
-                <button class="icon-btn" onclick="togglePane('output-pane', this)">-</button>
+                <div class="output-actions">
+                    <button class="icon-btn" onclick="copyOutput()">📋</button>
+                    <button class="icon-btn" onclick="downloadOutput()">💾</button>
+                    <button class="icon-btn" onclick="togglePane('output-pane', this)">-</button>
+                </div>
             </div>
             <pre id="output">// النتيجة هنا...</pre>
         </div>
     </main>
 
-    <footer class="footer-run">
+    <main class="workspace layout-col" id="view-learn" style="display: none; padding: 20px; align-items: center; justify-content: center;">
+        <div class="learn-container">
+            <h1 style="color: var(--primary); margin-bottom: 10px;">📚 أكاديمية بيضاء</h1>
+            <p style="margin-bottom: 20px; color: var(--text-muted);">مرحباً بك في مسار التعلم. هنا ستتعلم البرمجة خطوة بخطوة.</p>
+            
+            <div class="lesson-card">
+                <h3 id="lesson-title">المستوى 0: الطباعة (ktab)</h3>
+                <p id="lesson-desc">استخدم الكلمة المفتاحية للطباعة لكتابة "salam" على الشاشة.</p>
+                
+
+
+                <textarea id="lesson-editor" class="lesson-editor" spellcheck="false" placeholder="اكتب الكود هنا..."></textarea>
+           <!-- شريط الرموز البرمجية للتعلم -->
+                <div class="symbols-container" style="margin-top: 15px; border-radius: 8px; border;">
+                    <div class="sym-row">
+                        <button class="sym-btn" onclick="insertToLesson('(')">(</button>
+                        <button class="sym-btn" onclick="insertToLesson(')')">)</button>
+                        <button class="sym-btn" onclick="insertToLesson('{')">{</button>
+                        <button class="sym-btn" onclick="insertToLesson('}')">}</button>
+                        <button class="sym-btn" onclick="insertToLesson('&quot;')">"</button>
+                        <button class="sym-btn" onclick="insertToLesson('=')">=</button>
+                        <button class="sym-btn" onclick="insertToLesson(';')">;</button>
+                        <button class="sym-btn" onclick="insertToLesson(' ')">␣</button>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 15px; width: 100%;">
+                    <button class="btn-primary" style="flex: 1;" onclick="checkLesson()">✅ تحقق من الحل</button>
+                    <button class="btn-secondary" onclick="resetLesson()">↺ إعادة</button>
+                </div>
+                
+                <div id="lesson-feedback" class="lesson-feedback hidden"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer-run" id="footer-run" style="display: flex;">
         <button class="btn-run" id="run-btn">▶ تشغيل الكود</button>
     </footer>
-    
-    <script src="main.js?v=602"></script>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js');
+            });
+        }
+    </script>
+    <script src="main.js?v=702"></script>
 </body>
 </html>

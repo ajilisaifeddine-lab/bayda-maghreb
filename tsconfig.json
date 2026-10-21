@@ -8,5 +8,5 @@
     "outDir": "dist",
     "rootDir": "."
   },
-  "include": ["core/**/*.ts", "cli/**/*.ts", "index.ts"]
+  "include": ["core/**/*.ts", "cli/**/*.ts", "index.ts", "writers/**/*.ts"]
 }

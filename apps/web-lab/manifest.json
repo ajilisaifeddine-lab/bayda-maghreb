@@ -1,0 +1,21 @@
+{
+  "name": "Bayda Lab 2026",
+  "short_name": "Bayda Lab",
+  "description": "An educational programming platform for North African dialects.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "assets/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

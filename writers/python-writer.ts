@@ -1,4 +1,6 @@
 import { AstNode } from '../core/types.js';
+import { arg, renderTokens } from './common.js';
+const pyWord = (t: { type: string; value: string }) => t.value === 'true' ? 'True' : t.value === 'false' ? 'False' : t.value;
 
 export function toPython(node: AstNode, keywords: Record<string, string>): string {
   return compileNode(node, 0, keywords);
@@ -16,12 +18,12 @@ function compileNode(node: AstNode, indentLevel: number, keywords: Record<string
       if (keywords[funcName] === 'print' || keywords[funcName] === 'log') {
         funcName = 'print';
       }
-      const args = node.args.map(arg => compileNode(arg, 0, keywords)).join(', ');
+      const args = node.args.map((a: any) => arg(a, pyWord as any)).join(', ');
       return `${indent}${funcName}(${args})`;
     }
 
     case 'If': {
-      const test = compileNode(node.test, 0, keywords);
+      const test = renderTokens((node.test as any).tokens, pyWord as any);
       let code = `${indent}if ${test}:\n`;
       const thenBody = node.then.map(n => compileNode(n, indentLevel + 1, keywords)).join('\n');
       code += thenBody || `${indent}    pass`; 
@@ -33,7 +35,11 @@ function compileNode(node: AstNode, indentLevel: number, keywords: Record<string
       }
       return code;
     }
-
+    case 'While': {
+      const test = renderTokens((node.test as any).tokens, pyWord as any);
+      const body = node.body.map((n: any) => compileNode(n, indentLevel + 1, keywords)).join('\n');
+      return `${indent}while ${test}:\n${body}`;
+    }
     case 'StringLiteral':
       return `"${node.value}"`;
 

@@ -43,6 +43,22 @@ document.addEventListener('click', (e) => {
     if (target.tagName === 'BUTTON' || target.closest('button')) playSound('click');
 });
 
+// ================= TOAST SYSTEM =================
+function showToast(message: string, type: 'success' | 'error' = 'success') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `<span>${type === 'success' ? '✅' : '❌'}</span> <span>${message}</span>`;
+    container.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('hiding');
+        toast.addEventListener('animationend', () => toast.remove());
+    }, 3000);
+}
+
 // ================= SETTINGS MODAL =================
 (window as any).openSettings = () => { document.getElementById('settings-modal')?.classList.add('active'); updateSoundUI(); };
 (window as any).closeSettings = () => { document.getElementById('settings-modal')?.classList.remove('active'); };
@@ -108,6 +124,7 @@ function renderNoteSelector() { noteSelector.innerHTML = ''; notes.forEach((note
 (window as any).loadSelectedNote = () => { currentNoteId = noteSelector.value; const note = notes.find(n => n.id === currentNoteId); notesEditor.innerHTML = note ? note.content : ''; };
 notesEditor?.addEventListener('input', () => { const note = notes.find(n => n.id === currentNoteId); if (note) { note.content = notesEditor.innerHTML; const textContent = notesEditor.innerText.trim(); note.title = textContent.substring(0, 15) + (textContent.length > 15 ? '...' : '') || 'ملاحظة فارغة'; saveNotesToStorage(); const opt = noteSelector.querySelector(`option[value="${note.id}"]`); if (opt) opt.textContent = note.title; } });
 (window as any).formatDoc = (cmd: string, value: string | undefined = undefined) => { document.execCommand(cmd, false, value); notesEditor.focus(); };
+(window as any).insertSym = (sym: string) => { if (!notesEditor) return; document.execCommand('insertText', false, sym); notesEditor.focus(); playSound('click'); };
 if (notes.length === 0) { (window as any).createNewNote(); } else { currentNoteId = notes[0].id; renderNoteSelector(); loadSelectedNote(); }
 
 // ================= DIALECTS & DICTIONARY =================
@@ -150,10 +167,120 @@ function updateLineNumbers() {
         lineNumbers.innerHTML = Array.from({length: lines}, (_, i) => i + 1).join('<br>');
     }
 }
-
 editor.addEventListener('scroll', () => {
     if (lineNumbers) lineNumbers.scrollTop = editor.scrollTop;
 });
+
+// ================= TABS & LEARN LOGIC =================
+(window as any).switchTab = (tab: 'lab' | 'learn') => {
+    const viewLab = document.getElementById('view-lab');
+    const viewLearn = document.getElementById('view-learn');
+    const footerRun = document.getElementById('footer-run');
+    const tabLabBtn = document.getElementById('tab-lab-btn');
+    const tabLearnBtn = document.getElementById('tab-learn-btn');
+
+    if (!viewLab || !viewLearn || !footerRun || !tabLabBtn || !tabLearnBtn) return;
+
+    if (tab === 'lab') {
+        viewLab.style.display = 'flex';
+        viewLearn.style.display = 'none';
+        tabLabBtn.classList.add('active');
+        tabLearnBtn.classList.remove('active');
+        footerRun.style.display = 'flex';
+    } else {
+        viewLab.style.display = 'none';
+        viewLearn.style.display = 'flex';
+        tabLabBtn.classList.remove('active');
+        tabLearnBtn.classList.add('active');
+        footerRun.style.display = 'none';
+    }
+    playSound('click');
+};
+
+(window as any).resetLesson = () => {
+    const editor = document.getElementById('lesson-editor') as HTMLTextAreaElement;
+    if (editor) editor.value = '';
+    const feedback = document.getElementById('lesson-feedback');
+    if (feedback) feedback.className = 'lesson-feedback hidden';
+};
+
+(window as any).insertToLesson = (sym: string) => {
+    const lessonEditor = document.getElementById('lesson-editor') as HTMLTextAreaElement;
+    if (!lessonEditor) return;
+    const start = lessonEditor.selectionStart;
+    const end = lessonEditor.selectionEnd;
+    const text = lessonEditor.value;
+    lessonEditor.value = text.substring(0, start) + sym + text.substring(end);
+    lessonEditor.selectionStart = lessonEditor.selectionEnd = start + sym.length;
+    lessonEditor.focus();
+    playSound('click');
+};
+
+// Helper function to search AST for a string value
+function containsString(node: any, target: string): boolean {
+    if (!node) return false;
+    if (node.type === 'StringLiteral' && node.value === target) return true;
+    if (node.type === 'Program') {
+        return node.body.some((child: any) => containsString(child, target));
+    }
+    if (node.type === 'Call') {
+        return node.args.some((child: any) => containsString(child, target));
+    }
+    if (node.type === 'If') {
+        return containsString(node.test, target) || 
+               node.then.some((child: any) => containsString(child, target)) || 
+               (node.else ? node.else.some((child: any) => containsString(child, target)) : false);
+    }
+    if (node.type === 'BinaryExpression') {
+        return containsString(node.left, target) || containsString(node.right, target);
+    }
+    return false;
+}
+
+(window as any).checkLesson = () => {
+    const lessonEditor = document.getElementById('lesson-editor') as HTMLTextAreaElement;
+    if (!lessonEditor) return;
+    
+    // تنظيف العلامات الذكية
+    let rawCode = lessonEditor.value;
+    rawCode = rawCode.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
+    const code = rawCode.trim();
+    
+    if (!code) {
+        showToast("❌ الرجاء كتابة كود أولاً.", "error");
+        playSound('error');
+        return;
+    }
+
+    try {
+        const keywordsMap = (window as any).currentKeywordsMap || {};
+        
+        if (Object.keys(keywordsMap).length === 0) {
+            showToast("❌ جاري تحميل اللهجة...", "error");
+            return;
+        }
+
+        // 1. التحقق من الصياغة (Syntax Check)
+        const lexer = new Lexer(code, keywordsMap);
+        const tokens = lexer.tokenize();
+        const parser = new Parser(tokens, keywordsMap);
+        const ast = parser.parse();
+        
+        // 2. التحقق من المهمة (Task Check)
+        if (containsString(ast, 'salam')) {
+            showToast("🎉 إجابة صحيحة! لقد تعلمت الطباعة بنجاح.", "success");
+            playSound('success');
+        } else {
+            showToast("⚠️ الصياغة صحيحة، لكن يجب أن تطبع كلمة 'salam' بالتحديد.", "error");
+            playSound('error');
+        }
+
+    } catch (error: any) {
+        // 3. خطأ برمجي حقيقي (Syntax Error)
+        showToast("❌ خطأ برمجي: " + error.message, "error");
+        playSound('error');
+    }
+};
 
 // ================= RUN CODE =================
 document.getElementById('run-btn')?.addEventListener('click', () => {
