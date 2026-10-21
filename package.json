@@ -27,7 +27,7 @@
     "python"
   ],
   "bin": {
-    "bayda": "./bayda-bin"
+    "bayda": "bayda-bin"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
