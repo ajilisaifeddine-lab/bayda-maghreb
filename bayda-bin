@@ -18,23 +18,31 @@ import { translateDialect } from "./dist/core/translate-node.js";
 const args = process.argv.slice(2);
 
 if (!args.length || args.includes("--help") || args.includes("-h")) {
-  console.error("usage: bayda <file.bayda> [--dialect code] [--py] [--run] [-o out]");
+  console.error("usage: bayda <file.bayda> [--dialect code] [--to js|py] [--py] [--run] [-o out]");
   process.exit(1);
 }
 
 const file = args.find((a) => a.endsWith(".bayda"));
 if (!file) {
-  console.error("usage: bayda <file.bayda> [--dialect code] [--py] [--run]");
+  console.error("usage: bayda <file.bayda> [--dialect code] [--to js|py] [--py] [--run] [-o out]");
   process.exit(1);
 }
 
 const dIdx = args.indexOf("--dialect");
+const parts = path.basename(file).split(".");
+const fromName = parts.length >= 3 ? parts.slice(1, -1).join(".") : "";
 const dialect =
-  dIdx !== -1 && args[dIdx + 1]
-    ? args[dIdx + 1]
-    : path.basename(file).split(".")[1] || "tn-latn";
+  dIdx !== -1 && args[dIdx + 1] ? args[dIdx + 1] : fromName || "tn-latn";
 
-const target = args.includes("--py") || args.includes("--python") ? "py" : "js";
+const tIdx = args.indexOf("--to");
+const toArg = tIdx !== -1 && args[tIdx + 1] ? args[tIdx + 1].toLowerCase() : "";
+const target =
+  args.includes("--py") ||
+  args.includes("--python") ||
+  toArg === "py" ||
+  toArg === "python"
+    ? "py"
+    : "js";
 const oIdx = args.indexOf("-o");
 const outFile = oIdx !== -1 ? args[oIdx + 1] : null;
 const shouldRun = args.includes("--run");

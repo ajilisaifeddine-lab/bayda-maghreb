@@ -1,6 +1,9 @@
 {
   "ekteb": "print",
   "ektb": "print",
+  "kteb": "print",
+  "ktib": "print",
+  "ktab": "print",
   "goul": "print",
   "9oul": "print",
   "9olli": "print",
@@ -8,10 +11,15 @@
   "idha": "if",
   "ida": "if",
   "s7i7": "true",
+  "s7ih": "true",
   "shih": "true",
+  "sahih": "true",
+  "sa7i7": "true",
+  "haqq": "true",
   "ghalet": "false",
   "ghalt": "false",
   "8alt": "false",
   "wella": "else",
-  "wlla": "else"
+  "wlla": "else",
+  "wela": "else"
 }

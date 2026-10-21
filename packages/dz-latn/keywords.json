@@ -1,7 +1,19 @@
 {
   "kteb": "print",
+  "ktab": "print",
+  "ktib": "print",
+  "ekteb": "print",
+  "goul": "print",
+  "9oul": "print",
   "ila": "if",
+  "idha": "if",
+  "ida": "if",
   "sah": "true",
+  "sahih": "true",
+  "s7i7": "true",
+  "haqq": "true",
   "ghalt": "false",
-  "wela": "else"
+  "ghalet": "false",
+  "wela": "else",
+  "wella": "else"
 }

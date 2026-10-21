@@ -2,10 +2,22 @@
 
 export const dz_latn_kw = {
   "kteb": "print",
+  "ktab": "print",
+  "ktib": "print",
+  "ekteb": "print",
+  "goul": "print",
+  "9oul": "print",
   "ila": "if",
+  "idha": "if",
+  "ida": "if",
   "sah": "true",
+  "sahih": "true",
+  "s7i7": "true",
+  "haqq": "true",
   "ghalt": "false",
-  "wela": "else"
+  "ghalet": "false",
+  "wela": "else",
+  "wella": "else"
 }
 ;
 
@@ -44,19 +56,42 @@ export const kab_tifinagh_kw = {
 
 export const ly_latn_kw = {
   "kteb": "print",
+  "ktab": "print",
+  "ktib": "print",
+  "ekteb": "print",
+  "goul": "print",
+  "9oul": "print",
   "kan": "if",
+  "idha": "if",
+  "ida": "if",
   "sahih": "true",
+  "sah": "true",
+  "s7i7": "true",
+  "haqq": "true",
   "ghalet": "false",
-  "wela": "else"
+  "ghalt": "false",
+  "wela": "else",
+  "wella": "else"
 }
 ;
 
 export const mr_latn_kw = {
   "ktab": "print",
+  "kteb": "print",
+  "ktib": "print",
+  "ekteb": "print",
+  "goul": "print",
+  "9oul": "print",
   "idha": "if",
+  "ila": "if",
+  "ida": "if",
   "haqq": "true",
+  "sahih": "true",
+  "s7i7": "true",
   "bla": "false",
-  "wela": "else"
+  "ghalt": "false",
+  "wela": "else",
+  "wella": "else"
 }
 ;
 
@@ -80,6 +115,9 @@ export const shi_latn_kw = {
 export const tn_latn_kw = {
   "ekteb": "print",
   "ektb": "print",
+  "kteb": "print",
+  "ktib": "print",
+  "ktab": "print",
   "goul": "print",
   "9oul": "print",
   "9olli": "print",
@@ -87,12 +125,17 @@ export const tn_latn_kw = {
   "idha": "if",
   "ida": "if",
   "s7i7": "true",
+  "s7ih": "true",
   "shih": "true",
+  "sahih": "true",
+  "sa7i7": "true",
+  "haqq": "true",
   "ghalet": "false",
   "ghalt": "false",
   "8alt": "false",
   "wella": "else",
-  "wlla": "else"
+  "wlla": "else",
+  "wela": "else"
 }
 ;
 
