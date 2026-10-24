@@ -1,3 +1,7 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later
+ * Copyright (C) 2026 ajilisaifeddine-lab
+ * This file is part of Bayda Lab. See LICENSE for the full terms.
+ */
 const CACHE_NAME = 'bayda-dynamic-v2';
 const ASSETS = [
   './',

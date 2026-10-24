@@ -2,11 +2,15 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, interactive-widget=resizes-content">
     <title>Bayda Lab 2026</title>
     <meta name="theme-color" content="#3b82f6">
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=702"> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Fira+Code:wght@400;600&display=swap" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="kid-fun.css">
+    <link rel="stylesheet" href="kid-ui.css">
+    <link rel="stylesheet" href="polish.css?v=56">
 </head>
 <body data-mode="beginner" data-theme="light">
     
@@ -22,29 +26,116 @@
     </div>
 
     <div class="modal-overlay" id="settings-modal">
-        <div class="modal-content">
+        <div class="modal-content st-modal">
             <button class="close-btn" onclick="closeSettings()">×</button>
             <h2>⚙️ الإعدادات</h2>
-            <div class="setting-row">
-                <label>حجم الخط:</label>
-                <input type="range" id="font-size-slider" min="12" max="24" value="16" oninput="changeFontSize(this.value)">
-            </div>
-            <div class="setting-row">
-                <label>المؤثرات الصوتية:</label>
-                <button id="toggle-sound-setting" class="btn-secondary" onclick="toggleSoundFromSettings()">🔊 مفعل</button>
-            </div>
-            <div class="setting-row">
-                <label>مسح البيانات:</label>
-                <button class="btn-secondary" onclick="clearAllData()" style="color:#ef4444; border-color:#ef4444;">🗑️ مسح الكل</button>
-            </div>
+            <div class="st-section">المحرر</div>
+            <div class="st-row"><span class="st-label">لغة البرنامج</span>
+                <select id="st-lang" class="st-select" onchange="stSetLang(this.value)">
+                    <option value="js">JavaScript</option><option value="py">Python</option></select></div>
+            <div class="st-row"><span class="st-label">حجم الخط</span>
+                <select id="st-font" class="st-select" onchange="stSetFont(this.value)">
+                    <option value="14">صغير</option><option value="16">متوسط</option><option value="18">كبير</option><option value="20">كبير جدًا</option><option value="22">ضخم</option></select></div>
+            <div class="st-section">خيارات النص</div>
+            <div class="st-row"><span class="st-label">التفاف النص</span>
+                <button class="st-switch" id="st-wrap" role="switch" aria-checked="true" onclick="stToggle('wrap', this)"></button></div>
+            <div class="st-row"><span class="st-label">إغلاق الأقواس تلقائيًا</span>
+                <button class="st-switch" id="st-brackets" role="switch" aria-checked="false" onclick="stToggle('brackets', this)"></button></div>
+            <div class="st-section">التعلّم والصوت</div>
+            <div class="st-row"><span class="st-label">القراءة الصوتية</span>
+                <button class="st-switch" id="st-tts" role="switch" aria-checked="false" onclick="stToggle('tts', this)"></button></div>
+            <div class="st-row"><span class="st-label">الترجمة الفورية</span>
+                <button class="st-switch" id="st-translate" role="switch" aria-checked="false" onclick="stToggle('translate', this)"></button></div>
+            <div class="st-row"><span class="st-label">المؤثرات الصوتية</span>
+                <button class="st-switch" id="st-sound" role="switch" aria-checked="true" onclick="stToggle('sound', this)"></button></div>
+            <div class="st-section">إمكانية الوصول</div>
+            <div class="st-row"><span class="st-label">تقليل الحركة</span>
+                <button class="st-switch" id="st-motion" role="switch" aria-checked="false" onclick="stToggle('motion', this)"></button></div>
+            <div class="st-row"><span class="st-label">الوضع عالي التباين</span>
+                <button class="st-switch" id="st-contrast" role="switch" aria-checked="false" onclick="stToggle('contrast', this)"></button></div>
+            <div class="st-row"><span class="st-label">خط عسر القراءة</span>
+                <button class="st-switch" id="st-dyslexia" role="switch" aria-checked="false" onclick="stToggle('dyslexia', this)"></button></div>
+                        <div class="st-section">التحكم والاختصارات</div>
+            <div class="st-row"><span class="st-label">اختصارات الكيبورد الخارجي (Ctrl / Alt)</span>
+                <button class="st-switch" id="st-shortcuts" role="switch" aria-checked="false" onclick="stToggle('shortcuts', this)"></button></div>
+            <div class="st-row"><span class="st-label">وضع اليد الواحدة</span>
+                <button class="st-switch" id="st-onehand" role="switch" aria-checked="false" onclick="stToggle('onehand', this)"></button></div>
+            <div class="st-row"><span class="st-label">الاهتزاز عند اللمس</span>
+                <button class="st-switch" id="st-haptics" role="switch" aria-checked="false" onclick="stToggle('haptics', this)"></button></div>
+            <div class="st-row"><span class="st-label">تشغيل تلقائي بعد التوقف عن الكتابة</span>
+                <button class="st-switch" id="st-autorun" role="switch" aria-checked="false" onclick="stToggle('autorun', this)"></button></div>
+            <div class="st-section">الشريط الذكي</div>
+            <div class="st-row"><span class="st-label">الشريط الذكي فوق لوحة المفاتيح</span>
+                <button class="st-switch" id="st-smartbar" role="switch" aria-checked="false" onclick="stToggle('smartbar', this)"></button></div>
+            <div class="st-row"><span class="st-label">اقتراح الكلمات والرموز</span>
+                <button class="st-switch" id="st-suggest" role="switch" aria-checked="false" onclick="stToggle('suggest', this)"></button></div>
+            <div class="st-row"><span class="st-label">معاينة مكبّرة للسطر</span>
+                <button class="st-switch" id="st-mag" role="switch" aria-checked="false" onclick="stToggle('mag', this)"></button></div>
+            <div class="st-section">الحركة والتأثيرات</div>
+            <div class="st-row"><span class="st-label">نجوم الهيدر</span>
+                <button class="st-switch" id="st-stars" role="switch" aria-checked="false" onclick="stToggle('stars', this)"></button></div>
+            <div class="st-row"><span class="st-label">دوران الشعار والأعلام والترس</span>
+                <button class="st-switch" id="st-spin" role="switch" aria-checked="false" onclick="stToggle('spin', this)"></button></div>
+            <div class="st-section pro-only">وضع المحترف</div>
+            <div class="st-row pro-only"><span class="st-label">وضع الحد الأدنى</span>
+                <button class="st-switch" id="st-minimal" role="switch" aria-checked="false" onclick="stToggle('minimal', this)"></button></div>
+            <div class="st-row pro-only"><span class="st-label">أزرار 📊 ⌨️ بجانب الترس</span>
+                <button class="st-switch" id="st-tools" role="switch" aria-checked="false" onclick="stToggle('tools', this)"></button></div>
+            <div class="st-section">العرض</div>
+            <div class="st-row"><span class="st-label">الثيم تلقائيًا حسب النظام</span>
+                <button class="st-switch" id="st-autotheme" role="switch" aria-checked="false" onclick="stToggle('autotheme', this)"></button></div>
+            <div class="st-row"><span class="st-label">أرقام الأسطر</span>
+                <button class="st-switch" id="st-lines" role="switch" aria-checked="false" onclick="stToggle('lines', this)"></button></div>
+            <div class="st-row st-danger"><span class="st-label">مسح البيانات</span>
+                <button class="btn-secondary" onclick="clearAllData()" style="color:#ef4444;border-color:#ef4444">🗑️ مسح الكل</button></div>
         </div>
     </div>
 
     <div class="modal-overlay" id="dict-popup">
-        <div class="modal-content">
+        <div class="modal-content dc-card" id="dc-card">
+            <div class="dc-glow"></div>
             <button class="close-btn" onclick="closeDictPopup()">×</button>
-            <h4 id="dw-word" style="font-size: 1.5rem; color: var(--primary); margin-bottom: 10px;"></h4>
-            <p id="dw-ar" style="font-size: 1.1rem; font-weight: bold;"></p>
+            <div class="dc-head">
+                <div class="dc-word-wrap">
+                    <h4 id="dw-word" class="dc-word">—</h4>
+                    <div class="dc-badges" id="dc-badges"></div>
+                </div>
+                <button class="dc-mascot" id="dc-mascot" onclick="dcMascotTap()" aria-label="المرشد">🐣</button>
+            </div>
+            <div class="dc-slots" id="dc-slots"></div>
+            <div class="dc-body">
+                <div class="dc-field"><span class="dc-k">المعنى</span><p class="dc-v dc-empty" id="dw-ar">—</p></div>
+                <div class="dc-field"><span class="dc-k">الدور البرمجي</span><p class="dc-v dc-empty" id="dc-role">—</p></div>
+                <div class="dc-code" id="dc-code-wrap">
+                    <div class="dc-lang"><span>JavaScript</span><code id="dc-js">—</code></div>
+                    <div class="dc-lang"><span>Python</span><code id="dc-py">—</code></div>
+                </div>
+                <div class="dc-field" id="dc-ex-wrap"><span class="dc-k">مثال</span><pre class="dc-v dc-empty" id="dc-ex">—</pre></div>
+                <div class="dc-field dc-analogy" id="dc-analogy-wrap"><span class="dc-k">تشبيه</span><p class="dc-v dc-empty" id="dc-analogy">—</p></div>
+            </div>
+            <div class="dc-note">بطاقة عرض — تُملأ تلقائيًا عند ربط المحرك والمعجم</div>
+            <div class="dc-actions">
+                <button class="dc-act dc-tap" onclick="dcSpeak()">🔊 نطق</button>
+                <button class="dc-act dc-tap" onclick="dcQuickTheme()">🎨 ثيم</button>
+                <button class="dc-act dc-tap" onclick="dcNext()">← التالي</button>
+            </div>
+            <div class="dc-dots" id="dc-dots"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="stats-modal">
+        <div class="modal-content bl-panel">
+            <button class="close-btn" onclick="closeModal('stats-modal')">×</button>
+            <h2>📊 الإحصاءات</h2>
+            <div id="bl-stats-body"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="keys-modal">
+        <div class="modal-content bl-panel">
+            <button class="close-btn" onclick="closeModal('keys-modal')">×</button>
+            <h2>⌨️ الاختصارات</h2>
+            <div id="bl-keys-body"></div>
         </div>
     </div>
 
@@ -123,7 +214,15 @@
                 <span>القاموس التفاعلي</span>
                 <button class="icon-btn" onclick="togglePane('dict-pane', this)">-</button>
             </div>
-            <div class="dict-content"><div class="dict-chips" id="dict-chips"></div></div>
+            <div class="dict-content">
+                <div class="dc-bar">
+                    <input id="dc-search" type="search" placeholder="ابحث عن مفردة..." disabled
+                           title="يُفعّل عند ربط المعجم">
+                    <button disabled title="يُفعّل عند ربط المعجم">مبتدئ</button>
+                    <button disabled title="يُفعّل عند ربط المعجم">متقدم</button>
+                </div>
+                <div class="dict-chips" id="dict-chips"></div>
+            </div>
         </div>
 
 
@@ -170,7 +269,7 @@
 
     <main class="workspace layout-col" id="view-learn" style="display: none; padding: 20px; align-items: center; justify-content: center;">
         <div class="learn-container">
-            <h1 style="color: var(--primary); margin-bottom: 10px;">📚 أكاديمية بيضاء</h1>
+            <h1 style="color: var(--primary); margin-bottom: 10px;">📚</h1>
             <p style="margin-bottom: 20px; color: var(--text-muted);">مرحباً بك في مسار التعلم. هنا ستتعلم البرمجة خطوة بخطوة.</p>
             
             <div class="lesson-card">
@@ -212,10 +311,33 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js');
+                navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});});if(window.caches){caches.keys().then(function(ks){ks.forEach(function(k){caches.delete(k);});});}
             });
         }
     </script>
-    <script src="main.js?v=702"></script>
+    <script>
+(function () {
+  function show(t) {
+    var d = document.getElementById("bl-err");
+    if (!d) {
+      d = document.createElement("div"); d.id = "bl-err";
+      d.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:99999;background:#b91c1c;color:#fff;font:12px monospace;padding:6px 10px;direction:ltr;white-space:pre-wrap;max-height:30vh;overflow:auto";
+      d.onclick = function () { d.remove(); };
+      document.body.appendChild(d);
+    }
+    d.textContent += t + "\n";
+  }
+  window.addEventListener("error", function (e) { show((e.filename || "").split("/").pop() + ":" + e.lineno + " " + e.message); });
+  window.addEventListener("unhandledrejection", function (e) { show("promise: " + (e.reason && e.reason.message || e.reason)); });
+})();
+</script>
+<script src="ui.js"></script>
+    <script src="settings.js?v=37"></script>
+    <script src="dict-ui.js"></script>
+    <script src="kid-mode.js"></script>
+    <script src="kid-fun.js"></script>
+    <script src="kid-ui.js"></script>
+    <script src="lang-picker.js"></script>
+    <script src="about.js"></script>
 </body>
 </html>

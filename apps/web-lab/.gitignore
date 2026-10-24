@@ -1,0 +1,5 @@
+*.before-*
+install_*.py
+*.b64
+*.v1.js
+lang-picker.before-*.js
