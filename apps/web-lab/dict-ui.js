@@ -3,7 +3,6 @@
  * This file is part of Bayda Lab. See LICENSE for the full terms.
  */
 const allVocabularies = window.allVocabularies || {};
-import { allKeywords } from './dialects';
 
 /* ============================================================
    dict-ui.js — طبقة عرض بطاقة القاموس التفاعلي (Bayda Lab)
