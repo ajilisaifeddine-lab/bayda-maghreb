@@ -16,7 +16,8 @@ var ST_KEYS = {
   translate: "baydaTranslate",
   motion: "baydaReduceMotion",
   contrast: "baydaHighContrast",
-  dyslexia: "baydaDyslexia"
+  dyslexia: "baydaDyslexia",
+  sound: "baydaSound"
 };
 
 var ST_DEFAULTS = {
