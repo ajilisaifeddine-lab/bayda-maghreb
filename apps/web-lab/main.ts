@@ -133,7 +133,9 @@ if (notes.length === 0) { (window as any).createNewNote(); } else { currentNoteI
 const greetings: Record<string, string> = { 'tn-latn': 'goul("Aslema")\nidha (s7i7) {\n    goul("Marhba bik")\n}', 'dz-latn': 'ktab("Salam")\nila (sah) {\n    ktab("Marhba")\n}', 'ly-latn': 'kteb("Salam")\nkan (sahih) {\n    kteb("Marhba")\n}', 'mr-latn': 'ktab("Salam")\nidha (haqq) {\n    ktab("Marhba")\n}', 'kab-latn': 'aru("Azul")\nma (tidett) {\n    aru("Ansuf")\n}', 'shi-latn': 'skr("Azul")\nma (tidtt) {\n    skr("Marhba")\n}' };
 (window as any).acceptConsent = () => { document.getElementById('consent-modal')!.classList.remove('active'); changeDialect('tn-latn'); saveState(); };
 (window as any).declineConsent = () => { document.getElementById('consent-modal')!.classList.remove('active'); changeDialect('tn-latn'); saveState(); };
-async function changeDialect(dialectId: string) {
+function changeDialect(dialectId: string) {
+    window.currentKeywordsMap = allKeywords[dialectId];
+    window.allKeywordsMap = allKeywords;
     currentDialect = dialectId;
     dialectChips.forEach(chip => { if (chip.getAttribute('data-dialect') === dialectId) chip.classList.add('active'); else chip.classList.remove('active'); });
     try {
@@ -307,6 +309,7 @@ window.BaydaEngine.run = function() {
             output.textContent = ""; // Clear the previous message
             // Execute the translated code safely
             const result = new Function(resultObj.code)(); // Use Function constructor to execute
+            output.textContent += result !== undefined ? result : ""; // Display the result
             output.textContent += result !== undefined ? result : ""; // Display the result
         }
         showToast("✅ الكود تم تشغيله بنجاح.", "success");
