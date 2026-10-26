@@ -1,3 +1,4 @@
+import { listDialects, getKeywords } from '../../core/registry.js';
 import { translate } from '../../core/translate.js';
 // بيانات اللهجات مُولَّدة وقت البناء من الجذر (packages/) عبر scripts/build-dialects.cjs
 // → مصدر واحد للحقيقة، بلا نسخ مكرّرة ولا fetch وقت التشغيل.
@@ -286,14 +287,28 @@ function containsString(node: any, target: string): boolean {
 
 window.BaydaEngine = window.BaydaEngine || {};
 window.BaydaEngine.run = function() {
-    const code = editor.value;
+    const code = editor.value.trim();
+    const keywordsMap = (window as any).currentKeywordsMap || {};
+    if (Object.keys(keywordsMap).length === 0) {
+        showToast("❌ جاري تحميل اللهجة...", "error");
+        return;
+    }
+    
+    const dialectId = currentDialect; // Get the current dialect
+    const { code: translatedCode } = translate(code, { keywords: keywordsMap, id: dialectId });
     if (!code) {
         showToast("❌ الرجاء كتابة كود أولاً.", "error");
         return;
     }
     try {
         // Execute the code here (you can replace this with your actual execution logic)
-        eval(code); // Caution: eval can be dangerous if not controlled
+        const output = document.getElementById('output');
+        if (output) {
+            output.textContent = ""; // Clear the previous message
+            // Execute the translated code safely
+            const result = new Function(translatedCode)(); // Use Function constructor to execute
+            output.textContent = result !== undefined ? result : ""; // Display the result
+        }
         showToast("✅ الكود تم تشغيله بنجاح.", "success");
     } catch (error) {
         showToast("❌ خطأ: " + error.message, "error");
