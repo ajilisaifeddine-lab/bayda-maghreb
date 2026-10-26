@@ -577,7 +577,7 @@ export const tn_latn_vocab = {
   "mli7": "مليح"
 };
 
-export const allVocabularies: Record<string, any> = {
+window.allVocabularies = {
   'dz-latn': dz_latn_vocab,
   'kab-latn': kab_latn_vocab,
   'kab-tifinagh': kab_tifinagh_vocab,

@@ -7,3 +7,4 @@ archive/
 
 # build output (generated from apps/web-lab/main.ts by npm run lab:build)
 apps/web-lab/main.js
+.aider*

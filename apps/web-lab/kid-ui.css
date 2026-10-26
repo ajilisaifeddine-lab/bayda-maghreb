@@ -1,0 +1,146 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later
+ * Copyright (C) 2026 ajilisaifeddine-lab
+ * This file is part of Bayda Lab. See LICENSE for the full terms.
+ */
+body.kid-on { --dock-h: 100px; --run-h: 82px; --hud-base: calc(var(--dock-h) + var(--run-h)); }
+body.kid-on:has(#tab-learn-btn.active) { --hud-base: var(--dock-h); }
+body:not(.kid-on) .kid-only { display: none !important; }
+
+body.kid-on .kb-wrap { bottom: calc(var(--hud-base) - 6px); inset-inline-end: 10px; }
+body.kid-on .kb-body { width: 80px; height: 80px; }
+body.kid-on .ks-bar  { bottom: calc(var(--hud-base) + 10px); }
+body.kid-on:has(.bb-ov) .kb-wrap,
+body.kid-on:has(.bb-ov) .ks-bar { display: none; }
+body.kid-on #view-lab, body.kid-on #view-learn { padding-bottom: 96px !important; }
+
+body.kid-on .controls-card > .icon-btn,
+body.kid-on .controls-card > .divider,
+body.kid-on #kid-theme-controls .icon-btn[onclick*="changeKidTheme"] { display: none !important; }
+body.kid-on #kid-theme-controls:not(:has(button:not([onclick*="changeKidTheme"]))) { display: none !important; }
+
+.kf-wand { margin-inline-start: auto; }
+body.kid-on #editor-pane .pane-header { justify-content: flex-start; gap: 8px; }
+body.kid-on .output-actions { display: flex; align-items: center; gap: 6px; }
+body.kid-on .kd-dock { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 1fr; }
+
+[data-mode="kid"] .tab-btn { min-height: 50px; padding: 10px 24px; font-size: 1.1rem; }
+[data-mode="kid"] .custom-select { min-height: 48px; padding: 6px 16px; font-size: 1rem; border-width: 3px; }
+[data-mode="kid"] .flag-btn { width: 38px; height: 38px; flex-shrink: 0; }
+[data-mode="kid"] .pane .icon-btn {
+  width: 46px; height: 46px; border-radius: 50%;
+  display: inline-grid; place-items: center;
+  background: var(--bg); border: 3px solid var(--border);
+  font-size: 1.25rem; box-shadow: 0 3px 0 var(--border);
+}
+[data-mode="kid"] .pane .icon-btn:active { transform: translateY(3px); box-shadow: none; }
+[data-mode="kid"] .dict-chips { gap: 12px; }
+[data-mode="kid"] .dict-chip { min-height: 52px; padding: 10px 18px; font-size: 1.1rem; border-width: 3px; border-radius: 18px; }
+[data-mode="kid"] .sym-btn { min-width: 52px; height: 52px; font-size: 1.3rem; border-radius: 16px; }
+[data-mode="kid"] .btn-primary, [data-mode="kid"] .btn-secondary {
+  min-height: 54px; border-radius: 20px; font-size: 1.05rem; box-shadow: 0 5px 0 rgba(0,0,0,.14);
+}
+[data-mode="kid"] .btn-primary:active, [data-mode="kid"] .btn-secondary:active { transform: translateY(4px); box-shadow: none; }
+body.kid-on .footer-run { padding: 6px 14px 10px; }
+body.kid-on .btn-run { height: 64px; padding: 0 20px; }
+
+[data-mode="kid"] .pane { border-width: 4px; border-radius: 26px; }
+[data-mode="kid"] .pane-header { min-height: 58px; padding: 8px 14px; font-size: 1.12rem; font-weight: 800; }
+body.kid-on .pane-minimized { height: auto !important; min-height: 64px !important; }
+[data-mode="kid"] .learn-container { border-width: 4px; border-radius: 30px; padding: 22px 18px; }
+[data-mode="kid"] .lesson-card { border-width: 4px; border-radius: 26px; }
+[data-mode="kid"] .lesson-editor { height: 150px; border-width: 3px; border-radius: 18px; font-size: 1.15rem; }
+
+@keyframes kidPop   { 0% { transform: scale(.55); opacity: 0; } 60% { transform: scale(1.06); opacity: 1; } 100% { transform: scale(1); } }
+@keyframes kidDrop  { 0% { transform: translateY(-70vh) rotate(-5deg); opacity: 0; } 55% { transform: translateY(14px) rotate(1.5deg); opacity: 1; } 75% { transform: translateY(-8px); } 100% { transform: none; } }
+@keyframes kidSlide { 0% { transform: translateY(80px); opacity: 0; } 65% { transform: translateY(-8px); opacity: 1; } 100% { transform: none; } }
+@keyframes kidUnfold { from { transform: translateY(-16px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes kidDrift { 0%, 100% { translate: 0 0; rotate: -.5deg; } 50% { translate: 0 -6px; rotate: .5deg; } }
+
+[data-mode="kid"] .modal-content {
+  max-width: 380px; width: 92%; padding: 26px 20px 22px;
+  border: 4px solid var(--primary); border-radius: 30px;
+  box-shadow: 0 12px 0 -4px rgba(0,0,0,.14), 0 24px 44px rgba(0,0,0,.25);
+}
+[data-mode="kid"] .modal-content h2 { font-size: 1.5rem; margin-bottom: 6px; }
+[data-mode="kid"] .modal-content p  { font-size: 1.05rem; line-height: 1.6; }
+[data-mode="kid"] .modal-actions { flex-direction: column; gap: 12px; }
+[data-mode="kid"] .modal-actions button { min-height: 56px; font-size: 1.1rem; }
+[data-mode="kid"] .close-btn {
+  width: 52px; height: 52px; font-size: 1.7rem;
+  background: var(--bg); border: 3px solid var(--border);
+}
+
+[data-mode="kid"] .modal-content:not(.dc-card):not(.st-modal) {
+  animation: kidDrop .65s cubic-bezier(.3, 1.2, .5, 1), kidDrift 5s ease-in-out .65s infinite;
+}
+[data-mode="kid"] #settings-modal.active { align-items: flex-end; }
+[data-mode="kid"] #settings-modal .st-modal {
+  max-width: none; width: 100%; max-height: 88dvh;
+  border-radius: 34px 34px 0 0; border-width: 4px 4px 0; padding: 22px 18px 28px;
+  animation: kidSlide .5s cubic-bezier(.3, 1.2, .5, 1);
+}
+[data-mode="kid"] .st-row { min-height: 60px; padding: 10px 0; }
+[data-mode="kid"] .st-label { font-size: 1.05rem; font-weight: 700; }
+[data-mode="kid"] .st-section { font-size: .95rem; margin: 18px 0 6px; }
+[data-mode="kid"] .st-select { min-height: 46px; border-width: 3px; border-radius: 14px; font-size: 1rem; }
+[data-mode="kid"] .st-switch { width: 64px; height: 36px; }
+[data-mode="kid"] .st-switch::after { top: 4px; left: 4px; width: 28px; height: 28px; }
+[data-mode="kid"] .st-switch[aria-checked="true"]::after { transform: translateX(28px); }
+
+[data-mode="kid"] #view-learn .learn-container { animation: kidPop .5s cubic-bezier(.34, 1.56, .64, 1); }
+[data-mode="kid"] .lesson-feedback:not(.hidden) { animation: kidPop .4s cubic-bezier(.34, 1.56, .64, 1); }
+[data-mode="kid"] .pane:not(.pane-minimized) > :not(.pane-header) { animation: kidUnfold .35s ease-out; }
+
+[data-mode="kid"] .kp-panel { animation: kidDrift 5s ease-in-out .4s infinite; }
+:where([data-mode="kid"] #dict-popup .dc-card:not(.dc-in-kid):not(.dc-slide-l):not(.dc-slide-r)) {
+  animation: kidDrift 5s ease-in-out infinite;
+}
+
+:root { --tabs-h: 58px; --bar-h: 60px; --notch-w: 196px; --flag: 32px; --hb: 2px; }
+[data-mode="kid"] { --tabs-h: 70px; --notch-w: 224px; --flag: 36px; --hb: 4px; }
+
+header { position: relative; }
+header .tabs-nav {
+  position: absolute; top: calc(8px + 3px); left: 0; right: 0; margin: 0 auto;
+  height: calc(var(--tabs-h) - 6px); align-items: center; z-index: 3;
+}
+header .hero-card {
+  display: grid; grid-template-columns: 1fr var(--notch-w) 1fr;
+  grid-template-rows: var(--tabs-h) var(--bar-h); gap: 0;
+  padding: 0 !important; border: 0 !important; background: none !important;
+  box-shadow: none !important; height: auto !important;
+}
+header .hero-card > .flags-side,
+header .hero-card > .logo-container {
+  background: var(--panel); border: var(--hb) solid var(--border); box-shadow: var(--shadow);
+}
+header .hero-card > .flags-side {
+  grid-row: 1 / 3; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; gap: 4px;
+}
+header .hero-card > .flags-side:first-child {
+  grid-column: 1;
+  border-start-start-radius: var(--radius); border-end-start-radius: var(--radius);
+  border-start-end-radius: calc(var(--radius) * .7); border-end-end-radius: 0;
+}
+header .hero-card > .flags-side:last-child {
+  grid-column: 3;
+  border-start-end-radius: var(--radius); border-end-end-radius: var(--radius);
+  border-start-start-radius: calc(var(--radius) * .7); border-end-start-radius: 0;
+}
+header .hero-card > .logo-container {
+  grid-column: 2; grid-row: 2; display: grid; place-items: center; border-inline-width: 0;
+}
+.hero-card .flag-btn { width: var(--flag); height: var(--flag); flex-shrink: 0; }
+
+body.kid-on .controls-card > .icon-btn[onclick="toggleLayout()"] {
+  display: inline-grid !important; place-items: center;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--bg); border: 3px solid var(--border);
+  font-size: 1.25rem; box-shadow: 0 3px 0 var(--border);
+}
+
+@keyframes kidSlideDown { to { transform: translateY(105%); opacity: .5; } }
+@keyframes kfFade { to { opacity: 0; } }
+[data-mode="kid"] #settings-modal.kf-closing { animation: kfFade .32s ease-in forwards; }
+[data-mode="kid"] #settings-modal.kf-closing .st-modal { animation: kidSlideDown .32s cubic-bezier(.5, 0, .9, .5) forwards; }

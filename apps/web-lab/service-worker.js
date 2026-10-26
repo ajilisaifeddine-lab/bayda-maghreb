@@ -1,18 +1,19 @@
-const CACHE_NAME = 'bayda-dynamic-v2';
+/* SPDX-License-Identifier: AGPL-3.0-or-later
+ * Copyright (C) 2026 ajilisaifeddine-lab
+ * This file is part of Bayda Lab. See LICENSE for the full terms.
+ */
+const CACHE_NAME = 'bayda-cache';
 const ASSETS = [
-  './',
   './index.html',
   './style.css',
-  './main.js',
-  './manifest.json',
-  './assets/logo.png',
-  './assets/kabyle.png',
-  './assets/amazigh.png'
+  './script.js',
+  './assets/icon.png',
+  './assets/icon-large.png'
 ];
 
 // التثبيت: نضع الملفات في الكاش، لكننا لا نجبر التحديث
-self.addEventListener('install', (e) => {
-  e.waitUntil(
+self.addEventListener('install', (event) => {
+  event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS);
     })
@@ -40,20 +41,10 @@ self.addEventListener('message', (e) => {
 });
 
 // الجلب: استراتيجية (Stale-While-Revalidate) لضمان السرعة والتحديث
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then((cachedResponse) => {
-      const fetchPromise = fetch(e.request).then((networkResponse) => {
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(e.request, networkResponse.clone());
-        });
-        return networkResponse;
-      }).catch(() => {
-        // إذا فشلت الشبكة (السيرفر مغلق)، نرجع للمخزن
-        return cachedResponse;
-      });
-
-      return cachedResponse || fetchPromise;
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
     })
   );
 });

@@ -1,0 +1,13 @@
+Bayda Lab (Bayda-Maghreb)
+Copyright (C) 2026 ajilisaifeddine-lab
+Licensed under AGPL-3.0-or-later (see LICENSE).
+Source code: https://github.com/ajilisaifeddine-lab/bayda-maghreb
+
+Third-party components
+- IBM Plex Sans Arabic - SIL Open Font License 1.1
+- Fira Code            - SIL Open Font License 1.1
+- Baloo Bhaijaan 2     - SIL Open Font License 1.1
+  (Currently loaded from fonts.googleapis.com. When the font files are bundled
+   in assets/fonts/, ship each font's OFL.txt and copyright notice with them.)
+
+Artwork (logo, mascot, flags): licensing and provenance still to be documented.
