@@ -13,7 +13,7 @@
    لا تحتوي أي بيانات معجمية ولا منطق تنفيذ كود.
    ============================================================ */
 "use strict";
-import DOMPurify from 'dompurify';
+const DOMPurify = window.DOMPurify;
 
 (function () {
 

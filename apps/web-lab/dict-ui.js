@@ -2,7 +2,7 @@
  * Copyright (C) 2026 ajilisaifeddine-lab
  * This file is part of Bayda Lab. See LICENSE for the full terms.
  */
-import { allVocabularies } from './vocabularies';
+const allVocabularies = window.allVocabularies || {};
 import { allKeywords } from './dialects';
 
 /* ============================================================
