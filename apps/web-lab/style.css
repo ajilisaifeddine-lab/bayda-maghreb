@@ -1040,14 +1040,4 @@ button:hover::after {
   70% { transform: scale(0.98) rotate(1deg); }
 }
 
-/* لا تفرض الحركة على من فعّل تقليل الحركة في جهازه */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+
