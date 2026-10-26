@@ -297,7 +297,7 @@ window.BaydaEngine.run = function() {
     }
     
     const dialectId = currentDialect; // Get the current dialect
-    const resultObj = translate(code, { keywords: keywordsMap, id: dialectId });
+    const resultObj = translate(code, { keywords: keywordsMap, id: currentDialect });
     if (!code) {
         showToast("❌ الرجاء كتابة كود أولاً.", "error");
         return;
