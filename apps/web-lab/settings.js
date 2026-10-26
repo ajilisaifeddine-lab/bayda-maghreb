@@ -171,7 +171,7 @@ function stToggle(k, btn) {
     try { localStorage.setItem("baydaSound", String(v)); } catch (e) {}
     if (typeof updateSoundButton === "function") updateSoundButton();
   } else if (k === "translate") {
-    toast(v ? "الترجمة الفورية: مفعّلة (المحرك معزول)" : "الترجمة الفورية: معطّلة");
+    toast(v ? "الترجمة الفورية: مفعّلة (المحرك جاهز)" : "الترجمة الفورية: معطّلة");
   }
 
   if (k !== "translate") beep(v ? "ok" : "close");
