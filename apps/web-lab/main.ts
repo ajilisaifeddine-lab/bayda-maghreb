@@ -284,9 +284,27 @@ function containsString(node: any, target: string): boolean {
     }
 };
 
-// ================= RUN CODE =================
+window.BaydaEngine = window.BaydaEngine || {};
+window.BaydaEngine.run = function() {
+    const code = editor.value;
+    if (!code) {
+        showToast("❌ الرجاء كتابة كود أولاً.", "error");
+        return;
+    }
+    try {
+        // Execute the code here (you can replace this with your actual execution logic)
+        eval(code); // Caution: eval can be dangerous if not controlled
+        showToast("✅ الكود تم تشغيله بنجاح.", "success");
+    } catch (error) {
+        showToast("❌ خطأ: " + error.message, "error");
+    }
+    const output = document.getElementById('output');
+    if (output) {
+        output.textContent = ""; // Clear the previous message
+    }
+};
 document.getElementById('run-btn')?.addEventListener('click', () => {
-    runCode();
+    window.BaydaEngine.run();
 });
 });
 

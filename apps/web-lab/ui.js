@@ -568,12 +568,10 @@ document.addEventListener("change", function (e) {
    14) ما كان يفعله المحرك — معزول الآن
    ============================================================ */
 function runCode() {
-  beep("err");
-  var out = el("output");
+  const out = el("output");
   if (out) {
-    out.textContent = "// محرك التنفيذ معزول في هذه النسخة.\n// الواجهة تعمل، والتشغيل سيُعاد ربطه لاحقًا.";
+    out.textContent = ""; // Clear the previous message
   }
-  toast("محرك التنفيذ معزول — الواجهة فقط");
 }
 
 function magicCode() {
