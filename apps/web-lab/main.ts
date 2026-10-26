@@ -295,7 +295,7 @@ window.BaydaEngine.run = function() {
     }
     
     const dialectId = currentDialect; // Get the current dialect
-    const { code: translatedCode } = translate(code, { keywords: keywordsMap, id: dialectId });
+    const resultObj = translate(code, { keywords: keywordsMap, id: dialectId });
     if (!code) {
         showToast("❌ الرجاء كتابة كود أولاً.", "error");
         return;
@@ -306,7 +306,7 @@ window.BaydaEngine.run = function() {
         if (output) {
             output.textContent = ""; // Clear the previous message
             // Execute the translated code safely
-            const result = new Function(translatedCode)(); // Use Function constructor to execute
+            const result = new Function(resultObj.code)(); // Use Function constructor to execute
             output.textContent += result !== undefined ? result : ""; // Display the result
         }
         showToast("✅ الكود تم تشغيله بنجاح.", "success");
@@ -316,7 +316,7 @@ window.BaydaEngine.run = function() {
     const output = document.getElementById('output');
     if (output) {
         output.textContent = ""; // Clear the previous message
-        output.textContent += translatedCode + "\n"; // Display the translated code
+        output.textContent = resultObj.code + "\n---\n" + (result !== undefined ? result : "") + "\n"; // Display the translated code
     }
 };
 document.getElementById('run-btn')?.addEventListener('click', () => {
