@@ -307,7 +307,7 @@ window.BaydaEngine.run = function() {
             output.textContent = ""; // Clear the previous message
             // Execute the translated code safely
             const result = new Function(translatedCode)(); // Use Function constructor to execute
-            output.textContent = result !== undefined ? result : ""; // Display the result
+            output.textContent += result !== undefined ? result : ""; // Display the result
         }
         showToast("✅ الكود تم تشغيله بنجاح.", "success");
     } catch (error) {
@@ -316,6 +316,7 @@ window.BaydaEngine.run = function() {
     const output = document.getElementById('output');
     if (output) {
         output.textContent = ""; // Clear the previous message
+        output.textContent += translatedCode + "\n"; // Display the translated code
     }
 };
 document.getElementById('run-btn')?.addEventListener('click', () => {
