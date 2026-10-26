@@ -2,6 +2,9 @@
  * Copyright (C) 2026 ajilisaifeddine-lab
  * This file is part of Bayda Lab. See LICENSE for the full terms.
  */
+import { allVocabularies } from './vocabularies';
+import { allKeywords } from './dialects';
+
 /* ============================================================
    dict-ui.js — طبقة عرض بطاقة القاموس التفاعلي (Bayda Lab)
    واجهة فقط. لا محرك، لا معجم، لا بيانات مفردات.

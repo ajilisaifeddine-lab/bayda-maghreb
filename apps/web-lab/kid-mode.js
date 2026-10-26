@@ -73,7 +73,7 @@ import DOMPurify from 'dompurify';
       '  <span class="kb-star">\u2B50</span>' +
       '</button>'
     );
-    document.body.appendChild(DOMPurify.sanitize(b));
+    document.body.appendChild(b);
     kEl("kb-body").addEventListener("click", kBuddyTap);
     setTimeout(function () { kSay(TIPS[0], 2600); }, 900);
   }
