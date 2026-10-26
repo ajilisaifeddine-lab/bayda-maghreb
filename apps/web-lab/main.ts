@@ -269,7 +269,7 @@ function containsString(node: any, target: string): boolean {
         }
 
         // 1. التحقق من الصياغة عبر translate() (lexer → normalizer → program)
-        const { ast } = translate(code, { keywords: keywordsMap, target: 'js' });
+        const { ast } = translate(code, { keywords: keywordsMap, id: currentDialect, target: 'js' });
         
         // 2. التحقق من المهمة (Task Check)
         if (containsString(ast, 'salam')) {
@@ -308,7 +308,7 @@ window.BaydaEngine.run = function() {
         if (output) {
             output.textContent = ""; // Clear the previous message
             // Execute the translated code safely
-            const result = new Function(resultObj.code)(); // Use Function constructor to execute
+            const result = resultObj.code; // Use resultObj.code instead of the previous result
             output.textContent += result !== undefined ? result : ""; // Display the result
             output.textContent += result !== undefined ? result : ""; // Display the result
         }
