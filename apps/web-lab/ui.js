@@ -598,7 +598,7 @@ function resetLesson() {
 function checkLesson() {
   var fb = el("lesson-feedback");
   if (fb) {
-    fb.textContent = "مصحّح الدروس معزول — الواجهة فقط.";
+    fb.textContent = "المحرك جاهز";
     fb.classList.remove("hidden");
   }
   beep("err");
