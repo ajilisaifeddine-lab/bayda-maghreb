@@ -286,13 +286,8 @@ function containsString(node: any, target: string): boolean {
 
 // ================= RUN CODE =================
 document.getElementById('run-btn')?.addEventListener('click', () => {
-    const code = editor.value; output.innerHTML = '';
-    try {
-        const keywordsMap = (window as any).currentKeywordsMap;
-        if (!keywordsMap) return alert("جاري تحميل اللهجة...");
-        const { code: result } = translate(code, { keywords: keywordsMap, target: targetLang.value === 'js' ? 'js' : 'py' });
-        output.textContent = result; output.style.color = 'var(--primary)'; playSound('success');
-    } catch (error: any) { output.textContent = "Error: " + error.message; output.style.color = '#ef4444'; playSound('error'); }
+    runCode();
+});
 });
 
 // ================= INITIALIZATION =================
