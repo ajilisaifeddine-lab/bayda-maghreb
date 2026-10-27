@@ -4,11 +4,25 @@
  */
 const CACHE_NAME = 'bayda-cache';
 const ASSETS = [
-  './index.html',
-  './style.css',
-  './script.js',
-  './assets/icon.png',
-  './assets/icon-large.png'
+  "./",
+  "./index.html",
+  "./style.css",
+  "./polish.css",
+  "./kid-ui.css",
+  "./main.js",
+  "./dict-ui.js",
+  "./lang-picker.js",
+  "./settings.js",
+  "./ui.js",
+  "./kid-mode.js",
+  "./assets/logo.png",
+  "./assets/mascot.webp",
+  "./assets/amazigh.png",
+  "./assets/kabyle.png",
+  "./assets/tn.png",
+  "./assets/dz.png",
+  "./assets/ly.png",
+  "./assets/mr.png"
 ];
 
 // التثبيت: نضع الملفات في الكاش، لكننا لا نجبر التحديث
