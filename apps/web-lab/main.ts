@@ -170,7 +170,7 @@ function changeDialect(dialectId: string) {
         // بيانات مضمّنة وقت البناء من الجذر (packages/) — لا شبكة، لا نسخ مكرّرة.
         const keywordsMap = allKeywords[dialectId] || {};
         const vocabMap = allVocabularies[dialectId] || {};
-        updateDictionary(vocabMap);
+        (window as any).currentDialect=dialectId; (window as any).currentVocab=vocabMap; (window as any).dcRenderChips?.();
         editor.value = greetings[dialectId] || greetings['tn-latn'];
         (window as any).currentKeywordsMap = keywordsMap;
         updateLineNumbers();

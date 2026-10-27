@@ -1078,3 +1078,6 @@ button:hover::after {
     border-color: #0284c7;
     transform: scale(1.08);
 }
+
+.dc-tab-btn { padding:4px 10px; font-size:0.85rem; border-radius:6px; border:1px solid var(--border,#cbd5e1); background:var(--bg-card,#fff); cursor:pointer; }
+.dc-tab-btn.active { background:#0284c7; color:#fff; border-color:#0284c7; }

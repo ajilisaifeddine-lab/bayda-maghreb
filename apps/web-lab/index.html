@@ -218,10 +218,9 @@
             </div>
             <div class="dict-content">
                 <div class="dc-bar">
-                    <input id="dc-search" type="search" placeholder="ابحث عن مفردة..." disabled
-                           title="يُفعّل عند ربط المعجم">
-                    <button disabled title="يُفعّل عند ربط المعجم">مبتدئ</button>
-                    <button disabled title="يُفعّل عند ربط المعجم">متقدم</button>
+                    <input id="dc-search" type="search" placeholder="🔍 ابحث في المعجم...">
+                    <button id="dc-filter-beginner" class="dc-tab-btn active" onclick="dcSetFilter('beginner')">مبتدئ</button>
+                    <button id="dc-filter-all" class="dc-tab-btn" onclick="dcSetFilter('all')">الكل</button>
                 </div>
                 <div class="dict-chips" id="dict-chips"></div>
             </div>

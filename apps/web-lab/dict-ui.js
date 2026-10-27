@@ -46,25 +46,38 @@ function dcSfx(kind) {
 }
 
 /* ---------- 1) شرائح المفردات (عناصر نائبة) ---------- */
+
+var dcFilter = "beginner";
+window.dcSetFilter = function(lvl) {
+  dcFilter = lvl;
+  document.getElementById("dc-filter-beginner")?.classList.toggle("active", lvl === "beginner");
+  document.getElementById("dc-filter-all")?.classList.toggle("active", lvl === "all");
+  dcRenderChips();
+};
+
 function dcRenderChips() {
   var box = document.getElementById("dict-chips");
   if (!box) return;
-
-  /* أربع شرائح نموذجية كما في التصميم + شريحة شبحية */
-  var demo = ["bla", "haqq", "idha", "ktab"];
-  var html = "";
-  for (var i = 0; i < demo.length; i++) {
-    html += '<button class="chip dc-chip dc-tap" data-w="' + demo[i] +
-            '" data-i="' + i + '">' + demo[i] + "</button>";
+  var vocab = window.currentVocab || {};
+  var words = Object.keys(vocab);
+  var q = (document.getElementById("dc-search")?.value || "").trim().toLowerCase();
+  if (q) {
+    words = words.filter(w => w.toLowerCase().includes(q) || (vocab[w] && vocab[w].toLowerCase().includes(q)));
+  } else if (dcFilter === "beginner") {
+    words = words.slice(0, 30);
   }
-  html += '<button class="chip dc-chip dc-ghost dc-tap" data-i="-1" ' +
-          'title="تظهر بقية المفردات عند ربط المعجم">+</button>';
-  box.innerHTML = html;
-
+  if (!words.length) {
+    box.innerHTML = '<span style="color:#64748b;font-size:0.9rem;padding:8px;">لا توجد مفردات</span>';
+    DC.chips = []; return;
+  }
+  box.innerHTML = words.map((w, i) => '<button class="chip dc-chip dc-tap" data-w="' + w + '" data-i="' + i + '">' + w + '</button>').join('');
   DC.chips = box.querySelectorAll(".dc-chip");
+  DC.currentWords = words;
   dcBindChips();
   dcRenderDots();
 }
+window.dcRenderChips = dcRenderChips;
+
 
 function dcBindChips() {
   for (var i = 0; i < DC.chips.length; i++) {
@@ -163,14 +176,17 @@ function dcOpenCard(i) {
       '<span class="dc-badge">' +
       (dcIsKid() ? "وضع الطفل" : dcIsPro() ? "وضع المحترف" : "وضع المبتدئ") +
       "</span>" +
-      '<span class="dc-badge dc-badge-empty">بانتظار الربط</span>';
+      '<span class="dc-badge dc-badge-empty">' + (window.currentDialect || 'عام') + '</span>';
   }
 
   /* عنوان الشريحة */
   var w = document.getElementById("dw-word");
   if (w) {
     var chip = DC.chips[DC.index];
-    w.textContent = chip ? (chip.getAttribute("data-w") || "+") : "—";
+    var wName = (DC.currentWords && DC.currentWords[DC.index]) || (chip ? chip.getAttribute("data-w") : "");
+  w.textContent = wName;
+  var ar = document.getElementById("dw-ar");
+  if (ar && window.currentVocab) { ar.textContent = "المفهوم البرمجي: " + (window.currentVocab[wName] || "عام"); ar.classList.remove("dc-empty"); }
   }
 
   /* حركة الدخول حسب الوضع */
@@ -397,3 +413,5 @@ if (document.readyState === "loading") {
 } else {
   dcInit();
 }
+
+document.getElementById("dc-search")?.addEventListener("input", () => dcRenderChips());
