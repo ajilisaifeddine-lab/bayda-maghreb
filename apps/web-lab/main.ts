@@ -89,7 +89,12 @@ let currentThemeIndex = 0;
 let kidThemeIndex = 0; const kidThemes = ['candy', 'jungle', 'ocean'];
 (window as any).changeKidTheme = () => { kidThemeIndex = (kidThemeIndex + 1) % kidThemes.length; document.body.setAttribute('data-kid-theme', kidThemes[kidThemeIndex]); };
 (window as any).readOutput = () => { const text = output.textContent || ""; if (!text || text === "// النتيجة هنا...") return; window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'ar-SA'; utterance.rate = 0.9; utterance.pitch = 1.2; window.speechSynthesis.speak(utterance); };
-(window as any).magicCode = () => { const magics = ['ktab("You are a superstar! ⭐")\nidha (haqq) {\n    ktab("Keep coding! 🚀")\n}', 'ktab("I love pizza! 🍕")', 'goul("Hello World! 🌍")', 'kteb("Bahja! 🎉")']; editor.value = magics[Math.floor(Math.random() * magics.length)]; saveState(); updateLineNumbers(); };
+(window as any).magicCode = () => { const magics = ['ktab("You are a superstar! ⭐")\nidha (haqq) {\n    ktab("Keep coding! 🚀")\n}', 'ktab("I love pizza! 🍕")', 'goul("Hello World! 🌍")', 'kteb("Bahja! 🎉")']; editor.value = magics[Math.floor(Math.random() * magics.length)]; saveState(); updateLineNumbers();
+        const tifBar = document.getElementById("tifinagh-bar");
+        if (tifBar) {
+            if (dialectId === "kab-tifinagh") { initTifinaghBar(); tifBar.classList.remove("hidden"); }
+            else { tifBar.classList.add("hidden"); }
+        } };
 
 // ================= STATE MANAGEMENT =================
 function saveState() { const state = { code: editor.value, mode: document.body.getAttribute('data-mode'), theme: document.body.getAttribute('data-theme'), dialect: currentDialect }; localStorage.setItem('baydaLabState', JSON.stringify(state)); }
@@ -130,9 +135,32 @@ notesEditor?.addEventListener('input', () => { const note = notes.find(n => n.id
 if (notes.length === 0) { (window as any).createNewNote(); } else { currentNoteId = notes[0].id; renderNoteSelector(); loadSelectedNote(); }
 
 // ================= DIALECTS & DICTIONARY =================
-const greetings: Record<string, string> = { 'tn-latn': 'goul("Aslema")\nidha (s7i7) {\n    goul("Marhba bik")\n}', 'dz-latn': 'ktab("Salam")\nila (sah) {\n    ktab("Marhba")\n}', 'ly-latn': 'kteb("Salam")\nkan (sahih) {\n    kteb("Marhba")\n}', 'mr-latn': 'ktab("Salam")\nidha (haqq) {\n    ktab("Marhba")\n}', 'kab-latn': 'aru("Azul")\nma (tidett) {\n    aru("Ansuf")\n}', 'shi-latn': 'skr("Azul")\nma (tidtt) {\n    skr("Marhba")\n}' };
+const greetings: Record<string, string> = { "kab-tifinagh": "ⴽⵜⴰⴱ(\"ⴰⵣⵓⵍ\")\nⵎⴰ (ⵀⴰⵇⵇ) {\n    ⴽⵜⴰⴱ(\"ⴰⵏⵙⵓⴼ\")\n}",  'tn-latn': 'goul("Aslema")\nidha (s7i7) {\n    goul("Marhba bik")\n}', 'dz-latn': 'ktab("Salam")\nila (sah) {\n    ktab("Marhba")\n}', 'ly-latn': 'kteb("Salam")\nkan (sahih) {\n    kteb("Marhba")\n}', 'mr-latn': 'ktab("Salam")\nidha (haqq) {\n    ktab("Marhba")\n}', 'kab-latn': 'aru("Azul")\nma (tidett) {\n    aru("Ansuf")\n}', 'shi-latn': 'skr("Azul")\nma (tidtt) {\n    skr("Marhba")\n}' };
 (window as any).acceptConsent = () => { document.getElementById('consent-modal')!.classList.remove('active'); changeDialect('tn-latn'); saveState(); };
 (window as any).declineConsent = () => { document.getElementById('consent-modal')!.classList.remove('active'); changeDialect('tn-latn'); saveState(); };
+
+const TIFINAGH_KEYS = ["ⴰ", "ⴱ", "ⴳ", "ⴷ", "ⴹ", "ⴻ", "ⴼ", "ⴽ", "ⵀ", "ⵃ", "ⵄ", "ⵅ", "ⵇ", "ⵉ", "ⵊ", "ⵍ", "ⵎ", "ⵏ", "ⵓ", "ⵔ", "ⵕ", "ⵖ", "ⵙ", "ⵚ", "ⵛ", "ⵜ", "ⵟ", "ⵡ", "ⵢ", "ⵣ", "ⵥ", "ⵯ"];
+function initTifinaghBar() {
+    const bar = document.getElementById("tifinagh-bar");
+    if (!bar || bar.hasChildNodes()) return;
+    TIFINAGH_KEYS.forEach(ch => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "tifinagh-key";
+        btn.textContent = ch;
+        btn.onclick = (e) => {
+            e.preventDefault();
+            if (!editor) return;
+            const start = editor.selectionStart || 0;
+            const end = editor.selectionEnd || 0;
+            editor.setRangeText(ch, start, end, "end");
+            editor.dispatchEvent(new Event("input"));
+            editor.focus();
+        };
+        bar.appendChild(btn);
+    });
+}
+
 function changeDialect(dialectId: string) {
     window.currentKeywordsMap = allKeywords[dialectId];
     window.allKeywordsMap = allKeywords;
