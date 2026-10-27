@@ -290,41 +290,33 @@ function containsString(node: any, target: string): boolean {
 window.BaydaEngine = window.BaydaEngine || {};
 window.BaydaEngine.run = function() {
     const code = editor.value.trim();
+    if (!code) {
+        showToast("❌ الرجاء كتابة كود أولاً.", "error");
+        return;
+    }
+
     const keywordsMap = (window as any).currentKeywordsMap || {};
     if (Object.keys(keywordsMap).length === 0) {
         showToast("❌ جاري تحميل اللهجة...", "error");
         return;
     }
-    
-    const dialectId = currentDialect; // Get the current dialect
-    const resultObj = translate(code, { keywords: keywordsMap, id: currentDialect });
-    if (!code) {
-        showToast("❌ الرجاء كتابة كود أولاً.", "error");
-        return;
-    }
+
+    const output = document.getElementById("output");
     try {
-        // Execute the code here (you can replace this with your actual execution logic)
-        const output = document.getElementById('output');
+        const resultObj = translate(code, { keywords: keywordsMap, id: currentDialect });
         if (output) {
-            output.textContent = ""; // Clear the previous message
-            // Execute the translated code safely
-            const result = resultObj.code; // Use resultObj.code instead of the previous result
-            output.textContent += result !== undefined ? result : ""; // Display the result
-            output.textContent += result !== undefined ? result : ""; // Display the result
+            output.textContent = resultObj.code || "";
         }
-        showToast("✅ الكود تم تشغيله بنجاح.", "success");
-    } catch (error) {
+        showToast("✅ تم التحويل بنجاح.", "success");
+    } catch (error: any) {
+        if (output) {
+            output.textContent = "❌ خطأ: " + error.message;
+        }
         showToast("❌ خطأ: " + error.message, "error");
-    }
-    const output = document.getElementById('output');
-    if (output) {
-        output.textContent = ""; // Clear the previous message
-        output.textContent = resultObj.code + "\n---\n" + (result !== undefined ? result : "") + "\n"; // Display the translated code
     }
 };
 document.getElementById('run-btn')?.addEventListener('click', () => {
     window.BaydaEngine.run();
-});
 });
 
 // ================= INITIALIZATION =================

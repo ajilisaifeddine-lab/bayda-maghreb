@@ -139,7 +139,7 @@ export const tn_latn_kw = {
 }
 ;
 
-window.allKeywords = {
+export const allKeywords: Record<string, any> = {
   'dz-latn': dz_latn_kw,
   'kab-latn': kab_latn_kw,
   'kab-tifinagh': kab_tifinagh_kw,
