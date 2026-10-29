@@ -38,9 +38,17 @@ packages/*.json → loader → lexer → normalizer → program.ts → writers
 
 ## Consumers (المستهلكون)
 
-- **المختبر** `apps/web-lab/`: **رفيع**. يستورد `translate()` من النواة، وبيانات اللهجات مُضمّنة وقت البناء من الجذر (`packages/`) عبر `scripts/build-dialects.cjs` → `dialects.ts` / `vocabularies.ts`. لا `fetch` وقت التشغيل، ولا نسخة مكرّرة من `packages/`، ولا منطق لغوي داخله.
+- **المختبر** `apps/web-lab/`: **رفيع**. يستورد `translate()` من النواة. يحمل **ملف أمثلة صغيراً مُضمّناً دائماً** من كل لهجة (للعرض والتجربة فقط) ويعمل بلا اتصال. ولا يتصل بالنواة إلا عندما يؤكّد المستخدم تنزيل لهجة (انظر Dialect Download). لا نسخة مكرّرة من `packages/`، ولا منطق لغوي داخله.
 - **CLI** `bayda-bin`: يقرأ ملف `.bayda`، يحمّل اللهجة، ثم `translateDialect()` ويطبع/ينفّذ الناتج.
 - **المكتبة** `index.ts` (تُبنى إلى `dist/` عبر `tsc`).
+
+## Dialect Download (تنزيل الحزم)
+
+- **متى:** فقط عندما يختار المستخدم لهجة ويؤكّد التنزيل. لا اتصال قبل ذلك.
+- **المصدر:** النواة (إصدار ثابت على GitHub). الشكل التفصيلي للملف المفهرس والمصدر قيد التصميم.
+- **التحقق:** بصمة sha256 لكل ملف، ثم `DialectSchema` في `core/schema.ts` (حدود الحجم، ورفض المفاتيح الخطرة `__proto__` و`constructor` و`prototype`)، قبل الحفظ وعند كل قراءة.
+- **التخزين:** في جهاز المستخدم فقط (IndexedDB). **لا يُرفع أي ملف من جهاز المستخدم أبداً.**
+- **التحديث:** إشعار بوجود إصدار أحدث. فإن وافق المستخدم نُزّلت الحزمة وفُحصت، ثم استبدلها التطبيق بالقديمة محلياً مع إشعار بحذف القديمة. وإن رفض بقيت القديمة.
 
 ## AI Hook
 
@@ -49,5 +57,5 @@ packages/*.json → loader → lexer → normalizer → program.ts → writers
 ## Scripts
 
 - `scripts/audit.cjs` — فحص صحّة حِزم اللهجات.
-- `scripts/build-dialects.cjs` — توليد `apps/web-lab/dialects.ts` و`vocabularies.ts`.
+- `scripts/build-dialects.cjs` — توليد `apps/web-lab/dialects.ts` و`vocabularies.ts` (قيد التحويل: سيولّد ملف الأمثلة المدمج فقط).
 - `scripts/migrate-reviewstatus.cjs` — نقل `reviewStatus` من keywords إلى manifest.
