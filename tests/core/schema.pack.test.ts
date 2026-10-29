@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import fs from "fs";
 import path from "path";
-import { validateDialectPack, PACK_LIMITS } from "../../core/schema";
+import { validateDialectPack, PACK_LIMITS } from "../../core/pack";
 
 const manifest = { id: "xx-latn", version: "1.0.0", name: "Test" };
 const pack = (kw: object = { ekteb: "print" }, vo: object = { salam: "سلام" }) => ({ manifest, keywords: kw, vocabulary: vo });
@@ -70,6 +70,34 @@ describe("schema — فحص حزمة لهجة مُنزَّلة", () => {
       const read = (f: string) => JSON.parse(fs.readFileSync(path.join(root, d, f), "utf8"));
       const r = validateDialectPack({ manifest: read("manifest.json"), keywords: read("keywords.json"), vocabulary: read("vocabulary.json") });
       expect(r.ok, d + ": " + (r.ok ? "" : r.error)).toBe(true);
+    }
+  });
+});
+
+describe("pack — تشديدات إضافية", () => {
+  it("الناتج نظيف: بلا نموذج أولي وبلا مفاتيح manifest غير معروفة", () => {
+    const r = validateDialectPack({
+      manifest: { ...manifest, extra: { deep: "x" } },
+      keywords: { ekteb: "print" },
+      vocabulary: { salam: "سلام" },
+    });
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(Object.getPrototypeOf(r.data.keywords)).toBeNull();
+      expect(Object.getPrototypeOf(r.data.vocabulary)).toBeNull();
+      expect("extra" in r.data.manifest).toBe(false);
+    }
+  });
+
+  it("اسم الحزمة لا يقبل أحرف التحكم أو الاتجاه", () => {
+    for (const n of ["a\u202Eb", "a\u0000b", "a\u200Bb"]) {
+      bad({ manifest: { ...manifest, name: n }, keywords: {}, vocabulary: {} });
+    }
+  });
+
+  it("يرفض معرّف لهجة فيه مسار أو فراغ", () => {
+    for (const id of ["../x", "a/b", "-a", ""]) {
+      bad({ manifest: { ...manifest, id }, keywords: {}, vocabulary: {} });
     }
   });
 });
