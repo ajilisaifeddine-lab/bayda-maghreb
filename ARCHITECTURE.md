@@ -57,5 +57,5 @@ packages/*.json → loader → lexer → normalizer → program.ts → writers
 ## Scripts
 
 - `scripts/audit.cjs` — فحص صحّة حِزم اللهجات.
-- `scripts/build-dialects.cjs` — توليد `apps/web-lab/dialects.ts` و`vocabularies.ts` (قيد التحويل: سيولّد ملف الأمثلة المدمج فقط).
+- `scripts/build-dialects.cjs` — توليد `apps/web-lab/examples.ts` (الأمثلة المدمجة فقط، من `packages/`). الملفان القديمان `dialects.ts` و`vocabularies.ts` لم يعودا يُولَّدان وسيُحذفان في التنظيف.
 - `scripts/migrate-reviewstatus.cjs` — نقل `reviewStatus` من keywords إلى manifest.

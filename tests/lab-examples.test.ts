@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import fs from "fs";
+import { createRequire } from "module";
 import path from "path";
 import { examples } from "../apps/web-lab/examples";
 import { translate } from "../core/translate";
@@ -47,5 +48,14 @@ describe("أمثلة المختبر المدمجة", () => {
   it("حجم الأمثلة صغير (مدمجة دائماً)", () => {
     const size = fs.statSync(path.join(process.cwd(), "apps/web-lab/examples.ts")).size;
     expect(size).toBeLessThan(12000);
+  });
+});
+
+describe("أمثلة المختبر — مُولَّدة ومحدَّثة", () => {
+  it("الملف المسجَّل يطابق ناتج المولِّد (شغّل npm run dialects إن فشل)", () => {
+    const req = createRequire(path.join(process.cwd(), "package.json"));
+    const { buildExamples, render } = req("./scripts/build-dialects.cjs");
+    const file = path.join(process.cwd(), "apps/web-lab/examples.ts");
+    expect(fs.readFileSync(file, "utf8")).toBe(render(buildExamples()));
   });
 });

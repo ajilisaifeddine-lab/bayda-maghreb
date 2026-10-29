@@ -1,5 +1,5 @@
 // أمثلة مدمجة دائماً في المختبر (تعمل بلا اتصال) — للعرض والتجربة فقط.
-// مصدرها packages/ ويفحصها tests/lab-examples.test.ts: أي انحراف عن الحزم الأصلية يفشل الاختبار.
+// مُولَّد بـ scripts/build-dialects.cjs (npm run dialects) من packages/ — لا تعدّله يدوياً.
 // الحزم الكاملة تُنزَّل من النواة بطلب المستخدم ولا تُدمج هنا.
 
 export interface DialectExample {
