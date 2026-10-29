@@ -65,13 +65,11 @@
     var b = document.createElement("div");
     b.id = "kid-buddy";
     b.className = "kb-wrap";
-    b.innerHTML = DOMPurify.sanitize(
-      '<div class="kb-bubble" id="kb-bubble"></div>' +
+    b.innerHTML = ('<div class="kb-bubble" id="kb-bubble"></div>' +
       '<button class="kb-body" id="kb-body" aria-label="\u0627\u0644\u0645\u0631\u0634\u062F \u0646\u062C\u0645">' +
       '  <img src="assets/mascot.webp" alt="" class="kb-img">' +
       '  <span class="kb-star">\u2B50</span>' +
-      '</button>'
-    );
+      '</button>');  /* نص ثابت لا يحتاج تنقية؛ أُزيلت مكتبة خارجية */
     document.body.appendChild(b);
     kEl("kb-body").addEventListener("click", kBuddyTap);
     setTimeout(function () { kSay(TIPS[0], 2600); }, 900);
