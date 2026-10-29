@@ -161,7 +161,7 @@ function openSettings() {
 
 function closeSettings() { closeModal("settings-modal"); }
 
-function closeDictPopup() { closeModal("dict-popup"); }
+function closeDictCard() { closeModal("dict-dock"); }
 
 /* نافذة تأكيد عامة */
 var confirmCallback = null;
@@ -286,6 +286,206 @@ function toggleDictionary() {
 /* ============================================================
    7) اختيار اللهجة من الأعلام
    ============================================================ */
+/* برق مخبري من الشعار نحو العلم المضغوط (واجهة فقط) */
+function flagBolt(flag) {
+  try {
+    if (!flag) return;
+    if (document.body.getAttribute("data-reduce-motion") === "on") return;
+    var hdr = document.querySelector("header");
+    var logo = document.getElementById("main-logo");
+    if (!hdr || !logo) return;
+    var h = hdr.getBoundingClientRect(), a = logo.getBoundingClientRect(), b = flag.getBoundingClientRect();
+    if (!a.width || !b.width) return;
+    var x1 = a.left + a.width / 2 - h.left, y1 = a.top + a.height / 2 - h.top;
+    var x2 = b.left + b.width / 2 - h.left, y2 = b.top + b.height / 2 - h.top;
+    var dx = x2 - x1, dy = y2 - y1, len = Math.sqrt(dx * dx + dy * dy);
+    if (!isFinite(len) || len < 8) return;
+
+    function jag(ax, ay, bx, by, amp, depth) {
+      var pts = [[ax, ay], [bx, by]];
+      for (var d = 0; d < depth; d++) {
+        var out = [pts[0]];
+        for (var i = 0; i < pts.length - 1; i++) {
+          var p = pts[i], q = pts[i + 1];
+          var ex = q[0] - p[0], ey = q[1] - p[1], l = Math.sqrt(ex * ex + ey * ey) || 1;
+          var off = (Math.random() - 0.5) * amp * l;
+          out.push([(p[0] + q[0]) / 2 - ey / l * off, (p[1] + q[1]) / 2 + ex / l * off], q);
+        }
+        pts = out;
+      }
+      return pts;
+    }
+    function toD(pts) {
+      return "M" + pts.map(function (q) { return q[0].toFixed(1) + " " + q[1].toFixed(1); }).join(" L");
+    }
+
+    var NS = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("class", "bl-bolt");
+    svg.setAttribute("aria-hidden", "true");
+    var segs = [];
+    function addSeg(pts, w) {
+      var seg = { pts: pts, els: [] };
+      [["bl-bolt-halo", w * 5], ["bl-bolt-glow", w * 2.6], ["bl-bolt-core", w]].forEach(function (c) {
+        var el = document.createElementNS(NS, "path");
+        el.setAttribute("class", c[0]);
+        el.setAttribute("stroke-width", c[1].toFixed(2));
+        el.setAttribute("pathLength", "1");
+        el.setAttribute("d", toD(pts));
+        svg.appendChild(el);
+        seg.els.push(el);
+      });
+      segs.push(seg);
+    }
+    function spark(x, y, r) {
+      var c = document.createElementNS(NS, "circle");
+      c.setAttribute("class", "bl-bolt-spark");
+      c.setAttribute("cx", x.toFixed(1));
+      c.setAttribute("cy", y.toFixed(1));
+      c.setAttribute("r", r);
+      svg.appendChild(c);
+    }
+
+    var main = jag(x1, y1, x2, y2, 0.5, 5);
+    addSeg(main, 2.4);
+    var base = Math.atan2(dy, dx), count = 0;
+    for (var i = 4; i < main.length - 4 && count < 5; i++) {
+      if (Math.random() < 0.14) {
+        var p = main[i];
+        var ang = base + (Math.random() < 0.5 ? -1 : 1) * (0.4 + Math.random() * 0.5);
+        var bl = len * (0.1 + Math.random() * 0.18);
+        addSeg(jag(p[0], p[1], p[0] + Math.cos(ang) * bl, p[1] + Math.sin(ang) * bl, 0.55, 3), 1.2);
+        count++;
+        i += 3;
+      }
+    }
+    spark(x1, y1, 14);
+    spark(x2, y2, 18);
+
+    var old = hdr.querySelector(".bl-bolt");
+    if (old && old.parentNode) old.parentNode.removeChild(old);
+    hdr.appendChild(svg);
+
+    function jitter() {
+      segs.forEach(function (seg) {
+        var d = toD(seg.pts.map(function (q) {
+          return [q[0] + (Math.random() - 0.5) * 4, q[1] + (Math.random() - 0.5) * 4];
+        }));
+        seg.els.forEach(function (el) { el.setAttribute("d", d); });
+      });
+    }
+    setTimeout(jitter, 70);
+    setTimeout(function () { svg.style.opacity = "0.2"; }, 130);
+    setTimeout(function () { svg.style.opacity = "1"; jitter(); }, 185);
+    setTimeout(function () { svg.style.transition = "opacity .25s ease-out"; svg.style.opacity = "0"; }, 330);
+    setTimeout(function () { if (svg.parentNode) svg.parentNode.removeChild(svg); }, 650);
+
+    if (flag.animate) {
+      flag.animate(
+        [{ filter: "brightness(2.2) drop-shadow(0 0 10px #fff)" }, { filter: "none" }],
+        { duration: 450, easing: "ease-out" }
+      );
+    }
+  } catch (err) { console.error("flagBolt:", err); }
+}
+
+/* زر تنزيل عائم فوق العلم + نافذة تأكيد (واجهة فقط) */
+var dlFloatTimer = null;
+function hideDlFloat() {
+  clearTimeout(dlFloatTimer);
+  var b = document.querySelector(".dl-float");
+  if (b && b.parentNode) b.parentNode.removeChild(b);
+}
+var DL_NAMES = {
+  "tn-latn": "اللهجة التونسية",
+  "dz-latn": "اللهجة الجزائرية",
+  "ly-latn": "اللهجة الليبية",
+  "mr-latn": "اللهجة الموريتانية",
+  "kab-latn": "اللهجة القبائلية",
+  "shi-latn": "اللهجة الشلحية",
+  "kab-tifinagh": "لهجة التيفناق"
+};
+function dlLabel(id) {
+  return Object.prototype.hasOwnProperty.call(DL_NAMES, id) ? DL_NAMES[id] : "هذه اللهجة";
+}
+function askDlConfirm(id, label) {
+  try {
+    var old = document.querySelector(".dl-confirm-wrap");
+    if (old && old.parentNode) old.parentNode.removeChild(old);
+    var wrap = document.createElement("div");
+    wrap.className = "dl-confirm-wrap";
+    var card = document.createElement("div");
+    card.className = "dl-confirm";
+    card.setAttribute("role", "dialog");
+    card.setAttribute("aria-modal", "true");
+    var title = document.createElement("p");
+    title.className = "dl-confirm-title";
+    title.textContent = "تنزيل حزمة " + label + " ؟";
+    var row = document.createElement("div");
+    row.className = "dl-confirm-actions";
+    var ok = document.createElement("button");
+    ok.type = "button"; ok.className = "dl-confirm-ok"; ok.textContent = "تنزيل";
+    var no = document.createElement("button");
+    no.type = "button"; no.className = "dl-confirm-no"; no.textContent = "إلغاء";
+    row.appendChild(ok); row.appendChild(no);
+    card.appendChild(title); card.appendChild(row);
+    wrap.appendChild(card);
+    function onKey(e) { if (e.key === "Escape") close(); }
+    function close() {
+      document.removeEventListener("keydown", onKey);
+      if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
+    }
+    no.addEventListener("click", close);
+    wrap.addEventListener("click", function (e) { if (e.target === wrap) close(); });
+    ok.addEventListener("click", function () {
+      close();
+      if (typeof window.baydaDownloadDialect === "function") {
+        window.baydaDownloadDialect(id);
+      } else {
+        toast("التنزيل غير متصل بالنواة بعد");
+      }
+    });
+    document.addEventListener("keydown", onKey);
+    document.body.appendChild(wrap);
+    ok.focus();
+  } catch (err) { console.error("askDlConfirm:", err); }
+}
+function showDlFloat(flag) {
+  try {
+    hideDlFloat();
+    var id = flag && flag.getAttribute("data-dialect");
+    if (!id || !/^[a-z0-9-]+$/i.test(id)) return;
+    var hdr = document.querySelector("header");
+    if (!hdr) return;
+    var h = hdr.getBoundingClientRect(), r = flag.getBoundingClientRect();
+    var size = flag.offsetWidth;
+    if (!r.width || !size) return;
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "dl-float";
+    var arrow = document.createElement("span");
+    arrow.className = "dl-arrow";
+    arrow.setAttribute("aria-hidden", "true");
+    b.appendChild(arrow);
+    b.setAttribute("aria-label", "تنزيل حزمة " + dlLabel(id));
+    b.style.width = size + "px";
+    b.style.height = size + "px";
+    b.style.left = (r.left + r.width / 2 - size / 2 - h.left) + "px";
+    b.style.top = (r.top + r.height / 2 - size / 2 - h.top) + "px";
+    b.addEventListener("click", function (e) {
+      e.stopPropagation();
+      hideDlFloat();
+      askDlConfirm(id, dlLabel(id));
+    });
+    hdr.appendChild(b);
+    dlFloatTimer = setTimeout(hideDlFloat, 4000);
+  } catch (err) { console.error("showDlFloat:", err); }
+}
+document.addEventListener("click", function (e) {
+  var t = e.target;
+  if (t && t.closest && !t.closest(".dl-float") && !t.closest(".flag-btn")) hideDlFloat();
+});
+
 var currentDialect = "dz-latn";
 
 document.addEventListener("click", function (e) {
@@ -296,7 +496,8 @@ document.addEventListener("click", function (e) {
   var all = document.querySelectorAll(".flag-btn");
   for (var i = 0; i < all.length; i++) all[i].classList.remove("active");
   btn.classList.add("active");
-
+  flagBolt(btn);
+  showDlFloat(btn);
   beep("ok");
   saveState();
 });
@@ -619,7 +820,7 @@ function initUI() {
   if (box) box.addEventListener("input", saveCurrentNoteContent);
 
   var runBtn = el("run-btn");
-  if (runBtn) runBtn.addEventListener("click", runCode);
+  // زر التشغيل يديره المحرك (main.ts)؛ لا مستمع ثانٍ هنا لأن runCode كانت تمسح النتيجة بعده
 
   var yesBtn = el("confirm-yes-btn");
   if (yesBtn) yesBtn.addEventListener("click", confirmYes);

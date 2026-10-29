@@ -503,45 +503,6 @@ stApplyLines(stGet("lines"));
   setInterval(spawn, 260);
 })();
 
-/* ===== نقل زر الإعدادات إلى الفراغ تحت الشعار (هاتف) ===== */
-(function () {
-  var hdr = document.querySelector("header");
-  var ctrl = document.querySelector(".controls-card");
-  var logo = document.querySelector(".logo-container");
-  var btn = document.querySelector('.controls-card > .icon-btn[onclick="openSettings()"]');
-  if (!hdr || !ctrl || !logo || !btn) return;
-  var anchor = btn.nextElementSibling;
-  var mq = window.matchMedia("(max-width: 768px)");
-
-  function place() {
-    var mobile = mq.matches && document.body.getAttribute("data-mode") !== "kid";
-    if (!mobile) {
-      if (btn.parentNode !== ctrl) ctrl.insertBefore(btn, anchor);
-      btn.classList.remove("bl-set-fab");
-      btn.style.top = ""; btn.style.left = ""; ctrl.style.marginTop = "";
-      return;
-    }
-    if (btn.parentNode !== hdr) {
-      hdr.appendChild(btn);
-      btn.classList.add("bl-set-fab");
-    }
-    var hr = hdr.getBoundingClientRect();
-    var lr = logo.getBoundingClientRect();
-    var cr = ctrl.getBoundingClientRect();
-    var cur = parseFloat(ctrl.style.marginTop) || 0;
-    var need = Math.max(0, cur + (52 - (cr.top - lr.bottom)));
-    if (Math.abs(need - cur) > 1) {
-      ctrl.style.marginTop = need + "px";
-      cr = ctrl.getBoundingClientRect();
-    }
-    var mid = (lr.bottom + cr.top) / 2 - hr.top;
-    btn.style.top = (mid - 22) + "px";
-    btn.style.left = (hr.width / 2 - 22) + "px";
-  }
-  window.addEventListener("resize", place);
-  setInterval(place, 500);
-  place();
-})();
 
 /* ===== تصغير اللوحات إلى دوائر ===== */
 (function () {
@@ -1531,33 +1492,80 @@ stApplyExtra();
   }
   var keys = mk("\u2328\uFE0F", "الاختصارات", "keys-modal");
   var stat = mk("\uD83D\uDCCA", "الإحصاءات", "stats-modal");
-  hdr.appendChild(keys);
-  hdr.appendChild(stat);
-  var mq = window.matchMedia("(max-width: 768px)");
+  var gear0 = document.querySelector('.tools-row .icon-btn[onclick="openSettings()"]');
+  if (gear0) { gear0.before(keys); gear0.after(stat); }
+  
+})();
 
-  function place() {
-    var fab = document.querySelector(".bl-set-fab");
-    if (mq.matches && fab && fab.parentNode === hdr) {
-      [keys, stat].forEach(function (b) {
-        if (b.parentNode !== hdr) hdr.appendChild(b);
-        b.classList.add("bl-tool-fab");
-        b.style.top = (fab.offsetTop - 1) + "px";
-      });
-      keys.style.left = (fab.offsetLeft - 113) + "px";
-      stat.style.left = (fab.offsetLeft + 111) + "px";
+/* ===== إمكانية الوصول للنوافذ: حوار + Esc + حبس التركيز (موحّد) ===== */
+(function () {
+  if (window.__blA11y) return;
+  window.__blA11y = true;
+  var MODALS = {
+    "settings-modal": { box: ".st-modal", label: "الإعدادات", close: "إغلاق الإعدادات" },
+    "stats-modal": { box: ".bl-panel", label: "الإحصاءات", close: "إغلاق" },
+    "keys-modal": { box: ".bl-panel", label: "الاختصارات", close: "إغلاق" }
+  };
+  var openers = {};
+  function has(id) { return Object.prototype.hasOwnProperty.call(MODALS, id); }
+  function focusables(box) {
+    return Array.prototype.slice.call(box.querySelectorAll("button, select, input, a[href], [tabindex]:not([tabindex='-1'])"))
+      .filter(function (e) { return !e.disabled && e.getClientRects().length > 0; });
+  }
+  function closeIt(id) {
+    if (id === "settings-modal" && typeof closeSettings === "function") closeSettings();
+    else if (typeof closeModal === "function") closeModal(id);
+  }
+  function setup(id) {
+    var m = document.getElementById(id);
+    var box = m && m.querySelector(MODALS[id].box);
+    if (!m || !box) return;
+    box.setAttribute("role", "dialog");
+    box.setAttribute("aria-modal", "true");
+    box.setAttribute("aria-label", MODALS[id].label);
+    var cb = box.querySelector(".close-btn");
+    if (cb) cb.setAttribute("aria-label", MODALS[id].close);
+    box.querySelectorAll(".st-row").forEach(function (row, i) {
+      var lab = row.querySelector(".st-label");
+      var ctl = row.querySelector(".st-switch, .st-select");
+      if (!lab || !ctl) return;
+      if (!lab.id) lab.id = id + "-l" + i;
+      ctl.setAttribute("aria-labelledby", lab.id);
+    });
+    new MutationObserver(function () {
+      var on = m.classList.contains("active");
+      if (on && !openers[id]) {
+        openers[id] = document.activeElement;
+        setTimeout(function () { var f = focusables(box); if (f.length) f[0].focus(); }, 60);
+      } else if (!on && openers[id]) {
+        var o = openers[id];
+        openers[id] = null;
+        if (o.focus && document.contains(o)) { try { o.focus(); } catch (e) {} }
+      }
+    }).observe(m, { attributes: true, attributeFilter: ["class"] });
+  }
+  Object.keys(MODALS).forEach(setup);
+  function top() {
+    var a = document.querySelectorAll(".modal-overlay.active");
+    return a.length ? a[a.length - 1] : null;
+  }
+  document.addEventListener("keydown", function (e) {
+    var m = top();
+    if (!m) return;
+    if (m.id === "confirm-modal") {
+      if (e.key === "Escape" && typeof confirmNo === "function") { e.preventDefault(); confirmNo(); }
       return;
     }
-    [keys, stat].forEach(function (b) {
-      b.classList.remove("bl-tool-fab");
-      b.style.top = "";
-      b.style.left = "";
-    });
-    var gear = ctrl.querySelector('.icon-btn[onclick="openSettings()"]');
-    if (gear) {
-      if (keys.nextSibling !== gear) ctrl.insertBefore(keys, gear);
-      if (gear.nextSibling !== stat) ctrl.insertBefore(stat, gear.nextSibling);
-    }
-  }
-  setInterval(place, 500);
-  place();
+    if (!has(m.id)) return;
+    var box = m.querySelector(MODALS[m.id].box);
+    if (!box) return;
+    if (e.key === "Escape") { e.preventDefault(); closeIt(m.id); return; }
+    if (e.key !== "Tab") return;
+    var f = focusables(box);
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1], a = document.activeElement;
+    if (!box.contains(a)) { e.preventDefault(); first.focus(); }
+    else if (e.shiftKey && a === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && a === last) { e.preventDefault(); first.focus(); }
+  });
 })();

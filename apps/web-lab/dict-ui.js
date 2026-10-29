@@ -194,7 +194,9 @@ function dcOpenCard(i) {
   void card.offsetWidth;
   card.classList.add("dc-in-" + dcMode());
 
-  if (typeof openModal === "function") openModal("dict-popup");
+  if (typeof openModal === "function") openModal("dict-dock");
+  var dk = document.getElementById("dict-dock");
+  if (dk && dk.scrollIntoView) dk.scrollIntoView({ behavior: "smooth", block: "nearest" });
   dcSfx("open");
   dcRenderDots();
   dcApplyScale(1);
@@ -351,7 +353,7 @@ function dcMascotTap() {
 }
 
 function dcConfetti() {
-  var host = document.getElementById("dict-popup");
+  var host = document.getElementById("dict-dock");
   if (!host) return;
   var colors = ["#f43f5e", "#f59e0b", "#22c55e", "#0ea5e9", "#a855f7", "#ec4899"];
   for (var i = 0; i < 26; i++) {
@@ -400,11 +402,11 @@ function dcInit() {
 
   /* دعم لوحة المفاتيح داخل البطاقة */
   document.addEventListener("keydown", function (e) {
-    var modal = document.getElementById("dict-popup");
+    var modal = document.getElementById("dict-dock");
     if (!modal || !modal.classList.contains("active")) return;
     if (e.key === "ArrowLeft") dcNext();
     if (e.key === "ArrowRight") dcPrev();
-    if (e.key === "Escape" && typeof closeDictPopup === "function") closeDictPopup();
+    if (e.key === "Escape" && typeof closeDictCard === "function") closeDictCard();
   });
 }
 
@@ -415,3 +417,7 @@ if (document.readyState === "loading") {
 }
 
 document.getElementById("dc-search")?.addEventListener("input", () => dcRenderChips());
+
+window.dcForceRender = function() {
+    if (typeof dcRenderChips === "function") dcRenderChips();
+};

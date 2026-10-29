@@ -101,23 +101,28 @@ function saveState() { const state = { code: editor.value, mode: document.body.g
 
 async function loadState() {
     const savedFontSize = localStorage.getItem('baydaFontSize');
-    if (savedFontSize) { document.documentElement.style.setProperty('--font-base', savedFontSize + 'px'); const slider = document.getElementById('font-size-slider') as HTMLInputElement; if (slider) slider.value = savedFontSize; }
+    if (savedFontSize) { document.documentElement.style.setProperty('--font-base', savedFontSize + 'px'); }
+
+    let targetDialect = 'tn-latn';
+    let targetCode = '';
 
     const saved = localStorage.getItem('baydaLabState');
     if (saved) {
         try {
             const state = JSON.parse(saved);
-            if (state.theme) { 
-                document.body.setAttribute('data-theme', state.theme); 
-                currentThemeIndex = themes.indexOf(state.theme); 
-                if(currentThemeIndex === -1) currentThemeIndex = 0;
-                document.getElementById('theme-toggle-btn')!.innerText = themeIcons[themes[currentThemeIndex]]; 
-            }
-            if (state.mode) { document.body.setAttribute('data-mode', state.mode); modeSelect.value = state.mode; updateModeUI(state.mode); }
-            if (state.dialect) await changeDialect(state.dialect);
-            if (state.code) { editor.value = state.code; updateLineNumbers(); }
+            if (state.theme) { document.body.setAttribute('data-theme', state.theme); }
+            if (state.mode) { document.body.setAttribute('data-mode', state.mode); }
+            if (state.dialect) { targetDialect = state.dialect; }
+            if (state.code && state.code.trim()) { targetCode = state.code; }
         } catch (e) { console.error(e); }
-    } else { await changeDialect('tn-latn'); document.getElementById('consent-modal')!.classList.add('active'); }
+    }
+
+    changeDialect(targetDialect);
+    editor.value = targetCode || greetings[targetDialect] || greetings['tn-latn'];
+    updateLineNumbers();
+    if (typeof (window as any).dcRenderChips === 'function') {
+        (window as any).dcRenderChips();
+    }
 }
 
 // ================= NOTES APP =================
@@ -349,4 +354,62 @@ document.getElementById('run-btn')?.addEventListener('click', () => {
 
 // ================= INITIALIZATION =================
 if (editor) editor.addEventListener('input', () => { updateLineNumbers(); saveState(); });
-loadState();
+try {
+        const s = localStorage.getItem('baydaLabState');
+        if (s) {
+            const parsed = JSON.parse(s);
+            if (!parsed.code || !parsed.code.trim()) {
+                localStorage.removeItem('baydaLabState');
+            }
+        }
+    } catch(e){}
+    loadState();
+
+window.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
+        try {
+            changeDialect(currentDialect || 'tn-latn');
+            if (!editor.value || !editor.value.trim()) {
+                editor.value = greetings[currentDialect || 'tn-latn'] || 'goul("Aslema")';
+                updateLineNumbers();
+            }
+        } catch(e) { console.error("Dialect init error:", e); }
+    }, 100);
+});
+
+// === بداية دالة تحميل اللهجة الآمنة ===
+import { fetchAndSaveDialect } from "./dialect-loader.js";
+
+(window as any).downloadDialect = async function(dialectId: string, btnElement: HTMLButtonElement) {
+    // 1. الحماية من ثغرات حقن المسار (Path Traversal)
+    if (!/^[a-z0-9-]+$/i.test(dialectId)) {
+        console.error("محاولة حقن غير صالحة:", dialectId);
+        return;
+    }
+    
+    if (btnElement.disabled) return;
+    
+    const textSpan = btnElement.querySelector(".dl-text") as HTMLSpanElement;
+    const isArabic = (document.documentElement.lang || navigator.language || "ar").toLowerCase().startsWith("ar");
+    const originalText = isArabic ? "تنزيل" : "Download";
+
+    btnElement.disabled = true;
+    btnElement.classList.add("is-loading");
+    if (textSpan) textSpan.textContent = "...";
+
+    try {
+        const baseUrl = `/packages/${encodeURIComponent(dialectId)}`;
+        await fetchAndSaveDialect(dialectId, baseUrl);
+        if (textSpan) textSpan.textContent = "✔ تم";
+    } catch (error) {
+        console.error(`فشل تحميل ${dialectId}:`, error);
+        if (textSpan) textSpan.textContent = "❌ خطأ";
+    } finally {
+        setTimeout(() => {
+            btnElement.disabled = false;
+            btnElement.classList.remove("is-loading");
+            if (textSpan) textSpan.textContent = originalText;
+        }, 2500);
+    }
+};
+// === نهاية دالة تحميل اللهجة ===

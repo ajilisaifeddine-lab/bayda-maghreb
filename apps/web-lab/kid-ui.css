@@ -92,7 +92,7 @@ body.kid-on .pane-minimized { height: auto !important; min-height: 64px !importa
 [data-mode="kid"] .pane:not(.pane-minimized) > :not(.pane-header) { animation: kidUnfold .35s ease-out; }
 
 [data-mode="kid"] .kp-panel { animation: kidDrift 5s ease-in-out .4s infinite; }
-:where([data-mode="kid"] #dict-popup .dc-card:not(.dc-in-kid):not(.dc-slide-l):not(.dc-slide-r)) {
+:where([data-mode="kid"] #dict-dock .dc-card:not(.dc-in-kid):not(.dc-slide-l):not(.dc-slide-r)) {
   animation: kidDrift 5s ease-in-out infinite;
 }
 

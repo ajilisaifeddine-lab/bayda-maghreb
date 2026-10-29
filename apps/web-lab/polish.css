@@ -167,16 +167,16 @@ body[data-onehand="on"] .sym-btn { min-width: 52px; height: 52px; }
 @media (max-width: 768px) {
   header .hero-card {
     flex-wrap: nowrap !important;
-    justify-content: space-between !important;
+    justify-content: center !important;
     padding: 6px 10px !important;
     gap: 6px !important;
   }
-  header .hero-card > .logo-container {
+  header .tabs-nav > .logo-container {
     width: auto !important;
     flex: 0 0 auto !important;
     margin-bottom: 0 !important;
   }
-  header .hero-card .logo-img {
+  header .tabs-nav .logo-img {
     max-height: 46px !important;
     width: auto !important;
   }
@@ -197,13 +197,13 @@ body[data-onehand="on"] .sym-btn { min-width: 52px; height: 52px; }
     gap: 4px !important;
     min-height: 76px;
   }
-  header .hero-card .logo-img {
+  header .tabs-nav .logo-img {
     height: clamp(56px, 17vw, 84px) !important;
     max-height: none !important;
     width: auto !important;
     filter: drop-shadow(0 2px 6px color-mix(in srgb, var(--primary) 45%, transparent));
   }
-  header .hero-card > .flags-side { gap: 4px !important; }
+  header .hero-card > .flags-side { gap: 11px !important; }
   header .hero-card .flag-btn {
     width: clamp(36px, 10.5vw, 48px) !important;
     height: clamp(36px, 10.5vw, 48px) !important;
@@ -221,7 +221,7 @@ body[data-onehand="on"] .sym-btn { min-width: 52px; height: 52px; }
 }
 
 /* ===== شعار 3D لامع بحدود تتبع شكله ===== */
-header .hero-card .logo-img {
+header .tabs-nav .logo-img {
   height: clamp(70px, 22vw, 100px) !important;
   max-width: 27vw !important;
   object-fit: contain !important;
@@ -234,17 +234,17 @@ header .hero-card .logo-img {
     drop-shadow(0 6px 8px rgba(0, 0, 0, .35))
     drop-shadow(0 0 12px color-mix(in srgb, var(--primary) 60%, transparent)) !important;
 }
-header .hero-card > .logo-container {
+header .tabs-nav > .logo-container {
   animation: logoShine 3.6s ease-in-out infinite;
 }
 @keyframes logoShine {
   0%, 100% { filter: brightness(1) saturate(1); }
   50% { filter: brightness(1.22) saturate(1.25); }
 }
-body[data-reduce-motion="on"] header .hero-card > .logo-container { animation: none; }
+body[data-reduce-motion="on"] header .tabs-nav > .logo-container { animation: none; }
 
 /* ===== شعار: حدّ أسود + دوران آمن + قوس الأعلام ===== */
-header .hero-card .logo-img {
+header .tabs-nav .logo-img {
   filter:
     drop-shadow(1.5px 0 0 #000)
     drop-shadow(-1.5px 0 0 #000)
@@ -256,12 +256,12 @@ header .hero-card .logo-img {
   0%, 100% { filter: brightness(1) saturate(1) drop-shadow(0 4px 5px rgba(0,0,0,.35)); }
   50% { filter: brightness(1.2) saturate(1.25) drop-shadow(0 6px 8px rgba(0,0,0,.4)); }
 }
-body[data-reduce-motion="on"] header .hero-card .logo-img { animation: none !important; }
-body[data-reduce-motion="on"] header .hero-card > .logo-container { filter: drop-shadow(0 4px 5px rgba(0,0,0,.35)); }
+body[data-reduce-motion="on"] header .tabs-nav .logo-img { animation: none !important; }
+body[data-reduce-motion="on"] header .tabs-nav > .logo-container { filter: drop-shadow(0 4px 5px rgba(0,0,0,.35)); }
 
 @media (max-width: 768px) {
-  header .hero-card { --logo-s: clamp(56px, 19vw, 90px); gap: 6px !important; }
-  header .hero-card > .logo-container {
+  header { --logo-s: clamp(44px, 13vw, 60px); gap: 6px !important; }
+  header .tabs-nav > .logo-container {
     width: calc(var(--logo-s) * 1.3) !important;
     height: calc(var(--logo-s) * 1.3);
     display: grid !important;
@@ -269,47 +269,41 @@ body[data-reduce-motion="on"] header .hero-card > .logo-container { filter: drop
     flex: 0 0 auto !important;
     overflow: visible !important;
   }
-  header .hero-card .logo-img {
+  header .tabs-nav .logo-img {
     width: var(--logo-s) !important;
     height: var(--logo-s) !important;
     max-width: none !important;
     object-fit: contain !important;
   }
-  /* قوس الأعلام: الأقرب للشعار أسفل، والأبعد أعلى */
-  header .hero-card > .flags-side:first-child .flag-btn:nth-child(3),
-  header .hero-card > .flags-side:last-child .flag-btn:nth-child(1) { translate: 0 0; }
-  header .hero-card > .flags-side .flag-btn:nth-child(2) { translate: 0 -8px; }
-  header .hero-card > .flags-side:first-child .flag-btn:nth-child(1),
-  header .hero-card > .flags-side:last-child .flag-btn:nth-child(3) { translate: 0 -22px; }
 }
 
 /* ===== شعار: دوران دائم + أعلى + لمعان ===== */
-header .hero-card .logo-img {
+header .tabs-nav .logo-img {
   animation: spin 20s linear infinite !important;
   transform-origin: 50% 50%;
 }
-header .hero-card > .logo-container {
+header .tabs-nav > .logo-container {
   position: relative;
   animation: logoShine 3.6s ease-in-out infinite !important;
   background: radial-gradient(circle, color-mix(in srgb, var(--primary) 30%, transparent) 0 36%, transparent 68%);
 }
-header .hero-card > .logo-container::before,
-header .hero-card > .logo-container::after {
+header .tabs-nav > .logo-container::before,
+header .tabs-nav > .logo-container::after {
   position: absolute; z-index: 2; pointer-events: none;
   color: #fff; font-size: 15px; line-height: 1;
   text-shadow: 0 0 6px var(--primary), 0 0 12px var(--primary);
   animation: logoTwinkle 2.4s ease-in-out infinite;
 }
-header .hero-card > .logo-container::before { content: "✦"; top: 4%; right: 6%; }
-header .hero-card > .logo-container::after { content: "✧"; bottom: 8%; left: 6%; animation-delay: 1.2s; }
+header .tabs-nav > .logo-container::before { content: "✦"; top: 4%; right: 6%; }
+header .tabs-nav > .logo-container::after { content: "✧"; bottom: 8%; left: 6%; animation-delay: 1.2s; }
 @keyframes logoTwinkle {
   0%, 100% { opacity: .15; transform: scale(.6); }
   50% { opacity: 1; transform: scale(1.25); }
 }
-body[data-reduce-motion="on"] header .hero-card .logo-img,
-body[data-reduce-motion="on"] header .hero-card > .logo-container,
-body[data-reduce-motion="on"] header .hero-card > .logo-container::before,
-body[data-reduce-motion="on"] header .hero-card > .logo-container::after { animation: none !important; }
+body[data-reduce-motion="on"] header .tabs-nav .logo-img,
+body[data-reduce-motion="on"] header .tabs-nav > .logo-container,
+body[data-reduce-motion="on"] header .tabs-nav > .logo-container::before,
+body[data-reduce-motion="on"] header .tabs-nav > .logo-container::after { animation: none !important; }
 
 @media (max-width: 768px) {
   header { gap: 4px !important; }
@@ -319,9 +313,9 @@ body[data-reduce-motion="on"] header .hero-card > .logo-container::after { anima
     padding: 4px 8px 6px !important;
     align-items: center !important;
   }
-  header .hero-card > .logo-container {
-    width: calc(var(--logo-s) * 1.42) !important;
-    height: calc(var(--logo-s) * 1.42) !important;
+  header .tabs-nav > .logo-container {
+    width: calc(var(--logo-s) * 1.2) !important;
+    height: calc(var(--logo-s) * 1.2) !important;
     margin-top: -2px !important;
   }
   header .hero-card .flag-btn {
@@ -331,9 +325,8 @@ body[data-reduce-motion="on"] header .hero-card > .logo-container::after { anima
 }
 
 /* ===== شعار أعلى + نجوم عشوائية ===== */
-header .hero-card > .logo-container::before,
-header .hero-card > .logo-container::after { content: none !important; animation: none !important; }
-header .hero-card > .logo-container { translate: 0 -12px; }
+header .tabs-nav > .logo-container::before,
+header .tabs-nav > .logo-container::after { content: none !important; animation: none !important; }
 header .hero-card { position: relative; overflow: visible; }
 
 .bl-stars { position: absolute; inset: 0; pointer-events: none; z-index: 6; overflow: visible; }
@@ -416,13 +409,18 @@ header .tabs-nav {
   background: none !important;
   border: 0 !important;
   box-shadow: none !important;
-  padding: 0 !important;
+  padding: 0 14px !important;
   gap: 8px !important;
 }
 header .tabs-nav .tab-btn {
   min-height: 44px;
+  min-width: 104px;
   padding-inline: 20px;
   border-radius: 30px;
+  text-align: center;
+  border: 2px solid color-mix(in srgb, var(--primary) 50%, var(--border));
+  box-shadow: 0 3px 0 var(--border);
+  transition: transform .2s ease, background-color .2s ease, box-shadow .2s ease;
 }
 header .tabs-nav .tab-btn:not(.active) {
   background: none !important;
@@ -430,6 +428,7 @@ header .tabs-nav .tab-btn:not(.active) {
   opacity: .75;
 }
 header .tabs-nav .tab-btn.active {
+  transform: scale(1.12);
   box-shadow: 0 3px 10px color-mix(in srgb, var(--primary) 40%, transparent);
 }
 
@@ -547,7 +546,6 @@ body[data-reduce-motion="on"] .bl-dock-btn { animation: none; }
 .bl-dock-btn::after,
 .icon-btn::after { background: none !important; animation: none !important; }
 
-.flag-btn:hover, .flag-btn:active,
 .bl-set-fab:hover, .bl-set-fab:active,
 .bl-dock-btn:hover, .bl-dock-btn:active {
   transform: none !important;
@@ -767,13 +765,13 @@ body[data-reduce-motion="on"] #view-lab .pane { transition: none; }
     padding: 0 !important; border: 0 !important; border-radius: 0 !important;
     background: none !important; box-shadow: none !important;
   }
-  header .hero-card > .logo-container {
+  header .tabs-nav > .logo-container {
     width: 126px !important; height: 126px !important; flex: none !important;
     display: grid !important; place-items: center; margin: -6px 0 !important;
     grid-row: auto !important; grid-column: auto !important;
     border: 0 !important; box-shadow: none !important;
   }
-  header .hero-card .logo-img {
+  header .tabs-nav .logo-img {
     width: 88px !important; height: 88px !important; max-width: none !important;
   }
   header .hero-card .flag-btn { width: 46px !important; height: 46px !important; }
@@ -784,8 +782,8 @@ body[data-reduce-motion="on"] #view-lab .pane { transition: none; }
   html { font-size: 19px; }
 
   header .hero-card { max-width: 780px !important; gap: 30px !important; }
-  header .hero-card > .logo-container { width: 160px !important; height: 160px !important; }
-  header .hero-card .logo-img { width: 116px !important; height: 116px !important; }
+  header .tabs-nav > .logo-container { width: 160px !important; height: 160px !important; }
+  header .tabs-nav .logo-img { width: 116px !important; height: 116px !important; }
   header .hero-card .flag-btn { width: 60px !important; height: 60px !important; }
   header .hero-card > .flags-side { gap: 12px !important; }
 
@@ -924,7 +922,7 @@ body.kid-on .learn-container { padding-top: 140px !important; }
 body:not(.kid-on) #view-learn .learn-container { padding-top: 10px !important; }
 
 /* ===== إيقاف الدوران من الإعدادات ===== */
-body[data-spin="off"] header .hero-card .logo-img,
+body[data-spin="off"] header .tabs-nav .logo-img,
 body[data-spin="off"] header .hero-card .flag-btn,
 body[data-spin="off"] .icon-btn[onclick="openSettings()"] { animation: none !important; }
 
@@ -932,14 +930,14 @@ body[data-spin="off"] .icon-btn[onclick="openSettings()"] { animation: none !imp
 body:not([data-mode="pro"]) .pro-only { display: none !important; }
 
 body[data-minimal="on"][data-mode="pro"] .bl-stars { display: none !important; }
-body[data-minimal="on"][data-mode="pro"] header .hero-card .logo-img,
+body[data-minimal="on"][data-mode="pro"] header .tabs-nav .logo-img,
 body[data-minimal="on"][data-mode="pro"] header .hero-card .flag-btn,
-body[data-minimal="on"][data-mode="pro"] header .hero-card > .logo-container,
+body[data-minimal="on"][data-mode="pro"] header .tabs-nav > .logo-container,
 body[data-minimal="on"][data-mode="pro"] .icon-btn[onclick="openSettings()"],
 body[data-minimal="on"][data-mode="pro"] .bl-set-fab,
 body[data-minimal="on"][data-mode="pro"] .st-switch[aria-checked="true"],
 body[data-minimal="on"][data-mode="pro"] .bl-dock-btn { animation: none !important; }
-body[data-minimal="on"][data-mode="pro"] header .hero-card > .logo-container { background: none !important; }
+body[data-minimal="on"][data-mode="pro"] header .tabs-nav > .logo-container { background: none !important; }
 body[data-minimal="on"][data-mode="pro"] .pane,
 body[data-minimal="on"][data-mode="pro"] .btn-run,
 body[data-minimal="on"][data-mode="pro"] .tab-btn.active,
