@@ -62,6 +62,7 @@
     "build:all": "npm run build && npm run lab:build",
     "dialects": "node scripts/build-dialects.cjs",
     "audit": "node scripts/audit.cjs",
+    "catalog": "node scripts/build-catalog.cjs",
     "lab:build": "npm run dialects && esbuild apps/web-lab/main.ts --bundle --format=esm --outfile=apps/web-lab/main.js --platform=browser",
     "lab:check": "node scripts/check-lab-build.cjs",
     "prepublishOnly": "npm run build"

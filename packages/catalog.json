@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "release": "v2.1.2",
+  "dialects": {
+    "dz-latn": {
+      "version": "1.0.0",
+      "files": {
+        "keywords.json": {
+          "sha256": "4b80aeb7e6b452883f06f863f5bc38fa4cb3eead045aef9ae511201b25d10dd5",
+          "bytes": 314
+        },
+        "manifest.json": {
+          "sha256": "9d6d7259823c6947b3fb1846b9e5bb5bef2f81ac1878b243706a83468eb9b467",
+          "bytes": 357
+        },
+        "symbols.json": {
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+          "bytes": 2
+        },
+        "vocabulary.json": {
+          "sha256": "8d42c06c4f956e8057f6d81ca90e63152a03f52df7753f59bf0981e380a214a4",
+          "bytes": 1701
+        }
+      }
+    },
+    "kab-latn": {
+      "version": "1.0.0",
+      "files": {
+        "keywords.json": {
+          "sha256": "5aecf36bba6fc03876201de62ac4fd493a2eb0f6f2616067d74e25d25b9d653f",
+          "bytes": 277
+        },
+        "manifest.json": {
+          "sha256": "d0347882f5eb5a92bfaaaa0c597593f44b4a7017b1cb9207ebe58e3a2f821e3e",
+          "bytes": 465
+        },
+        "vocabulary.json": {
+          "sha256": "8856701062fd0495e938ae4fe1946e468e831af6a531dbfa3cba7687957bc4f9",
+          "bytes": 818
+        }
+      }
+    },
+    "kab-tifinagh": {
+      "version": "1.0.0",
+      "files": {
+        "keywords.json": {
+          "sha256": "dee24b90b13e60d3ae08d3f58cb574706100e2a4f3f3938101017d52d17510aa",
+          "bytes": 281
+        },
+        "manifest.json": {
+          "sha256": "6233cf2adb85e1de536bda285bce8d4b2d3e3b443d992288982f4787de58e8cd",
+          "bytes": 170
+        },
+        "vocabulary.json": {
+          "sha256": "16a763bf90d9aea0559b821b0c2653bcff5032e8ba214f6be57ed79ea5912632",
+          "bytes": 175
+        }
+      }
+    },
+    "ly-latn": {
+      "version": "1.0.0",
+      "files": {
+        "keywords.json": {
+          "sha256": "38443631a00ea7f5b88ee3e47389747e96a5686fee3df05ed158921e2dd1ef62",
+          "bytes": 314
+        },
+        "manifest.json": {
+          "sha256": "2591b6739c706c058de5c1c9980514475bb209813c6d9aa210ce88befe69b708",
+          "bytes": 224
+        },
+        "symbols.json": {
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+          "bytes": 2
+        },
+        "vocabulary.json": {
+          "sha256": "76b71ffca0c3e0d8b14185d2221d145c2888314c0f4cdbf80167ce1177ffdf27",
+          "bytes": 8311
+        }
+      }
+    },
+    "mr-latn": {
+      "version": "1.0.0",
+      "files": {
+        "keywords.json": {
+          "sha256": "63e82ebd195f9b1d6dd1de5e4cdc03984883d8c10c46e369887aef9f580f0ed4",
+          "bytes": 294
+        },
+        "manifest.json": {
+          "sha256": "182929483d2582f8b15846b5615d27ec157e18e2288116b53ea59869aab76fe1",
+          "bytes": 256
+        },
+        "vocabulary.json": {
+          "sha256": "4b718d79413a95c193d241f17534b4838a8cdebbae2adacc55585dd476b03d8f",
+          "bytes": 4818
+        }
+      }
+    },
+    "shi-latn": {
+      "version": "1.0.0",
+      "files": {
+        "keywords.json": {
+          "sha256": "eca1381b373178017ebe38518b0fc2f734296c54ee97eb7d00232ea517548c21",
+          "bytes": 236
+        },
+        "manifest.json": {
+          "sha256": "cb9b982c454aa62fafdb570c94c1cbc46d2f231bb01244ef12404975dd333a20",
+          "bytes": 225
+        },
+        "vocabulary.json": {
+          "sha256": "f6e3dee6d7c4f778623c8017f535b42b0176b3fb6abc5d284862cb9edbf2b488",
+          "bytes": 172
+        }
+      }
+    },
+    "tn-latn": {
+      "version": "1.0.0",
+      "files": {
+        "keywords.json": {
+          "sha256": "f7672cc35284c34ca16214e27335c63224a015c5bc6753ba6b8c4cbf17a4ae91",
+          "bytes": 433
+        },
+        "manifest.json": {
+          "sha256": "138a3a7da7c92981c5b2ccbd19a871b36954dceed6711fe0ae18e4462333d316",
+          "bytes": 455
+        },
+        "vocabulary.json": {
+          "sha256": "ed010075f9d4a5795bd3a57a09dabf3eb5f1cf01eeae6f1bb2872d2a77363e05",
+          "bytes": 560
+        }
+      }
+    }
+  }
+}
