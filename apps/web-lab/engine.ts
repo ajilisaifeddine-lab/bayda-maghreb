@@ -144,6 +144,24 @@ export function checkLesson(source: string): LessonResult {
   }
 }
 
+/** نص الترحيب للمحرر: المثال المدمج، أو نص مبني من كلمات الحزمة المنزَّلة إن لم تحوِ كلمات المثال. */
+export function sampleFor(id: string): string {
+  if (typeof id !== "string" || !DIALECT_ID.test(id)) return "";
+  const ex = has(examples, id) ? examples[id] : undefined;
+  const pack = packs.get(id);
+  if (!pack) return ex ? ex.sample : "";
+  if (ex && Object.keys(ex.keywords).every((w) => has(pack.keywords, w) && pack.keywords[w] === ex.keywords[w])) {
+    return ex.sample;
+  }
+  const word = (concept: string): string | undefined => Object.keys(pack.keywords).find((w) => pack.keywords[w] === concept);
+  const p = word("print");
+  if (!p) return "";
+  const i = word("if");
+  const tr = word("true");
+  const hello = p + '("Hello")';
+  return i && tr ? hello + "\n" + i + " (" + tr + ") {\n    " + p + '("Hi")\n}' : hello;
+}
+
 export const BaydaEngine = Object.freeze({
   setDialect,
   getDialect,
@@ -152,6 +170,7 @@ export const BaydaEngine = Object.freeze({
   removePack,
   runCode,
   checkLesson,
+  sampleFor,
 });
 
 declare global {

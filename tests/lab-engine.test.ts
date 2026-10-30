@@ -108,3 +108,30 @@ describe("محرك المختبر", () => {
     expect(containsString(null, "salam")).toBe(false);
   });
 });
+
+
+describe("sampleFor — مثال المحرر", () => {
+  it("بلا حزمة: المثال المدمج لكل لهجة، واسم غير آمن يعطي نصاً فارغاً", () => {
+    for (const id of ids) expect(E.sampleFor(id), id).toBe(examples[id].sample);
+    for (const id of ["", "../x", "nope-latn"]) expect(E.sampleFor(id), id).toBe("");
+  });
+
+  it("حزمة فيها كلمات المثال: يبقى المثال المدمج", () => {
+    const ex = examples["tn-latn"];
+    E.installPack(pack("tn-latn", { ...ex.keywords }));
+    expect(E.sampleFor("tn-latn")).toBe(ex.sample);
+  });
+
+  it("حزمة بكلمات مختلفة: يُبنى مثال منها ويعمل", () => {
+    E.installPack(pack("tn-latn", { zzprint: "print", zzif: "if", zztrue: "true" }));
+    const s = E.sampleFor("tn-latn");
+    expect(s).toContain("zzprint");
+    E.setDialect("tn-latn");
+    expect(E.runCode(s).ok).toBe(true);
+  });
+
+  it("حزمة بلا مفهوم الطباعة: نص فارغ لا خطأ", () => {
+    E.installPack(pack("tn-latn", { zzif: "if" }));
+    expect(E.sampleFor("tn-latn")).toBe("");
+  });
+});

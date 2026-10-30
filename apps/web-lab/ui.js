@@ -488,6 +488,38 @@ document.addEventListener("click", function (e) {
 
 var currentDialect = "dz-latn";
 
+/* ===== ربط الواجهة بالمحرك (engine.bundle.js) =====
+   لكل لهجة مصدر واحد فقط: الحزمة المنزَّلة المفحوصة إن وُجدت، وإلا المثال المدمج. */
+var lastSample = "";
+function applyDialect(id) {
+  try {
+    var E = window.BaydaEngine;
+    if (!E || !id) return;
+    window.currentVocab = E.setDialect(id).vocabulary;
+    /* المحرر: يُملأ بمثال اللهجة إن كان فارغاً أو ما زال مثالاً لم يُعدَّل؛ كود المستخدم لا يُستبدل */
+    var ed = el("editor");
+    if (ed && (!ed.value.trim() || ed.value === lastSample)) {
+      lastSample = E.sampleFor(id);
+      ed.value = lastSample;
+      updateLineNumbers();
+    }
+    if (typeof window.dcRenderChips === "function") window.dcRenderChips();
+  } catch (err) { console.error("applyDialect:", err); }
+}
+
+/* أرقام الأسطر: تتبع المحرر (بلا innerHTML، وبحد لحماية الهاتف) */
+function updateLineNumbers() {
+  var ed = el("editor"), ln = el("line-numbers");
+  if (!ed || !ln) return;
+  var n = Math.min(ed.value.split("\n").length, 5000);
+  ln.textContent = "";
+  for (var i = 1; i <= n; i++) {
+    if (i > 1) ln.appendChild(document.createElement("br"));
+    ln.appendChild(document.createTextNode(String(i)));
+  }
+  ln.scrollTop = ed.scrollTop;
+}
+
 document.addEventListener("click", function (e) {
   var btn = e.target && e.target.closest ? e.target.closest(".flag-btn") : null;
   if (!btn) return;
@@ -498,6 +530,7 @@ document.addEventListener("click", function (e) {
   btn.classList.add("active");
   flagBolt(btn);
   showDlFloat(btn);
+  applyDialect(currentDialect);
   beep("ok");
   saveState();
 });
@@ -769,9 +802,26 @@ document.addEventListener("change", function (e) {
    14) ما كان يفعله المحرك — مربوط الآن
    ============================================================ */
 function runCode() {
-  const out = el("output");
-  if (out) {
-    out.textContent = ""; // Clear the previous message
+  var out = el("output");
+  var ed = el("editor");
+  if (!out || !ed) return;
+  var E = window.BaydaEngine;
+  if (!E) {
+    out.textContent = "❌ المحرك غير محمّل.";
+    toast("❌ المحرك غير محمّل");
+    beep("err");
+    return;
+  }
+  var sel = el("target-lang");
+  var r = E.runCode(ed.value, sel ? sel.value : "js");
+  if (r.ok) {
+    out.textContent = r.code || "";
+    toast("✅ تم التحويل بنجاح.");
+    beep("ok");
+  } else {
+    out.textContent = "❌ خطأ: " + r.error;
+    toast("❌ " + r.error);
+    beep("err");
   }
 }
 
@@ -798,11 +848,14 @@ function resetLesson() {
 
 function checkLesson() {
   var fb = el("lesson-feedback");
+  var box = el("lesson-editor");
+  var E = window.BaydaEngine;
+  var r = E && box ? E.checkLesson(box.value) : { status: "error", message: "المحرك غير محمّل." };
   if (fb) {
-    fb.textContent = "المحرك جاهز";
+    fb.textContent = r.message;
     fb.classList.remove("hidden");
   }
-  beep("err");
+  beep(r.status === "ok" ? "ok" : "err");
 }
 
 /* ============================================================
@@ -820,7 +873,16 @@ function initUI() {
   if (box) box.addEventListener("input", saveCurrentNoteContent);
 
   var runBtn = el("run-btn");
-  // زر التشغيل يديره المحرك (main.ts)؛ لا مستمع ثانٍ هنا لأن runCode كانت تمسح النتيجة بعده
+  if (runBtn) runBtn.addEventListener("click", runCode);
+  var edBox = el("editor");
+  if (edBox) {
+    edBox.addEventListener("input", updateLineNumbers);
+    edBox.addEventListener("scroll", function () {
+      var ln = el("line-numbers");
+      if (ln) ln.scrollTop = edBox.scrollTop;
+    });
+  }
+  updateLineNumbers();
 
   var yesBtn = el("confirm-yes-btn");
   if (yesBtn) yesBtn.addEventListener("click", confirmYes);
@@ -828,6 +890,7 @@ function initUI() {
   if (noBtn) noBtn.addEventListener("click", confirmNo);
 
   restoreState();
+  applyDialect(currentDialect);
 
   /* نافذة الموافقة تظهر مرة واحدة فقط */
   if (!localStorage.getItem(LS.consent)) {
