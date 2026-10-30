@@ -5,6 +5,7 @@ test-*.bayda
 archive/
 *.bak
 
-# build output (generated from apps/web-lab/main.ts by npm run lab:build)
+# build output (npm run lab:build): engine.bundle.js from apps/web-lab/engine.ts; main.js is the old bundle
 apps/web-lab/main.js
+apps/web-lab/engine.bundle.js
 .aider*
