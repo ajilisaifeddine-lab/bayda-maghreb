@@ -161,7 +161,7 @@ function openSettings() {
 
 function closeSettings() { closeModal("settings-modal"); }
 
-function closeDictCard() { closeModal("dict-dock"); }
+function closeDictCard() { closeModal("dict-dock"); if (typeof window.dcRestoreRoom === "function") window.dcRestoreRoom(); }
 
 /* نافذة تأكيد عامة */
 var confirmCallback = null;

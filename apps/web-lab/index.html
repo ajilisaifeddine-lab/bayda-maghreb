@@ -91,37 +91,6 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="dict-popup">
-        <div class="modal-content dc-card" id="dc-card">
-            <div class="dc-glow"></div>
-            <button class="close-btn" onclick="closeDictPopup()">×</button>
-            <div class="dc-head">
-                <div class="dc-word-wrap">
-                    <h4 id="dw-word" class="dc-word">—</h4>
-                    <div class="dc-badges" id="dc-badges"></div>
-                </div>
-                <button class="dc-mascot" id="dc-mascot" onclick="dcMascotTap()" aria-label="المرشد">🐣</button>
-            </div>
-            <div class="dc-slots" id="dc-slots"></div>
-            <div class="dc-body">
-                <div class="dc-field"><span class="dc-k">المعنى</span><p class="dc-v dc-empty" id="dw-ar">—</p></div>
-                <div class="dc-field"><span class="dc-k">الدور البرمجي</span><p class="dc-v dc-empty" id="dc-role">—</p></div>
-                <div class="dc-code" id="dc-code-wrap">
-                    <div class="dc-lang"><span>JavaScript</span><code id="dc-js">—</code></div>
-                    <div class="dc-lang"><span>Python</span><code id="dc-py">—</code></div>
-                </div>
-                <div class="dc-field" id="dc-ex-wrap"><span class="dc-k">مثال</span><pre class="dc-v dc-empty" id="dc-ex">—</pre></div>
-                <div class="dc-field dc-analogy" id="dc-analogy-wrap"><span class="dc-k">تشبيه</span><p class="dc-v dc-empty" id="dc-analogy">—</p></div>
-            </div>
-            <div class="dc-note">بطاقة عرض — تُملأ تلقائيًا عند ربط المحرك والمعجم</div>
-            <div class="dc-actions">
-                <button class="dc-act dc-tap" onclick="dcSpeak()">🔊 نطق</button>
-                <button class="dc-act dc-tap" onclick="dcQuickTheme()">🎨 ثيم</button>
-                <button class="dc-act dc-tap" onclick="dcNext()">← التالي</button>
-            </div>
-            <div class="dc-dots" id="dc-dots"></div>
-        </div>
-    </div>
 
     <div class="modal-overlay" id="stats-modal">
         <div class="modal-content bl-panel">
@@ -224,6 +193,37 @@
                     <button id="dc-filter-all" class="dc-tab-btn" onclick="dcSetFilter('all')">الكل</button>
                 </div>
                 <div class="dict-chips" id="dict-chips"></div>
+                <div id="dict-dock">
+            <div class="modal-content dc-card" id="dc-card">
+                <div class="dc-glow"></div>
+                <button class="close-btn" onclick="closeDictCard()">×</button>
+                <div class="dc-head">
+                    <div class="dc-word-wrap">
+                        <h4 id="dw-word" class="dc-word">—</h4>
+                        <div class="dc-badges" id="dc-badges"></div>
+                    </div>
+                    <button class="dc-mascot" id="dc-mascot" onclick="dcMascotTap()" aria-label="المرشد">🐣</button>
+                </div>
+                <div class="dc-slots" id="dc-slots"></div>
+                <div class="dc-body">
+                    <div class="dc-field"><span class="dc-k">المعنى</span><p class="dc-v dc-empty" id="dw-ar">—</p></div>
+                    <div class="dc-field"><span class="dc-k">الدور البرمجي</span><p class="dc-v dc-empty" id="dc-role">—</p></div>
+                    <div class="dc-code" id="dc-code-wrap">
+                        <div class="dc-lang"><span>JavaScript</span><code id="dc-js">—</code></div>
+                        <div class="dc-lang"><span>Python</span><code id="dc-py">—</code></div>
+                    </div>
+                    <div class="dc-field" id="dc-ex-wrap"><span class="dc-k">مثال</span><pre class="dc-v dc-empty" id="dc-ex">—</pre></div>
+                    <div class="dc-field dc-analogy" id="dc-analogy-wrap"><span class="dc-k">تشبيه</span><p class="dc-v dc-empty" id="dc-analogy">—</p></div>
+                </div>
+                <div class="dc-note">بطاقة عرض — تُملأ تلقائيًا عند ربط المحرك والمعجم</div>
+                <div class="dc-actions">
+                    <button class="dc-act dc-tap" onclick="dcSpeak()">🔊 نطق</button>
+                    <button class="dc-act dc-tap" onclick="dcQuickTheme()">🎨 ثيم</button>
+                    <button class="dc-act dc-tap" onclick="dcNext()">← التالي</button>
+                </div>
+                <div class="dc-dots" id="dc-dots"></div>
+            </div>
+                </div>
             </div>
         </div>
 

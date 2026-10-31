@@ -584,7 +584,27 @@ stApplyLines(stGet("lines"));
   };
 
   window.addEventListener("resize", render);
-  setInterval(render, 500);
+  /* بدل الاستعلام الدوري كل 500 مللي ثانية: يُعاد الرسم عند تغيّر اللوحات أو حجم الواجهة فقط */
+  var raf = 0;
+  function schedule() {
+    if (raf) return;
+    raf = requestAnimationFrame(function () { raf = 0; render(); });
+  }
+  window.addEventListener("orientationchange", schedule);
+  if (window.MutationObserver) {
+    var mo = new MutationObserver(schedule);
+    MAIN.forEach(function (it) {
+      var p = document.getElementById(it[0]);
+      if (p) mo.observe(p, { attributes: true, attributeFilter: ["class"] });
+    });
+  }
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(schedule);
+    ro.observe(hdr);
+    ro.observe(ctrl);
+  } else {
+    setInterval(render, 1500);
+  }
   render();
 })();
 

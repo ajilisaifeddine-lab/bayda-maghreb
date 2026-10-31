@@ -160,6 +160,72 @@ function dcPeek(node, e) {
 }
 
 /* ---------- 4) البطاقة ---------- */
+/* مساحة للبطاقة (هاتف): تُصغَّر لوحتا المحرر والنتيجة بآلية اللوحات نفسها، وتعودان عند إغلاق البطاقة */
+var dcShrunk = [];
+var dcRoomMade = false;
+function dcMakeRoom() {
+  try {
+    if (dcRoomMade) return;
+    if (!window.matchMedia || !window.matchMedia("(max-width: 768px)").matches) return;
+    if (typeof window.togglePane !== "function") return;
+    var dp = document.getElementById("dict-pane");
+    if (!dp || dp.classList.contains("hidden") || dp.classList.contains("pane-minimized")) return;
+    dcRoomMade = true;
+    ["editor-pane", "output-pane"].forEach(function (id) {
+      var p = document.getElementById(id);
+      if (!p || p.classList.contains("pane-minimized")) return;
+      var b = p.querySelector('.icon-btn[onclick^="togglePane"]');
+      if (!b) return;
+      window.togglePane(id, b);
+      dcShrunk.push([id, b]);
+    });
+  } catch (err) { console.error("dcMakeRoom:", err); }
+}
+function dcRestoreRoom() {
+  try {
+    dcCardState(false);
+    dcRoomMade = false;
+    var list = dcShrunk;
+    dcShrunk = [];
+    list.forEach(function (it) {
+      var p = document.getElementById(it[0]);
+      if (p && p.classList.contains("pane-minimized")) window.togglePane(it[0], it[1]);
+    });
+  } catch (err) { console.error("dcRestoreRoom:", err); }
+}
+window.dcRestoreRoom = dcRestoreRoom;
+
+/* حالة البطاقة على لوحة القاموس: data-card="open" يفعّل (عبر CSS) شريط الكلمات الأفقي والبطاقة الممتدة */
+function dcCardState(open) {
+  try {
+    var pane = document.getElementById("dict-pane");
+    if (!pane) return;
+    if (open) pane.setAttribute("data-card", "open");
+    else pane.removeAttribute("data-card");
+  } catch (err) { console.error("dcCardState:", err); }
+}
+/* الكلمة الحالية في الشريط: تُعلَّم وتُمرَّر إلى الوسط */
+function dcMarkActive() {
+  try {
+    var chips = DC.chips || [];
+    for (var i = 0; i < chips.length; i++) {
+      if (i === DC.index) chips[i].setAttribute("aria-current", "true");
+      else chips[i].removeAttribute("aria-current");
+    }
+    var cur = chips[DC.index];
+    if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+  } catch (err) { console.error("dcMarkActive:", err); }
+}
+window.dcCardState = dcCardState;
+(function () {
+  var w = document.getElementById("dw-word");
+  if (!w || !window.MutationObserver) return;
+  new MutationObserver(function () {
+    var pane = document.getElementById("dict-pane");
+    if (pane && pane.getAttribute("data-card") === "open") dcMarkActive();
+  }).observe(w, { childList: true, characterData: true, subtree: true });
+})();
+
 function dcOpenCard(i) {
   var card = document.getElementById("dc-card");
   if (!card) return;
@@ -195,6 +261,8 @@ function dcOpenCard(i) {
   card.classList.add("dc-in-" + dcMode());
 
   if (typeof openModal === "function") openModal("dict-dock");
+  dcMakeRoom();
+  dcCardState(true);
   var dk = document.getElementById("dict-dock");
   if (dk && dk.scrollIntoView) dk.scrollIntoView({ behavior: "smooth", block: "nearest" });
   dcSfx("open");
