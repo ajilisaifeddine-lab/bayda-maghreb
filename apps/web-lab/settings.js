@@ -567,11 +567,13 @@ stApplyLines(stGet("lines"));
   var origTP = window.togglePane;
   window.togglePane = function (id, btn) {
     var pane = document.getElementById(id);
+    var drawer = typeof isDrawerMode === "function" && isDrawerMode();
+    if (drawer && id === "dict-pane") { setDrawer(false); return; }
     var isMain = MAIN.some(function (it) { return it[0] === id; });
     if (isMain && pane && !isMin(pane)) {
       var open = MAIN.filter(function (it) {
         var p = document.getElementById(it[0]);
-        return p && !isMin(p) && !p.classList.contains("hidden");
+        return p && !isMin(p) && !p.classList.contains("hidden") && !(drawer && it[0] === "dict-pane");
       });
       if (open.length <= 1) {
         toast("يجب أن تبقى لوحة واحدة مفتوحة");

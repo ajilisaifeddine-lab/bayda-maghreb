@@ -276,12 +276,41 @@ function togglePane(paneId, btn) {
   beep("tap");
 }
 
+function isDrawerMode() {
+  return document.body.getAttribute("data-mode") !== "kid" &&
+    !!window.matchMedia && window.matchMedia("(max-width: 768px)").matches;
+}
+function setDrawer(open) {
+  var pane = el("dict-pane");
+  if (!pane) return;
+  if (open) pane.setAttribute("data-drawer", "open");
+  else pane.removeAttribute("data-drawer");
+}
+/* هاتف (غير الطفل): القاموس درج سفلي؛ غير ذلك: إخفاء/إظهار اللوحة */
 function toggleDictionary() {
   var pane = el("dict-pane");
   if (!pane) return;
-  pane.classList.toggle("hidden");
+  if (isDrawerMode()) {
+    pane.classList.remove("hidden");
+    setDrawer(pane.getAttribute("data-drawer") !== "open");
+  } else {
+    pane.classList.toggle("hidden");
+  }
   beep("tap");
 }
+/* سحب رأس القاموس إلى الأسفل يغلق الدرج */
+(function () {
+  var pane = el("dict-pane");
+  var head = pane && pane.querySelector(".pane-header");
+  if (!head) return;
+  var y0 = null;
+  head.addEventListener("pointerdown", function (e) { y0 = e.clientY; });
+  head.addEventListener("pointerup", function (e) {
+    if (y0 !== null && isDrawerMode() && e.clientY - y0 > 50) setDrawer(false);
+    y0 = null;
+  });
+  head.addEventListener("pointercancel", function () { y0 = null; });
+})();
 
 /* ============================================================
    7) اختيار اللهجة من الأعلام
@@ -787,6 +816,12 @@ function syncModeControls(mode) {
   var isKid = mode === "kid";
   if (standard) standard.classList.toggle("hidden", isKid);
   if (kid) kid.classList.toggle("hidden", !isKid);
+  /* القاموس: درج يبدأ مغلقاً على الهاتف (غير الطفل)، ولا درج في غيره */
+  var dp = el("dict-pane");
+  if (dp) {
+    dp.removeAttribute("data-drawer");
+    if (isDrawerMode()) dp.classList.remove("hidden");
+  }
 }
 
 document.addEventListener("change", function (e) {

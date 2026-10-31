@@ -166,6 +166,7 @@ var dcRoomMade = false;
 function dcMakeRoom() {
   try {
     if (dcRoomMade) return;
+    if (typeof isDrawerMode === "function" && isDrawerMode()) return;
     if (!window.matchMedia || !window.matchMedia("(max-width: 768px)").matches) return;
     if (typeof window.togglePane !== "function") return;
     var dp = document.getElementById("dict-pane");

@@ -74,6 +74,33 @@ pre { flex: 1; padding: 10px; background: transparent; color: var(--text); borde
 #dict-pane[data-card="open"] .dict-chips .dc-chip { flex: 0 0 auto; scroll-snap-align: center; }
 #dict-pane[data-card="open"] .dc-chip[aria-current="true"] { background: var(--primary); color: var(--on-primary, #fff); border-color: var(--primary); }
 #dict-pane[data-card="open"] #dict-dock { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+
+/* المبتدئ والمحترف (هاتف): المحرر والنتيجة معاً، والقاموس درج سفلي مغلق افتراضياً. وضع الطفل يبقى كما هو. */
+@media (max-width: 768px) {
+  body:not([data-mode="kid"]) #view-lab .editor-pane { flex: 3 1 0; }
+  body:not([data-mode="kid"]) #view-lab .output-pane { flex: 2 1 0; }
+  body:not([data-mode="kid"]) #view-lab #dict-pane {
+    position: fixed; inset-inline: 0; bottom: 0; z-index: 30;
+    height: min(62vh, 540px); margin: 0;
+    border-radius: 18px 18px 0 0;
+    transform: translateY(105%); visibility: hidden;
+    transition: transform .28s ease, visibility 0s linear .28s;
+    box-shadow: 0 -10px 34px rgba(0,0,0,.4);
+  }
+  body:not([data-mode="kid"]) #view-lab #dict-pane[data-drawer="open"] {
+    transform: none; visibility: visible; transition: transform .28s ease;
+  }
+  body:not([data-mode="kid"]) #view-lab #dict-pane::before {
+    content: ""; position: absolute; top: 5px; left: 50%; translate: -50% 0;
+    width: 44px; height: 4px; border-radius: 2px; background: var(--border);
+  }
+  [data-mode="pro"] #dict-dock .dc-slots,
+  [data-mode="pro"] #dict-dock #dc-ex-wrap,
+  [data-mode="pro"] #dict-dock #dc-analogy-wrap,
+  [data-mode="pro"] #dict-dock .dc-note,
+  [data-mode="pro"] #dict-dock .dc-mascot { display: none; }
+}
+body[data-reduce-motion="on"] #view-lab #dict-pane { transition: none; }
 .dict-chip { background: var(--bg); border: 2px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 12px; cursor: pointer; font-family: var(--font-code); font-weight: bold; font-size: 0.9rem; transition: 0.2s; }
 .dict-chip:hover { border-color: var(--primary); color: var(--primary); }
 
