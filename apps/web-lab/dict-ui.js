@@ -227,6 +227,12 @@ window.dcCardState = dcCardState;
   }).observe(w, { childList: true, characterData: true, subtree: true });
 })();
 
+/* نص المعنى في البطاقة: معرّف مفهوم (array_list) يُعنوَن "المفهوم البرمجي"، والمعنى العربي المباشر يُعرض كما هو */
+function dcMeaningText(v) {
+  if (typeof v !== "string" || !v) return "";
+  return /^[a-z][a-z0-9_]*$/.test(v) ? "المفهوم البرمجي: " + v : v;
+}
+
 function dcOpenCard(i) {
   var card = document.getElementById("dc-card");
   if (!card) return;
@@ -253,7 +259,11 @@ function dcOpenCard(i) {
     var wName = (DC.currentWords && DC.currentWords[DC.index]) || (chip ? chip.getAttribute("data-w") : "");
   w.textContent = wName;
   var ar = document.getElementById("dw-ar");
-  if (ar && window.currentVocab) { ar.textContent = "المفهوم البرمجي: " + (window.currentVocab[wName] || "عام"); ar.classList.remove("dc-empty"); }
+  if (ar && window.currentVocab) {
+    var mv = window.currentVocab[wName];
+    ar.textContent = dcMeaningText(mv);
+    ar.classList.toggle("dc-empty", !mv);
+  }
   }
 
   /* حركة الدخول حسب الوضع */

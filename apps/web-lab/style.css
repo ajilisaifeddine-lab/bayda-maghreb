@@ -75,6 +75,12 @@ pre { flex: 1; padding: 10px; background: transparent; color: var(--text); borde
 #dict-pane[data-card="open"] .dc-chip[aria-current="true"] { background: var(--primary); color: var(--on-primary, #fff); border-color: var(--primary); }
 #dict-pane[data-card="open"] #dict-dock { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
 
+/* بطاقة المفردة: الحقول الفارغة لا تُعرض، وتظهر تلقائياً حين يملؤها المصدر (بيانات النواة بعد التنزيل) */
+#dict-dock .dc-field:has(> .dc-empty),
+#dict-dock .dc-lang:has(> code.dc-empty),
+#dict-dock .dc-code:not(:has(code:not(.dc-empty))),
+#dict-dock .dc-slots:not(:has(.dc-slot:not(.dc-empty))) { display: none; }
+
 /* المبتدئ والمحترف (هاتف): المحرر والنتيجة معاً، والقاموس درج سفلي مغلق افتراضياً. وضع الطفل يبقى كما هو. */
 @media (max-width: 768px) {
   body:not([data-mode="kid"]) #view-lab .editor-pane { flex: 3 1 0; }
