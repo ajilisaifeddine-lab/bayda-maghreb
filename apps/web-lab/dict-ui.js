@@ -154,8 +154,12 @@ function dcPeek(node, e) {
   var tip = document.createElement("div");
   tip.className = "dc-peek";
   tip.id = "dc-peek";
-  tip.innerHTML = '<b>' + (node.getAttribute("data-w") || "+") + "</b>" +
-                  '<span>اضغط مطوّلًا للمعاينة — التفاصيل تُفتح بالنقر</span>';
+  var tipW = document.createElement("b");
+  tipW.textContent = node.getAttribute("data-w") || "+";
+  var tipHint = document.createElement("span");
+  tipHint.textContent = "اضغط مطوّلًا للمعاينة — التفاصيل تُفتح بالنقر";
+  tip.appendChild(tipW);
+  tip.appendChild(tipHint);
 
   var rect = node.getBoundingClientRect();
   tip.style.left = Math.max(8, rect.left) + "px";
