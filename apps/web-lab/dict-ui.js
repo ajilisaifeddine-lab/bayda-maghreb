@@ -67,10 +67,22 @@ function dcRenderChips() {
     words = words.slice(0, 30);
   }
   if (!words.length) {
-    box.innerHTML = '<span style="color:#64748b;font-size:0.9rem;padding:8px;">لا توجد مفردات</span>';
+    box.textContent = "";
+    var none = document.createElement("span");
+    none.style.cssText = "color:#64748b;font-size:0.9rem;padding:8px;";
+    none.textContent = "لا توجد مفردات";
+    box.appendChild(none);
     DC.chips = []; return;
   }
-  box.innerHTML = words.map((w, i) => '<button class="chip dc-chip dc-tap" data-w="' + w + '" data-i="' + i + '">' + w + '</button>').join('');
+  box.textContent = "";
+  words.forEach(function (w, i) {
+    var b = document.createElement("button");
+    b.className = "chip dc-chip dc-tap";
+    b.setAttribute("data-w", w);
+    b.setAttribute("data-i", String(i));
+    b.textContent = w;
+    box.appendChild(b);
+  });
   DC.chips = box.querySelectorAll(".dc-chip");
   DC.currentWords = words;
   dcBindChips();
@@ -245,11 +257,15 @@ function dcOpenCard(i) {
   /* شارة الوضع */
   var badges = document.getElementById("dc-badges");
   if (badges) {
-    badges.innerHTML =
-      '<span class="dc-badge">' +
-      (dcIsKid() ? "وضع الطفل" : dcIsPro() ? "وضع المحترف" : "وضع المبتدئ") +
-      "</span>" +
-      '<span class="dc-badge dc-badge-empty">' + (window.currentDialect || 'عام') + '</span>';
+    badges.textContent = "";
+    var bMode = document.createElement("span");
+    bMode.className = "dc-badge";
+    bMode.textContent = dcIsKid() ? "وضع الطفل" : dcIsPro() ? "وضع المحترف" : "وضع المبتدئ";
+    var bDia = document.createElement("span");
+    bDia.className = "dc-badge dc-badge-empty";
+    bDia.textContent = window.currentDialect || "عام";
+    badges.appendChild(bMode);
+    badges.appendChild(bDia);
   }
 
   /* عنوان الشريحة */
