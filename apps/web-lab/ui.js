@@ -600,11 +600,60 @@ function renderNoteSelector() {
   });
 }
 
+/* تنقية HTML الملاحظات بقائمة بيضاء: وسوم تنسيق بسيطة بلا أي خصائص، والباقي يُفكّ إلى نصه أو يُحذف.
+   تُطبَّق عند العرض وعند الحفظ، فلا يُنفَّذ أي HTML قادم من التخزين أو اللصق. */
+var NOTE_TAGS = { B: 1, STRONG: 1, I: 1, EM: 1, U: 1, BR: 1, DIV: 1, P: 1, UL: 1, OL: 1, LI: 1 };
+var NOTE_DROP = { SCRIPT: 1, STYLE: 1, TEMPLATE: 1, IFRAME: 1, OBJECT: 1, EMBED: 1, NOSCRIPT: 1, SVG: 1, MATH: 1, TEXTAREA: 1, SELECT: 1, TITLE: 1 };
+var NOTE_MAX_HTML = 200000;
+var NOTE_MAX_DEPTH = 40;
+
+function noteFragment(html) {
+  var frag = document.createDocumentFragment();
+  if (typeof html !== "string" || !html) return frag;
+  if (html.length > NOTE_MAX_HTML) html = html.slice(0, NOTE_MAX_HTML);
+  var doc;
+  try {
+    doc = new DOMParser().parseFromString(html, "text/html");
+  } catch (e) {
+    return frag;
+  }
+  var own = Object.prototype.hasOwnProperty;
+  (function walk(src, dst, depth) {
+    for (var n = src.firstChild; n; n = n.nextSibling) {
+      if (n.nodeType === 3) {
+        dst.appendChild(document.createTextNode(n.nodeValue));
+      } else if (n.nodeType === 1) {
+        var tag = String(n.nodeName).toUpperCase();
+        if (own.call(NOTE_DROP, tag)) continue;
+        if (depth >= NOTE_MAX_DEPTH) {
+          dst.appendChild(document.createTextNode(n.textContent || ""));
+          continue;
+        }
+        if (own.call(NOTE_TAGS, tag)) {
+          var copy = document.createElement(tag.toLowerCase());
+          dst.appendChild(copy);
+          if (tag !== "BR") walk(n, copy, depth + 1);
+        } else {
+          walk(n, dst, depth + 1);
+        }
+      }
+    }
+  })(doc.body, frag, 0);
+  return frag;
+}
+
+function cleanNoteHtml(html) {
+  var tmp = document.createElement("div");
+  tmp.appendChild(noteFragment(html));
+  return tmp.innerHTML;
+}
+
 function renderCurrentNote() {
   var box = el("notes-editor");
   if (!box) return;
   var note = notes.find(function (n) { return n.id === currentNoteId; });
-  box.innerHTML = note ? (note.html || note.content || "") : "";
+  box.textContent = "";
+  if (note) box.appendChild(noteFragment(note.html || note.content || ""));
 }
 
 function createNewNote() {
@@ -665,7 +714,7 @@ function insertSym(sym) {
   } catch (e) {
     done = false;
   }
-  if (!done) box.innerHTML += sym;
+  if (!done) box.appendChild(document.createTextNode(String(sym)));
   saveCurrentNoteContent();
 }
 
@@ -674,8 +723,9 @@ function saveCurrentNoteContent() {
   if (!box || !currentNoteId) return;
   var note = notes.find(function (n) { return n.id === currentNoteId; });
   if (note) {
-    note.html = box.innerHTML;
-    note.content = box.innerHTML;
+    var clean = cleanNoteHtml(box.innerHTML);
+    note.html = clean;
+    note.content = clean;
     persistNotes();
   }
 }
@@ -906,6 +956,20 @@ function initUI() {
 
   var box = el("notes-editor");
   if (box) box.addEventListener("input", saveCurrentNoteContent);
+  if (box) {
+    /* اللصق نصاً عادياً فقط، ومنع إسقاط محتوى خارجي في المحرر */
+    box.addEventListener("paste", function (e) {
+      var cd = e.clipboardData;
+      if (!cd) return;
+      e.preventDefault();
+      var t = cd.getData("text/plain") || "";
+      var ok = false;
+      try { ok = document.execCommand("insertText", false, t); } catch (err) { ok = false; }
+      if (!ok) box.appendChild(document.createTextNode(t));
+      saveCurrentNoteContent();
+    });
+    box.addEventListener("drop", function (e) { e.preventDefault(); });
+  }
 
   var runBtn = el("run-btn");
   if (runBtn) runBtn.addEventListener("click", runCode);
