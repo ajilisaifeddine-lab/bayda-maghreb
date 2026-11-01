@@ -3,12 +3,27 @@
 // ثم تُفحص الحزمة كاملة بـ core/pack.ts. لا يُرفع أي شيء: طلبات GET فقط، بلا كوكيز ولا مرجع.
 import { validateDialectPack, type DialectPack } from "../../core/pack.js";
 
-/** مصادر التنزيل في مكان واحد. الفهرس من GitHub (طازج)، والملفات من jsDelivr بإصدار ثابت. */
-export const SOURCES = {
-  catalogUrl: "https://raw.githubusercontent.com/ajilisaifeddine-lab/bayda-maghreb/main/packages/catalog.json",
-  fileUrl: (release: string, id: string, file: string): string =>
-    "https://cdn.jsdelivr.net/gh/ajilisaifeddine-lab/bayda-maghreb@" + release + "/packages/" + id + "/" + file,
-};
+/** يُعرَّف وقت البناء فقط (esbuild --define). false في البناء العادي فيُحذف المصدر المحلي من الحزمة. */
+declare const __LOCAL_SOURCES__: boolean | undefined;
+
+export interface Sources {
+  catalogUrl: string;
+  fileUrl: (release: string, id: string, file: string) => string;
+}
+
+/** مصادر التنزيل في مكان واحد. الفهرس من GitHub (طازج)، والملفات من jsDelivr بإصدار ثابت.
+ *  المصدر المحلي لا يدخل إلا في بناء الاختبار (npm run lab:build:local). */
+export const SOURCES: Sources =
+  typeof __LOCAL_SOURCES__ !== "undefined" && __LOCAL_SOURCES__ === true
+    ? {
+        catalogUrl: "/packages/catalog.json",
+        fileUrl: (_release: string, id: string, file: string): string => "/packages/" + id + "/" + file,
+      }
+    : {
+        catalogUrl: "https://raw.githubusercontent.com/ajilisaifeddine-lab/bayda-maghreb/main/packages/catalog.json",
+        fileUrl: (release: string, id: string, file: string): string =>
+          "https://cdn.jsdelivr.net/gh/ajilisaifeddine-lab/bayda-maghreb@" + release + "/packages/" + id + "/" + file,
+      };
 
 export const SUPPORTED_SCHEMA = 1;
 const MAX_FILE_BYTES = 1000000; // الحزم الحالية أصغر من 10 كيلوبايت

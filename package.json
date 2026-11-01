@@ -63,7 +63,8 @@
     "dialects": "node scripts/build-dialects.cjs",
     "audit": "node scripts/audit.cjs",
     "catalog": "node scripts/build-catalog.cjs",
-    "lab:build": "npm run dialects && esbuild apps/web-lab/engine.ts --bundle --minify --format=iife --target=es2019 --platform=browser --outfile=apps/web-lab/engine.bundle.js",
+    "lab:build": "npm run dialects && esbuild apps/web-lab/app.ts --bundle --minify --format=iife --target=es2019 --platform=browser --define:__LOCAL_SOURCES__=false --outfile=apps/web-lab/engine.bundle.js",
+    "lab:build:local": "npm run dialects && esbuild apps/web-lab/app.ts --bundle --minify --format=iife --target=es2019 --platform=browser --define:__LOCAL_SOURCES__=true --outfile=apps/web-lab/engine.bundle.js",
     "lab:check": "node scripts/check-lab-build.cjs",
     "prepublishOnly": "npm run build"
   },
