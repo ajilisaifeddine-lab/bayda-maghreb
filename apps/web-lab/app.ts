@@ -3,6 +3,7 @@
 import { BaydaEngine } from "./engine.js";
 import { downloadDialect } from "./downloader.js";
 import { PackStore, createIndexedDbBackend } from "./store.js";
+import { Notebook, createNotebookApi, browserStorage, type NotebookApi } from "./notebook-store.js";
 
 declare global {
   interface Window {
@@ -10,6 +11,7 @@ declare global {
     toast?: (message: string, ms?: number) => void;
     applyDialect?: (id: string) => void;
     currentDialect?: string;
+    BaydaNotebook?: NotebookApi;
   }
 }
 
@@ -85,6 +87,16 @@ async function restore(): Promise<void> {
 
 try {
   Object.defineProperty(window, "baydaDownloadDialect", { value: download, writable: false, configurable: false });
+} catch {
+  /* معرَّف مسبقاً */
+}
+
+try {
+  Object.defineProperty(window, "BaydaNotebook", {
+    value: createNotebookApi(new Notebook(browserStorage())),
+    writable: false,
+    configurable: false,
+  });
 } catch {
   /* معرَّف مسبقاً */
 }
