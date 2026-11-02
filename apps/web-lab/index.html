@@ -186,6 +186,10 @@
                 <span>القاموس التفاعلي</span>
                 <button class="icon-btn" onclick="togglePane('dict-pane', this)">-</button>
             </div>
+            <div class="nb-tabs" id="nb-tabs" role="tablist" hidden>
+                <button type="button" class="nb-tab active" id="nb-tab-dict" role="tab" aria-selected="true">📖 القاموس</button>
+                <button type="button" class="nb-tab" id="nb-tab-book" role="tab" aria-selected="false">📒 دفتري <span class="nb-badge" id="nb-due" hidden>0</span></button>
+            </div>
             <div class="dict-content">
                 <div class="dc-bar">
                     <input id="dc-search" type="search" placeholder="🔍 ابحث في المعجم...">
@@ -219,9 +223,47 @@
                     <button class="dc-act dc-tap" onclick="dcSpeak()">🔊 نطق</button>
                     <button class="dc-act dc-tap" onclick="dcQuickTheme()">🎨 ثيم</button>
                     <button class="dc-act dc-tap" onclick="dcNext()">← التالي</button>
+                    <button type="button" class="dc-act dc-tap" id="nb-pin">📌 احفظ</button>
                 </div>
                 <div class="dc-dots" id="dc-dots"></div>
             </div>
+                </div>
+            </div>
+            <div class="nb-panel" id="nb-panel" hidden>
+                <div class="nb-main" id="nb-main">
+                    <button type="button" class="btn-primary nb-start" id="nb-start" hidden>🧠 ابدأ مراجعة اليوم (<span id="nb-start-n">0</span>)</button>
+                    <button type="button" class="dc-act dc-tap" id="nb-save-code">🔖 احفظ كود المحرر</button>
+                    <details class="nb-note-form" id="nb-note-form">
+                        <summary>➕ ملاحظة جديدة</summary>
+                        <input id="nb-note-title" type="text" maxlength="80" placeholder="العنوان">
+                        <textarea id="nb-note-body" maxlength="8000" rows="4" placeholder="اكتب ملاحظتك هنا..."></textarea>
+                        <button type="button" class="dc-act dc-tap" id="nb-note-save">حفظ الملاحظة</button>
+                    </details>
+                    <input id="nb-search" type="search" placeholder="🔍 ابحث في دفتري...">
+                    <div class="nb-filters" id="nb-filters">
+                        <button type="button" class="dc-tab-btn active" data-f="">الكل</button>
+                        <button type="button" class="dc-tab-btn" data-f="word">كلمات</button>
+                        <button type="button" class="dc-tab-btn" data-f="code">أكواد</button>
+                        <button type="button" class="dc-tab-btn" data-f="text">ملاحظات</button>
+                    </div>
+                    <div class="nb-list" id="nb-list"></div>
+                </div>
+                <div class="nb-review" id="nb-review" hidden>
+                    <div class="nb-rv-top">
+                        <span id="nb-rv-count"></span>
+                        <button type="button" class="dc-tab-btn" id="nb-rv-exit">إنهاء المراجعة</button>
+                    </div>
+                    <div class="nb-rv-card" id="nb-rv-card">
+                        <div class="nb-rv-word" id="nb-rv-word"></div>
+                        <div class="nb-rv-dia" id="nb-rv-dia"></div>
+                        <div class="nb-rv-meaning" id="nb-rv-meaning" hidden></div>
+                        <button type="button" class="dc-act dc-tap" id="nb-rv-show">أظهر المعنى</button>
+                        <div class="nb-rv-btns" id="nb-rv-btns" hidden>
+                            <button type="button" class="dc-act dc-tap" id="nb-rv-no">🔁 أعدها</button>
+                            <button type="button" class="dc-act dc-tap" id="nb-rv-yes">✅ عرفتها</button>
+                        </div>
+                    </div>
+                    <p class="nb-rv-done" id="nb-rv-done" hidden></p>
                 </div>
             </div>
         </div>
@@ -336,6 +378,7 @@
 <script src="ui.js"></script>
     <script src="settings.js?v=37"></script>
     <script src="dict-ui.js"></script>
+    <script src="notebook-ui.js"></script>
     <script src="kid-mode.js"></script>
     <script src="kid-fun.js"></script>
     <script src="kid-ui.js"></script>
