@@ -220,6 +220,52 @@
     refreshDue();
   }
 
+  /* تصدير واستيراد الدفتر بملف تختاره أنت: لا شيء يخرج من جهازك ولا يعود إليه إلا بملف تحدده.
+     الاستيراد يُفحص بالقائمة البيضاء نفسها (الحجم والبنية وكل سجل)، والمكرر يُتخطى. */
+  var IMPORT_MAX = 1000000;
+  function stamp() {
+    var d = new Date();
+    function p(n) { return (n < 10 ? "0" : "") + n; }
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+  }
+  function exportBook() {
+    try {
+      if (NB.counts().total === 0) { say("الدفتر فارغ: لا شيء للتصدير"); return; }
+      var blob = new Blob([NB.exportText()], { type: "application/json" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "bayda-notebook-" + stamp() + ".json";
+      a.rel = "noopener";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      say("📤 تم تجهيز ملف دفترك");
+      sound("ok");
+    } catch (err) {
+      say("❌ تعذّر التصدير");
+    }
+  }
+  function importBook(file) {
+    if (!file) return;
+    if (file.size > IMPORT_MAX) { say("❌ الملف كبير جداً"); return; }
+    if (!/\.json$/i.test(file.name || "")) { say("❌ اختر ملف دفتر بصيغة .json"); return; }
+    var rd = new FileReader();
+    rd.onerror = function () { say("❌ تعذّرت قراءة الملف"); };
+    rd.onload = function () {
+      var r = NB.importText(typeof rd.result === "string" ? rd.result : "");
+      if (!r.ok) { say("❌ " + r.error); sound("err"); return; }
+      var skipped = r.dropped + r.skipped;
+      var msg = "📥 أُضيف " + r.added + (skipped ? " (تُخطّي " + skipped + ")" : "");
+      say(r.persistent ? msg : "⚠️ " + msg + " — لن يُحفظ بعد إغلاق الصفحة");
+      sound("ok");
+      render();
+      refreshDue();
+    };
+    rd.readAsText(file);
+  }
+
   /* وضع الطفل: لا دفتر */
   function guardKid() {
     if (document.body.getAttribute("data-mode") === "kid" && state.tab === "book") showTab("dict");
@@ -235,6 +281,16 @@
   on("nb-rv-yes", "click", function () { rvAnswer(true); });
   on("nb-rv-no", "click", function () { rvAnswer(false); });
   on("nb-rv-exit", "click", exitReview);
+  on("nb-export", "click", exportBook);
+  on("nb-import", "click", function () { var f = $("nb-import-file"); if (f) f.click(); });
+  var impFile = $("nb-import-file");
+  if (impFile) {
+    impFile.addEventListener("change", function () {
+      var f = impFile.files && impFile.files[0];
+      importBook(f);
+      impFile.value = "";
+    });
+  }
   on("mode-select", "change", function () { setTimeout(guardKid, 60); });
   searchEl.addEventListener("input", function () { state.query = searchEl.value; render(); });
   var filters = $("nb-filters");

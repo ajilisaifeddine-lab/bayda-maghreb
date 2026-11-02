@@ -233,6 +233,11 @@
                 <div class="nb-main" id="nb-main">
                     <button type="button" class="btn-primary nb-start" id="nb-start" hidden>🧠 ابدأ مراجعة اليوم (<span id="nb-start-n">0</span>)</button>
                     <button type="button" class="dc-act dc-tap" id="nb-save-code">🔖 احفظ كود المحرر</button>
+                    <div class="nb-io">
+                        <button type="button" class="dc-act dc-tap" id="nb-export">📤 تصدير</button>
+                        <button type="button" class="dc-act dc-tap" id="nb-import">📥 استيراد</button>
+                        <input type="file" id="nb-import-file" accept="application/json,.json" hidden>
+                    </div>
                     <details class="nb-note-form" id="nb-note-form">
                         <summary>➕ ملاحظة جديدة</summary>
                         <input id="nb-note-title" type="text" maxlength="80" placeholder="العنوان">
