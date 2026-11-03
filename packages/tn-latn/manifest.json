@@ -3,12 +3,13 @@
   "name": "Tounsi Franco",
   "version": "1.0.0",
   "requiresConsent": true,
-  "description": "حزمة اللهجة التونسية - تتطلب موافقة المستخدم قبل التنزيل",
+  "description": "الدارجة التونسية باللاتيني - مستلهمة من روح مبادرة Ncodi لـ عزيز عماري",
   "detection": {
     "mode": "suggestion",
     "message": "الكشف التلقائي يقترح هذه الحزمة كخيار أول، لا يفرضها"
   },
   "code": "tn-latn",
   "script": "latin",
-  "reviewStatus": "pending"
+  "reviewStatus": "pending",
+  "tribute": "Dedicated to Aziz Amari (Ncodi pioneer)"
 }

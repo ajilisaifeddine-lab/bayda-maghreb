@@ -1,0 +1,20 @@
+{
+  "goul": "print",
+  "gol": "print",
+  "kteb": "print",
+  "ktab": "print",
+  "ekteb": "print",
+  "ila": "if",
+  "ida": "if",
+  "loukan": "if",
+  "wella": "else",
+  "wela": "else",
+  "bessah": "else",
+  "s7i7": "true",
+  "bseh": "true",
+  "sahih": "true",
+  "ghalet": "false",
+  "kdoub": "false",
+  "madam": "while",
+  "koulma": "while"
+}

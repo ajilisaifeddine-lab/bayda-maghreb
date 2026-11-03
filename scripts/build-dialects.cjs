@@ -14,12 +14,18 @@ const REQUIRED_CONCEPTS = ["print", "if", "true"];
 
 const SAMPLES = {
   "tn-latn": 'goul("Aslema")\nidha (s7i7) {\n    goul("Marhba bik")\n}',
+  "tn-arab": 'قول("عسلامة")\nإذا (صحيح) {\n    قول("مرحبا بيكم")\n}',
   "dz-latn": 'ktab("Salam")\nila (sah) {\n    ktab("Marhba")\n}',
   "ly-latn": 'kteb("Salam")\nkan (sahih) {\n    kteb("Marhba")\n}',
   "mr-latn": 'ktab("Salam")\nidha (haqq) {\n    ktab("Marhba")\n}',
   "kab-latn": 'aru("Azul")\nma (tidett) {\n    aru("Ansuf")\n}',
   "shi-latn": 'skr("Azul")\nma (tidtt) {\n    skr("Marhba")\n}',
   "kab-tifinagh": 'ⴽⵜⴰⴱ("ⴰⵣⵓⵍ")\nⵎⴰ (ⵀⴰⵇⵇ) {\n    ⴽⵜⴰⴱ("ⴰⵏⵙⵓⴼ")\n}',
+  "ma-latn": 'goul("Salam")\nila (s7i7) {\n    goul("Marhba")\n}',
+  "ma-arab": 'قول("سلام")\nإلى (بصح) {\n    قول("مرحبا بكم")\n}',
+  "dz-arab": 'كتب("سلام")\nايلا (صح) {\n    كتب("مرحبا")\n}',
+  "ly-arab": 'كتب("سلام")\nكان (صحيح) {\n    كتب("مرحبا")\n}',
+  "mr-arab": 'كتب("سلام")\nإذا (حق) {\n    كتب("مرحبا")\n}',
 };
 
 const HEADER = [

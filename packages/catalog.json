@@ -2,6 +2,23 @@
   "schema": 1,
   "release": "v2.1.2",
   "dialects": {
+    "dz-arab": {
+      "version": "1.0.0",
+      "files": {
+        "keywords.json": {
+          "sha256": "1e10282f945bbf0a2b3001ea4ad7b5df00ed1afcced67a5dd9e0a267e24cd323",
+          "bytes": 321
+        },
+        "manifest.json": {
+          "sha256": "77432b12437ae76c6de1ce1545373e59d30f347f76c8448231a358e5691eed67",
+          "bytes": 215
+        },
+        "vocabulary.json": {
+          "sha256": "c3de5734dff699954e2b295d57fb767ec271f26925721a3f4988e9fdd2d71ca6",
+          "bytes": 237
+        }
+      }
+    },
     "dz-latn": {
       "version": "1.0.0",
       "files": {
@@ -48,12 +65,29 @@
           "bytes": 281
         },
         "manifest.json": {
-          "sha256": "6233cf2adb85e1de536bda285bce8d4b2d3e3b443d992288982f4787de58e8cd",
-          "bytes": 170
+          "sha256": "fe5a3b944b366b915c418f802b67652507879f9d2180c6791f6ab0ff72ba5adf",
+          "bytes": 236
         },
         "vocabulary.json": {
           "sha256": "16a763bf90d9aea0559b821b0c2653bcff5032e8ba214f6be57ed79ea5912632",
           "bytes": 175
+        }
+      }
+    },
+    "ly-arab": {
+      "version": "1.0.0",
+      "files": {
+        "keywords.json": {
+          "sha256": "3b18cbb591b424ceb9539cefdefc586c2dc258a078b84cdd6d1283b8b3065823",
+          "bytes": 301
+        },
+        "manifest.json": {
+          "sha256": "c371be3660ae33310833c6a2a059b2d9b77331e73ea704f0197abd26a431d61e",
+          "bytes": 207
+        },
+        "vocabulary.json": {
+          "sha256": "d5ca087869f23ad0fe758bc62419e3c72c23b0de28178d805663bb71cba485f5",
+          "bytes": 253
         }
       }
     },
@@ -75,6 +109,57 @@
         "vocabulary.json": {
           "sha256": "76b71ffca0c3e0d8b14185d2221d145c2888314c0f4cdbf80167ce1177ffdf27",
           "bytes": 8311
+        }
+      }
+    },
+    "ma-arab": {
+      "version": "1.0.0",
+      "files": {
+        "keywords.json": {
+          "sha256": "c8cd68d920f78b7181e1bd28e5ad294f4ed6b1018872c299af38624acf3045c7",
+          "bytes": 322
+        },
+        "manifest.json": {
+          "sha256": "a9fe4cb0b0e426b8751cfe56758b61a1b26ea6f5ef6c218252727dd69bec1f78",
+          "bytes": 396
+        },
+        "vocabulary.json": {
+          "sha256": "5250b597eaf35d229adf7618e6dde4ee81efa092f33156ddc590121ff4aeba38",
+          "bytes": 377
+        }
+      }
+    },
+    "ma-latn": {
+      "version": "1.0.0",
+      "files": {
+        "keywords.json": {
+          "sha256": "97a8f0965a3ddfd130aef4938068c5a66a0846f6431d6e76795f2b496879957c",
+          "bytes": 340
+        },
+        "manifest.json": {
+          "sha256": "47bc2115067364163c07c0b7ca8bb9f3e8a4e0171a859a1d6579f9abe1b75584",
+          "bytes": 210
+        },
+        "vocabulary.json": {
+          "sha256": "7232fbfd55921a4d6e38832fdb9599fb4538e37c797861e89842995ffb8f328d",
+          "bytes": 327
+        }
+      }
+    },
+    "mr-arab": {
+      "version": "1.0.0",
+      "files": {
+        "keywords.json": {
+          "sha256": "b6158362ae323ebd9989fb9aa1898c99ffb67da85b3f5ee3f821a22285b33841",
+          "bytes": 300
+        },
+        "manifest.json": {
+          "sha256": "310e8bbd28dcd738c202eed46f5d571b943998b00e2ac2a43fe37563e0cb2144",
+          "bytes": 217
+        },
+        "vocabulary.json": {
+          "sha256": "b07587517f3f70c4410bf6693f53720422fe1ca7fb9b38bfac5ea678dac4efc8",
+          "bytes": 259
         }
       }
     },
@@ -103,12 +188,29 @@
           "bytes": 236
         },
         "manifest.json": {
-          "sha256": "cb9b982c454aa62fafdb570c94c1cbc46d2f231bb01244ef12404975dd333a20",
-          "bytes": 225
+          "sha256": "a7fe83fa7e75b7ffddae80dd8a87d2e686db923296401e6debfcfc864298704e",
+          "bytes": 274
         },
         "vocabulary.json": {
           "sha256": "f6e3dee6d7c4f778623c8017f535b42b0176b3fb6abc5d284862cb9edbf2b488",
           "bytes": 172
+        }
+      }
+    },
+    "tn-arab": {
+      "version": "1.0.0",
+      "files": {
+        "keywords.json": {
+          "sha256": "29a5f5e938f57ae311ac244f76656d64e9f98b495abec1a5f1d542ecb8c9b609",
+          "bytes": 286
+        },
+        "manifest.json": {
+          "sha256": "594b25eb8bb7e50c2a91555e74da102c0dee2327e34aa4f586d19f839a43b95d",
+          "bytes": 415
+        },
+        "vocabulary.json": {
+          "sha256": "fdcd35ef42ea42f43c96c28b75d350d27067e454c491fcd2dbbc00426dff0c0a",
+          "bytes": 265
         }
       }
     },
@@ -120,8 +222,8 @@
           "bytes": 433
         },
         "manifest.json": {
-          "sha256": "138a3a7da7c92981c5b2ccbd19a871b36954dceed6711fe0ae18e4462333d316",
-          "bytes": 455
+          "sha256": "ca54dc236cf6785f9948b557d4143d9f0aca2700844db56b74544418225c9ff9",
+          "bytes": 530
         },
         "vocabulary.json": {
           "sha256": "ed010075f9d4a5795bd3a57a09dabf3eb5f1cf01eeae6f1bb2872d2a77363e05",

@@ -9,6 +9,24 @@ export interface DialectExample {
 }
 
 export const examples: Record<string, DialectExample> = {
+  "dz-arab": {
+    "sample": "كتب(\"سلام\")\nايلا (صح) {\n    كتب(\"مرحبا\")\n}",
+    "keywords": {
+      "كتب": "print",
+      "ايلا": "if",
+      "صح": "true"
+    },
+    "vocabulary": {
+      "واش": "ماذا",
+      "علاش": "لماذا",
+      "بزاف": "كثير",
+      "شوية": "قليل",
+      "مليح": "جيد",
+      "دروك": "الآن",
+      "وين": "أين",
+      "كاين": "موجود"
+    }
+  },
   "dz-latn": {
     "sample": "ktab(\"Salam\")\nila (sah) {\n    ktab(\"Marhba\")\n}",
     "keywords": {
@@ -60,6 +78,24 @@ export const examples: Record<string, DialectExample> = {
       "ⵜⴰⴼⴰⵜ": "ضوء"
     }
   },
+  "ly-arab": {
+    "sample": "كتب(\"سلام\")\nكان (صحيح) {\n    كتب(\"مرحبا\")\n}",
+    "keywords": {
+      "كتب": "print",
+      "كان": "if",
+      "صحيح": "true"
+    },
+    "vocabulary": {
+      "شنو": "ماذا",
+      "علاش": "لماذا",
+      "هلبا": "كثير",
+      "شوية": "قليل",
+      "باهي": "جيد",
+      "توا": "الآن",
+      "وين": "أين",
+      "كيف": "كيف"
+    }
+  },
   "ly-latn": {
     "sample": "kteb(\"Salam\")\nkan (sahih) {\n    kteb(\"Marhba\")\n}",
     "keywords": {
@@ -76,6 +112,60 @@ export const examples: Record<string, DialectExample> = {
       "لكل": "foreach",
       "لكل واحد": "foreach",
       "حاجة وتخلاص": "variable"
+    }
+  },
+  "ma-arab": {
+    "sample": "قول(\"سلام\")\nإلى (بصح) {\n    قول(\"مرحبا بكم\")\n}",
+    "keywords": {
+      "قول": "print",
+      "إلى": "if",
+      "بصح": "true"
+    },
+    "vocabulary": {
+      "دابا": "الآن",
+      "بزاف": "كثير",
+      "شوية": "قليل",
+      "مزيان": "جيد",
+      "واخا": "موافق",
+      "فين": "أين",
+      "شنو": "ماذا",
+      "علاش": "لماذا"
+    }
+  },
+  "ma-latn": {
+    "sample": "goul(\"Salam\")\nila (s7i7) {\n    goul(\"Marhba\")\n}",
+    "keywords": {
+      "goul": "print",
+      "ila": "if",
+      "s7i7": "true"
+    },
+    "vocabulary": {
+      "daba": "الآن",
+      "bzaf": "كثير",
+      "chwiya": "قليل",
+      "mezyan": "جيد",
+      "wakha": "موافق",
+      "fin": "أين",
+      "chno": "ماذا",
+      "3lach": "لماذا"
+    }
+  },
+  "mr-arab": {
+    "sample": "كتب(\"سلام\")\nإذا (حق) {\n    كتب(\"مرحبا\")\n}",
+    "keywords": {
+      "كتب": "print",
+      "إذا": "if",
+      "حق": "true"
+    },
+    "vocabulary": {
+      "اشحال": "كم",
+      "ياسر": "كثير",
+      "شوي": "قليل",
+      "زين": "جميل",
+      "ذرك": "الآن",
+      "وين": "أين",
+      "كيفاش": "كيف",
+      "لاه": "لماذا"
     }
   },
   "mr-latn": {
@@ -111,6 +201,24 @@ export const examples: Record<string, DialectExample> = {
       "tifawin": "ضوء",
       "aman": "ماء",
       "aghbalu": "خبز"
+    }
+  },
+  "tn-arab": {
+    "sample": "قول(\"عسلامة\")\nإذا (صحيح) {\n    قول(\"مرحبا بيكم\")\n}",
+    "keywords": {
+      "قول": "print",
+      "إذا": "if",
+      "صحيح": "true"
+    },
+    "vocabulary": {
+      "سلام": "سلام",
+      "أهلا": "أهلا",
+      "برشا": "كثير",
+      "شوية": "قليل",
+      "باهي": "جيد",
+      "خايب": "سيء",
+      "لاباس": "بخير",
+      "يعطيك": "يعطيك"
     }
   },
   "tn-latn": {

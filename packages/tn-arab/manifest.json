@@ -1,0 +1,12 @@
+{
+  "id": "tn-arab",
+  "code": "tn-arab",
+  "name": "تونسية (حرف عربي)",
+  "version": "1.0.0",
+  "script": "Arabic",
+  "country": "تونس",
+  "iso639_3": "aeb",
+  "tribute": "Dedicated to Chakib Daii (Naftah pioneer)",
+  "description": "الدارجة التونسية بالحرف العربي - مستلهمة من روح مبادرة Naftah لـ شكيب دعاي",
+  "reviewStatus": "verified"
+}

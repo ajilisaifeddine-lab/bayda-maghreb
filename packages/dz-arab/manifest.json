@@ -1,0 +1,10 @@
+{
+  "id": "dz-arab",
+  "code": "dz-arab",
+  "name": "جزائرية (حرف عربي)",
+  "version": "1.0.0",
+  "script": "Arabic",
+  "country": "الجزائر",
+  "iso639_3": "arq",
+  "reviewStatus": "verified"
+}
