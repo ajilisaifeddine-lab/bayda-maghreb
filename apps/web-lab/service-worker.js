@@ -9,7 +9,6 @@ const ASSETS = [
   "./style.css",
   "./polish.css",
   "./kid-ui.css",
-  "./main.js",
   "./dict-ui.js",
   "./lang-picker.js",
   "./settings.js",
