@@ -57,7 +57,7 @@ describe("translate — تحصين المدخلات", () => {
   it("يرفض هدفاً غير مدعوم", () => {
     expect(() =>
       // @ts-expect-error هدف خاطئ
-      translate("goul(1)", { keywords: { goul: "print" }, target: "java" })
+      translate("goul(1)", { keywords: { goul: "print" }, target: "ruby" })
     ).toThrow(/INVALID_TARGET/);
   });
 

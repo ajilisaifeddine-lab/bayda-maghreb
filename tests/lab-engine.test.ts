@@ -20,7 +20,7 @@ describe("محرك المختبر", () => {
       const s = E.setDialect(id);
       expect(s.source, id).toBe("example");
       expect(Object.getPrototypeOf(s.keywords)).toBeNull();
-      for (const target of ["js", "py"]) {
+      for (const target of ["js", "py", "c", "cpp", "java", "php", "algo"]) {
         const r = E.runCode(examples[id].sample, target);
         expect(r.ok, id + ":" + target + " " + (r.error || "")).toBe(true);
         expect((r.code || "").length).toBeGreaterThan(0);

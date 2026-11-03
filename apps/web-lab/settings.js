@@ -182,7 +182,8 @@ function stSetLang(v) {
   var tl = document.getElementById("target-lang");
   if (tl) tl.value = v;
   beep("tap");
-  toast("لغة البرنامج: " + (v === "py" ? "Python" : "JavaScript"));
+  var names = { js: "JavaScript", py: "Python", algo: "خوارزميات (Algo)", c: "C", cpp: "C++", java: "Java", php: "PHP" };
+  toast("لغة البرنامج: " + (names[v] || v));
 }
 
 function stSetFont(v) {
@@ -652,7 +653,7 @@ ST_EXTRA.push("smartbar", "suggest");
   var cur = null, symSig = "", raf = 0, holdT = null, holdI = null;
 
   function mode() { return document.body.getAttribute("data-mode") || "beginner"; }
-  function lang() { var t = document.getElementById("target-lang"); return t && t.value === "py" ? "py" : "js"; }
+  function lang() { var t = document.getElementById("target-lang"); return t ? t.value : "js"; }
   function isEd(e) { return !!e && (e.id === "editor" || e.id === "lesson-editor"); }
 
   var bar = document.createElement("div");

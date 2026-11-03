@@ -97,7 +97,8 @@ export function runCode(source: string, target: string = "js"): RunResult {
     if (!code) return { ok: false, error: "الرجاء كتابة كود أولاً." };
     if (code.length > MAX_SOURCE_CHARS) return { ok: false, error: "الكود أطول من الحد المسموح." };
     if (!ready()) return { ok: false, error: "اختر لهجة أولاً." };
-    const t: Target = target === "py" ? "py" : "js";
+    const valid: readonly Target[] = ["js", "py", "c", "cpp", "java", "php", "algo"];
+    const t: Target = valid.includes(target as Target) ? (target as Target) : "js";
     const r = translate(code, { keywords: current.keywords, id: current.id, target: t });
     return { ok: true, code: r.code };
   } catch (e) {

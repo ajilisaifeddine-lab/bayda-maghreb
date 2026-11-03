@@ -32,7 +32,14 @@
             <div class="st-section">المحرر</div>
             <div class="st-row"><span class="st-label">لغة البرنامج</span>
                 <select id="st-lang" class="st-select" onchange="stSetLang(this.value)">
-                    <option value="js">JavaScript</option><option value="py">Python</option></select></div>
+                    <option value="js">JavaScript</option>
+                    <option value="py">Python</option>
+                    <option value="algo">خوارزميات (Algo)</option>
+                    <option value="c">C</option>
+                    <option value="cpp">C++</option>
+                    <option value="java">Java</option>
+                    <option value="php">PHP</option>
+                </select></div>
             <div class="st-row"><span class="st-label">حجم الخط</span>
                 <select id="st-font" class="st-select" onchange="stSetFont(this.value)">
                     <option value="14">صغير</option><option value="16">متوسط</option><option value="18">كبير</option><option value="20">كبير جدًا</option><option value="22">ضخم</option></select></div>
@@ -147,9 +154,14 @@
             <button class="icon-btn" id="side-toggle-btn" onclick="toggleDictionary()" title="إخفاء/إظهار">📖</button>
             <button class="icon-btn" onclick="toggleLayout()" title="تغيير التخطيط">🖥️</button>
             <div class="divider"></div>
-            <select id="target-lang" class="custom-select">
+            <select id="target-lang" class="custom-select" title="لغة الهدف">
                 <option value="js">JS</option>
                 <option value="py">PY</option>
+                <option value="algo">خوارزميات</option>
+                <option value="c">C</option>
+                <option value="cpp">C++</option>
+                <option value="java">Java</option>
+                <option value="php">PHP</option>
             </select>
             <select id="mode-select" class="custom-select">
                 <option value="kid">🐻 طـفـل</option>
