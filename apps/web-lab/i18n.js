@@ -766,6 +766,41 @@
     obs.observe(dcCard, { childList: true, subtree: true, attributes: false });
   }
 
+  
+  function saveLanguagePref(lang) {
+    try {
+      if (lang && DICT[lang]) localStorage.setItem("bayda_ui_lang", lang);
+    } catch (e) {}
+  }
+
+  function updateDomTranslations(root) {
+    var lang = document.documentElement.lang || "ar";
+    var t = DICT[lang] || DICT.ar;
+    var base = root || document;
+
+    base.querySelectorAll("[data-i18n], [data-i18n-key]").forEach(function(el) {
+      var key = el.getAttribute("data-i18n-key") || el.getAttribute("data-i18n");
+      var text = t[key] || (DICT.ar ? DICT.ar[key] : null);
+      if (text) el.textContent = text;
+    });
+
+    base.querySelectorAll("[data-i18n-placeholder]").forEach(function(el) {
+      var key = el.getAttribute("data-i18n-placeholder");
+      var text = t[key] || (DICT.ar ? DICT.ar[key] : null);
+      if (text) el.placeholder = text;
+    });
+
+    base.querySelectorAll("[data-tooltip-key]").forEach(function(el) {
+      var key = el.getAttribute("data-tooltip-key");
+      var text = t[key] || (DICT.ar ? DICT.ar[key] : null);
+      if (text) el.setAttribute("data-tooltip", text);
+    });
+
+    if (window.BaydaTooltip && typeof window.BaydaTooltip.refresh === "function") {
+      window.BaydaTooltip.refresh();
+    }
+  }
+
   window.BaydaI18n = {
     dict: DICT,
     apply: apply,
