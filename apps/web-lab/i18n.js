@@ -7,6 +7,37 @@
 
   var DICT = {
     ar: {
+      dlRetry: "تعذّر التنزيل، انقر للمحاولة مجدداً",
+      dlComplete: "اكتمل التنزيل بنجاح",
+      dlDownloading: "جارٍ التنزيل والتثبيت...",
+      outputPlaceholder: "// النتيجة هنا...", notesPlaceholder: "اكتب ملاحظاتك هنا...",
+      dictSearch: "🔍 ابحث في المعجم...",
+      filterBeginner: "مبتدئ",
+      filterAll: "الكل",
+      cardMeaning: "المعنى",
+      cardRole: "الدور البرمجي",
+      cardExample: "مثال",
+      cardAnalogy: "تشبيه",
+      actSpeak: "🔊 نطق",
+      actTheme: "🎨 ثيم",
+      actNext: "← التالي",
+      actPin: "📌 احفظ",
+      nbTabDict: "📖 القاموس",
+      nbTabBook: "📒 دفتري",
+      nbSaveCode: "🔖 احفظ كود المحرر",
+      nbExport: "📤 تصدير",
+      nbImport: "📥 استيراد",
+      nbNewNote: "➕ ملاحظة جديدة",
+      nbNoteTitle: "العنوان",
+      nbNoteBody: "اكتب ملاحظتك هنا...",
+      nbNoteSave: "حفظ الملاحظة",
+      nbSearch: "🔍 ابحث في دفتري...",
+      filterWords: "كلمات",
+      filterCodes: "أكواد",
+      filterNotes: "ملاحظات",
+      toastNotConnected: "التنزيل غير متصل بالنواة بعد",
+      toastDlSuccess: "تم التنزيل والحفظ بنجاح! 🎉",
+      toastDlFailed: "تعذّر التنزيل، حاول مجدداً",
       dir: 'rtl',
       tabLab: '🧪 المختبر',
       tabLearn: '📚 التعلم',
@@ -49,6 +80,33 @@
       close: 'إغلاق'
     },
     fr: {
+      dictSearch: "🔍 Rechercher dans le lexique...",
+      filterBeginner: "Débutant",
+      filterAll: "Tous",
+      cardMeaning: "Signification",
+      cardRole: "Rôle de programmation",
+      cardExample: "Exemple",
+      cardAnalogy: "Analogie",
+      actSpeak: "🔊 Prononcer",
+      actTheme: "🎨 Thème",
+      actNext: "← Suivant",
+      actPin: "📌 Épingler",
+      nbTabDict: "📖 Dictionnaire",
+      nbTabBook: "📒 Mon cahier",
+      nbSaveCode: "🔖 Enregistrer le code",
+      nbExport: "📤 Exporter",
+      nbImport: "📥 Importer",
+      nbNewNote: "➕ Nouvelle note",
+      nbNoteTitle: "Titre",
+      nbNoteBody: "Écrivez votre note ici...",
+      nbNoteSave: "Enregistrer la note",
+      nbSearch: "🔍 Rechercher dans le cahier...",
+      filterWords: "Mots",
+      filterCodes: "Codes",
+      filterNotes: "Notes",
+      toastNotConnected: "Téléchargement non connecté au noyau",
+      toastDlSuccess: "Téléchargé et enregistré avec succès ! 🎉",
+      toastDlFailed: "Échec du téléchargement, réessayez",
       dir: 'ltr',
       tabLab: '🧪 Labo',
       tabLearn: '📚 Apprendre',
@@ -91,6 +149,33 @@
       close: 'Fermer'
     },
     en: {
+      dictSearch: "🔍 Search lexicon...",
+      filterBeginner: "Beginner",
+      filterAll: "All",
+      cardMeaning: "Meaning",
+      cardRole: "Programming Role",
+      cardExample: "Example",
+      cardAnalogy: "Analogy",
+      actSpeak: "🔊 Speak",
+      actTheme: "🎨 Theme",
+      actNext: "← Next",
+      actPin: "📌 Pin",
+      nbTabDict: "📖 Dictionary",
+      nbTabBook: "📒 Notebook",
+      nbSaveCode: "🔖 Save Editor Code",
+      nbExport: "📤 Export",
+      nbImport: "📥 Import",
+      nbNewNote: "➕ New Note",
+      nbNoteTitle: "Title",
+      nbNoteBody: "Write your note here...",
+      nbNoteSave: "Save Note",
+      nbSearch: "🔍 Search notebook...",
+      filterWords: "Words",
+      filterCodes: "Codes",
+      filterNotes: "Notes",
+      toastNotConnected: "Downloader not connected to engine yet",
+      toastDlSuccess: "Downloaded and saved successfully! 🎉",
+      toastDlFailed: "Download failed, please retry",
       dir: 'ltr',
       tabLab: '🧪 Lab',
       tabLearn: '📚 Learn',
@@ -133,6 +218,33 @@
       close: 'Close'
     },
     es: {
+      dictSearch: "🔍 Buscar en el léxico...",
+      filterBeginner: "Principiante",
+      filterAll: "Todos",
+      cardMeaning: "Significado",
+      cardRole: "Rol en programación",
+      cardExample: "Ejemplo",
+      cardAnalogy: "Analogía",
+      actSpeak: "🔊 Pronunciar",
+      actTheme: "🎨 Tema",
+      actNext: "← Siguiente",
+      actPin: "📌 Guardar",
+      nbTabDict: "📖 Diccionario",
+      nbTabBook: "📒 Mi cuaderno",
+      nbSaveCode: "🔖 Guardar código",
+      nbExport: "📤 Exportar",
+      nbImport: "📥 Importar",
+      nbNewNote: "➕ Nueva nota",
+      nbNoteTitle: "Título",
+      nbNoteBody: "Escribe tu nota aquí...",
+      nbNoteSave: "Guardar nota",
+      nbSearch: "🔍 Buscar en mi cuaderno...",
+      filterWords: "Palabras",
+      filterCodes: "Códigos",
+      filterNotes: "Notas",
+      toastNotConnected: "Descarga no conectada al núcleo aún",
+      toastDlSuccess: "¡Descargado y guardado con éxito! 🎉",
+      toastDlFailed: "Error de descarga, inténtalo de nuevo",
       dir: 'ltr',
       tabLab: '🧪 Laboratorio',
       tabLearn: '📚 Aprender',
@@ -175,6 +287,33 @@
       close: 'Cerrar'
     },
     it: {
+      dictSearch: "🔍 Cerca nel lessico...",
+      filterBeginner: "Principiante",
+      filterAll: "Tutti",
+      cardMeaning: "Significato",
+      cardRole: "Ruolo di programmazione",
+      cardExample: "Esempio",
+      cardAnalogy: "Analogia",
+      actSpeak: "🔊 Pronuncia",
+      actTheme: "🎨 Tema",
+      actNext: "← Avanti",
+      actPin: "📌 Salva",
+      nbTabDict: "📖 Dizionario",
+      nbTabBook: "📒 Il mio quaderno",
+      nbSaveCode: "🔖 Salva codice",
+      nbExport: "📤 Esporta",
+      nbImport: "📥 Importa",
+      nbNewNote: "➕ Nuova nota",
+      nbNoteTitle: "Titolo",
+      nbNoteBody: "Scrivi la tua nota qui...",
+      nbNoteSave: "Salva nota",
+      nbSearch: "🔍 Cerca nel quaderno...",
+      filterWords: "Parole",
+      filterCodes: "Codici",
+      filterNotes: "Note",
+      toastNotConnected: "Download non ancora connesso al motore",
+      toastDlSuccess: "Scaricato e salvato con successo! 🎉",
+      toastDlFailed: "Download fallito, riprova",
       dir: 'ltr',
       tabLab: '🧪 Laboratorio',
       tabLearn: '📚 Imparare',
@@ -217,6 +356,33 @@
       close: 'Chiudi'
     },
     de: {
+      dictSearch: "🔍 Im Lexikon suchen...",
+      filterBeginner: "Anfänger",
+      filterAll: "Alle",
+      cardMeaning: "Bedeutung",
+      cardRole: "Programmierrolle",
+      cardExample: "Beispiel",
+      cardAnalogy: "Analogie",
+      actSpeak: "🔊 Aussprechen",
+      actTheme: "🎨 Design",
+      actNext: "← Weiter",
+      actPin: "📌 Merken",
+      nbTabDict: "📖 Wörterbuch",
+      nbTabBook: "📒 Mein Notizbuch",
+      nbSaveCode: "🔖 Editor-Code speichern",
+      nbExport: "📤 Exportieren",
+      nbImport: "📥 Importieren",
+      nbNewNote: "➕ Neue Notiz",
+      nbNoteTitle: "Titel",
+      nbNoteBody: "Schreibe deine Notiz hier...",
+      nbNoteSave: "Notiz speichern",
+      nbSearch: "🔍 In Notizen suchen...",
+      filterWords: "Wörter",
+      filterCodes: "Codes",
+      filterNotes: "Notizen",
+      toastNotConnected: "Downloader noch nicht mit der Engine verbunden",
+      toastDlSuccess: "Erfolgreich heruntergeladen und gespeichert! 🎉",
+      toastDlFailed: "Download fehlgeschlagen, bitte erneut versuchen",
       dir: 'ltr',
       tabLab: '🧪 Labor',
       tabLearn: '📚 Lernen',
@@ -259,6 +425,33 @@
       close: 'Schließen'
     },
     nl: {
+      dictSearch: "🔍 Zoeken in lexicon...",
+      filterBeginner: "Beginner",
+      filterAll: "Alles",
+      cardMeaning: "Betekenis",
+      cardRole: "Programmeertaak",
+      cardExample: "Voorbeeld",
+      cardAnalogy: "Analogie",
+      actSpeak: "🔊 Uitspreken",
+      actTheme: "🎨 Thema",
+      actNext: "← Volgende",
+      actPin: "📌 Pinnen",
+      nbTabDict: "📖 Woordenboek",
+      nbTabBook: "📒 Mijn notitieboek",
+      nbSaveCode: "🔖 Editorcode opslaan",
+      nbExport: "📤 Exporteren",
+      nbImport: "📥 Importeren",
+      nbNewNote: "➕ Nieuwe notitie",
+      nbNoteTitle: "Titel",
+      nbNoteBody: "Schrijf hier je notitie...",
+      nbNoteSave: "Notitie opslaan",
+      nbSearch: "🔍 Zoeken in notitieboek...",
+      filterWords: "Woorden",
+      filterCodes: "Codes",
+      filterNotes: "Notities",
+      toastNotConnected: "Downloader nog niet verbonden met engine",
+      toastDlSuccess: "Succesvol gedownload en opgeslagen! 🎉",
+      toastDlFailed: "Download mislukt, probeer het opnieuw",
       dir: 'ltr',
       tabLab: '🧪 Lab',
       tabLearn: '📚 Leren',
@@ -301,6 +494,14 @@
       close: 'Sluiten'
     }
   };
+
+  
+  function t(key, fallback) {
+    var lang = document.documentElement.lang || "ar";
+    if (DICT[lang] && DICT[lang][key]) return DICT[lang][key];
+    if (DICT.ar && DICT.ar[key]) return DICT.ar[key];
+    return fallback || key;
+  }
 
   function apply(id) {
     var lang = DICT[id] ? id : 'ar';
@@ -390,11 +591,91 @@
       if (clearBtn) clearBtn.textContent = t.clearAllData;
     }
 
+    
+    // القاموس التفاعلي
+    var dcSearch = document.getElementById("dc-search");
+    if (dcSearch) dcSearch.placeholder = t.dictSearch;
+    var dcFiltBeg = document.getElementById("dc-filter-beginner");
+    if (dcFiltBeg) dcFiltBeg.textContent = t.filterBeginner;
+    var dcFiltAll = document.getElementById("dc-filter-all");
+    if (dcFiltAll) dcFiltAll.textContent = t.filterAll;
+
+    // حقول بطاقة المعجم
+    var dcFields = document.querySelectorAll("#dc-card .dc-field .dc-k");
+    if (dcFields[0]) dcFields[0].textContent = t.cardMeaning;
+    if (dcFields[1]) dcFields[1].textContent = t.cardRole;
+    if (dcFields[2]) dcFields[2].textContent = t.cardExample;
+    if (dcFields[3]) dcFields[3].textContent = t.cardAnalogy;
+
+    // أزرار إجراءات المعجم
+    var dcActs = document.querySelectorAll("#dc-card .dc-actions button");
+    if (dcActs[0]) dcActs[0].textContent = t.actSpeak;
+    if (dcActs[1]) dcActs[1].textContent = t.actTheme;
+    if (dcActs[2]) dcActs[2].textContent = t.actNext;
+    var nbPin = document.getElementById("nb-pin");
+    if (nbPin) nbPin.textContent = t.actPin;
+
+    // دفتر المتعلم
+    var nbTabDict = document.getElementById("nb-tab-dict");
+    if (nbTabDict) nbTabDict.textContent = t.nbTabDict;
+    var nbTabBook = document.getElementById("nb-tab-book");
+    if (nbTabBook) {
+      var badge = nbTabBook.querySelector(".nb-badge");
+      nbTabBook.textContent = t.nbTabBook + " ";
+      if (badge) nbTabBook.appendChild(badge);
+    }
+    var nbSaveCode = document.getElementById("nb-save-code");
+    if (nbSaveCode) nbSaveCode.textContent = t.nbSaveCode;
+    var nbExport = document.getElementById("nb-export");
+    if (nbExport) nbExport.textContent = t.nbExport;
+    var nbImport = document.getElementById("nb-import");
+    if (nbImport) nbImport.textContent = t.nbImport;
+
+    var nbFormSum = document.querySelector("#nb-note-form summary");
+    if (nbFormSum) nbFormSum.textContent = t.nbNewNote;
+    var nbNoteTitle = document.getElementById("nb-note-title");
+    if (nbNoteTitle) nbNoteTitle.placeholder = t.nbNoteTitle;
+    var nbNoteBody = document.getElementById("nb-note-body");
+    if (nbNoteBody) nbNoteBody.placeholder = t.nbNoteBody;
+    var nbNoteSave = document.getElementById("nb-note-save");
+    if (nbNoteSave) nbNoteSave.textContent = t.nbNoteSave;
+
+    var nbSearch = document.getElementById("nb-search");
+    if (nbSearch) nbSearch.placeholder = t.nbSearch;
+
+    var nbFiltWords = document.querySelector('#nb-filters button[data-f="word"]');
+    if (nbFiltWords) nbFiltWords.textContent = t.filterWords;
+    var nbFiltCodes = document.querySelector('#nb-filters button[data-f="code"]');
+    if (nbFiltCodes) nbFiltCodes.textContent = t.filterCodes;
+    var nbFiltNotes = document.querySelector('#nb-filters button[data-f="text"]');
+    if (nbFiltNotes) nbFiltNotes.textContent = t.filterNotes;
+
     try {
       localStorage.setItem('bayda_ui_lang', lang);
     } catch (e) {}
 
-    document.dispatchEvent(new CustomEvent('bayda:uilang_changed', { detail: { lang: lang } }));
+    
+    // تحديث العناصر الحاملة لخاصية data-i18n
+    document.querySelectorAll("[data-i18n]").forEach(function(el) {
+      var key = el.getAttribute("data-i18n");
+      if (t[key]) el.textContent = t[key];
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(function(el) {
+      var key = el.getAttribute("data-i18n-placeholder");
+      if (t[key]) el.placeholder = t[key];
+    });
+
+    // لوحة الإخراج والملاحظات
+    var outEl = document.getElementById("output");
+    if (outEl && (!outEl.textContent || outEl.textContent.trim().startsWith("//"))) {
+      outEl.textContent = t.outputPlaceholder || "// النتيجة هنا...";
+    }
+    var noteEd = document.getElementById("notes-editor");
+    if (noteEd) {
+      noteEd.setAttribute("placeholder", t.notesPlaceholder || "اكتب ملاحظاتك هنا...");
+    }
+
+    document.dispatchEvent(new CustomEvent('bayda:uilang_changed', { detail: { lang: lang, dir: t.dir, dict: t } }));
   }
 
   
@@ -429,9 +710,27 @@
     apply(saved);
   }
 
+  
+  // تحديث فوري لبطاقة المعجم عند فتح أي كلمة
+  var dcCard = document.getElementById("dc-card");
+  if (dcCard && !window._dcI18nObserved) {
+    window._dcI18nObserved = true;
+    var obs = new MutationObserver(function() {
+      var lang = document.documentElement.lang || "ar";
+      var curT = DICT[lang] || DICT.ar;
+      var fields = dcCard.querySelectorAll(".dc-field .dc-k");
+      if (fields[0]) fields[0].textContent = curT.cardMeaning;
+      if (fields[1]) fields[1].textContent = curT.cardRole;
+      if (fields[2]) fields[2].textContent = curT.cardExample;
+      if (fields[3]) fields[3].textContent = curT.cardAnalogy;
+    });
+    obs.observe(dcCard, { childList: true, subtree: true, attributes: false });
+  }
+
   window.BaydaI18n = {
     dict: DICT,
     apply: apply,
+    t: t,
     loadAndApply: loadAndApply,
     init: init
   };

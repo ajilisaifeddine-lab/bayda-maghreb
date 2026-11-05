@@ -540,7 +540,7 @@ function askDlConfirm(id) {
 
       btn.addEventListener("click", async function () {
         if (typeof window.baydaDownloadDialect !== "function") {
-          toast("التنزيل غير متصل بالنواة بعد");
+          toast(window.BaydaI18n ? window.BaydaI18n.t("toastNotConnected") : "التنزيل غير متصل بالنواة بعد");
           close();
           return;
         }
@@ -551,10 +551,17 @@ function askDlConfirm(id) {
         btn.style.setProperty("cursor", "wait");
         btn.style.setProperty("background", "rgba(15, 76, 117, 0.95)");
 
+        var t = function(k, d) { return window.BaydaI18n ? window.BaydaI18n.t(k) : d; };
+
+        btn.textContent = "";
+        btn.disabled = true;
+        btn.style.setProperty("cursor", "wait");
+        btn.style.setProperty("background", "rgba(15, 76, 117, 0.95)");
+
         var spin = document.createElement("span");
         spin.className = "dl-spin";
         var spinText = document.createElement("span");
-        spinText.textContent = "جارٍ التنزيل والتثبيت...";
+        spinText.textContent = t("dlDownloading", "جارٍ التنزيل والتثبيت...");
         btn.appendChild(spin);
         btn.appendChild(spinText);
 
@@ -569,7 +576,6 @@ function askDlConfirm(id) {
         try {
           await window.baydaDownloadDialect(v.id);
 
-          // 2. حركة النجاح (Success Animation)
           btn.textContent = "";
           btn.className = "dl-variant-btn dl-success-anim";
           btn.style.setProperty("background", "#059669");
@@ -582,19 +588,35 @@ function askDlConfirm(id) {
           chk.style.setProperty("margin-inline-end", "8px");
 
           var msg = document.createElement("span");
-          msg.textContent = "تم التنزيل والحفظ بنجاح! 🎉";
+          msg.textContent = t("toastDlSuccess", "تم التنزيل والحفظ بنجاح! 🎉");
 
           btn.appendChild(chk);
           btn.appendChild(msg);
 
-          title.textContent = "✅ اكتمل التنزيل بنجاح";
+          title.textContent = "✅ " + t("dlComplete", "اكتمل التنزيل بنجاح");
           if (typeof beep === "function") beep("success");
+
+          var prefix = v.id.split("-")[0];
+          var flagBtn = document.querySelector(".flag-btn[data-dialect^='" + prefix + "']");
+          if (flagBtn) {
+            flagBtn.classList.add("has-pack");
+            flagBtn.setAttribute("data-dialect", v.id);
+          }
 
           setTimeout(close, 1400);
         } catch (err) {
-          btn.textContent = "❌ تعذّر التنزيل، حاول مجدداً";
+          console.error("dl error:", err);
+          btn.disabled = false;
+          btn.style.setProperty("cursor", "pointer");
           btn.style.setProperty("background", "#dc2626");
-          setTimeout(close, 1800);
+          btn.style.setProperty("border-color", "#f87171");
+          btn.textContent = "🔄 " + t("dlRetry", "تعذّر التنزيل، انقر للمحاولة مجدداً");
+
+          list.querySelectorAll("button").forEach(function (b) {
+            b.style.removeProperty("opacity");
+            b.style.removeProperty("pointer-events");
+          });
+          no.style.removeProperty("display");
         }
       });
       list.appendChild(btn);
