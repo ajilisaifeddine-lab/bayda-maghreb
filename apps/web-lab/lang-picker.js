@@ -28,11 +28,12 @@
   ];
   const WORLD = [
     { id: 'ar', n: 'العربية', s: 'Arabic', c: 'ع', w: {} },
-    { id: 'en', n: 'English', s: 'الإنجليزية', c: 'EN', w: LW('en', 'Hello', 'en-US') },
     { id: 'fr', n: 'Français', s: 'الفرنسية', c: 'FR', w: LW('fr', 'Salut', 'fr-FR') },
+    { id: 'en', n: 'English', s: 'الإنجليزية', c: 'EN', w: LW('en', 'Hello', 'en-US') },
     { id: 'es', n: 'Español', s: 'الإسبانية', c: 'ES', w: LW('es', 'Hola', 'es-ES') },
-    { id: 'ru', n: 'Русский', s: 'الروسية', c: 'RU', w: LW('ru', 'Привет', 'ru-RU') },
-    { id: 'zh', n: '中文', s: 'الصينية', c: '中', w: LW('zh', '你好', 'zh-CN') }
+    { id: 'it', n: 'Italiano', s: 'الإيطالية', c: 'IT', w: LW('it', 'Ciao', 'it-IT') },
+    { id: 'de', n: 'Deutsch', s: 'الألمانية', c: 'DE', w: LW('de', 'Hallo', 'de-DE') },
+    { id: 'nl', n: 'Nederlands', s: 'الهولندية', c: 'NL', w: LW('nl', 'Hallo', 'nl-NL') }
   ];
   const ALL = DIAL.concat(WORLD);
   const W = id => Object.assign({}, AR, (ALL.find(o => o.id === id) || {}).w);
@@ -80,6 +81,9 @@ body.lp-new .logo-container::after{animation:lpPulse 1.6s ease-in-out infinite}
 [data-mode="kid"] .lp-grp .lp-ck{position:absolute;top:6px;inset-inline-end:8px;width:24px;height:24px;line-height:24px;border-radius:50%;background:var(--primary,#3b82f6);color:#fff;font-size:.9rem}
 .st-lang-btn{min-width:120px}
 body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .lp-row,body.lp-new[data-reduce-motion="on"] .logo-container::after{animation:none}
+.lp-spin-loader{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(59,130,246,.25);border-top-color:var(--primary,#3b82f6);border-radius:50%;animation:lpSpin .65s linear infinite;vertical-align:middle}
+.lp-row.loading{pointer-events:none;opacity:.85}
+.lp-row.loading .lp-ck{visibility:visible}
 @keyframes lpFade{from{opacity:0}to{opacity:1}}
 @keyframes lpFadeOut{to{opacity:0}}
 @keyframes lpUp{0%{transform:translateY(100%)}70%{transform:translateY(-8px)}100%{transform:none}}
@@ -119,7 +123,7 @@ body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .lp-row,bod
     const sb = $('#st-uilang'); if (sb) sb.textContent = nameOf(cur()) + ' ›';
   }
 
-  function pick(o, isD) {
+  async function pick(o, isD, rowBtn) {
     seen();
     wr("bayda_ui_lang", o.id);
     if (isKid()) say(o);
@@ -138,18 +142,41 @@ body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .lp-row,bod
         if (pfb) {
           D.querySelectorAll(".flag-btn").forEach(b => b.classList.remove("active"));
           pfb.classList.add("active");
+          pfb.setAttribute("data-dialect", o.id);
         }
       }
-    } else applyWorld(o.id);
-    D.dispatchEvent(new CustomEvent("bayda:uilang", { detail: { id: o.id, dialect: isD } }));
-    mark();
-    if (isD || o.id === "ar") { setTimeout(close, 260); return; }
-    const note = $(".lp-note", ov);
-    if (note) {
-      note.textContent = "اخترت «" + o.n + "». ستُفعَّل ترجمة الواجهة عند ربط ملف اللغة.";
-      note.hidden = false;
+      D.dispatchEvent(new CustomEvent("bayda:uilang", { detail: { id: o.id, dialect: isD } }));
+      mark();
+      setTimeout(close, 260);
+    } else {
+      // إظهار مؤشر التحميل على السطر المحدد
+      if (rowBtn) {
+        rowBtn.classList.add("loading");
+        const ck = rowBtn.querySelector(".lp-ck");
+        if (ck) {
+          ck.textContent = "";
+          const sp = D.createElement("span");
+          sp.className = "lp-spin-loader";
+          ck.appendChild(sp);
+        }
+      }
+      applyWorld(o.id);
+      if (window.BaydaI18n) {
+        if (typeof window.BaydaI18n.loadAndApply === "function") {
+          await window.BaydaI18n.loadAndApply(o.id);
+        } else if (typeof window.BaydaI18n.apply === "function") {
+          window.BaydaI18n.apply(o.id);
+        }
+      }
+      D.dispatchEvent(new CustomEvent("bayda:uilang", { detail: { id: o.id, dialect: isD } }));
+      mark();
+      if (rowBtn) {
+        rowBtn.classList.remove("loading");
+        const ck = rowBtn.querySelector(".lp-ck");
+        if (ck) ck.textContent = "✓";
+      }
+      setTimeout(close, 260);
     }
-    setTimeout(close, 1500);
   }
 
   function row(o, i, isD) {
@@ -157,7 +184,7 @@ body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .lp-row,bod
     b.type = 'button'; b.className = 'lp-row'; b.dataset.id = o.id; b.style.setProperty('--i', i);
     b.innerHTML = '<span class="lp-ico"></span><span class="lp-nm"><b></b><small></small></span><span class="lp-ck">✓</span>';
     $('b', b).textContent = o.n; $('small', b).textContent = o.s;
-    if (!isD && o.id !== 'ar') { const e = D.createElement('em'); e.className = 'lp-soon'; e.textContent = 'قريباً'; $('.lp-nm', b).appendChild(e); }
+    /* all world languages active */
     const ic = $('.lp-ico', b);
     if (isD) {
       ic.textContent = o.s.charAt(0);
@@ -165,7 +192,7 @@ body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .lp-row,bod
       const im = $('.flag-btn[data-dialect="' + o.id + '"] img') || $('.flag-btn[data-dialect^="' + country + '"] img');
       if (im) { const x = D.createElement('img'); x.src = im.getAttribute('src'); x.alt = ''; x.onerror = () => x.remove(); ic.appendChild(x); }
     } else ic.textContent = o.c;
-    b.addEventListener('click', () => pick(o, isD));
+    b.addEventListener('click', () => pick(o, isD, b));
     return b;
   }
 
