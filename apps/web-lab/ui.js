@@ -674,14 +674,14 @@ function showDlFloat(flag) {
     arrow.setAttribute("aria-hidden", "true");
     b.appendChild(arrow);
     b.setAttribute("aria-label", "تنزيل حزمة " + dlLabel(id));
-    b.style.width = size + "px";
-    b.style.height = size + "px";
-    b.style.left = (r.left + r.width / 2 - size / 2 - h.left) + "px";
-    b.style.top = (r.top + r.height / 2 - size / 2 - h.top) + "px";
+    b.style.setProperty("width", size + "px");
+    b.style.setProperty("height", size + "px");
+    b.style.setProperty("left", (r.left + r.width / 2 - size / 2 - h.left) + "px");
+    b.style.setProperty("top", (r.top + r.height / 2 - size / 2 - h.top) + "px");
     b.addEventListener("click", function (e) {
       e.stopPropagation();
       hideDlFloat();
-      askDlConfirm(id, dlLabel(id));
+      askDlConfirm(id);
     });
     hdr.appendChild(b);
     dlFloatTimer = setTimeout(hideDlFloat, 4000);

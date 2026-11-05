@@ -711,7 +711,34 @@
   }
 
   
-  // تحديث فوري لبطاقة المعجم عند فتح أي كلمة
+  // مراقب DOM عام لتحديث العناصر الموسومة بـ data-i18n-key فور إضافتها
+  if (typeof MutationObserver !== "undefined" && !window._baydaI18nGlobalObserver) {
+    window._baydaI18nGlobalObserver = new MutationObserver(function(mutations) {
+      for (var i = 0; i < mutations.length; i++) {
+        var m = mutations[i];
+        if (m.addedNodes && m.addedNodes.length > 0) {
+          for (var j = 0; j < m.addedNodes.length; j++) {
+            var node = m.addedNodes[j];
+            if (node.nodeType === 1) { // ELEMENT_NODE
+              if (node.hasAttribute("data-i18n-key") || node.hasAttribute("data-i18n") || node.hasAttribute("data-i18n-placeholder")) {
+                updateDomTranslations(node.parentElement || document);
+                break;
+              } else if (node.querySelector && node.querySelector("[data-i18n-key], [data-i18n], [data-i18n-placeholder]")) {
+                updateDomTranslations(node);
+                break;
+              }
+            }
+          }
+        }
+      }
+    });
+    window._baydaI18nGlobalObserver.observe(document.body || document.documentElement, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  // مراقب بطاقة المعجم
   var dcCard = document.getElementById("dc-card");
   if (dcCard && !window._dcI18nObserved) {
     window._dcI18nObserved = true;
@@ -730,6 +757,9 @@
   window.BaydaI18n = {
     dict: DICT,
     apply: apply,
+    setLanguage: apply,
+    updateDom: updateDomTranslations,
+    savePref: saveLanguagePref,
     t: t,
     loadAndApply: loadAndApply,
     init: init
