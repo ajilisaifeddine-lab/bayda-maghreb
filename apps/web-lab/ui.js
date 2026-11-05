@@ -458,6 +458,40 @@ var COUNTRY_FLAGS = {
 function dlLabel(id) {
   return Object.prototype.hasOwnProperty.call(DL_NAMES, id) ? DL_NAMES[id] : "هذه اللهجة";
 }
+
+function saveInstalledPack(dialectId) {
+  try {
+    var raw = localStorage.getItem("bayda_installed_packs");
+    var list = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(list)) list = [];
+    if (!list.includes(dialectId)) {
+      list.push(dialectId);
+      localStorage.setItem("bayda_installed_packs", JSON.stringify(list));
+    }
+  } catch (e) {
+    console.warn("Could not save installed pack:", e);
+  }
+}
+
+function restoreInstalledPacks() {
+  try {
+    var raw = localStorage.getItem("bayda_installed_packs");
+    var list = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(list)) return;
+    list.forEach(function (id) {
+      if (typeof id !== "string") return;
+      var prefix = id.split("-")[0];
+      var flagBtn = document.querySelector(".flag-btn[data-dialect^='" + prefix + "']");
+      if (flagBtn) {
+        flagBtn.classList.add("has-pack");
+        flagBtn.setAttribute("data-dialect", id);
+      }
+    });
+  } catch (e) {
+    console.warn("Could not restore installed packs:", e);
+  }
+}
+
 function askDlConfirm(id) {
   try {
     var old = document.querySelector(".dl-confirm-wrap");
@@ -539,8 +573,13 @@ function askDlConfirm(id) {
       btn.textContent = v.label;
 
       btn.addEventListener("click", async function () {
+        var t = function(k, d) { return window.BaydaI18n ? window.BaydaI18n.t(k) : d; };
+        if (navigator && navigator.onLine === false) {
+          toast("⚠️ " + t("toastOffline", "لا يوجد اتصال بالإنترنت، يرجى التحقق من الشبكة"));
+          return;
+        }
         if (typeof window.baydaDownloadDialect !== "function") {
-          toast(window.BaydaI18n ? window.BaydaI18n.t("toastNotConnected") : "التنزيل غير متصل بالنواة بعد");
+          toast(t("toastNotConnected", "التنزيل غير متصل بالنواة بعد"));
           close();
           return;
         }
@@ -602,6 +641,7 @@ function askDlConfirm(id) {
             flagBtn.classList.add("has-pack");
             flagBtn.setAttribute("data-dialect", v.id);
           }
+          saveInstalledPack(v.id);
 
           setTimeout(close, 1400);
         } catch (err) {
@@ -1180,4 +1220,10 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initUI);
 } else {
   initUI();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", restoreInstalledPacks);
+} else {
+  restoreInstalledPacks();
 }

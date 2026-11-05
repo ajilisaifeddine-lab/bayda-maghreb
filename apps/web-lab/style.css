@@ -1345,3 +1345,27 @@ body[data-reduce-motion="on"] .dl-arrow { animation: none; }
   visibility: visible;
   transform: translate(-50%, 0) scale(1);
 }
+
+/* Hero Flags Arc Responsive Optimization for Ultra-Narrow Screens (< 360px) */
+@media (max-width: 360px) {
+  .hero-card {
+    height: auto;
+    min-height: 52px;
+    margin-bottom: 14px !important;
+    padding: 4px 6px;
+  }
+  .flags-side {
+    gap: 3px;
+  }
+  .flags-side .flag-btn {
+    width: clamp(26px, 7.5vw, 30px);
+    height: clamp(26px, 7.5vw, 30px);
+  }
+  .flags-side .flag-btn:nth-child(1) { translate: 0 16px; }
+  .flags-side .flag-btn:nth-child(2) { translate: 0 2px; }
+  .flags-side .flag-btn:nth-child(3) { translate: 0 -6px; }
+  .flags-side .flag-btn:nth-child(4) { translate: 0 -9px; }
+  .flags-side .flag-btn:nth-child(5) { translate: 0 -6px; }
+  .flags-side .flag-btn:nth-child(6) { translate: 0 2px; }
+  .flags-side .flag-btn:nth-child(7) { translate: 0 16px; }
+}
