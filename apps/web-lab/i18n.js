@@ -655,15 +655,26 @@
     } catch (e) {}
 
     
-    // تحديث العناصر الحاملة لخاصية data-i18n
-    document.querySelectorAll("[data-i18n]").forEach(function(el) {
-      var key = el.getAttribute("data-i18n");
-      if (t[key]) el.textContent = t[key];
+    // تحديث العناصر الحاملة لخاصية data-i18n أو data-i18n-key
+    document.querySelectorAll("[data-i18n], [data-i18n-key]").forEach(function(el) {
+      var key = el.getAttribute("data-i18n-key") || el.getAttribute("data-i18n");
+      var text = t[key] || (DICT.ar ? DICT.ar[key] : null);
+      if (text) el.textContent = text;
     });
     document.querySelectorAll("[data-i18n-placeholder]").forEach(function(el) {
       var key = el.getAttribute("data-i18n-placeholder");
-      if (t[key]) el.placeholder = t[key];
+      var text = t[key] || (DICT.ar ? DICT.ar[key] : null);
+      if (text) el.placeholder = text;
     });
+    // تحديث التلميحات المترجمة
+    document.querySelectorAll("[data-tooltip-key]").forEach(function(el) {
+      var key = el.getAttribute("data-tooltip-key");
+      var text = t[key] || (DICT.ar ? DICT.ar[key] : null);
+      if (text) el.setAttribute("data-tooltip", text);
+    });
+    if (window.BaydaTooltip && typeof window.BaydaTooltip.refresh === "function") {
+      window.BaydaTooltip.refresh();
+    }
 
     // لوحة الإخراج والملاحظات
     var outEl = document.getElementById("output");
