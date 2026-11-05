@@ -82,6 +82,8 @@
                 <button class="st-switch" id="st-autotheme" role="switch" aria-checked="false" onclick="stToggle('autotheme', this)"></button></div>
             <div class="st-row"><span class="st-label">أرقام الأسطر</span>
                 <button class="st-switch" id="st-lines" role="switch" aria-checked="false" onclick="stToggle('lines', this)"></button></div>
+            <div class="st-row"><span class="st-label">نسخة الكود الاحتياطية</span>
+                <button class="btn-secondary" id="clear-autosave-btn" onclick="clearAutoSave()" style="color:#f59e0b;border-color:#f59e0b">🧹 مسح الحفظ التلقائي</button></div>
             <div class="st-row st-danger"><span class="st-label">مسح البيانات</span>
                 <button class="btn-secondary" onclick="clearAllData()" style="color:#ef4444;border-color:#ef4444">🗑️ مسح الكل</button></div>
         </div>
@@ -172,7 +174,10 @@
     <main class="workspace layout-col" id="view-lab" style="display: flex;">
         <div class="pane editor-pane" id="editor-pane">
             <div class="pane-header">
-                <span>المحرر</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span>المحرر</span>
+                    <span id="autosave-status" class="autosave-badge" style="font-size:0.75rem;opacity:0.75;font-weight:normal;"></span>
+                </div>
                 <button class="icon-btn" onclick="togglePane('editor-pane', this)">-</button>
             </div>
             <div class="editor-wrapper">

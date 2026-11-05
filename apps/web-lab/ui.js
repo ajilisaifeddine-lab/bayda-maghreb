@@ -1227,3 +1227,161 @@ if (document.readyState === "loading") {
 } else {
   restoreInstalledPacks();
 }
+
+// نغمة ترحيبية خفيفة وذكية عند اكتمال حركة دخول الواجهة
+function playEntranceChime() {
+  if (typeof beep !== "function") return;
+  if (document.body && document.body.getAttribute("data-reduce-motion") === "on") return;
+  setTimeout(function () {
+    try {
+      beep("open");
+    } catch (e) {}
+  }, 520);
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", playEntranceChime);
+} else {
+  playEntranceChime();
+}
+
+
+// ==========================================
+// محرك الحفظ التلقائي للكود (Auto-Save 30s)
+// ==========================================
+(function initAutoSave() {
+  var STORAGE_KEY = "bayda_editor_autosave";
+
+  function getEditorEl() {
+    return document.getElementById("editor");
+  }
+
+  // 1. مؤقت النسخ الاحتياطي الدوري كل 30 ثانية
+  setInterval(function () {
+    try {
+      var ed = getEditorEl();
+      if (!ed) return;
+      var text = ed.value || "";
+      if (text.trim().length > 0) {
+        var now = new Date();
+        var timeStr = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          code: text,
+          timestamp: Date.now(),
+          timeStr: timeStr
+        }));
+        var badge = document.getElementById("autosave-status");
+        if (badge) {
+          badge.textContent = "💾 تم الحفظ " + timeStr;
+          badge.style.setProperty("color", "#10b981");
+          setTimeout(function() {
+            if (badge) badge.style.removeProperty("color");
+          }, 1500);
+        }
+      }
+    } catch (e) {
+      console.warn("Auto-save failed:", e);
+    }
+  }, 30000);
+
+  // 2. إشعار الاستعادة التفاعلي عند بدء التشغيل
+  function promptRestoreIfAvailable() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      var data = JSON.parse(raw);
+      if (!data || !data.code || !data.code.trim()) return;
+
+      var ed = getEditorEl();
+      if (!ed) return;
+
+      // إذا كان الكود الحالي هو نفس المحفوظ لا حاجة لإظهار التنبيه
+      if (ed.value && ed.value.trim() === data.code.trim()) return;
+
+      // إنشاء بطاقة تنبيه للاستعادة
+      var toastContainer = document.getElementById("toast-container") || document.body;
+      var box = document.createElement("div");
+      box.className = "toast auto-restore-toast";
+      box.style.setProperty("display", "flex");
+      box.style.setProperty("flex-direction", "column");
+      box.style.setProperty("gap", "10px");
+      box.style.setProperty("padding", "14px 18px");
+      box.style.setProperty("border-radius", "16px");
+      box.style.setProperty("background", "rgba(15, 76, 117, 0.95)");
+      box.style.setProperty("color", "#fff");
+      box.style.setProperty("box-shadow", "0 10px 30px rgba(0,0,0,0.5)");
+
+      var msg = document.createElement("div");
+      msg.textContent = "📄 تم العثور على نسخة محفوظة تلقائياً لعملك السابق. هل ترغب في استعادتها؟";
+      msg.style.setProperty("font-size", "0.9rem");
+      msg.style.setProperty("font-weight", "600");
+      box.appendChild(msg);
+
+      var actions = document.createElement("div");
+      actions.style.setProperty("display", "flex");
+      actions.style.setProperty("gap", "8px");
+
+      var btnRestore = document.createElement("button");
+      btnRestore.type = "button";
+      btnRestore.textContent = "✓ استعادة الكود";
+      btnRestore.style.setProperty("padding", "6px 14px");
+      btnRestore.style.setProperty("border-radius", "8px");
+      btnRestore.style.setProperty("background", "#059669");
+      btnRestore.style.setProperty("color", "#fff");
+      btnRestore.style.setProperty("border", "none");
+      btnRestore.style.setProperty("font-weight", "bold");
+      btnRestore.style.setProperty("cursor", "pointer");
+
+      btnRestore.addEventListener("click", function () {
+        ed.value = data.code;
+        if (typeof updateEditorLines === "function") updateEditorLines();
+        if (typeof toast === "function") toast("تمت استعادة الكود بنجاح!");
+        if (box.parentNode) box.parentNode.removeChild(box);
+      });
+
+      var btnDismiss = document.createElement("button");
+      btnDismiss.type = "button";
+      btnDismiss.textContent = "تجاهل";
+      btnDismiss.style.setProperty("padding", "6px 14px");
+      btnDismiss.style.setProperty("border-radius", "8px");
+      btnDismiss.style.setProperty("background", "rgba(255,255,255,0.2)");
+      btnDismiss.style.setProperty("color", "#fff");
+      btnDismiss.style.setProperty("border", "none");
+      btnDismiss.style.setProperty("cursor", "pointer");
+
+      btnDismiss.addEventListener("click", function () {
+        if (box.parentNode) box.parentNode.removeChild(box);
+      });
+
+      actions.appendChild(btnRestore);
+      actions.appendChild(btnDismiss);
+      box.appendChild(actions);
+
+      toastContainer.appendChild(box);
+    } catch (e) {
+      console.warn("Restore prompt check failed:", e);
+    }
+  }
+
+  // 3. دالة مسح الحفظ التلقائي من الإعدادات
+  window.clearAutoSave = function () {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      var badge = document.getElementById("autosave-status");
+      if (badge) badge.textContent = "";
+      if (typeof toast === "function") {
+        toast("🧹 تم مسح النسخة الاحتياطية للكود بنجاح");
+      }
+    } catch (e) {
+      console.warn("Could not clear auto-save:", e);
+    }
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function () {
+      setTimeout(promptRestoreIfAvailable, 600);
+    });
+  } else {
+    setTimeout(promptRestoreIfAvailable, 600);
+  }
+})();
