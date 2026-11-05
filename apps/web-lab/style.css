@@ -1401,3 +1401,49 @@ body[data-reduce-motion="on"] .dl-arrow { animation: none; }
   .flags-side .flag-btn { animation: none !important; opacity: 1 !important; transform: none !important; }
 }
 body[data-reduce-motion="on"] .flags-side .flag-btn { animation: none !important; opacity: 1 !important; transform: none !important; }
+
+
+/* ============================================================
+   Language Picker (.lp-ov) System CSS (CSP Compliant)
+   ============================================================ */
+.logo-container { position: relative; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.logo-container::after { content: "🌐"; position: absolute; bottom: 4px; inset-inline-end: 8px; width: 24px; height: 24px; display: grid; place-items: center; font-size: 14px; background: var(--panel, #fff); border: 2px solid var(--border, #e2e8f0); border-radius: 50%; pointer-events: none; }
+body.lp-new .logo-container::after { animation: lpPulse 1.6s ease-in-out infinite; }
+.lp-ov { position: fixed; inset: 0; z-index: 13000; display: flex; align-items: flex-end; justify-content: center; background: rgba(15, 23, 42, 0.45); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); animation: lpFade 0.25s ease-out; }
+.lp-ov.out { animation: lpFadeOut 0.3s ease-in forwards; }
+.lp-sheet { width: 100%; max-width: 520px; max-height: 88dvh; overflow-y: auto; background: var(--panel, #fff); color: var(--text, #0f172a); border: 2px solid var(--border, #e2e8f0); border-bottom: 0; border-radius: 28px 28px 0 0; padding: 6px 16px 26px; box-shadow: 0 -12px 40px rgba(0,0,0,.2); animation: lpUp 0.45s cubic-bezier(.3, 1.2, .5, 1); }
+.lp-ov.out .lp-sheet { animation: lpDown 0.3s cubic-bezier(.5, 0, .9, .5) forwards; }
+.lp-head { position: sticky; top: 0; z-index: 2; background: var(--panel, #fff); padding: 6px 0 10px; touch-action: none; }
+.lp-grab { display: block; width: 46px; height: 5px; border-radius: 9px; background: var(--border, #cbd5e1); margin: 2px auto 10px; }
+.lp-brand { display: flex; align-items: center; gap: 12px; }
+.lp-logo, .wl-logo { width: 48px; height: 48px; object-fit: contain; animation: lpSpin 14s linear infinite; filter: drop-shadow(0 0 6px var(--primary, #3b82f6)); }
+.lp-brand h2 { font-size: 1.2rem; margin: 0; }
+.lp-brand p { margin-top: 2px; font-size: 0.85rem; color: var(--text-muted, #64748b); margin-bottom: 0; }
+.lp-sec { font-size: 0.9rem; font-weight: 800; color: var(--text-muted, #64748b); margin: 14px 4px 8px; }
+.lp-sec small { font-weight: 600; opacity: 0.8; }
+.lp-row { display: grid; grid-template-columns: 48px 1fr 28px; align-items: center; gap: 12px; width: 100%; min-height: 60px; padding: 8px 12px; margin-bottom: 8px; background: var(--bg, #f8fafc); color: inherit; border: 2px solid var(--border, #e2e8f0); border-radius: var(--radius, 14px); cursor: pointer; text-align: start; font: inherit; transition: transform .12s, box-shadow .12s; position: relative; }
+.lp-row:active { transform: scale(0.98); }
+.lp-row.on { border-color: var(--primary, #3b82f6); background: color-mix(in srgb, var(--primary, #3b82f6) 12%, var(--panel, #fff)); }
+.lp-ico { position: relative; width: 48px; height: 48px; border-radius: 50%; overflow: hidden; display: grid; place-items: center; background: var(--primary, #3b82f6); color: var(--on-primary, #fff); font-weight: 800; font-size: 1.05rem; border: 2px solid var(--border, #e2e8f0); }
+.lp-ico img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.lp-nm b { display: block; font-size: 1.1rem; }
+.lp-nm small { display: block; font-size: 0.85rem; color: var(--text-muted, #64748b); }
+.lp-soon { display: inline-block; margin-top: 2px; font-style: normal; font-size: 0.7rem; font-weight: 700; padding: 0 7px; border-radius: 99px; background: var(--border, #e2e8f0); color: var(--text-muted, #64748b); }
+.lp-ck { visibility: hidden; color: var(--primary, #3b82f6); font-weight: 900; font-size: 1.3rem; text-align: center; }
+.lp-row.on .lp-ck { visibility: visible; }
+.lp-grp.w { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.lp-grp.w .lp-row { grid-template-columns: 36px 1fr 18px; gap: 8px; min-height: 52px; padding: 6px 10px; margin: 0; }
+.lp-grp.w .lp-ico { width: 36px; height: 36px; font-size: 0.85rem; }
+.lp-grp.w .lp-nm b { font-size: 1rem; }
+.lp-grp.w .lp-nm small { font-size: 0.75rem; }
+.lp-note { margin: 10px 4px 0; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--primary, #3b82f6) 10%, var(--panel, #fff)); font-size: 0.9rem; text-align: center; }
+.st-lang-btn { min-width: 120px; }
+
+@keyframes lpFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes lpFadeOut { to { opacity: 0; } }
+@keyframes lpUp { 0% { transform: translateY(100%); } 70% { transform: translateY(-8px); } 100% { transform: none; } }
+@keyframes lpDown { to { transform: translateY(105%); } }
+@keyframes lpSpin { to { transform: rotate(-360deg); } }
+@keyframes lpPop { 0% { transform: scale(0.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes lpPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+body[data-reduce-motion="on"] .lp-logo, body[data-reduce-motion="on"] .lp-row, body.lp-new[data-reduce-motion="on"] .logo-container::after { animation: none; }
