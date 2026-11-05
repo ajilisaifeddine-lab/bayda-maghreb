@@ -9,24 +9,30 @@
   const rd = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } };
   const wr = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
 
-  const AR = { d: 'rtl', k: 'ar', l: ['أهلا بك', 'في'], b: 'بـيـضــاء', s: 'مختبر البرمجة', h: 'مرحباً', v: 'ar-SA',
-    q: 'هل تسمح لنا باكتشاف لهجتك تلقائياً؟', y: 'نعم، بالطبع', n: 'لا، سأختار بنفسي' };
-  const LW = (k, l, h, v, q, y, n) => ({ d: 'ltr', k: k, l: l, b: 'bayda-lab', s: '', h: h, v: v, q: q, y: y, n: n });
+  const AR = { d: 'rtl', k: 'ar', h: 'مرحباً', v: 'ar-SA' };
+  const LW = (k, h, v) => ({ d: 'ltr', k: k, h: h, v: v });
   const DIAL = [
-    { id: 'tn-latn', n: 'تونسية', s: 'Tounsi', w: { l: ['أهلا بيك', 'في'], h: 'أهلا بيك' } },
-    { id: 'dz-latn', n: 'جزائرية', s: 'Dziri', w: { l: ['مرحبا بيك', 'في'], h: 'مرحبا بيك' } },
-    { id: 'ly-latn', n: 'ليبية', s: 'Libi', w: { l: ['أهلا بيك', 'في'], h: 'أهلا بيك' } },
-    { id: 'mr-latn', n: 'حسانية', s: 'Hassaniya', w: { l: ['مرحبا بيك', 'في'], h: 'مرحبا بيك' } },
-    { id: 'kab-latn', n: 'قبائلية', s: 'Taqbaylit', w: { k: 'kab', l: ['Ansuf', 'ɣer'], b: 'bayda-lab', s: '', h: 'Ansuf', v: '' } },
-    { id: 'shi-latn', n: 'شلحية', s: 'Tacelḥit', w: { k: 'shi', l: ['Ansuf', 'ɣ'], b: 'bayda-lab', s: '', h: 'Ansuf', v: '' } }
+    { id: "tn-latn", n: "تونسية (لاتيني)", s: "Tounsi", w: { h: "أهلا بيك" } },
+    { id: "tn-arab", n: "تونسية (عربي)", s: "تونسي", w: { h: "أهلا بيك" } },
+    { id: "dz-latn", n: "جزائرية (لاتيني)", s: "Dziri", w: { h: "مرحبا بيك" } },
+    { id: "dz-arab", n: "جزائرية (عربي)", s: "دزيري", w: { h: "مرحبا بيك" } },
+    { id: "ma-latn", n: "مغربية (لاتيني)", s: "Darija", w: { h: "مرحبا بيك" } },
+    { id: "ma-arab", n: "مغربية (عربي)", s: "دارجة", w: { h: "مرحبا بيك" } },
+    { id: "ly-latn", n: "ليبية (لاتيني)", s: "Libi", w: { h: "أهلا بيك" } },
+    { id: "ly-arab", n: "ليبية (عربي)", s: "ليبي", w: { h: "أهلا بيك" } },
+    { id: "mr-latn", n: "حسانية (لاتيني)", s: "Hassaniya", w: { h: "مرحبا بيك" } },
+    { id: "mr-arab", n: "حسانية (عربي)", s: "حسانية", w: { h: "مرحبا بيك" } },
+    { id: "kab-latn", n: "قبائلية (لاتيني)", s: "Taqbaylit", w: { k: "kab", h: "Ansuf", v: "" } },
+    { id: "kab-tifinagh", n: "قبائلية (تيفيناغ)", s: "ⵜⴰⵇⴱⴰⵢⵍⵉⵜ", w: { k: "kab", h: "Ansuf", v: "" } },
+    { id: "shi-latn", n: "شلحية (لاتيني)", s: "Tacelḥit", w: { k: "shi", h: "Ansuf", v: "" } }
   ];
   const WORLD = [
     { id: 'ar', n: 'العربية', s: 'Arabic', c: 'ع', w: {} },
-    { id: 'en', n: 'English', s: 'الإنجليزية', c: 'EN', w: LW('en', ['Welcome', 'to'], 'Hello', 'en-US', 'May we detect your dialect automatically?', 'Yes, of course', "No, I'll choose myself") },
-    { id: 'fr', n: 'Français', s: 'الفرنسية', c: 'FR', w: LW('fr', ['Bienvenue', 'dans'], 'Salut', 'fr-FR', 'Pouvons-nous détecter votre dialecte automatiquement ?', 'Oui, bien sûr', 'Non, je choisirai moi-même') },
-    { id: 'es', n: 'Español', s: 'الإسبانية', c: 'ES', w: LW('es', ['Bienvenido', 'a'], 'Hola', 'es-ES', '¿Nos permites detectar tu dialecto automáticamente?', 'Sí, claro', 'No, elegiré yo') },
-    { id: 'ru', n: 'Русский', s: 'الروسية', c: 'RU', w: LW('ru', ['Добро пожаловать', 'в'], 'Привет', 'ru-RU', 'Разрешите определить ваш диалект автоматически?', 'Да, конечно', 'Нет, выберу сам') },
-    { id: 'zh', n: '中文', s: 'الصينية', c: '中', w: LW('zh', ['欢迎', '来到'], '你好', 'zh-CN', '是否允许我们自动识别您的方言？', '好的', '不，我自己选择') }
+    { id: 'en', n: 'English', s: 'الإنجليزية', c: 'EN', w: LW('en', 'Hello', 'en-US') },
+    { id: 'fr', n: 'Français', s: 'الفرنسية', c: 'FR', w: LW('fr', 'Salut', 'fr-FR') },
+    { id: 'es', n: 'Español', s: 'الإسبانية', c: 'ES', w: LW('es', 'Hola', 'es-ES') },
+    { id: 'ru', n: 'Русский', s: 'الروسية', c: 'RU', w: LW('ru', 'Привет', 'ru-RU') },
+    { id: 'zh', n: '中文', s: 'الصينية', c: '中', w: LW('zh', '你好', 'zh-CN') }
   ];
   const ALL = DIAL.concat(WORLD);
   const W = id => Object.assign({}, AR, (ALL.find(o => o.id === id) || {}).w);
@@ -43,7 +49,7 @@ body.lp-new .logo-container::after{animation:lpPulse 1.6s ease-in-out infinite}
 .lp-head{position:sticky;top:0;z-index:2;background:var(--panel,#fff);padding:6px 0 10px;touch-action:none}
 .lp-grab{display:block;width:46px;height:5px;border-radius:9px;background:var(--border,#cbd5e1);margin:2px auto 10px}
 .lp-brand{display:flex;align-items:center;gap:12px}
-.lp-logo,.wl-logo{width:48px;height:48px;object-fit:contain;animation:lpSpin 14s linear infinite;filter:drop-shadow(0 0 6px var(--primary,#3b82f6))}
+.lp-logo{width:48px;height:48px;object-fit:contain;animation:lpSpin 14s linear infinite;filter:drop-shadow(0 0 6px var(--primary,#3b82f6))}
 .lp-brand h2{font-size:1.2rem}
 .lp-brand p{margin-top:2px;font-size:.85rem;color:var(--text-muted,#64748b)}
 .lp-sec{font-size:.9rem;font-weight:800;color:var(--text-muted,#64748b);margin:14px 4px 8px}
@@ -72,33 +78,15 @@ body.lp-new .logo-container::after{animation:lpPulse 1.6s ease-in-out infinite}
 [data-mode="kid"] .lp-grp .lp-nm b{font-size:1rem}
 [data-mode="kid"] .lp-grp .lp-nm small,[data-mode="kid"] .lp-soon{display:none}
 [data-mode="kid"] .lp-grp .lp-ck{position:absolute;top:6px;inset-inline-end:8px;width:24px;height:24px;line-height:24px;border-radius:50%;background:var(--primary,#3b82f6);color:#fff;font-size:.9rem}
-body.lp-open #consent-modal{visibility:hidden}
-#consent-modal .modal-content{text-align:center}
-#consent-modal h2{display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.25;margin-bottom:10px}
-body:not([data-mode="kid"]) #consent-modal.active .modal-content{animation:lpPop .45s cubic-bezier(.34,1.56,.64,1)}
-.wl-top{display:flex;justify-content:center;margin-bottom:6px}
-.wl-mascot{display:none}
-.wl-hand{font-size:1.7rem;display:inline-block;transform-origin:70% 70%;animation:wlWave 2.4s ease-in-out infinite}
-.wl-a{font-size:1.15rem;font-weight:700}
-.wl-b{font-size:.85rem;font-weight:600;color:var(--text-muted,#64748b)}
-.wl-brand{font-size:2.1rem;font-weight:900;color:var(--primary,#3b82f6);line-height:1.3}
-.wl-brand.lat{letter-spacing:.03em}
-.wl-s{font-size:1rem;font-weight:600;color:var(--text-muted,#64748b)}
-[data-mode="kid"] .wl-logo{display:none}
-[data-mode="kid"] .wl-mascot{display:flex;align-items:flex-end;gap:8px}
-[data-mode="kid"] .wl-mascot img{width:84px;height:84px;object-fit:contain;animation:kbFloat 3.2s ease-in-out infinite;filter:drop-shadow(0 8px 10px rgba(0,0,0,.2))}
-[data-mode="kid"] .wl-say{position:relative;margin-bottom:46px;background:#fff;color:#2a1a5e;border:3px solid var(--primary);border-radius:16px;padding:6px 14px;font-weight:800;font-size:1.05rem}
-[data-mode="kid"] .wl-brand{font-size:2.5rem}
 .st-lang-btn{min-width:120px}
-body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .wl-logo,body[data-reduce-motion="on"] .wl-hand,body[data-reduce-motion="on"] .lp-row,body[data-reduce-motion="on"] .wl-mascot img,body.lp-new[data-reduce-motion="on"] .logo-container::after{animation:none}
+body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .lp-row,body.lp-new[data-reduce-motion="on"] .logo-container::after{animation:none}
 @keyframes lpFade{from{opacity:0}to{opacity:1}}
 @keyframes lpFadeOut{to{opacity:0}}
 @keyframes lpUp{0%{transform:translateY(100%)}70%{transform:translateY(-8px)}100%{transform:none}}
 @keyframes lpDown{to{transform:translateY(105%)}}
 @keyframes lpSpin{to{transform:rotate(-360deg)}}
 @keyframes lpPop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
-@keyframes lpPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
-@keyframes wlWave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(16deg)}20%,40%{transform:rotate(-10deg)}}`;
+@keyframes lpPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}`;
   const st = D.createElement('style'); st.id = 'lp-css'; st.textContent = css; D.head.appendChild(st);
 
   let ov = null, prevFocus = null;
@@ -132,18 +120,35 @@ body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .wl-logo,bo
   }
 
   function pick(o, isD) {
-    seen(); wr('bayda_ui_lang', o.id);
+    seen();
+    wr("bayda_ui_lang", o.id);
     if (isKid()) say(o);
     if (isD) {
       const fb = $('.flag-btn[data-dialect="' + o.id + '"]');
-      if (fb) fb.click();
+      if (fb) {
+        fb.click();
+      } else {
+        if (typeof applyDialect === "function") {
+          if (typeof currentDialect !== "undefined") currentDialect = o.id;
+          applyDialect(o.id);
+          if (typeof saveState === "function") saveState();
+        }
+        const country = o.id.split("-")[0];
+        const pfb = $('.flag-btn[data-dialect^="' + country + '"]');
+        if (pfb) {
+          D.querySelectorAll(".flag-btn").forEach(b => b.classList.remove("active"));
+          pfb.classList.add("active");
+        }
+      }
     } else applyWorld(o.id);
-    D.dispatchEvent(new CustomEvent('bayda:uilang', { detail: { id: o.id, dialect: isD } }));
+    D.dispatchEvent(new CustomEvent("bayda:uilang", { detail: { id: o.id, dialect: isD } }));
     mark();
-    if (isD || o.id === 'ar') { setTimeout(close, 260); return; }
-    const note = $('.lp-note', ov);
-    note.textContent = 'اخترت «' + o.n + '». ستُفعَّل ترجمة الواجهة عند ربط ملف اللغة.';
-    note.hidden = false;
+    if (isD || o.id === "ar") { setTimeout(close, 260); return; }
+    const note = $(".lp-note", ov);
+    if (note) {
+      note.textContent = "اخترت «" + o.n + "». ستُفعَّل ترجمة الواجهة عند ربط ملف اللغة.";
+      note.hidden = false;
+    }
     setTimeout(close, 1500);
   }
 
@@ -156,7 +161,8 @@ body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .wl-logo,bo
     const ic = $('.lp-ico', b);
     if (isD) {
       ic.textContent = o.s.charAt(0);
-      const im = $('.flag-btn[data-dialect="' + o.id + '"] img');
+      const country = o.id.split("-")[0];
+      const im = $('.flag-btn[data-dialect="' + o.id + '"] img') || $('.flag-btn[data-dialect^="' + country + '"] img');
       if (im) { const x = D.createElement('img'); x.src = im.getAttribute('src'); x.alt = ''; x.onerror = () => x.remove(); ic.appendChild(x); }
     } else ic.textContent = o.c;
     b.addEventListener('click', () => pick(o, isD));
@@ -211,7 +217,6 @@ body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .wl-logo,bo
       o.remove(); if (ov === o) ov = null;
       D.removeEventListener('keydown', onKey);
       B.classList.remove('lp-open');
-      D.dispatchEvent(new CustomEvent('bayda:lpclosed'));
       if (prevFocus && prevFocus.focus) prevFocus.focus();
     }, 300);
   }
@@ -237,41 +242,7 @@ body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .wl-logo,bo
 
   D.addEventListener('click', e => {
     const f = e.target.closest && e.target.closest('.flag-btn');
-    if (f && f.dataset.dialect) { wr('bayda_ui_lang', f.dataset.dialect); apply(f.dataset.dialect); mark(); }
-  });
-
-  function apply(id) {
-    const t = W(id);
-    const m = $('#consent-modal .modal-content');
-    if (!m) return;
-    const h = $('h2', m), p = $('p', m), bs = m.querySelectorAll('.modal-actions button');
-    m.dir = t.d; m.lang = t.k;
-    let top = $('.wl-top', m);
-    if (!top) {
-      top = D.createElement('div'); top.className = 'wl-top';
-      top.innerHTML = '<img class="wl-logo" alt=""><div class="wl-mascot"><img src="assets/mascot.webp" alt=""><span class="wl-say"></span></div>';
-      const lg = $('#main-logo'); $('.wl-logo', top).src = lg ? lg.getAttribute('src') : 'assets/logo.png';
-      m.insertBefore(top, h);
-    }
-    $('.wl-say', top).textContent = t.h + '!';
-    h.textContent = '';
-    const add = (cls, txt) => { const s = D.createElement('span'); s.className = cls; s.textContent = txt; s.dir = 'auto'; h.appendChild(s); return s; };
-    add('wl-hand', '👋').removeAttribute('dir');
-    add('wl-a', t.l[0]); add('wl-b', t.l[1]);
-    const br = add('wl-brand' + (t.b === 'bayda-lab' ? ' lat' : ''), t.b);
-    if (t.b !== 'bayda-lab') br.setAttribute('aria-label', 'بيضاء');
-    if (t.s) add('wl-s', t.s);
-    p.textContent = t.q;
-    if (bs[0]) bs[0].textContent = t.y;
-    if (bs[1]) bs[1].textContent = t.n;
-  }
-  apply(rd('bayda_ui_lang', ''));
-  D.addEventListener('bayda:uilang', e => apply(e.detail && e.detail.id));
-  D.addEventListener('bayda:lpclosed', () => {
-    const o = $('#consent-modal'), m = $('#consent-modal .modal-content');
-    if (!o || !m) return;
-    o.style.animation = 'none'; m.style.animation = 'none'; void o.offsetWidth;
-    o.style.animation = 'lpFade .3s ease-out'; m.style.animation = '';
+    if (f && f.dataset.dialect) { wr('bayda_ui_lang', f.dataset.dialect); mark(); }
   });
 
   if (rd('bayda_lang_seen', '') !== '1') setTimeout(open, 900);

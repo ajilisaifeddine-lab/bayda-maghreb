@@ -18,7 +18,6 @@ var LS = {
   fontSize: "baydaFontSize",
   state: "baydaLabState",
   notes: "baydaNotesList",
-  consent: "baydaConsent"
 };
 
 /* ---------- عناصر مشتركة ---------- */
@@ -185,18 +184,7 @@ function confirmNo() {
   closeModal("confirm-modal");
 }
 
-/* الموافقة على اكتشاف اللهجة */
-function acceptConsent() {
-  localStorage.setItem(LS.consent, "accepted");
-  closeModal("consent-modal");
-  toast("شكرًا لك 🌿");
-}
 
-function declineConsent() {
-  localStorage.setItem(LS.consent, "declined");
-  closeModal("consent-modal");
-  toast("اختر لهجتك يدويًا من الأعلام");
-}
 
 /* إغلاق النوافذ بالنقر على الخلفية أو زر Escape */
 document.addEventListener("click", function (e) {
@@ -426,39 +414,214 @@ function hideDlFloat() {
   if (b && b.parentNode) b.parentNode.removeChild(b);
 }
 var DL_NAMES = {
-  "tn-latn": "اللهجة التونسية",
-  "dz-latn": "اللهجة الجزائرية",
-  "ly-latn": "اللهجة الليبية",
-  "mr-latn": "اللهجة الموريتانية",
-  "kab-latn": "اللهجة القبائلية",
-  "shi-latn": "اللهجة الشلحية",
-  "kab-tifinagh": "لهجة التيفناق"
+  "tn-latn": "تونسية (لاتيني)",
+  "tn-arab": "تونسية (عربي)",
+  "dz-latn": "جزائرية (لاتيني)",
+  "dz-arab": "جزائرية (عربي)",
+  "ma-latn": "مغربية (لاتيني)",
+  "ma-arab": "مغربية (عربي)",
+  "ly-latn": "ليبية (لاتيني)",
+  "ly-arab": "ليبية (عربي)",
+  "mr-latn": "حسانية (لاتيني)",
+  "mr-arab": "حسانية (عربي)",
+  "kab-latn": "قبائلية (لاتيني)",
+  "kab-tifinagh": "قبائلية (تيفيناغ)",
+  "shi-latn": "شلحية (لاتيني)"
+};
+var DL_GROUPS = {
+  "tn": [{ id: "tn-arab", label: "تنزيل بالحرف العربي" }, { id: "tn-latn", label: "تنزيل بالحرف اللاتيني" }],
+  "dz": [{ id: "dz-arab", label: "تنزيل بالحرف العربي" }, { id: "dz-latn", label: "تنزيل بالحرف اللاتيني" }],
+  "ma": [{ id: "ma-arab", label: "تنزيل بالحرف العربي" }, { id: "ma-latn", label: "تنزيل بالحرف اللاتيني" }],
+  "ly": [{ id: "ly-arab", label: "تنزيل بالحرف العربي" }, { id: "ly-latn", label: "تنزيل بالحرف اللاتيني" }],
+  "mr": [{ id: "mr-arab", label: "تنزيل بالحرف العربي" }, { id: "mr-latn", label: "تنزيل بالحرف اللاتيني" }],
+  "kab": [{ id: "kab-latn", label: "تنزيل بالحرف اللاتيني" }, { id: "kab-tifinagh", label: "تنزيل بحرف التيفيناغ" }],
+  "shi": [{ id: "shi-latn", label: "تنزيل بالحرف اللاتيني" }]
+};
+var COUNTRY_NAMES = {
+  "tn": "اللهجة التونسية",
+  "dz": "اللهجة الجزائرية",
+  "ma": "الدارجة المغربية",
+  "ly": "اللهجة الليبية",
+  "mr": "اللهجة الموريتانية (الحسانية)",
+  "kab": "اللهجة القبائلية",
+  "shi": "اللهجة الشلحية"
+};
+var COUNTRY_FLAGS = {
+  "tn": "assets/tn.png",
+  "dz": "assets/dz.png",
+  "ma": "assets/ma.png",
+  "ly": "assets/ly.png",
+  "mr": "assets/mr.png",
+  "kab": "assets/kabyle.png",
+  "shi": "assets/amazigh.png"
 };
 function dlLabel(id) {
   return Object.prototype.hasOwnProperty.call(DL_NAMES, id) ? DL_NAMES[id] : "هذه اللهجة";
 }
-function askDlConfirm(id, label) {
+function askDlConfirm(id) {
   try {
     var old = document.querySelector(".dl-confirm-wrap");
     if (old && old.parentNode) old.parentNode.removeChild(old);
+
+    var prefix = id.split("-")[0];
+    var countryLabel = COUNTRY_NAMES[prefix] || dlLabel(id);
+    var variants = DL_GROUPS[prefix] || [{ id: id, label: "تنزيل الحزمة" }];
+    var flagSrc = COUNTRY_FLAGS[prefix] || "assets/logo.png";
+
     var wrap = document.createElement("div");
     wrap.className = "dl-confirm-wrap";
+
     var card = document.createElement("div");
     card.className = "dl-confirm";
     card.setAttribute("role", "dialog");
     card.setAttribute("aria-modal", "true");
+    card.style.setProperty("padding", "clamp(16px, 4.5vw, 22px) clamp(12px, 3.8vw, 18px)");
+    card.style.setProperty("border-radius", "24px");
+    card.style.setProperty("position", "relative");
+    card.style.setProperty("overflow", "hidden");
+    card.style.setProperty("background-image", "url(" + flagSrc + ")");
+    card.style.setProperty("background-size", "cover");
+    card.style.setProperty("background-position", "center");
+    card.style.setProperty("border", "2px solid rgba(255, 255, 255, 0.45)");
+    card.style.setProperty("box-shadow", "0 20px 45px rgba(0, 0, 0, 0.55)");
+
+    var overlay = document.createElement("div");
+    overlay.style.setProperty("position", "absolute");
+    overlay.style.setProperty("inset", "0");
+    overlay.style.setProperty("background", "rgba(11, 27, 43, 0.68)");
+    overlay.style.setProperty("-webkit-backdrop-filter", "blur(2px)");
+    overlay.style.setProperty("backdrop-filter", "blur(2px)");
+    overlay.style.setProperty("z-index", "1");
+    card.appendChild(overlay);
+
+    var content = document.createElement("div");
+    content.style.setProperty("position", "relative");
+    content.style.setProperty("z-index", "2");
+    content.style.setProperty("color", "#fff");
+
     var title = document.createElement("p");
     title.className = "dl-confirm-title";
-    title.textContent = "تنزيل حزمة " + label + " ؟";
+    title.style.setProperty("margin", "0 0 16px");
+    /* font-size governed by responsive css */
+    title.style.setProperty("font-weight", "800");
+    title.style.setProperty("color", "#ffffff");
+    title.style.setProperty("text-shadow", "0 2px 8px rgba(0, 0, 0, 0.8)");
+    title.textContent = "تنزيل حزمة " + countryLabel;
+    content.appendChild(title);
+
+    var list = document.createElement("div");
+    list.style.setProperty("display", "flex");
+    list.style.setProperty("flex-direction", "column");
+    list.style.setProperty("gap", "12px");
+    list.style.setProperty("margin-bottom", "18px");
+
+    variants.forEach(function (v) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "dl-variant-btn";
+      btn.style.setProperty("width", "100%");
+      /* min-height governed by responsive css */
+      btn.style.setProperty("border-radius", "16px");
+      btn.style.setProperty("cursor", "pointer");
+      btn.style.setProperty("border", "2px solid rgba(255, 255, 255, 0.4)");
+      btn.style.setProperty("background", "rgba(15, 76, 117, 0.82)");
+      btn.style.setProperty("-webkit-backdrop-filter", "blur(4px)");
+      btn.style.setProperty("backdrop-filter", "blur(4px)");
+      btn.style.setProperty("color", "#ffffff");
+      btn.style.setProperty("font", "inherit");
+      /* font-size governed by responsive css */
+      btn.style.setProperty("font-weight", "700");
+      btn.style.setProperty("display", "flex");
+      btn.style.setProperty("align-items", "center");
+      btn.style.setProperty("justify-content", "center");
+      btn.style.setProperty("padding", "0 18px");
+      btn.style.setProperty("box-shadow", "0 4px 14px rgba(0, 0, 0, 0.3)");
+      btn.textContent = v.label;
+
+      btn.addEventListener("click", async function () {
+        if (typeof window.baydaDownloadDialect !== "function") {
+          toast("التنزيل غير متصل بالنواة بعد");
+          close();
+          return;
+        }
+
+        // 1. حالة التحميل (Loading State)
+        btn.textContent = "";
+        btn.disabled = true;
+        btn.style.setProperty("cursor", "wait");
+        btn.style.setProperty("background", "rgba(15, 76, 117, 0.95)");
+
+        var spin = document.createElement("span");
+        spin.className = "dl-spin";
+        var spinText = document.createElement("span");
+        spinText.textContent = "جارٍ التنزيل والتثبيت...";
+        btn.appendChild(spin);
+        btn.appendChild(spinText);
+
+        list.querySelectorAll("button").forEach(function (b) {
+          if (b !== btn) {
+            b.style.setProperty("opacity", "0.35");
+            b.style.setProperty("pointer-events", "none");
+          }
+        });
+        no.style.setProperty("display", "none");
+
+        try {
+          await window.baydaDownloadDialect(v.id);
+
+          // 2. حركة النجاح (Success Animation)
+          btn.textContent = "";
+          btn.className = "dl-variant-btn dl-success-anim";
+          btn.style.setProperty("background", "#059669");
+          btn.style.setProperty("border-color", "#34d399");
+
+          var chk = document.createElement("span");
+          chk.textContent = "✓ ";
+          chk.style.setProperty("font-size", "1.3rem");
+          chk.style.setProperty("font-weight", "900");
+          chk.style.setProperty("margin-inline-end", "8px");
+
+          var msg = document.createElement("span");
+          msg.textContent = "تم التنزيل والحفظ بنجاح! 🎉";
+
+          btn.appendChild(chk);
+          btn.appendChild(msg);
+
+          title.textContent = "✅ اكتمل التنزيل بنجاح";
+          if (typeof beep === "function") beep("success");
+
+          setTimeout(close, 1400);
+        } catch (err) {
+          btn.textContent = "❌ تعذّر التنزيل، حاول مجدداً";
+          btn.style.setProperty("background", "#dc2626");
+          setTimeout(close, 1800);
+        }
+      });
+      list.appendChild(btn);
+    });
+    content.appendChild(list);
+
     var row = document.createElement("div");
     row.className = "dl-confirm-actions";
-    var ok = document.createElement("button");
-    ok.type = "button"; ok.className = "dl-confirm-ok"; ok.textContent = "تنزيل";
     var no = document.createElement("button");
-    no.type = "button"; no.className = "dl-confirm-no"; no.textContent = "إلغاء";
-    row.appendChild(ok); row.appendChild(no);
-    card.appendChild(title); card.appendChild(row);
+    no.type = "button";
+    no.className = "dl-confirm-no";
+    no.textContent = "إلغاء";
+    /* min-width governed by responsive css */
+    no.style.setProperty("min-height", "42px");
+    no.style.setProperty("border-radius", "22px");
+    no.style.setProperty("cursor", "pointer");
+    no.style.setProperty("border", "2px solid rgba(255, 255, 255, 0.35)");
+    no.style.setProperty("background", "rgba(0, 0, 0, 0.35)");
+    no.style.setProperty("color", "#ffffff");
+    no.style.setProperty("font", "inherit");
+    no.style.setProperty("font-weight", "bold");
+    row.appendChild(no);
+    content.appendChild(row);
+
+    card.appendChild(content);
     wrap.appendChild(card);
+
     function onKey(e) { if (e.key === "Escape") close(); }
     function close() {
       document.removeEventListener("keydown", onKey);
@@ -466,17 +629,9 @@ function askDlConfirm(id, label) {
     }
     no.addEventListener("click", close);
     wrap.addEventListener("click", function (e) { if (e.target === wrap) close(); });
-    ok.addEventListener("click", function () {
-      close();
-      if (typeof window.baydaDownloadDialect === "function") {
-        window.baydaDownloadDialect(id);
-      } else {
-        toast("التنزيل غير متصل بالنواة بعد");
-      }
-    });
     document.addEventListener("keydown", onKey);
     document.body.appendChild(wrap);
-    ok.focus();
+    no.focus();
   } catch (err) { console.error("askDlConfirm:", err); }
 }
 function showDlFloat(flag) {
@@ -797,7 +952,6 @@ function clearAllData() {
       localStorage.removeItem(LS.fontSize);
       localStorage.removeItem(LS.state);
       localStorage.removeItem(LS.notes);
-      localStorage.removeItem(LS.consent);
     } catch (e) { /* تجاهل */ }
 
     notes = [];
@@ -991,10 +1145,7 @@ function initUI() {
   restoreState();
   applyDialect(currentDialect);
 
-  /* نافذة الموافقة تظهر مرة واحدة فقط */
-  if (!localStorage.getItem(LS.consent)) {
-    setTimeout(function () { openModal("consent-modal"); }, 400);
-  }
+  
 
   /* نغمة خفيفة عند أي زر */
   document.addEventListener("click", function (e) {
