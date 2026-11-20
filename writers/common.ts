@@ -1,5 +1,5 @@
 import type { Token } from "../core/lexer.js";
-import type { Arg } from "../core/program.js";
+import type { Arg } from "../core/ast.js";
 
 const wordy = (t: Token) => t.type === "IDENT" || t.type === "KEYWORD" || t.type === "NUMBER";
 

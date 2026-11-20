@@ -1,10 +1,6 @@
-import { Token } from "./lexer";
-export type Arg = { type: "String" | "Number" | "Ident"; value: string } | { type: "Raw"; tokens: Token[] };
-export type Call = { type: "Call"; name: string; args: Arg[] };
-export type Expr = { type: "Raw"; tokens: Token[] };
-export type If = { type: "If"; test: Expr; then: Stmt[]; else: Stmt[] | null };
-export type Stmt = Call | If;
-export type Program = { type: "Program"; body: Stmt[] };
+import type { Arg, Call, If, Program, Stmt, While } from "./ast.js";
+import type { Token } from "./types.js";
+
 export function parseProgram(tokens: Token[]): Program {
  
 
@@ -34,16 +30,7 @@ const parseCall = (): Call => {
     const one = cur.length === 1 ? cur[0] : null;
     if (one && one.type === "STRING") args.push({ type: "String", value: one.value });
     else if (one && one.type === "NUMBER") args.push({ type: "Number", value: one.value });
-    else if (one && (one.type === "IDENT" || one.type === "KEYWORD")) {
-      // مفاهيم منطقية قياسية (بعد التطبيع): true / false
-      if (one.value === "true" || one.value === "false") {
-        args.push({ type: "Raw", tokens: [{ ...one, value: one.value }] });
-      } else {
-        args.push({ type: "Raw", tokens: cur });
-      }
-    } else {
-      args.push({ type: "Raw", tokens: cur });
-    }
+    else args.push({ type: "Raw", tokens: cur });
     cur = [];
   };
 
@@ -119,7 +106,7 @@ while (tokens[j] && tokens[j].type === "SYMBOL" && tokens[j].value === "\n") j++
     else if (nx && nx.type === "KEYWORD" && nx.value === "else") { i = j + 1; other = parseBlock(); }
     return { type: "If", test: { type: "Raw", tokens: stripParens(test) }, then, else: other };
   };
-const parseWhile = (): Stmt => {
+const parseWhile = (): While => {
   i++; // تخطي الكلمة المفتاحية while
   const test: Token[] = [];
   let depth = 0;
@@ -135,9 +122,7 @@ const parseWhile = (): Stmt => {
   }
   if (!test.length) fail(tokens[i] || tokens[i - 1]);
   const body = parseBlock();
-  // إرجاع العقدة الجديدة (متوافقة مع التعديل السابق في ast.ts)
-  
-return { type: "While", test: { type: "Raw", tokens: stripParens(test) }, body } as any;
+  return { type: "While", test: { type: "Raw", tokens: stripParens(test) }, body };
 };
 const parseStmt = (): Stmt => {
     const t = tokens[i];

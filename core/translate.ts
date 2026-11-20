@@ -1,6 +1,7 @@
 import { Lexer, Token } from "./lexer.js";
 import { normalize } from "./normalizer.js";
-import { parseProgram, Program } from "./program.js";
+import { parseProgram } from "./program.js";
+import type { Program } from "./ast.js";
 import { toJS } from "../writers/js-writer.js";
 import { toPython } from "../writers/python-writer.js";
 import { toC } from "../writers/c-writer.js";

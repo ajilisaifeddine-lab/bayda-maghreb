@@ -12,14 +12,3 @@ export interface Token {
   line: number;
   col: number;
 }
-
-// Abstract Syntax Tree (AST) Types
-export type AstNode =
-  | { type: 'Program'; body: AstNode[] }
-  | { type: 'Call'; name: string; args: AstNode[] }
-  | { type: "While"; test: AstNode; body: AstNode[] }
-  | { type: 'If'; test: AstNode; then: AstNode[]; else?: AstNode[] }
-  | { type: 'StringLiteral'; value: string }
-  | { type: 'NumberLiteral'; value: number }
-  | { type: 'Identifier'; name: string }
-  | { type: 'BinaryExpression'; operator: string; left: AstNode; right: AstNode };
