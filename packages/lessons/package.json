@@ -1,0 +1,49 @@
+{
+  "name": "@ajilisaifeddine-lab/bayda-lessons",
+  "version": "1.0.0",
+  "description": "Headless curriculum, dialect verification engine, 10-language localization, sandbox runtime, achievements, review quizzes, and kid companion toolkit for Bayda Maghreb.",
+  "license": "AGPL-3.0",
+  "type": "module",
+  "main": "./index.js",
+  "module": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "types",
+    "README.md"
+  ],
+  "keywords": [
+    "bayda-maghreb",
+    "bayda",
+    "darija",
+    "amazigh",
+    "kabyle",
+    "lessons",
+    "curriculum",
+    "transpiler",
+    "headless"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ajilisaifeddine-lab/bayda-maghreb.git",
+    "directory": "packages/lessons"
+  },
+  "homepage": "https://github.com/ajilisaifeddine-lab/bayda-maghreb/tree/main/packages/lessons",
+  "bugs": {
+    "url": "https://github.com/ajilisaifeddine-lab/bayda-maghreb/issues"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
