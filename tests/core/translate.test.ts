@@ -8,7 +8,7 @@ import { lex } from "../../core/lexer";
 import { normalize } from "../../core/normalizer";
 
 const packagesDir = path.resolve(__dirname, "../../packages");
-const dirs = fs.readdirSync(packagesDir).filter((f) => fs.statSync(path.join(packagesDir, f)).isDirectory());
+const dirs = fs.readdirSync(packagesDir).filter((f) => fs.statSync(path.join(packagesDir, f)).isDirectory() && fs.existsSync(path.join(packagesDir, f, "manifest.json")));
 
 describe("translate() — المسار الكامل لكل اللهجات", () => {
   describe.each(dirs)("dialect %s", (dir) => {

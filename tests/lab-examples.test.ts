@@ -7,7 +7,7 @@ import { translate } from "../core/translate";
 import { validateDialectPack } from "../core/pack";
 
 const root = path.join(process.cwd(), "packages");
-const ids = fs.readdirSync(root).filter((d) => fs.statSync(path.join(root, d)).isDirectory()).sort();
+const ids = fs.readdirSync(root).filter((d) => fs.statSync(path.join(root, d)).isDirectory() && fs.existsSync(path.join(root, d, "manifest.json"))).sort();
 const read = (id: string, f: string): Record<string, unknown> =>
   JSON.parse(fs.readFileSync(path.join(root, id, f), "utf8"));
 

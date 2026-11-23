@@ -23,7 +23,7 @@ function buildCatalog() {
   if (!SEMVER.test(String(pkg.version))) throw new Error("رقم إصدار package.json غير صالح");
   const ids = fs
     .readdirSync(PACKAGES)
-    .filter((d) => fs.statSync(path.join(PACKAGES, d)).isDirectory())
+    .filter((d) => fs.statSync(path.join(PACKAGES, d)).isDirectory() && fs.existsSync(path.join(PACKAGES, d, "manifest.json")))
     .sort();
   const dialects = {};
   for (const id of ids) {

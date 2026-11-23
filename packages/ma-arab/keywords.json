@@ -13,5 +13,21 @@
   "كدوب": "false",
   "غالط": "false",
   "مادام": "while",
-  "كلما": "while"
+  "كلما": "while",
+  "لكل": "for",
+  "خلي": "let",
+  "دير": "let",
+  "سول": "input",
+  "عطيني": "input",
+  "خدمة": "function",
+  "رجع": "return",
+  "زيد": "push",
+  "طول": "length",
+  "شحال": "length",
+  "ولا_إلى": "else_if",
+  "حبس": "break",
+  "وقف": "break",
+  "كمل": "continue",
+  "جرب": "try",
+  "شد": "catch"
 }

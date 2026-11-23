@@ -12,5 +12,21 @@
   "صح": "true",
   "غالط": "false",
   "مادام": "while",
-  "طولما": "while"
+  "طولما": "while",
+  "لكل": "for",
+  "خلي": "let",
+  "حط": "let",
+  "اسأل": "input",
+  "عطيني": "input",
+  "خدمة": "function",
+  "رجع": "return",
+  "زيد": "push",
+  "طول": "length",
+  "قداش": "length",
+  "وإلا_كان": "else_if",
+  "وقف": "break",
+  "اطلع": "break",
+  "كمل": "continue",
+  "جرب": "try",
+  "امسك": "catch"
 }

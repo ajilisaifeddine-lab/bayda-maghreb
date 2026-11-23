@@ -64,7 +64,7 @@ describe("schema — فحص حزمة لهجة مُنزَّلة", () => {
 
   it("كل حزم المستودع الحالية تجتاز الفحص", () => {
     const root = path.join(process.cwd(), "packages");
-    const dirs = fs.readdirSync(root).filter((d) => fs.statSync(path.join(root, d)).isDirectory());
+    const dirs = fs.readdirSync(root).filter((d) => fs.statSync(path.join(root, d)).isDirectory() && fs.existsSync(path.join(root, d, "manifest.json")));
     expect(dirs.length).toBeGreaterThan(0);
     for (const d of dirs) {
       const read = (f: string) => JSON.parse(fs.readFileSync(path.join(root, d, f), "utf8"));

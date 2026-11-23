@@ -102,7 +102,7 @@ const closeOf = (list: Token[]) => {
 while (tokens[j] && tokens[j].type === "SYMBOL" && tokens[j].value === "\n") j++;    
     const nx = tokens[j];
     let other: Stmt[] | null = null;
-    if (nx && nx.type === "KEYWORD" && nx.value === "else if") { i = j; other = [parseIf()]; }
+    if (nx && nx.type === "KEYWORD" && (nx.value === "else if" || nx.value === "else_if")) { i = j; other = [parseIf()]; }
     else if (nx && nx.type === "KEYWORD" && nx.value === "else") { i = j + 1; other = parseBlock(); }
     return { type: "If", test: { type: "Raw", tokens: stripParens(test) }, then, else: other };
   };

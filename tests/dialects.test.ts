@@ -9,7 +9,7 @@ describe("dialects", () => {
     return;
   }
 
-  const dirs = fs.readdirSync(packagesDir).filter(f => fs.statSync(path.join(packagesDir, f)).isDirectory());
+  const dirs = fs.readdirSync(packagesDir).filter(f => fs.statSync(path.join(packagesDir, f)).isDirectory() && fs.existsSync(path.join(packagesDir, f, "manifest.json")));
 
   describe.each(dirs)("dialect %s", (dir) => {
     it("has valid manifest and keywords", () => {

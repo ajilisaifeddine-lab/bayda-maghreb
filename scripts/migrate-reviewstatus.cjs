@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const packagesDir = path.join(__dirname, '../packages');
-const dirs = fs.readdirSync(packagesDir).filter(f => fs.statSync(path.join(packagesDir, f)).isDirectory());
+const dirs = fs.readdirSync(packagesDir).filter(f => fs.statSync(path.join(packagesDir, f)).isDirectory() && fs.existsSync(path.join(packagesDir, f, "manifest.json")));
 
 let moved = 0;
 for (const dir of dirs) {

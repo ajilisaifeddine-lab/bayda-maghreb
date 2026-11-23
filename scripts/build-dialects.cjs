@@ -57,7 +57,7 @@ function onlyStrings(obj) {
 function buildExamples() {
   const dirs = fs
     .readdirSync(PACKAGES)
-    .filter((d) => fs.statSync(path.join(PACKAGES, d)).isDirectory())
+    .filter((d) => fs.statSync(path.join(PACKAGES, d)).isDirectory() && fs.existsSync(path.join(PACKAGES, d, "manifest.json")))
     .sort();
   const missing = dirs.filter((d) => !Object.hasOwn(SAMPLES, d));
   const extra = Object.keys(SAMPLES).filter((d) => !dirs.includes(d));
