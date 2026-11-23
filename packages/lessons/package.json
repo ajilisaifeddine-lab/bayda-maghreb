@@ -1,6 +1,6 @@
 {
   "name": "@ajilisaifeddine-lab/bayda-lessons",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Headless curriculum, dialect verification engine, 10-language localization, sandbox runtime, achievements, review quizzes, and kid companion toolkit for Bayda Maghreb.",
   "license": "AGPL-3.0",
   "type": "module",
@@ -33,7 +33,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ajilisaifeddine-lab/bayda-maghreb.git",
+    "url": "git+https://github.com/ajilisaifeddine-lab/bayda-maghreb.git",
     "directory": "packages/lessons"
   },
   "homepage": "https://github.com/ajilisaifeddine-lab/bayda-maghreb/tree/main/packages/lessons",

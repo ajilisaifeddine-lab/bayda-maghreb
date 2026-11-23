@@ -9,7 +9,7 @@ Self-contained, framework-agnostic (zero React / DOM dependencies) lessons engin
 - **10-Language Localization (`LESSON_UI_COPY`, `resolveLessonCopy`, `formatLessonVerdictMessage`)**: Embedded copy for `ar`, `en`, `fr`, `es`, `pt-BR`, `it`, `de`, `nl`, `arn`, `ht`.
 - **Headless Session Controller (`createLessonSession`)**: Drop-in state controller for any UI framework (React, Vue, Svelte, vanilla JS, React Native, or CLI) with JSON progress export/import.
 - **Review Quizzes, Achievements & Kid Companion**: `generateLessonReviewQuizzes`, `evaluateAchievements`, `buildKidLessonCompanionGuide`, `formatDialectCardForKids`, and pure browser-safe pronunciation helpers (`buildLessonPronunciationClips`, `parseKidVoiceCommand`).
-- **Dialect Registry & Integrity (`STARTER_DIALECT_PACKS`, `FULL_DIALECT_PACKS`, `verifyPackIntegrity`)**: Built-in Maghrebi & Amazigh packs plus SHA-256 pack verification.
+- **Dialect Registry & Integrity (`STARTER_DIALECT_PACKS`, `FULL_DIALECT_PACKS`, `adaptDialectPack`, `partitionLessonsForPack`, `verifyPackIntegrity`)**: Accepts `bayda-maghreb` `core/loader.ts` `DialectPackage` objects (`{ id, manifest, keywords, vocabulary }`) directly and normalizes `core/concepts.json` aliases (`else if`, `function`, `length`), unlocking/locking lessons strictly from each dialect's `keywords.json`.
 
 ## Quick Usage
 

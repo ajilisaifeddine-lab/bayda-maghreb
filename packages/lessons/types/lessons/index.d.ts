@@ -1,16 +1,18 @@
 import { parseLearnerProfile } from '../core/achievements';
 import { diagnoseCompileError } from '../core/diagnostics';
 import { formatDialectCardForKids, parseCodeStepsForKids } from '../core/kidVisualLogic';
-import { checkAstRules, computeDialectCurriculumProgress, fillSlots, getShuffledLessonCards, missingConceptsForLesson, verifyLessonSolution, verifyLessonSource, verifyReviewQuizChallenge } from '../core/lessons';
+import { adaptDialectPack, checkAstRules, computeDialectCurriculumProgress, fillSlots, getShuffledLessonCards, missingConceptsForLesson, partitionLessonsForPack, verifyLessonSolution, verifyLessonSource, verifyReviewQuizChallenge } from '../core/lessons';
+import { canonicalizeConcept } from '../core/normalizer';
 import { computeSha256Hex, validateDialectPack, verifyPackIntegrity } from '../core/pack';
 import { buildAndVerifyFullPack, loadValidatedInstalledPacks, resolveDialectPack } from '../core/packStore';
 import { executeAst, traceExecutionAst } from '../core/sandbox';
 import { translateDialect } from '../core/translate';
-import { DialectPack, KidAgeBand, LearnerProfile, LearningMode, LessonTemplate, Target, UiLang } from '../core/types';
+import { DialectPack, DialectPackInput, KidAgeBand, LearnerProfile, LearningMode, LessonTemplate, Target, UiLang } from '../core/types';
 import { buildLessonAudioPhrase, buildLessonPronunciationClips } from './audio';
 import { LessonUiStrings } from './i18n';
 import { LessonSessionOptions } from './session';
-export { BaydaEngine, LESSONS_CURRICULUM, checkAstRules, computeDialectCurriculumProgress, defaultInputsForLesson, deterministicShuffleIndices, fillSlots, findConceptWord, generateLessonReviewQuizzes, getShuffledLessonCards, missingConceptsForLesson, verifyLessonSolution, verifyLessonSource, verifyReviewQuizChallenge, type DialectCurriculumProgress, type LessonReviewQuizItem, type LessonSolutionResult, type ReviewQuizEvaluation, type ShuffledLessonCard, type VerifyLessonOptions, } from '../core/lessons';
+export { BaydaEngine, LESSONS_CURRICULUM, adaptDialectPack, checkAstRules, computeDialectCurriculumProgress, defaultInputsForLesson, deterministicShuffleIndices, fillSlots, findConceptWord, generateLessonReviewQuizzes, getShuffledLessonCards, isRepoDialectPackage, missingConceptsForLesson, partitionLessonsForPack, verifyLessonSolution, verifyLessonSource, verifyReviewQuizChallenge, type DialectCurriculumProgress, type LessonReviewQuizItem, type LessonSolutionResult, type PartitionedLessonsResult, type ReviewQuizEvaluation, type ShuffledLessonCard, type VerifyLessonOptions, } from '../core/lessons';
+export { CONCEPT_ALIASES, canonicalizeConcept, } from '../core/normalizer';
 export { diagnoseCompileError, type DiagnosticHint, } from '../core/diagnostics';
 export { MAX_ARRAY_LENGTH, MAX_CALL_DEPTH, MAX_LOOP_ITERATIONS, MAX_OUTPUT_LINES, MAX_RUNTIME_BYTES, MAX_STRING_LENGTH, MAX_TOTAL_STEPS, executeAst, traceExecutionAst, type ExecuteOptions, type RuntimeVal, } from '../core/sandbox';
 export { translateDialect, type TranslateOptions } from '../core/translate';
@@ -25,9 +27,10 @@ export { resolveKidTier, visualForConcept, type KidProgressionTier, type Resolve
 export { formatDialectCardForKids, parseCodeStepsForKids, type KidLogicTone, type KidVisualBlockLabel, type KidVisualLabels, } from '../core/kidVisualLogic';
 export { buildKidVoiceCommandHints, buildLessonAudioPhrase, buildLessonPronunciationClips, detectSpeechLang, extractSelectedCodeSpeech, formatSpeechReadableSnippet, getVoiceRecognitionLang, parseKidVoiceCommand, stripEmojisForSpeech, uiLangToSpeechTag, type KidVoiceCommandKind, type KidVoiceCommandMatch, type LessonAudioClip, type SelectedCodeSpeechSegment, type SelectedCodeSpeechTerm, type SpeechDetectOptions, type SpeechDialectContext, } from './audio';
 export { createLessonSession, type HydratedLesson, type LessonReviewSessionState, type LessonSessionController, type LessonSessionOptions, type LessonSessionState, type SerializedLessonProgress, } from './session';
-export { TARGET_META, VALID_TARGETS, isRtlTarget, isValidTarget, type AchievementId, type AstNode, type AwaitingInputPrompt, type BadgeUnlockRecord, type DialectPack, type ExecutionResult, type ExecutionStepKind, type ExecutionStepTrace, type ExecutionWarningCode, type KidAgeBand, type LearnerProfile, type LearningMode, type LessonKind, type LessonNodeName, type LessonRule, type LessonTemplate, type LessonVerdict, type PackSource, type Target, type TranspileResult, type UiLang, } from '../core/types';
+export { TARGET_META, VALID_TARGETS, isRtlTarget, isValidTarget, type AchievementId, type AstNode, type AwaitingInputPrompt, type BadgeUnlockRecord, type DialectPack, type DialectPackInput, type ExecutionResult, type ExecutionStepKind, type ExecutionStepTrace, type ExecutionWarningCode, type KidAgeBand, type LearnerProfile, type LearningMode, type LessonKind, type LessonNodeName, type LessonRule, type LessonTemplate, type LessonVerdict, type PackSource, type RepoDialectPackage, type ScriptKind, type Target, type TranspileResult, type UiLang, } from '../core/types';
 export interface LessonsToolkitConfig {
-    pack?: DialectPack;
+    pack?: DialectPackInput;
+    dialects?: DialectPackInput[];
     dialectId?: string;
     useFullPack?: boolean;
     uiLang?: UiLang;
@@ -41,8 +44,9 @@ export interface LessonsToolkitConfig {
  * achievements, kid companion guides, and pronunciation data from one call.
  */
 export declare function createLessonsToolkit(config?: LessonsToolkitConfig): {
-    version: '1.0.0';
+    version: '1.0.1';
     curriculum: LessonTemplate[];
+    dialects: DialectPack[];
     starterDialects: DialectPack[];
     fullDialects: DialectPack[];
     engine: {
@@ -53,11 +57,16 @@ export declare function createLessonsToolkit(config?: LessonsToolkitConfig): {
         fillTemplate: typeof fillSlots;
         checkRules: typeof checkAstRules;
         missingConcepts: typeof missingConceptsForLesson;
+        partitionLessons: typeof partitionLessonsForPack;
+        adaptDialect: typeof adaptDialectPack;
         shuffleCards: typeof getShuffledLessonCards;
     };
+    adaptDialect: typeof adaptDialectPack;
+    canonicalizeConcept: typeof canonicalizeConcept;
     getStrings: (lang?: UiLang) => LessonUiStrings;
     getLessonsForMode: (mode: LearningMode, kidBand?: KidAgeBand, stars?: number) => LessonTemplate[];
-    resolveLesson: (lesson: LessonTemplate, pack?: DialectPack, lang?: UiLang) => {
+    partitionLessons: (packOrKeywords?: DialectPackInput | Record<string, string>, mode?: LearningMode) => import(".").PartitionedLessonsResult;
+    resolveLesson: (lesson: LessonTemplate, packInput?: DialectPackInput, lang?: UiLang) => {
         lesson: LessonTemplate;
         copy: import("./i18n").ResolvedLessonCopy;
         starterCode: string;
@@ -70,7 +79,7 @@ export declare function createLessonsToolkit(config?: LessonsToolkitConfig): {
         companionGuide: import(".").KidLessonCompanionGuide | undefined;
         pronunciationClips: import("./audio").LessonAudioClip[];
     };
-    verifySolution: (source: string, lesson: LessonTemplate, pack?: DialectPack, options?: {
+    verifySolution: (source: string, lesson: LessonTemplate, packInput?: DialectPackInput, options?: {
         inputs?: string[];
         interactiveInput?: boolean;
         target?: Target;
@@ -132,7 +141,7 @@ export declare function createLessonsToolkit(config?: LessonsToolkitConfig): {
             target: number;
         }[];
     };
-    generateReviewQuizzes: (completedIds: string[], pack?: DialectPack, mode?: LearningMode) => import(".").LessonReviewQuizItem[];
+    generateReviewQuizzes: (completedIds: string[], packInput?: DialectPackInput, mode?: LearningMode) => import(".").LessonReviewQuizItem[];
     verifyReviewQuiz: typeof verifyReviewQuizChallenge;
     formatVisualCard: typeof formatDialectCardForKids;
     parseVisualSteps: typeof parseCodeStepsForKids;

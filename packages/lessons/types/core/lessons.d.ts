@@ -1,9 +1,30 @@
 import { executeAst } from './sandbox';
 import { translateDialect } from './translate';
-import { AstNode, DialectPack, ExecutionStepTrace, ExecutionWarningCode, LessonRule, LessonTemplate, LessonVerdict, Target } from './types';
+import { AstNode, DialectPack, DialectPackInput, ExecutionStepTrace, ExecutionWarningCode, LearningMode, LessonRule, LessonTemplate, LessonVerdict, Target } from './types';
 export declare const LESSONS_CURRICULUM: LessonTemplate[];
+export declare function isRepoDialectPackage(input: DialectPackInput): input is Exclude<DialectPackInput, DialectPack>;
+/**
+ * Adapts either a frontend `DialectPack` or a disk-loaded `core/loader.ts`
+ * `DialectPackage` (`{ id, manifest, keywords, vocabulary }`) from the main
+ * `bayda-maghreb` repository into a normalized `DialectPack`.
+ */
+export declare function adaptDialectPack(input: DialectPackInput): DialectPack;
 export declare function findConceptWord(keywords: Record<string, string>, concept: string): string | null;
-export declare function missingConceptsForLesson(lesson: LessonTemplate, keywords: Record<string, string>): string[];
+export declare function missingConceptsForLesson(lesson: Pick<LessonTemplate, 'requires'>, keywords: Record<string, string>): string[];
+export interface PartitionedLessonsResult {
+    ready: LessonTemplate[];
+    locked: Array<{
+        lesson: LessonTemplate;
+        id: string;
+        status: LessonTemplate['status'];
+        missing: string[];
+    }>;
+}
+/**
+ * Mirrors `lessonsFor()` / `lockedFor()` from `core/lessons.ts`:
+ * evaluates each lesson strictly against the dialect's actual `keywords.json`.
+ */
+export declare function partitionLessonsForPack(lessons: LessonTemplate[], packOrKeywords: DialectPackInput | Record<string, string>, mode?: LearningMode): PartitionedLessonsResult;
 export declare function fillSlots(template: string, keywords: Record<string, string>): {
     ok: true;
     text: string;
@@ -60,12 +81,12 @@ export interface ShuffledLessonCard {
     index: number;
     text: string;
 }
-export declare function getShuffledLessonCards(lesson: LessonTemplate, pack: DialectPack): {
+export declare function getShuffledLessonCards(lesson: LessonTemplate, packInput: DialectPackInput): {
     cards: string[];
     shuffled: ShuffledLessonCard[];
 };
-export declare function verifyLessonSolution(source: string, pack: DialectPack, lesson: LessonTemplate, options?: VerifyLessonOptions): LessonSolutionResult;
-export declare function verifyLessonSource(source: string, pack: DialectPack, lesson: LessonTemplate, options?: {
+export declare function verifyLessonSolution(source: string, packInput: DialectPackInput, lesson: LessonTemplate, options?: VerifyLessonOptions): LessonSolutionResult;
+export declare function verifyLessonSource(source: string, packInput: DialectPackInput, lesson: LessonTemplate, options?: {
     inputs?: string[];
 }): LessonVerdict;
 export declare const BaydaEngine: {
@@ -76,6 +97,8 @@ export declare const BaydaEngine: {
     fillTemplate: typeof fillSlots;
     checkRules: typeof checkAstRules;
     missingConcepts: typeof missingConceptsForLesson;
+    partitionLessons: typeof partitionLessonsForPack;
+    adaptDialect: typeof adaptDialectPack;
     shuffleCards: typeof getShuffledLessonCards;
 };
 export interface DialectCurriculumProgress {
@@ -85,7 +108,7 @@ export interface DialectCurriculumProgress {
     readyInPackCount: number;
     percentage: number;
 }
-export declare function computeDialectCurriculumProgress(completedIds: string[], lessons: LessonTemplate[], pack: DialectPack): DialectCurriculumProgress;
+export declare function computeDialectCurriculumProgress(completedIds: string[], lessons: LessonTemplate[], packInput: DialectPackInput): DialectCurriculumProgress;
 export interface LessonReviewQuizItem {
     id: string;
     lessonId: string;
@@ -101,7 +124,7 @@ export interface LessonReviewQuizItem {
     expectedOutput: string;
     lesson: LessonTemplate;
 }
-export declare function generateLessonReviewQuizzes(completedIds: string[], lessons: LessonTemplate[], pack: DialectPack, options?: {
+export declare function generateLessonReviewQuizzes(completedIds: string[], lessons: LessonTemplate[], packInput: DialectPackInput, options?: {
     inputs?: string[];
 }): LessonReviewQuizItem[];
 export interface ReviewQuizEvaluation {
@@ -110,4 +133,4 @@ export interface ReviewQuizEvaluation {
     verdict?: LessonVerdict;
     error?: string;
 }
-export declare function verifyReviewQuizChallenge(quiz: LessonReviewQuizItem, submission: string, pack: DialectPack): ReviewQuizEvaluation;
+export declare function verifyReviewQuizChallenge(quiz: LessonReviewQuizItem, submission: string, packInput: DialectPackInput): ReviewQuizEvaluation;
