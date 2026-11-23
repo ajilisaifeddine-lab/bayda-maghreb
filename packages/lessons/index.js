@@ -416,6 +416,64 @@ function diagnoseCompileError(rawError, source, activePack, allPacks) {
   return { kind: "unexpected_token" };
 }
 
+// src/core/normalizer.ts
+var CONCEPT_ALIASES = {
+  "else if": "else_if",
+  function: "fn",
+  length: "len"
+};
+var DIALECT_METADATA_KEYS = /* @__PURE__ */ new Set(["reviewStatus", "review", "status", "$schema"]);
+function canonicalizeConcept(concept) {
+  const trimmed = concept.trim();
+  return CONCEPT_ALIASES[trimmed] ?? trimmed;
+}
+function normalizeWord(word) {
+  return word.trim().toLowerCase();
+}
+function normalizeTokens(tokens, keywords) {
+  const lowerKeywords = /* @__PURE__ */ new Map();
+  for (const [k, v] of Object.entries(keywords)) {
+    if (DIALECT_METADATA_KEYS.has(k) || typeof v !== "string") continue;
+    lowerKeywords.set(normalizeWord(k), canonicalizeConcept(v));
+  }
+  const out = [];
+  let i = 0;
+  while (i < tokens.length) {
+    const cur = tokens[i];
+    if (cur.type === "EOF") {
+      out.push(cur);
+      break;
+    }
+    const next = tokens[i + 1];
+    if (cur.type === "IDENT" && next && next.type === "IDENT" && cur.line === next.line) {
+      const phrase = `${normalizeWord(cur.value)} ${normalizeWord(next.value)}`;
+      const phraseConcept = lowerKeywords.get(phrase);
+      if (phraseConcept) {
+        out.push({
+          type: "IDENT",
+          value: `${cur.value} ${next.value}`,
+          line: cur.line,
+          column: cur.column,
+          concept: phraseConcept
+        });
+        i += 2;
+        continue;
+      }
+    }
+    if (cur.type === "IDENT") {
+      const concept = lowerKeywords.get(normalizeWord(cur.value));
+      if (concept) {
+        out.push({ ...cur, concept });
+        i++;
+        continue;
+      }
+    }
+    out.push(cur);
+    i++;
+  }
+  return out;
+}
+
 // src/core/sandbox.ts
 var MAX_LOOP_ITERATIONS = 500;
 var MAX_TOTAL_STEPS = 15e3;
@@ -1547,53 +1605,6 @@ function lex(source) {
   }
   tokens.push({ type: "EOF", value: "", line, column });
   return tokens;
-}
-
-// src/core/normalizer.ts
-function normalizeWord(word) {
-  return word.trim().toLowerCase();
-}
-function normalizeTokens(tokens, keywords) {
-  const lowerKeywords = /* @__PURE__ */ new Map();
-  for (const [k, v] of Object.entries(keywords)) {
-    lowerKeywords.set(normalizeWord(k), v);
-  }
-  const out = [];
-  let i = 0;
-  while (i < tokens.length) {
-    const cur = tokens[i];
-    if (cur.type === "EOF") {
-      out.push(cur);
-      break;
-    }
-    const next = tokens[i + 1];
-    if (cur.type === "IDENT" && next && next.type === "IDENT" && cur.line === next.line) {
-      const phrase = `${normalizeWord(cur.value)} ${normalizeWord(next.value)}`;
-      const phraseConcept = lowerKeywords.get(phrase);
-      if (phraseConcept) {
-        out.push({
-          type: "IDENT",
-          value: `${cur.value} ${next.value}`,
-          line: cur.line,
-          column: cur.column,
-          concept: phraseConcept
-        });
-        i += 2;
-        continue;
-      }
-    }
-    if (cur.type === "IDENT") {
-      const concept = lowerKeywords.get(normalizeWord(cur.value));
-      if (concept) {
-        out.push({ ...cur, concept });
-        i++;
-        continue;
-      }
-    }
-    out.push(cur);
-    i++;
-  }
-  return out;
 }
 
 // src/core/program.ts
@@ -3736,15 +3747,91 @@ var LESSONS_CURRICULUM = [
   }
 ];
 var SLOT_RE = /\{\{([a-z0-9_ ]+)\}\}/gi;
+var DIALECT_META_KEYS = /* @__PURE__ */ new Set(["reviewStatus", "review", "status", "$schema"]);
+function cleanStringRecord(obj) {
+  const out = {};
+  if (!obj) return out;
+  for (const [k, v] of Object.entries(obj)) {
+    if (DIALECT_META_KEYS.has(k) || typeof v !== "string") continue;
+    out[k] = v;
+  }
+  return out;
+}
+function normalizeScriptKind(rawScript, id) {
+  const s = (rawScript ?? "").trim().toLowerCase();
+  if (s === "arabic" || s === "arab" || /-arab$/i.test(id)) return "Arabic";
+  if (s === "tifinagh" || s === "tfng" || /-tifinagh$/i.test(id)) return "Tifinagh";
+  return "Latin";
+}
+function isRepoDialectPackage(input) {
+  return typeof input === "object" && input !== null && "manifest" in input;
+}
+function adaptDialectPack(input) {
+  if (!isRepoDialectPackage(input)) {
+    return input;
+  }
+  const m = input.manifest ?? {};
+  const id = typeof m.id === "string" && m.id.trim() ? m.id : input.id;
+  const script = normalizeScriptKind(typeof m.script === "string" ? m.script : void 0, id);
+  const rtl = typeof m.rtl === "boolean" ? m.rtl : script === "Arabic";
+  const keywords = cleanStringRecord(input.keywords);
+  const vocabulary = cleanStringRecord(input.vocabulary);
+  const printWord = findConceptWord(keywords, "print") ?? (rtl ? "\u0643\u062A\u0628" : "ktab");
+  return {
+    id,
+    code: typeof m.code === "string" && m.code.trim() ? m.code : id,
+    name: typeof m.name === "string" && m.name.trim() ? m.name : id,
+    nativeName: typeof m.nativeName === "string" && m.nativeName.trim() ? m.nativeName : typeof m.name === "string" && m.name.trim() ? m.name : id,
+    country: typeof m.country === "string" ? m.country : "Maghreb",
+    regionLabel: typeof m.regionLabel === "string" ? m.regionLabel : "North Africa",
+    script,
+    rtl,
+    iso639_3: typeof m.iso639_3 === "string" ? m.iso639_3 : void 0,
+    reviewStatus: m.reviewStatus === "verified" ? "verified" : "pending",
+    requiresConsent: Boolean(m.requiresConsent),
+    version: typeof m.version === "string" ? m.version : "1.0.0",
+    description: typeof m.description === "string" ? m.description : "",
+    tribute: typeof m.tribute === "string" ? m.tribute : void 0,
+    keywords,
+    vocabulary,
+    starterCode: `${printWord}("Salam!")`
+  };
+}
 function findConceptWord(keywords, concept) {
+  const target = canonicalizeConcept(concept);
   for (const [word, mapped] of Object.entries(keywords)) {
-    if (mapped === concept) return word;
+    if (DIALECT_META_KEYS.has(word) || typeof mapped !== "string") continue;
+    if (canonicalizeConcept(mapped) === target) return word;
   }
   return null;
 }
 function missingConceptsForLesson(lesson, keywords) {
-  const available = new Set(Object.values(keywords));
-  return lesson.requires.filter((req) => !available.has(req));
+  const available = /* @__PURE__ */ new Set();
+  for (const [k, v] of Object.entries(keywords)) {
+    if (DIALECT_META_KEYS.has(k) || typeof v !== "string") continue;
+    available.add(canonicalizeConcept(v));
+  }
+  return lesson.requires.filter((req) => !available.has(canonicalizeConcept(req)));
+}
+function partitionLessonsForPack(lessons, packOrKeywords, mode) {
+  const keywords = "keywords" in packOrKeywords && typeof packOrKeywords.keywords === "object" ? adaptDialectPack(packOrKeywords).keywords : packOrKeywords;
+  const subset = (mode ? lessons.filter((l) => l.mode === mode) : lessons).slice().sort((a, b) => a.order - b.order);
+  const ready = [];
+  const locked = [];
+  for (const lesson of subset) {
+    const missing = missingConceptsForLesson(lesson, keywords);
+    if (lesson.status === "ready" && missing.length === 0) {
+      ready.push(lesson);
+    } else {
+      locked.push({
+        lesson,
+        id: lesson.id,
+        status: lesson.status,
+        missing
+      });
+    }
+  }
+  return { ready, locked };
 }
 function fillSlots(template, keywords) {
   const missing = [];
@@ -4028,7 +4115,8 @@ function deterministicShuffleIndices(length, seedStr) {
   }
   return arr;
 }
-function getShuffledLessonCards(lesson, pack) {
+function getShuffledLessonCards(lesson, packInput) {
+  const pack = adaptDialectPack(packInput);
   const cards = (lesson.cards ?? []).map((c) => fillSlots(c, pack.keywords).text);
   const order = deterministicShuffleIndices(cards.length, `${lesson.id}:${pack.id}`);
   return {
@@ -4036,7 +4124,8 @@ function getShuffledLessonCards(lesson, pack) {
     shuffled: order.map((idx) => ({ index: idx, text: cards[idx] }))
   };
 }
-function verifyLessonSolution(source, pack, lesson, options) {
+function verifyLessonSolution(source, packInput, lesson, options) {
+  const pack = adaptDialectPack(packInput);
   const trimmed = source.trim();
   if (!trimmed) {
     return { status: "error", message: "Empty program" };
@@ -4098,8 +4187,8 @@ function verifyLessonSolution(source, pack, lesson, options) {
     trace
   };
 }
-function verifyLessonSource(source, pack, lesson, options) {
-  const res = verifyLessonSolution(source, pack, lesson, options);
+function verifyLessonSource(source, packInput, lesson, options) {
+  const res = verifyLessonSolution(source, packInput, lesson, options);
   if (res.status === "ok") {
     return { status: "ok", outputs: res.outputs };
   }
@@ -4123,9 +4212,12 @@ var BaydaEngine = {
   fillTemplate: fillSlots,
   checkRules: checkAstRules,
   missingConcepts: missingConceptsForLesson,
+  partitionLessons: partitionLessonsForPack,
+  adaptDialect: adaptDialectPack,
   shuffleCards: getShuffledLessonCards
 };
-function computeDialectCurriculumProgress(completedIds, lessons, pack) {
+function computeDialectCurriculumProgress(completedIds, lessons, packInput) {
+  const pack = adaptDialectPack(packInput);
   const completedSet = new Set(completedIds);
   const totalGuided = lessons.length;
   const completedCount = lessons.filter((l) => completedSet.has(l.id)).length;
@@ -4141,7 +4233,8 @@ function computeDialectCurriculumProgress(completedIds, lessons, pack) {
     percentage
   };
 }
-function generateLessonReviewQuizzes(completedIds, lessons, pack, options) {
+function generateLessonReviewQuizzes(completedIds, lessons, packInput, options) {
+  const pack = adaptDialectPack(packInput);
   const quizzes = [];
   const completedLessons = lessons.filter(
     (l) => l.status === "ready" && completedIds.includes(l.id) && Boolean(l.template) && BaydaEngine.missingConcepts(l, pack.keywords).length === 0
@@ -4237,7 +4330,8 @@ function generateLessonReviewQuizzes(completedIds, lessons, pack, options) {
   });
   return quizzes;
 }
-function verifyReviewQuizChallenge(quiz, submission, pack) {
+function verifyReviewQuizChallenge(quiz, submission, packInput) {
+  const pack = adaptDialectPack(packInput);
   if (quiz.kind === "code-challenge") {
     const verdict = BaydaEngine.verifyLesson(submission, pack, quiz.lesson);
     if (verdict.status === "ok") {
@@ -8924,6 +9018,7 @@ function sanitizeCompletedMap(raw) {
 }
 function createLessonSession(options = {}) {
   const catalog = options.lessons ?? LESSONS_CURRICULUM;
+  const customDialects = (options.dialects ?? []).map(adaptDialectPack);
   const initialMode = options.mode ?? "beginner";
   const initialStars = Math.max(0, options.kidStars ?? 0);
   const initialBand = options.kidAgeBand ?? "auto";
@@ -8936,7 +9031,7 @@ function createLessonSession(options = {}) {
     kidStars: initialStars,
     resolvedKidBand: initialMode === "kid" ? resolveKidTier(initialStars, initialBand).band : null,
     kidLessonFilter: options.kidLessonFilter ?? "age",
-    pack: options.pack ?? STARTER_DIALECT_PACKS[0],
+    pack: options.pack ? adaptDialectPack(options.pack) : customDialects[0] ?? STARTER_DIALECT_PACKS[0],
     uiLang: options.uiLang ?? "en",
     hasConsent: options.hasConsent ?? true,
     enforceConsent: options.enforceConsent ?? false,
@@ -9101,7 +9196,8 @@ function createLessonSession(options = {}) {
       };
       emit();
     },
-    setDialect: (pack) => {
+    setDialect: (packInput) => {
+      const pack = adaptDialectPack(packInput);
       state = {
         ...state,
         pack,
@@ -9114,7 +9210,8 @@ function createLessonSession(options = {}) {
       emit();
     },
     setDialectById: (dialectId, useFullPack = false) => {
-      const pack = useFullPack ? getFullDialectById(dialectId) : getDialectById(dialectId);
+      const customMatch = customDialects.find((d) => d.id === dialectId || d.code === dialectId);
+      const pack = customMatch ?? (useFullPack ? getFullDialectById(dialectId) : getDialectById(dialectId));
       state = {
         ...state,
         pack,
@@ -9379,14 +9476,19 @@ function createLessonSession(options = {}) {
 
 // src/lessons/index.ts
 function createLessonsToolkit(config = {}) {
-  const initialPack = config.pack ?? (config.dialectId ? config.useFullPack ? getFullDialectById(config.dialectId) : getDialectById(config.dialectId) : STARTER_DIALECT_PACKS[0]);
+  const customDialects = (config.dialects ?? []).map(adaptDialectPack);
+  const findDialectById = (id) => customDialects.find((d) => d.id === id || d.code === id) ?? (config.useFullPack ? getFullDialectById(id) : getDialectById(id));
+  const initialPack = config.pack ? adaptDialectPack(config.pack) : config.dialectId ? findDialectById(config.dialectId) : customDialects[0] ?? STARTER_DIALECT_PACKS[0];
   const uiLang = config.uiLang ?? "en";
   return {
     version: "1.0.0",
     curriculum: LESSONS_CURRICULUM,
+    dialects: customDialects.length > 0 ? customDialects : STARTER_DIALECT_PACKS,
     starterDialects: STARTER_DIALECT_PACKS,
     fullDialects: FULL_DIALECT_PACKS,
     engine: BaydaEngine,
+    adaptDialect: adaptDialectPack,
+    canonicalizeConcept,
     getStrings: (lang = uiLang) => getLessonUiStrings(lang, config.copyOverrides),
     getLessonsForMode: (mode, kidBand, stars = 0) => {
       const modeLessons = LESSONS_CURRICULUM.filter((l) => l.mode === mode).sort(
@@ -9398,17 +9500,22 @@ function createLessonsToolkit(config = {}) {
       }
       return modeLessons;
     },
-    resolveLesson: (lesson, pack = initialPack, lang = uiLang) => ({
-      lesson,
-      copy: resolveLessonCopy(lesson, lang, config.copyOverrides),
-      starterCode: lesson.template ? fillSlots(lesson.template, pack.keywords).text : "",
-      missingConcepts: missingConceptsForLesson(lesson, pack.keywords),
-      shuffledCards: lesson.kind === "arrange" ? getShuffledLessonCards(lesson, pack) : void 0,
-      kidTier: lesson.mode === "kid" ? resolveKidLessonTier(lesson) : void 0,
-      companionGuide: lesson.mode === "kid" ? buildKidLessonCompanionGuide(lesson, pack) : void 0,
-      pronunciationClips: buildLessonPronunciationClips(lesson, pack)
-    }),
-    verifySolution: (source, lesson, pack = initialPack, options) => {
+    partitionLessons: (packOrKeywords = initialPack, mode) => partitionLessonsForPack(LESSONS_CURRICULUM, packOrKeywords, mode),
+    resolveLesson: (lesson, packInput = initialPack, lang = uiLang) => {
+      const pack = adaptDialectPack(packInput);
+      return {
+        lesson,
+        copy: resolveLessonCopy(lesson, lang, config.copyOverrides),
+        starterCode: lesson.template ? fillSlots(lesson.template, pack.keywords).text : "",
+        missingConcepts: missingConceptsForLesson(lesson, pack.keywords),
+        shuffledCards: lesson.kind === "arrange" ? getShuffledLessonCards(lesson, pack) : void 0,
+        kidTier: lesson.mode === "kid" ? resolveKidLessonTier(lesson) : void 0,
+        companionGuide: lesson.mode === "kid" ? buildKidLessonCompanionGuide(lesson, pack) : void 0,
+        pronunciationClips: buildLessonPronunciationClips(lesson, pack)
+      };
+    },
+    verifySolution: (source, lesson, packInput = initialPack, options) => {
+      const pack = adaptDialectPack(packInput);
       const result = verifyLessonSolution(source, pack, lesson, {
         inputs: options?.inputs,
         interactiveInput: options?.interactiveInput,
@@ -9428,6 +9535,7 @@ function createLessonsToolkit(config = {}) {
     },
     createSession: (sessionOpts = {}) => createLessonSession({
       pack: initialPack,
+      dialects: config.dialects,
       uiLang,
       enforceConsent: config.enforceConsent,
       hasConsent: config.hasConsent,
@@ -9444,9 +9552,9 @@ function createLessonsToolkit(config = {}) {
         }))
       };
     },
-    generateReviewQuizzes: (completedIds, pack = initialPack, mode) => {
+    generateReviewQuizzes: (completedIds, packInput = initialPack, mode) => {
       const subset = mode ? LESSONS_CURRICULUM.filter((l) => l.mode === mode) : LESSONS_CURRICULUM;
-      return generateLessonReviewQuizzes(completedIds, subset, pack);
+      return generateLessonReviewQuizzes(completedIds, subset, packInput);
     },
     verifyReviewQuiz: verifyReviewQuizChallenge,
     formatVisualCard: formatDialectCardForKids,
@@ -9476,6 +9584,7 @@ export {
   ACHIEVEMENT_DEFINITIONS,
   BRANCH_LESSON_IDS,
   BaydaEngine,
+  CONCEPT_ALIASES,
   FULL_DIALECT_PACKS,
   LESSONS_CURRICULUM,
   LESSON_UI_COPY,
@@ -9492,11 +9601,13 @@ export {
   STARTER_DIALECT_PACKS,
   TARGET_META,
   VALID_TARGETS,
+  adaptDialectPack,
   buildAndVerifyFullPack,
   buildKidLessonCompanionGuide,
   buildKidVoiceCommandHints,
   buildLessonAudioPhrase,
   buildLessonPronunciationClips,
+  canonicalizeConcept,
   checkAstRules,
   computeDialectCurriculumProgress,
   computeSha256Hex,
@@ -9523,6 +9634,7 @@ export {
   getShuffledLessonCards,
   getVoiceRecognitionLang,
   isLessonUiLang,
+  isRepoDialectPackage,
   isRtlTarget,
   isValidTarget,
   loadValidatedInstalledPacks,
@@ -9530,6 +9642,7 @@ export {
   parseCodeStepsForKids,
   parseKidVoiceCommand,
   parseLearnerProfile,
+  partitionLessonsForPack,
   resolveAchievementCopy,
   resolveDialectPack,
   resolveKidLessonTier,

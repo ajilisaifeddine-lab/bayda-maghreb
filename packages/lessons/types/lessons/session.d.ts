@@ -4,7 +4,7 @@ import { KidLessonTierInfo } from '../core/kidModeStudio';
 import { ResolvedKidBand } from '../core/kidProgression';
 import { KidVisualBlockLabel } from '../core/kidVisualLogic';
 import { DialectCurriculumProgress, LessonReviewQuizItem, LessonSolutionResult, ReviewQuizEvaluation, ShuffledLessonCard } from '../core/lessons';
-import { AchievementId, DialectPack, KidAgeBand, LearnerProfile, LearningMode, LessonTemplate, Target, UiLang } from '../core/types';
+import { AchievementId, DialectPack, DialectPackInput, KidAgeBand, LearnerProfile, LearningMode, LessonTemplate, Target, UiLang } from '../core/types';
 import { LessonAudioClip } from './audio';
 import { LessonUiStrings, ResolvedLessonCopy } from './i18n';
 export interface LessonReviewSessionState {
@@ -67,7 +67,8 @@ export interface LessonSessionState {
     reviewSession: LessonReviewSessionState;
 }
 export interface LessonSessionOptions {
-    pack?: DialectPack;
+    pack?: DialectPackInput;
+    dialects?: DialectPackInput[];
     uiLang?: UiLang;
     mode?: LearningMode;
     kidAgeBand?: KidAgeBand;
@@ -91,7 +92,7 @@ export interface LessonSessionController {
     getState: () => LessonSessionState;
     subscribe: (listener: (state: LessonSessionState) => void) => () => void;
     setMode: (mode: LearningMode) => void;
-    setDialect: (pack: DialectPack) => void;
+    setDialect: (pack: DialectPackInput) => void;
     setDialectById: (dialectId: string, useFullPack?: boolean) => void;
     setUiLang: (uiLang: UiLang) => void;
     setKidAgeBand: (band: KidAgeBand) => void;

@@ -10,7 +10,7 @@ if (!fs.existsSync(packagesDir)) {
     process.exit(1);
 }
 
-const dirs = fs.readdirSync(packagesDir).filter(f => fs.statSync(path.join(packagesDir, f)).isDirectory());
+const dirs = fs.readdirSync(packagesDir).filter(f => fs.statSync(path.join(packagesDir, f)).isDirectory() && fs.existsSync(path.join(packagesDir, f, "manifest.json")));
 let successCount = 0;
 let errorCount = 0;
 let totalKeywords = 0;

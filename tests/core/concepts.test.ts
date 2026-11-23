@@ -8,7 +8,7 @@ const concepts = JSON.parse(fs.readFileSync(path.join(root, "core/concepts.json"
 
 const ALLOWED = new Set<string>([...(concepts.core || []), ...(concepts.library || [])]);
 
-const dirs = fs.readdirSync(packagesDir).filter((f) => fs.statSync(path.join(packagesDir, f)).isDirectory());
+const dirs = fs.readdirSync(packagesDir).filter((f) => fs.statSync(path.join(packagesDir, f)).isDirectory() && fs.existsSync(path.join(packagesDir, f, "manifest.json")));
 
 describe("concepts.json — كل كلمة لهجة تشير إلى مفهوم قياسي", () => {
   describe.each(dirs)("dialect %s", (dir) => {

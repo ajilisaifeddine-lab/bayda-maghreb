@@ -22,7 +22,7 @@ describe("lexer", () => {
 });
 
 const packagesDir = path.resolve(__dirname, "../../packages");
-const dirs = fs.readdirSync(packagesDir).filter((f) => fs.statSync(path.join(packagesDir, f)).isDirectory());
+const dirs = fs.readdirSync(packagesDir).filter((f) => fs.statSync(path.join(packagesDir, f)).isDirectory() && fs.existsSync(path.join(packagesDir, f, "manifest.json")));
 
 describe.each(dirs)("dialect %s keywords lexing", (dir) => {
   it("every single-word key is one IDENT", () => {

@@ -127,6 +127,33 @@ export interface DialectPack {
     starterCode: string;
     meta?: Record<string, DictMetaEntry>;
 }
+/**
+ * Matches the disk-loaded DialectPackage shape returned by `core/loader.ts`
+ * in the main `bayda-maghreb` repository (`{ id, manifest, keywords, vocabulary }`).
+ */
+export interface RepoDialectPackage {
+    id: string;
+    manifest: {
+        id?: string;
+        code?: string;
+        name?: string;
+        nativeName?: string;
+        country?: string;
+        regionLabel?: string;
+        script?: string;
+        rtl?: boolean;
+        iso639_3?: string;
+        reviewStatus?: string;
+        requiresConsent?: boolean;
+        version?: string;
+        description?: string;
+        tribute?: string;
+        [key: string]: unknown;
+    };
+    keywords: Record<string, string>;
+    vocabulary?: Record<string, string>;
+}
+export type DialectPackInput = DialectPack | RepoDialectPackage;
 export type PackSource = 'example' | 'downloaded';
 export interface TranspileMetrics {
     transpileMs: number;
