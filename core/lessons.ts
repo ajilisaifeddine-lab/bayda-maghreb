@@ -10,7 +10,7 @@ export const MODES = ["kid", "beginner", "pro"] as const;
 
 export type Mode = (typeof MODES)[number];
 export type Kind = "type" | "arrange";
-export type NodeName = "if" | "while";
+export type NodeName = "if" | "while" | "let" | "for" | "function" | "return" | "try" | "break" | "continue";
 
 /** الحدود: النصوص قصيرة عمداً (الدروس للأطفال والمبتدئين). */
 export const LESSON_LIMITS = {
@@ -39,7 +39,8 @@ export type Rule =
   | { op: "has_else" }
   | { op: "nested_if" }
   | { op: "test_token"; node: NodeName; value: string }
-  | { op: "test_compares"; node: NodeName };
+  | { op: "test_compares"; node: NodeName }
+  | { op: "calls"; name: string };
 
 interface LessonBase {
   id: string;
@@ -136,7 +137,8 @@ const word = (v: unknown): v is string => typeof v === "string" && WORD.test(v);
 
 function cleanRule(r: unknown): Rule | null {
   if (!isRec(r) || hasForbidden(r)) return null;
-  const node = r.node === "if" || r.node === "while" ? r.node : null;
+  const nodes: ReadonlySet<string> = new Set(["if", "while", "let", "for", "function", "return", "try", "break", "continue"]);
+  const node = typeof r.node === "string" && nodes.has(r.node) ? (r.node as NodeName) : null;
   switch (r.op) {
     case "prints_text":
       return word(r.value) ? { op: "prints_text", value: r.value } : null;
@@ -164,6 +166,8 @@ function cleanRule(r: unknown): Rule | null {
       return node && typeof r.value === "string" && TOKEN.test(r.value) ? { op: "test_token", node, value: r.value } : null;
     case "test_compares":
       return node ? { op: "test_compares", node } : null;
+    case "calls":
+      return typeof r.name === "string" && TOKEN.test(r.name) ? { op: "calls", name: r.name } : null;
     default:
       return null;
   }
@@ -369,19 +373,21 @@ interface Facts {
   elses: number;
   nestedIf: boolean;
   tests: Record<NodeName, string[][]>;
+  calls: Set<string>;
 }
 
-/** يجمع الحقائق من شجرة translate(): Program / Call / If / While (يدخل في كل الكتل). */
+/** يجمع الحقائق من شجرة translate() عبر جميع العقد والكتل والتعبيرات. */
 function collect(ast: unknown): Facts {
   const f: Facts = {
     printCalls: 0,
     texts: [],
     numbers: [],
     bools: [],
-    count: { if: 0, while: 0 },
+    count: { if: 0, while: 0, let: 0, for: 0, function: 0, return: 0, try: 0, break: 0, continue: 0 },
     elses: 0,
     nestedIf: false,
-    tests: { if: [], while: [] },
+    tests: { if: [], while: [], let: [], for: [], function: [], return: [], try: [], break: [], continue: [] },
+    calls: new Set<string>(),
   };
   let budget = 10000;
   const list = (x: unknown): unknown[] => (Array.isArray(x) ? x : []);
@@ -392,12 +398,24 @@ function collect(ast: unknown): Facts {
           .map((k) => k.value)
           .filter((v): v is string => typeof v === "string" && v.trim() !== "")
       : [];
+  const scanCalls = (expr: unknown): void => {
+    if (!isRec(expr)) return;
+    const toks = list(expr.tokens).filter(isRec);
+    for (let k = 0; k + 1 < toks.length; k++) {
+      const cur = toks[k];
+      const nx = toks[k + 1];
+      if ((cur.type === "KEYWORD" || cur.type === "IDENT") && typeof cur.value === "string" && nx.value === "(") {
+        f.calls.add(cur.value);
+      }
+    }
+  };
   const arg = (a: unknown): void => {
     if (!isRec(a)) return;
     if ((a.type === "String" || a.type === "StringLiteral") && typeof a.value === "string") f.texts.push(a.value);
     else if ((a.type === "Number" || a.type === "NumberLiteral") && (typeof a.value === "string" || typeof a.value === "number")) {
       f.numbers.push(String(a.value));
     } else if (a.type === "Raw") {
+      scanCalls(a);
       const v = values(a);
       if (v.length === 1 && (v[0] === "true" || v[0] === "false")) f.bools.push(v[0]);
     }
@@ -407,21 +425,48 @@ function collect(ast: unknown): Facts {
     if (n.type === "Program") {
       for (const c of list(n.body)) visit(c, depth + 1, inIf);
     } else if (n.type === "Call") {
+      if (typeof n.name === "string") f.calls.add(n.name);
       if (n.name === "print") {
         f.printCalls++;
         for (const a of list(n.args)) arg(a);
+      } else {
+        for (const a of list(n.args)) if (isRec(a) && a.type === "Raw") scanCalls(a);
       }
     } else if (n.type === "If") {
       f.count.if++;
       if (inIf) f.nestedIf = true;
       if (Array.isArray(n.else)) f.elses++;
       f.tests.if.push(values(n.test));
+      scanCalls(n.test);
       for (const c of list(n.then)) visit(c, depth + 1, true);
       for (const c of list(n.else)) visit(c, depth + 1, true);
     } else if (n.type === "While") {
       f.count.while++;
       f.tests.while.push(values(n.test));
+      scanCalls(n.test);
       for (const c of list(n.body)) visit(c, depth + 1, inIf);
+    } else if (n.type === "Var") {
+      if (n.declare === true) f.count.let++;
+      scanCalls(n.value);
+    } else if (n.type === "For") {
+      f.count.for++;
+      scanCalls(n.start);
+      scanCalls(n.end);
+      scanCalls(n.iterable);
+      for (const c of list(n.body)) visit(c, depth + 1, inIf);
+    } else if (n.type === "Fn") {
+      f.count.function++;
+      for (const c of list(n.body)) visit(c, depth + 1, inIf);
+    } else if (n.type === "Return") {
+      f.count.return++;
+      scanCalls(n.value);
+    } else if (n.type === "Try") {
+      f.count.try++;
+      for (const c of list(n.body)) visit(c, depth + 1, inIf);
+      for (const c of list(n.handler)) visit(c, depth + 1, inIf);
+    } else if (n.type === "Flow") {
+      if (n.kind === "break") f.count.break++;
+      else if (n.kind === "continue") f.count.continue++;
     }
   };
   visit(ast, 0, false);
@@ -455,6 +500,8 @@ function holds(r: Rule, f: Facts): boolean {
       return f.tests[r.node].some((v) => v.includes(r.value));
     case "test_compares":
       return f.tests[r.node].some((v) => /[<>]|[=!]=/.test(v.join("")));
+    case "calls":
+      return f.calls.has(r.name);
     default:
       return false;
   }

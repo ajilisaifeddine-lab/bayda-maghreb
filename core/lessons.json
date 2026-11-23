@@ -10,15 +10,35 @@
         "title": "🤖 اجعل الروبوت يتكلم",
         "status": "ready",
         "kind": "arrange",
-        "requires": ["print"],
+        "requires": [
+          "print"
+        ],
         "goal": "اختر البطاقة التي تجعل الروبوت يقول salam.",
-        "explain": ["الروبوت يتكلم عندما نعطيه بطاقة {{print}}.", "اضغط على البطاقة التي كُتب فيها salam."],
-        "hints": ["ابحث عن الكلمة salam."],
-        "cards": ["{{print}}(\"salam\")", "{{print}}(\"ahlan\")"],
-        "answer": [0],
+        "explain": [
+          "الروبوت يتكلم عندما نعطيه بطاقة {{print}}.",
+          "اضغط على البطاقة التي كُتب فيها salam."
+        ],
+        "hints": [
+          "ابحث عن الكلمة salam."
+        ],
+        "cards": [
+          "{{print}}(\"salam\")",
+          "{{print}}(\"ahlan\")"
+        ],
+        "answer": [
+          0
+        ],
         "wrong": "{{print}}(\"ahlan\")",
-        "check": [{"op": "prints_text", "value": "salam"}],
-        "feedback": {"ok": "أحسنت! الروبوت قال salam 🎉", "wrong": "حاول مرة أخرى، اختر البطاقة الثانية."}
+        "check": [
+          {
+            "op": "prints_text",
+            "value": "salam"
+          }
+        ],
+        "feedback": {
+          "ok": "أحسنت! الروبوت قال salam 🎉",
+          "wrong": "حاول مرة أخرى، اختر البطاقة الثانية."
+        }
       },
       {
         "id": "kid-twice",
@@ -26,15 +46,40 @@
         "title": "🤖 روبوت يتكلم مرتين",
         "status": "ready",
         "kind": "arrange",
-        "requires": ["print"],
+        "requires": [
+          "print"
+        ],
         "goal": "رتّب البطاقتين: أولاً salam ثم ahlan.",
-        "explain": ["الروبوت ينفّذ البطاقات من الأولى إلى الأخيرة.", "اختر بطاقتين بالترتيب الصحيح، وتجاهل البطاقة الزائدة."],
-        "hints": ["ابدأ بالبطاقة التي فيها salam."],
-        "cards": ["{{print}}(\"salam\")", "{{print}}(\"ahlan\")", "{{print}}(\"yalla\")"],
-        "answer": [0, 1],
+        "explain": [
+          "الروبوت ينفّذ البطاقات من الأولى إلى الأخيرة.",
+          "اختر بطاقتين بالترتيب الصحيح، وتجاهل البطاقة الزائدة."
+        ],
+        "hints": [
+          "ابدأ بالبطاقة التي فيها salam."
+        ],
+        "cards": [
+          "{{print}}(\"salam\")",
+          "{{print}}(\"ahlan\")",
+          "{{print}}(\"yalla\")"
+        ],
+        "answer": [
+          0,
+          1
+        ],
         "wrong": "{{print}}(\"ahlan\")\n{{print}}(\"salam\")",
-        "check": [{"op": "prints_in_order", "values": ["salam", "ahlan"]}],
-        "feedback": {"ok": "رائع! تكلّم الروبوت بالترتيب الصحيح 🎉", "wrong": "الترتيب غير صحيح، جرّب مرة أخرى."}
+        "check": [
+          {
+            "op": "prints_in_order",
+            "values": [
+              "salam",
+              "ahlan"
+            ]
+          }
+        ],
+        "feedback": {
+          "ok": "رائع! تكلّم الروبوت بالترتيب الصحيح 🎉",
+          "wrong": "الترتيب غير صحيح، جرّب مرة أخرى."
+        }
       },
       {
         "id": "kid-door",
@@ -42,15 +87,47 @@
         "title": "🚪 الباب السحري",
         "status": "ready",
         "kind": "arrange",
-        "requires": ["print", "if", "true", "false"],
+        "requires": [
+          "print",
+          "if",
+          "true",
+          "false"
+        ],
         "goal": "الباب يفتح فقط عندما يكون الشرط {{true}}. اختر البطاقة الصحيحة.",
-        "explain": ["البطاقة {{if}} تعني: إذا تحقق الشرط افعل ما بداخلها.", "الباب السحري يفتح إذا كان الشرط {{true}} (صح)، ويبقى مغلقاً إذا كان {{false}} (غلط)."],
-        "hints": ["اختر البطاقة التي فيها {{true}}."],
-        "cards": ["{{if}} ({{false}}) {\n    {{print}}(\"salam\")\n}", "{{if}} ({{true}}) {\n    {{print}}(\"salam\")\n}"],
-        "answer": [1],
+        "explain": [
+          "البطاقة {{if}} تعني: إذا تحقق الشرط افعل ما بداخلها.",
+          "الباب السحري يفتح إذا كان الشرط {{true}} (صح)، ويبقى مغلقاً إذا كان {{false}} (غلط)."
+        ],
+        "hints": [
+          "اختر البطاقة التي فيها {{true}}."
+        ],
+        "cards": [
+          "{{if}} ({{false}}) {\n    {{print}}(\"salam\")\n}",
+          "{{if}} ({{true}}) {\n    {{print}}(\"salam\")\n}"
+        ],
+        "answer": [
+          1
+        ],
         "wrong": "{{if}} ({{false}}) {\n    {{print}}(\"salam\")\n}",
-        "check": [{"op": "has_node", "node": "if"}, {"op": "test_token", "node": "if", "value": "true"}, {"op": "prints_text", "value": "salam"}],
-        "feedback": {"ok": "فُتح الباب! 🎉", "wrong": "الباب بقي مغلقاً، جرّب البطاقة الأخرى."}
+        "check": [
+          {
+            "op": "has_node",
+            "node": "if"
+          },
+          {
+            "op": "test_token",
+            "node": "if",
+            "value": "true"
+          },
+          {
+            "op": "prints_text",
+            "value": "salam"
+          }
+        ],
+        "feedback": {
+          "ok": "فُتح الباب! 🎉",
+          "wrong": "الباب بقي مغلقاً، جرّب البطاقة الأخرى."
+        }
       },
       {
         "id": "kid-sun-rain",
@@ -58,15 +135,48 @@
         "title": "🌞 الشمس أو المطر",
         "status": "ready",
         "kind": "arrange",
-        "requires": ["print", "if", "else", "false"],
+        "requires": [
+          "print",
+          "if",
+          "else",
+          "false"
+        ],
         "goal": "الجو ممطر اليوم. ركّب البطاقتين ليقول الروبوت rain.",
-        "explain": ["بطاقة {{if}} تسأل: هل الجو مشمس؟ والجواب هنا {{false}} (غلط).", "بطاقة {{else}} تعني: وإلا، أي عندما يكون الجواب غلط، فيقول الروبوت rain."],
-        "hints": ["ضع بطاقة {{if}} أولاً ثم بطاقة {{else}}."],
-        "cards": ["{{if}} ({{false}}) {\n    {{print}}(\"sun\")\n}", "{{else}} {\n    {{print}}(\"rain\")\n}", "{{print}}(\"rain\")"],
-        "answer": [0, 1],
+        "explain": [
+          "بطاقة {{if}} تسأل: هل الجو مشمس؟ والجواب هنا {{false}} (غلط).",
+          "بطاقة {{else}} تعني: وإلا، أي عندما يكون الجواب غلط، فيقول الروبوت rain."
+        ],
+        "hints": [
+          "ضع بطاقة {{if}} أولاً ثم بطاقة {{else}}."
+        ],
+        "cards": [
+          "{{if}} ({{false}}) {\n    {{print}}(\"sun\")\n}",
+          "{{else}} {\n    {{print}}(\"rain\")\n}",
+          "{{print}}(\"rain\")"
+        ],
+        "answer": [
+          0,
+          1
+        ],
         "wrong": "{{print}}(\"rain\")",
-        "check": [{"op": "has_else"}, {"op": "prints_text", "value": "rain"}, {"op": "test_token", "node": "if", "value": "false"}],
-        "feedback": {"ok": "ممتاز! الروبوت قال rain 🎉", "wrong": "جرّب مرة أخرى: بطاقة الشرط أولاً ثم بطاقة وإلا."}
+        "check": [
+          {
+            "op": "has_else"
+          },
+          {
+            "op": "prints_text",
+            "value": "rain"
+          },
+          {
+            "op": "test_token",
+            "node": "if",
+            "value": "false"
+          }
+        ],
+        "feedback": {
+          "ok": "ممتاز! الروبوت قال rain 🎉",
+          "wrong": "جرّب مرة أخرى: بطاقة الشرط أولاً ثم بطاقة وإلا."
+        }
       }
     ],
     "beginner": [
@@ -76,14 +186,31 @@
         "title": "الطباعة",
         "status": "ready",
         "kind": "type",
-        "requires": ["print"],
+        "requires": [
+          "print"
+        ],
         "goal": "اطبع كلمة salam على الشاشة.",
-        "explain": ["الطباعة تعني عرض شيء على الشاشة.", "كلمة الطباعة في لهجتك هي {{print}}.", "ضع ما تريد طباعته بين قوسين، وضع النص بين علامتي تنصيص."],
-        "hints": ["ابدأ بكلمة الطباعة ثم قوسين.", "الشكل العام: {{print}}(\"...\")"],
+        "explain": [
+          "الطباعة تعني عرض شيء على الشاشة.",
+          "كلمة الطباعة في لهجتك هي {{print}}.",
+          "ضع ما تريد طباعته بين قوسين، وضع النص بين علامتي تنصيص."
+        ],
+        "hints": [
+          "ابدأ بكلمة الطباعة ثم قوسين.",
+          "الشكل العام: {{print}}(\"...\")"
+        ],
         "template": "{{print}}(\"salam\")",
         "wrong": "{{print}}(\"ahlan\")",
-        "check": [{"op": "prints_text", "value": "salam"}],
-        "feedback": {"ok": "🎉 إجابة صحيحة! لقد تعلمت الطباعة بنجاح.", "wrong": "⚠️ الصياغة صحيحة، لكن يجب أن تطبع كلمة salam بالتحديد."}
+        "check": [
+          {
+            "op": "prints_text",
+            "value": "salam"
+          }
+        ],
+        "feedback": {
+          "ok": "🎉 إجابة صحيحة! لقد تعلمت الطباعة بنجاح.",
+          "wrong": "⚠️ الصياغة صحيحة، لكن يجب أن تطبع كلمة salam بالتحديد."
+        }
       },
       {
         "id": "bg-two-lines",
@@ -91,14 +218,32 @@
         "title": "سطران",
         "status": "ready",
         "kind": "type",
-        "requires": ["print"],
+        "requires": [
+          "print"
+        ],
         "goal": "اطبع salam ثم ahlan، كلٌّ في سطر.",
-        "explain": ["البرنامج يُنفَّذ من الأعلى إلى الأسفل، سطراً بعد سطر.", "اكتب أمر طباعة لكل سطر."],
-        "hints": ["اكتب أمر {{print}} مرتين."],
+        "explain": [
+          "البرنامج يُنفَّذ من الأعلى إلى الأسفل، سطراً بعد سطر.",
+          "اكتب أمر طباعة لكل سطر."
+        ],
+        "hints": [
+          "اكتب أمر {{print}} مرتين."
+        ],
         "template": "{{print}}(\"salam\")\n{{print}}(\"ahlan\")",
         "wrong": "{{print}}(\"ahlan\")\n{{print}}(\"salam\")",
-        "check": [{"op": "prints_in_order", "values": ["salam", "ahlan"]}],
-        "feedback": {"ok": "🎉 ممتاز! طُبع السطران بالترتيب.", "wrong": "⚠️ تأكد من الكلمتين وترتيبهما: salam أولاً ثم ahlan."}
+        "check": [
+          {
+            "op": "prints_in_order",
+            "values": [
+              "salam",
+              "ahlan"
+            ]
+          }
+        ],
+        "feedback": {
+          "ok": "🎉 ممتاز! طُبع السطران بالترتيب.",
+          "wrong": "⚠️ تأكد من الكلمتين وترتيبهما: salam أولاً ثم ahlan."
+        }
       },
       {
         "id": "bg-number",
@@ -106,14 +251,29 @@
         "title": "الأرقام",
         "status": "ready",
         "kind": "type",
-        "requires": ["print"],
+        "requires": [
+          "print"
+        ],
         "goal": "اطبع الرقم 7.",
-        "explain": ["الأرقام تُكتب بلا علامتي تنصيص.", "مثال: {{print}}(5) يطبع الرقم 5."],
-        "hints": ["لا تضع الرقم بين علامتي تنصيص."],
+        "explain": [
+          "الأرقام تُكتب بلا علامتي تنصيص.",
+          "مثال: {{print}}(5) يطبع الرقم 5."
+        ],
+        "hints": [
+          "لا تضع الرقم بين علامتي تنصيص."
+        ],
         "template": "{{print}}(7)",
         "wrong": "{{print}}(5)",
-        "check": [{"op": "prints_number", "value": "7"}],
-        "feedback": {"ok": "🎉 أحسنت! طبعت رقماً.", "wrong": "⚠️ اطبع الرقم 7 بلا علامتي تنصيص."}
+        "check": [
+          {
+            "op": "prints_number",
+            "value": "7"
+          }
+        ],
+        "feedback": {
+          "ok": "🎉 أحسنت! طبعت رقماً.",
+          "wrong": "⚠️ اطبع الرقم 7 بلا علامتي تنصيص."
+        }
       },
       {
         "id": "bg-boolean",
@@ -121,14 +281,31 @@
         "title": "صح وغلط",
         "status": "ready",
         "kind": "type",
-        "requires": ["print", "true", "false"],
+        "requires": [
+          "print",
+          "true",
+          "false"
+        ],
         "goal": "اطبع القيمة {{true}} (صح).",
-        "explain": ["للبرنامج قيمتان خاصتان: {{true}} تعني صح، و{{false}} تعني غلط.", "تُكتبان بلا علامتي تنصيص."],
-        "hints": ["اجعل القيمة داخل القوسين: {{print}}({{true}})"],
+        "explain": [
+          "للبرنامج قيمتان خاصتان: {{true}} تعني صح، و{{false}} تعني غلط.",
+          "تُكتبان بلا علامتي تنصيص."
+        ],
+        "hints": [
+          "اجعل القيمة داخل القوسين: {{print}}({{true}})"
+        ],
         "template": "{{print}}({{true}})",
         "wrong": "{{print}}({{false}})",
-        "check": [{"op": "prints_bool", "value": "true"}],
-        "feedback": {"ok": "🎉 رائع! عرفت القيمة صح.", "wrong": "⚠️ اطبع القيمة صح بلا علامتي تنصيص."}
+        "check": [
+          {
+            "op": "prints_bool",
+            "value": "true"
+          }
+        ],
+        "feedback": {
+          "ok": "🎉 رائع! عرفت القيمة صح.",
+          "wrong": "⚠️ اطبع القيمة صح بلا علامتي تنصيص."
+        }
       },
       {
         "id": "bg-if",
@@ -136,14 +313,40 @@
         "title": "الشرط",
         "status": "ready",
         "kind": "type",
-        "requires": ["print", "if", "true"],
+        "requires": [
+          "print",
+          "if",
+          "true"
+        ],
         "goal": "اطبع salam فقط إذا كان الشرط {{true}}.",
-        "explain": ["الشرط يجعل البرنامج يقرر: ينفّذ ما بين الأقواس المعقوفة فقط إذا تحقق الشرط.", "الشكل العام: {{if}} (الشرط) { ... }"],
-        "hints": ["ضع أمر الطباعة داخل الأقواس المعقوفة."],
+        "explain": [
+          "الشرط يجعل البرنامج يقرر: ينفّذ ما بين الأقواس المعقوفة فقط إذا تحقق الشرط.",
+          "الشكل العام: {{if}} (الشرط) { ... }"
+        ],
+        "hints": [
+          "ضع أمر الطباعة داخل الأقواس المعقوفة."
+        ],
         "template": "{{if}} ({{true}}) {\n    {{print}}(\"salam\")\n}",
         "wrong": "{{print}}(\"salam\")",
-        "check": [{"op": "has_node", "node": "if"}, {"op": "test_token", "node": "if", "value": "true"}, {"op": "prints_text", "value": "salam"}],
-        "feedback": {"ok": "🎉 ممتاز! كتبت أول شرط.", "wrong": "⚠️ اكتب شرطاً شرطه صح، واطبع salam بداخله."}
+        "check": [
+          {
+            "op": "has_node",
+            "node": "if"
+          },
+          {
+            "op": "test_token",
+            "node": "if",
+            "value": "true"
+          },
+          {
+            "op": "prints_text",
+            "value": "salam"
+          }
+        ],
+        "feedback": {
+          "ok": "🎉 ممتاز! كتبت أول شرط.",
+          "wrong": "⚠️ اكتب شرطاً شرطه صح، واطبع salam بداخله."
+        }
       },
       {
         "id": "bg-else",
@@ -151,14 +354,40 @@
         "title": "وإلا",
         "status": "ready",
         "kind": "type",
-        "requires": ["print", "if", "else", "false"],
+        "requires": [
+          "print",
+          "if",
+          "else",
+          "false"
+        ],
         "goal": "الشرط هنا {{false}}. اجعل البرنامج يطبع no.",
-        "explain": ["كلمة {{else}} تعني: وإلا. أي ما يُنفَّذ عندما لا يتحقق الشرط.", "تُكتب بعد القوس المعقوف الذي يغلق الشرط."],
-        "hints": ["ضع {{else}} بعد القوس المعقوف الذي يغلق الشرط."],
+        "explain": [
+          "كلمة {{else}} تعني: وإلا. أي ما يُنفَّذ عندما لا يتحقق الشرط.",
+          "تُكتب بعد القوس المعقوف الذي يغلق الشرط."
+        ],
+        "hints": [
+          "ضع {{else}} بعد القوس المعقوف الذي يغلق الشرط."
+        ],
         "template": "{{if}} ({{false}}) {\n    {{print}}(\"yes\")\n}\n{{else}} {\n    {{print}}(\"no\")\n}",
         "wrong": "{{print}}(\"yes\")",
-        "check": [{"op": "has_else"}, {"op": "test_token", "node": "if", "value": "false"}, {"op": "prints_text", "value": "no"}],
-        "feedback": {"ok": "🎉 رائع! عرفت كيف يتصرف البرنامج وإلا.", "wrong": "⚠️ استعمل شرطاً غلط وجملة وإلا تطبع no."}
+        "check": [
+          {
+            "op": "has_else"
+          },
+          {
+            "op": "test_token",
+            "node": "if",
+            "value": "false"
+          },
+          {
+            "op": "prints_text",
+            "value": "no"
+          }
+        ],
+        "feedback": {
+          "ok": "🎉 رائع! عرفت كيف يتصرف البرنامج وإلا.",
+          "wrong": "⚠️ استعمل شرطاً غلط وجملة وإلا تطبع no."
+        }
       },
       {
         "id": "bg-compare",
@@ -166,35 +395,144 @@
         "title": "المقارنة",
         "status": "ready",
         "kind": "type",
-        "requires": ["print", "if"],
+        "requires": [
+          "print",
+          "if"
+        ],
         "goal": "اطبع salam إذا كان 5 أكبر من 3.",
-        "explain": ["يمكن أن يكون الشرط مقارنة بين رقمين.", "علامة > تعني أكبر من، وعلامة < تعني أصغر من."],
-        "hints": ["الشكل العام: {{if}} (5 > 3) { ... }"],
+        "explain": [
+          "يمكن أن يكون الشرط مقارنة بين رقمين.",
+          "علامة > تعني أكبر من، وعلامة < تعني أصغر من."
+        ],
+        "hints": [
+          "الشكل العام: {{if}} (5 > 3) { ... }"
+        ],
         "template": "{{if}} (5 > 3) {\n    {{print}}(\"salam\")\n}",
         "wrong": "{{print}}(\"salam\")",
-        "check": [{"op": "test_compares", "node": "if"}, {"op": "prints_text", "value": "salam"}],
-        "feedback": {"ok": "🎉 أحسنت! كتبت شرط مقارنة.", "wrong": "⚠️ اكتب شرطاً فيه مقارنة بين رقمين، واطبع salam."}
+        "check": [
+          {
+            "op": "test_compares",
+            "node": "if"
+          },
+          {
+            "op": "prints_text",
+            "value": "salam"
+          }
+        ],
+        "feedback": {
+          "ok": "🎉 أحسنت! كتبت شرط مقارنة.",
+          "wrong": "⚠️ اكتب شرطاً فيه مقارنة بين رقمين، واطبع salam."
+        }
       },
       {
         "id": "bg-variables",
         "order": 8,
         "title": "المتغيرات",
-        "status": "planned",
-        "requires": ["let"]
+        "status": "ready",
+        "kind": "type",
+        "requires": [
+          "let",
+          "print"
+        ],
+        "goal": "أنشئ متغيراً اسمه score قيمته 10 ثم اطبعه.",
+        "explain": [
+          "كلمة {{let}} تُنشئ متغيراً يحفظ قيمة باسم معيّن.",
+          "بعد حفظ القيمة يمكنك تمرير اسم المتغير إلى {{print}}."
+        ],
+        "hints": [
+          "اكتب {{let}} score = 10 ثم {{print}}(score)."
+        ],
+        "template": "{{let}} score = 10\n{{print}}(score)",
+        "wrong": "{{print}}(10)",
+        "check": [
+          {
+            "op": "has_node",
+            "node": "let"
+          },
+          {
+            "op": "min_prints",
+            "min": 1
+          }
+        ],
+        "feedback": {
+          "ok": "🎉 أحسنت! أنشأت متغيراً وطبعته.",
+          "wrong": "⚠️ أنشئ المتغير أولاً ثم اطبعه."
+        }
       },
       {
         "id": "bg-while-counter",
         "order": 9,
         "title": "العدّاد داخل while",
-        "status": "planned",
-        "requires": ["while", "let"]
+        "status": "ready",
+        "kind": "type",
+        "requires": [
+          "while",
+          "let",
+          "print"
+        ],
+        "goal": "استعمل عدّاداً مع حلقة {{while}} لطباعة قيمة i ما دام i أصغر أو يساوي 3.",
+        "explain": [
+          "نُعرّف عدّاداً بكلمة {{let}} قبل الحلقة، ثم نزيده داخلها بـ i = i + 1.",
+          "نطبع قيمة العدّاد داخل الحلقة عبر {{print}}."
+        ],
+        "hints": [
+          "أنشئ {{let}} i = 1 ثم {{while}} (i <= 3) وزِد i في السطر الأخير."
+        ],
+        "template": "{{let}} i = 1\n{{while}} (i <= 3) {\n    {{print}}(i)\n    i = i + 1\n}",
+        "wrong": "{{print}}(1)",
+        "check": [
+          {
+            "op": "has_node",
+            "node": "let"
+          },
+          {
+            "op": "has_node",
+            "node": "while"
+          },
+          {
+            "op": "min_prints",
+            "min": 1
+          }
+        ],
+        "feedback": {
+          "ok": "🎉 ممتاز! بنيت حلقة بعدّاد.",
+          "wrong": "⚠️ استعمل متغيراً عدّاداً داخل حلقة مع الطباعة بداخله."
+        }
       },
       {
         "id": "bg-for",
         "order": 10,
         "title": "حلقة for",
-        "status": "planned",
-        "requires": ["for", "let"]
+        "status": "ready",
+        "kind": "type",
+        "requires": [
+          "for",
+          "print"
+        ],
+        "goal": "استعمل حلقة {{for}} على النطاق 1..3 واطبع قيمة k في كل دورة.",
+        "explain": [
+          "حلقة {{for}} تكرّر تلقائياً من بداية النطاق إلى نهايته.",
+          "في كل دورة تتغيّر قيمة المتغير ثم نطبعها عبر {{print}}."
+        ],
+        "hints": [
+          "اكتب {{for}} (k : 1..3) { {{print}}(k) }"
+        ],
+        "template": "{{for}} (k : 1..3) {\n    {{print}}(k)\n}",
+        "wrong": "{{print}}(1)",
+        "check": [
+          {
+            "op": "has_node",
+            "node": "for"
+          },
+          {
+            "op": "min_prints",
+            "min": 1
+          }
+        ],
+        "feedback": {
+          "ok": "🎉 رائع! كتبت حلقة for بنجاح.",
+          "wrong": "⚠️ استعمل حلقة التكرار مع النطاق 1..3 واطبع المتغير."
+        }
       }
     ],
     "pro": [
@@ -204,14 +542,51 @@
         "title": "شرطان في برنامج واحد",
         "status": "ready",
         "kind": "type",
-        "requires": ["print", "if", "true", "false"],
+        "requires": [
+          "print",
+          "if",
+          "true",
+          "false"
+        ],
         "goal": "اكتب برنامجاً فيه شرطان: الأول صحيح ويطبع salam، والثاني غلط ويطبع ahlan.",
-        "explain": ["يمكن أن يحتوي البرنامج على أكثر من شرط، وتُفحص بالترتيب.", "كل شرط مستقل عن الآخر."],
-        "hints": ["اكتب {{if}} مرتين: شرط الأول {{true}} وشرط الثاني {{false}}."],
+        "explain": [
+          "يمكن أن يحتوي البرنامج على أكثر من شرط، وتُفحص بالترتيب.",
+          "كل شرط مستقل عن الآخر."
+        ],
+        "hints": [
+          "اكتب {{if}} مرتين: شرط الأول {{true}} وشرط الثاني {{false}}."
+        ],
         "template": "{{if}} ({{true}}) {\n    {{print}}(\"salam\")\n}\n{{if}} ({{false}}) {\n    {{print}}(\"ahlan\")\n}",
         "wrong": "{{if}} ({{true}}) {\n    {{print}}(\"salam\")\n}",
-        "check": [{"op": "min_nodes", "node": "if", "min": 2}, {"op": "test_token", "node": "if", "value": "true"}, {"op": "test_token", "node": "if", "value": "false"}, {"op": "prints_text", "value": "salam"}, {"op": "prints_text", "value": "ahlan"}],
-        "feedback": {"ok": "🎉 ممتاز! برنامج بشرطين.", "wrong": "⚠️ المطلوب شرطان: صحيح يطبع salam وغلط يطبع ahlan."}
+        "check": [
+          {
+            "op": "min_nodes",
+            "node": "if",
+            "min": 2
+          },
+          {
+            "op": "test_token",
+            "node": "if",
+            "value": "true"
+          },
+          {
+            "op": "test_token",
+            "node": "if",
+            "value": "false"
+          },
+          {
+            "op": "prints_text",
+            "value": "salam"
+          },
+          {
+            "op": "prints_text",
+            "value": "ahlan"
+          }
+        ],
+        "feedback": {
+          "ok": "🎉 ممتاز! برنامج بشرطين.",
+          "wrong": "⚠️ المطلوب شرطان: صحيح يطبع salam وغلط يطبع ahlan."
+        }
       },
       {
         "id": "pr-nested-if",
@@ -219,14 +594,39 @@
         "title": "شرط داخل شرط",
         "status": "ready",
         "kind": "type",
-        "requires": ["print", "if", "else", "true", "false"],
+        "requires": [
+          "print",
+          "if",
+          "else",
+          "true",
+          "false"
+        ],
         "goal": "اكتب شرطاً صحيحاً بداخله شرط غلط له {{else}} يطبع b.",
-        "explain": ["يمكن وضع شرط داخل شرط آخر.", "الشرط الداخلي لا يُفحص إلا إذا تحقق الشرط الخارجي."],
-        "hints": ["اكتب الشرط الداخلي بين الأقواس المعقوفة للشرط الخارجي."],
+        "explain": [
+          "يمكن وضع شرط داخل شرط آخر.",
+          "الشرط الداخلي لا يُفحص إلا إذا تحقق الشرط الخارجي."
+        ],
+        "hints": [
+          "اكتب الشرط الداخلي بين الأقواس المعقوفة للشرط الخارجي."
+        ],
         "template": "{{if}} ({{true}}) {\n    {{if}} ({{false}}) {\n        {{print}}(\"a\")\n    }\n    {{else}} {\n        {{print}}(\"b\")\n    }\n}",
         "wrong": "{{if}} ({{true}}) {\n    {{print}}(\"b\")\n}",
-        "check": [{"op": "nested_if"}, {"op": "has_else"}, {"op": "prints_text", "value": "b"}],
-        "feedback": {"ok": "🎉 رائع! كتبت شرطاً داخل شرط.", "wrong": "⚠️ ضع شرطاً غلطاً له وإلا داخل شرط صحيح، واطبع b."}
+        "check": [
+          {
+            "op": "nested_if"
+          },
+          {
+            "op": "has_else"
+          },
+          {
+            "op": "prints_text",
+            "value": "b"
+          }
+        ],
+        "feedback": {
+          "ok": "🎉 رائع! كتبت شرطاً داخل شرط.",
+          "wrong": "⚠️ ضع شرطاً غلطاً له وإلا داخل شرط صحيح، واطبع b."
+        }
       },
       {
         "id": "pr-while-shape",
@@ -234,35 +634,162 @@
         "title": "شكل الحلقة while",
         "status": "ready",
         "kind": "type",
-        "requires": ["print", "while", "false"],
+        "requires": [
+          "print",
+          "while",
+          "false"
+        ],
         "goal": "اكتب حلقة {{while}} شرطها {{false}} وبداخلها طباعة salam.",
-        "explain": ["الحلقة تكرّر ما بداخلها ما دام الشرط صحيحاً، وتفحصه قبل كل تكرار.", "شرطنا هنا {{false}} فلن يُنفَّذ ما بداخلها أبداً.", "لا توجد متغيرات في هذه النسخة، لذلك هذا الدرس للتعرّف على شكل الحلقة فقط."],
-        "hints": ["الشكل العام: {{while}} (الشرط) { ... }"],
+        "explain": [
+          "الحلقة تكرّر ما بداخلها ما دام الشرط صحيحاً، وتفحصه قبل كل تكرار.",
+          "شرطنا هنا {{false}} فلن يُنفَّذ ما بداخلها أبداً.",
+          "لا توجد متغيرات في هذه النسخة، لذلك هذا الدرس للتعرّف على شكل الحلقة فقط."
+        ],
+        "hints": [
+          "الشكل العام: {{while}} (الشرط) { ... }"
+        ],
         "template": "{{while}} ({{false}}) {\n    {{print}}(\"salam\")\n}",
         "wrong": "{{print}}(\"salam\")",
-        "check": [{"op": "has_node", "node": "while"}, {"op": "test_token", "node": "while", "value": "false"}, {"op": "prints_text", "value": "salam"}],
-        "feedback": {"ok": "🎉 أحسنت! عرفت شكل الحلقة.", "wrong": "⚠️ اكتب حلقة شرطها غلط وبداخلها طباعة salam."}
+        "check": [
+          {
+            "op": "has_node",
+            "node": "while"
+          },
+          {
+            "op": "test_token",
+            "node": "while",
+            "value": "false"
+          },
+          {
+            "op": "prints_text",
+            "value": "salam"
+          }
+        ],
+        "feedback": {
+          "ok": "🎉 أحسنت! عرفت شكل الحلقة.",
+          "wrong": "⚠️ اكتب حلقة شرطها غلط وبداخلها طباعة salam."
+        }
       },
       {
         "id": "pr-functions",
         "order": 4,
         "title": "الدوال",
-        "status": "planned",
-        "requires": ["function", "return"]
+        "status": "ready",
+        "kind": "type",
+        "requires": [
+          "function",
+          "return",
+          "print"
+        ],
+        "goal": "عرّف دالة باسم add تعيد جمع عددين باستعمال {{function}} و{{return}}، ثم اطبع نتيجتها.",
+        "explain": [
+          "الدالة كتلة كود قابلة لإعادة الاستعمال تُعرَّف بالكلمة {{function}}.",
+          "الكلمة {{return}} تُعيد النتيجة من داخل الدالة."
+        ],
+        "hints": [
+          "اكتب: {{function}} add(a, b) { {{return}} a + b } ثم {{print}}(add(2, 3))"
+        ],
+        "template": "{{function}} add(a, b) {\n    {{return}} a + b\n}\n{{print}}(add(2, 3))",
+        "wrong": "{{print}}(2 + 3)",
+        "check": [
+          {
+            "op": "has_node",
+            "node": "function"
+          },
+          {
+            "op": "has_node",
+            "node": "return"
+          },
+          {
+            "op": "min_prints",
+            "min": 1
+          }
+        ],
+        "feedback": {
+          "ok": "🎉 ممتاز! أنشأت دالة تُعيد قيمة وتستدعيها.",
+          "wrong": "⚠️ المطلوب تعريف دالة تُعيد قيمة وطباعة ناتج استدعائها."
+        }
       },
       {
         "id": "pr-arrays",
         "order": 5,
         "title": "المصفوفات",
-        "status": "planned",
-        "requires": ["push", "length"]
+        "status": "ready",
+        "kind": "type",
+        "requires": [
+          "let",
+          "push",
+          "length",
+          "print"
+        ],
+        "goal": "أنشئ مصفوفة بمتغير {{let}}، أضف لها عنصراً عبر {{push}}، ثم اطبع طولها عبر {{length}}.",
+        "explain": [
+          "المصفوفة تجمع عدة قيم داخل أقواس مربعة مثل [1, 2].",
+          "تضيف الدالة {{push}} عنصراً جديداً، وتعيد {{length}} عدد العناصر."
+        ],
+        "hints": [
+          "استعمل {{push}}(nums, 3) ثم {{print}}({{length}}(nums))"
+        ],
+        "template": "{{let}} nums = [1, 2]\n{{push}}(nums, 3)\n{{print}}({{length}}(nums))",
+        "wrong": "{{let}} nums = [1, 2]\n{{print}}(nums)",
+        "check": [
+          {
+            "op": "has_node",
+            "node": "let"
+          },
+          {
+            "op": "calls",
+            "name": "push"
+          },
+          {
+            "op": "calls",
+            "name": "length"
+          },
+          {
+            "op": "min_prints",
+            "min": 1
+          }
+        ],
+        "feedback": {
+          "ok": "🎉 رائع! أضفت عنصراً للمصفوفة وقرأت طولها.",
+          "wrong": "⚠️ تأكد من تعريف المصفوفة واستعمال الإضافة وحساب الطول ثم الطباعة."
+        }
       },
       {
         "id": "pr-errors",
         "order": 6,
         "title": "معالجة الأخطاء",
-        "status": "planned",
-        "requires": ["try", "catch"]
+        "status": "ready",
+        "kind": "type",
+        "requires": [
+          "try",
+          "catch",
+          "print"
+        ],
+        "goal": "احمِ الكود بكتلة {{try}} وأمسك الخطأ في {{catch}} مع طباعة رسالة.",
+        "explain": [
+          "كتلة {{try}} تجرّب تنفيذ شيفرة قد يحدث فيها خطأ.",
+          "عند حدوث خطأ ينتقل التنفيذ إلى كتلة {{catch}}."
+        ],
+        "hints": [
+          "الشكل: {{try}} { ... } {{catch}} (ex) { {{print}}(\"err\") }"
+        ],
+        "template": "{{try}} {\n    {{print}}(\"ok\")\n} {{catch}} (ex) {\n    {{print}}(\"err\")\n}",
+        "wrong": "{{print}}(\"ok\")",
+        "check": [
+          {
+            "op": "has_node",
+            "node": "try"
+          },
+          {
+            "op": "min_prints",
+            "min": 2
+          }
+        ],
+        "feedback": {
+          "ok": "🎉 أحسنت! أتقنت هيكلة معالجة الأخطاء.",
+          "wrong": "⚠️ ضع كتلة تجربة ومعالجة خطأ مع الطباعة داخلهما."
+        }
       }
     ]
   }

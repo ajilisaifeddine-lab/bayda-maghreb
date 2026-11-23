@@ -18,8 +18,18 @@ const syntax: TargetSyntax = {
     return code;
   },
   whileLoop: (indent, test, body) => `${indent}while ${test}:\n${body}`,
+  varStmt: (indent, _declare, name, value) => `${indent}${name} = ${value}`,
+  forLoop: (indent, v, s, e, it, body) => {
+    const b = body || indent + UNIT + "pass";
+    return s !== null && e !== null
+      ? `${indent}for ${v} in range(${s}, (${e}) + 1):\n${b}`
+      : `${indent}for ${v} in ${it}:\n${b}`;
+  },
+  fnDecl: (indent, name, params, body) => `${indent}def ${name}(${params.join(", ")}):\n${body || indent + UNIT + "pass"}`,
+  returnStmt: (indent, value) => `${indent}return${value !== null ? " " + value : ""}`,
+  tryCatch: (indent, body, param, handler) => `${indent}try:\n${body || indent + UNIT + "pass"}\n${indent}except Exception${param ? ` as ${param}` : ""}:\n${handler || indent + UNIT + "pass"}`,
+  flowStmt: (indent, kind) => `${indent}${kind}`,
 };
-
 export function toPython(program: Program, keywords: Record<string, string> = {}): string {
   return compileProgram(program, syntax, keywords);
 }

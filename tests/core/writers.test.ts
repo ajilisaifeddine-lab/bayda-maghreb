@@ -56,3 +56,39 @@ describe("الكتّاب — عقدة غير معروفة", () => {
     for (const write of writers) expect(codeOf(() => write({ type: "Foo" } as any))).toBe("UNSUPPORTED_NODE");
   });
 });
+
+describe("الكتّاب — المتغيرات وحلقة for عبر كل الأهداف", () => {
+  it("يُنتج كوداً غير فارغ وصالحاً لكل هدف", () => {
+    const kw = { khalli: "let", lkoll: "for", goul: "print" };
+    const src = "khalli s = 0\nlkoll (k : 1..3) { s = s + k }\ngoul(s)";
+    const out: Record<string, string> = {};
+    for (const target of TARGETS) out[target] = translate(src, { keywords: kw, target }).code;
+    expect(out.js).toContain("let s = 0;");
+    expect(out.js).toContain("for (let k = 1; k <= 3; k++)");
+    expect(out.py).toContain("for k in range(1, (3) + 1):");
+    expect(out.c).toContain("int s = 0;");
+    expect(out.cpp).toContain("auto s = 0;");
+    expect(out.java).toContain("var s = 0;");
+    expect(out.php).toContain("$s = 0;");
+    expect(out.algo).toContain("ليكن s ← 0;");
+  });
+});
+
+describe("الكتّاب — الدوال ومعالجة الأخطاء والتحكم عبر كل الأهداف", () => {
+  it("يُنتج كوداً غير فارغ وصالحاً لكل هدف", () => {
+    const kw = { daalla: "function", rja3: "return", jarreb: "try", msak: "catch", hbess: "break", twala: "while", haqq: "true", goul: "print" };
+    const src = "daalla add(a, b) { rja3 a + b }\njarreb { twala (haqq) { hbess } } msak (err) { goul(err) }";
+    const out: Record<string, string> = {};
+    for (const target of TARGETS) out[target] = translate(src, { keywords: kw, target }).code;
+    expect(out.js).toContain("function add(a, b)");
+    expect(out.py).toContain("def add(a, b):");
+    expect(out.c).toContain("int add(int a, int b)");
+    expect(out.cpp).toContain("auto add(auto a, auto b)");
+    expect(out.java).toContain("static Object add(Object a, Object b)");
+    expect(out.php).toContain("function add($a, $b)");
+    expect(out.php).toContain("catch (\\Throwable $err)");
+    expect(out.algo).toContain("دالة add(a، b)");
+    expect(out.algo).toContain("أرجع a+b;");
+    expect(out.algo).toContain("توقف;");
+  });
+});

@@ -26,6 +26,12 @@ export interface TargetSyntax {
   /** سلسلة if / else if / else: otherwise هو جسم else المركَّب أو null إن لم يوجد. */
   ifChain(indent: string, branches: readonly Branch[], otherwise: string | null): string;
   whileLoop(indent: string, test: string, body: string): string;
+  varStmt(indent: string, declare: boolean, name: string, value: string, isStringLiteral: boolean): string;
+  forLoop(indent: string, variable: string, start: string | null, end: string | null, iterable: string | null, body: string): string;
+  fnDecl(indent: string, name: string, params: readonly string[], body: string): string;
+  returnStmt(indent: string, value: string | null): string;
+  tryCatch(indent: string, body: string, param: string | null, handler: string): string;
+  flowStmt(indent: string, kind: "break" | "continue"): string;
 }
 
 /** الرمز كما هو. */

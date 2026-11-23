@@ -49,6 +49,24 @@ export function compileProgram(program: Program, syntax: TargetSyntax, keywords:
       }
       case "While":
         return syntax.whileLoop(indent, renderTokens(s.test.tokens, syntax.word), block(s.body, level + 1));
+      case "Var": {
+        const isStr = s.value.tokens.length === 1 && s.value.tokens[0].type === "STRING";
+        return syntax.varStmt(indent, s.declare, s.name, renderTokens(s.value.tokens, syntax.word), isStr);
+      }
+      case "For": {
+        const start = s.start ? renderTokens(s.start.tokens, syntax.word) : null;
+        const end = s.end ? renderTokens(s.end.tokens, syntax.word) : null;
+        const iterable = s.iterable ? renderTokens(s.iterable.tokens, syntax.word) : null;
+        return syntax.forLoop(indent, s.variable, start, end, iterable, block(s.body, level + 1));
+      }
+      case "Fn":
+        return syntax.fnDecl(indent, s.name, s.params, block(s.body, level + 1));
+      case "Return":
+        return syntax.returnStmt(indent, s.value ? renderTokens(s.value.tokens, syntax.word) : null);
+      case "Try":
+        return syntax.tryCatch(indent, block(s.body, level + 1), s.param, block(s.handler, level + 1));
+      case "Flow":
+        return syntax.flowStmt(indent, s.kind);
       default:
         return unsupported(s);
     }

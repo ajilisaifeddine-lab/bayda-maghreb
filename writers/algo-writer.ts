@@ -16,8 +16,18 @@ const syntax: TargetSyntax = {
     return `${code}\n${indent}نهاية إذا`;
   },
   whileLoop: (indent, test, body) => `${indent}طالما (${test}) كرر\n${body}\n${indent}نهاية طالما`,
+  varStmt: (indent, declare, name, value) => `${indent}${declare ? "ليكن " : ""}${name} ← ${value};`,
+  forLoop: (indent, v, s, e, it, body) => {
+    const b = body || indent + "  // لا شيء";
+    return s !== null && e !== null
+      ? `${indent}لكل ${v} من ${s} إلى ${e} كرر\n${b}\n${indent}نهاية لكل`
+      : `${indent}لكل ${v} في ${it} كرر\n${b}\n${indent}نهاية لكل`;
+  },
+  fnDecl: (indent, name, params, body) => `${indent}دالة ${name}(${params.join("، ")})\n${body || indent + "  // لا شيء"}\n${indent}نهاية دالة`,
+  returnStmt: (indent, value) => `${indent}أرجع${value !== null ? " " + value : ""};`,
+  tryCatch: (indent, body, param, handler) => `${indent}حاول\n${body || indent + "  // لا شيء"}\n${indent}عند الخطأ${param ? ` (${param})` : ""}\n${handler || indent + "  // لا شيء"}\n${indent}نهاية حاول`,
+  flowStmt: (indent, kind) => `${indent}${kind === "break" ? "توقف" : "واصل"};`,
 };
-
 export function toAlgo(program: Program, keywords: Record<string, string> = {}): string {
   return compileProgram(program, syntax, keywords);
 }

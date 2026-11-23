@@ -108,7 +108,6 @@ describe("دروس النواة — core/lessons.json", () => {
 
   it("الدروس المخطَّطة لا تظهر في lessonsFor وتظهر في lockedFor مع المفاهيم الناقصة", () => {
     const planned = all.filter((l) => l.status === "planned");
-    expect(planned.length).toBeGreaterThan(0);
     for (const l of planned) {
       for (const d of dialects) {
         const kw = KW[d];
@@ -117,6 +116,19 @@ describe("دروس النواة — core/lessons.json", () => {
         const lock = lockedFor(data, mode, kw).find((x) => x.id === l.id);
         expect(lock, l.id + "@" + d).toBeTruthy();
         expect(lock?.missing).toEqual(l.requires.filter((c) => !conceptsOf(kw).has(c)));
+      }
+    }
+    const sample = JSON.parse(text);
+    sample.modes.pro.push({ id: "pr-future", order: 99, title: "مستقبل", status: "planned", requires: ["function", "unknown_future"] });
+    const check = validateLessons(sample);
+    expect(check.ok).toBe(true);
+    if (check.ok) {
+      for (const d of dialects) {
+        const kw = KW[d];
+        expect(lessonsFor(check.data, "pro", kw).some((x) => x.id === "pr-future")).toBe(false);
+        const lock = lockedFor(check.data, "pro", kw).find((x) => x.id === "pr-future");
+        expect(lock?.status).toBe("planned");
+        expect(lock?.missing).toEqual(["unknown_future"]);
       }
     }
   });

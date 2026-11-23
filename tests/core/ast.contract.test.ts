@@ -12,6 +12,14 @@ const kw = {
   twala: "while",
   haqq: "true",
   ghalet: "false",
+  khalli: "let",
+  lkoll: "for",
+  daalla: "function",
+  rja3: "return",
+  jarreb: "try",
+  msak: "catch",
+  hbess: "break",
+  kammel: "continue",
 };
 
 const parse = (src: string): unknown => parseProgram(normalize(new Lexer(src, kw).tokenize(), kw));
@@ -58,6 +66,37 @@ function stmt(s: any, at: string): string[] {
         ...raw(s.test, at + ".test"),
         ...block(s.body, at + ".body"),
       ];
+    case "Var":
+      return [
+        ...(hasKeys(s, ["type", "declare", "name", "value"]) && typeof s.declare === "boolean" && typeof s.name === "string" && s.name !== "" ? [] : [at + ": bad Var keys"]),
+        ...raw(s.value, at + ".value"),
+      ];
+    case "For":
+      return [
+        ...(hasKeys(s, ["type", "variable", "start", "end", "iterable", "body"]) && typeof s.variable === "string" && s.variable !== "" ? [] : [at + ": bad For keys"]),
+        ...(s.start === null ? [] : raw(s.start, at + ".start")),
+        ...(s.end === null ? [] : raw(s.end, at + ".end")),
+        ...(s.iterable === null ? [] : raw(s.iterable, at + ".iterable")),
+        ...block(s.body, at + ".body"),
+      ];
+    case "Fn":
+      return [
+        ...(hasKeys(s, ["type", "name", "params", "body"]) && typeof s.name === "string" && s.name !== "" && Array.isArray(s.params) && s.params.every((p: any) => typeof p === "string" && p !== "") ? [] : [at + ": bad Fn keys"]),
+        ...block(s.body, at + ".body"),
+      ];
+    case "Return":
+      return [
+        ...(hasKeys(s, ["type", "value"]) ? [] : [at + ": bad Return keys"]),
+        ...(s.value === null ? [] : raw(s.value, at + ".value")),
+      ];
+    case "Try":
+      return [
+        ...(hasKeys(s, ["type", "body", "param", "handler"]) && (s.param === null || (typeof s.param === "string" && s.param !== "")) ? [] : [at + ": bad Try keys"]),
+        ...block(s.body, at + ".body"),
+        ...block(s.handler, at + ".handler"),
+      ];
+    case "Flow":
+      return hasKeys(s, ["type", "kind"]) && (s.kind === "break" || s.kind === "continue") ? [] : [at + ": bad Flow keys"];
     default:
       return [at + ": unknown statement type " + String(s && s.type)];
   }
@@ -80,6 +119,14 @@ const corpus: Array<[string, string]> = [
   ["if inside if", 'idha haqq { idha ghalet { goul("a") } sinon { goul("b") } }'],
   ["if inside while", 'twala (x < 3) { idha haqq { goul("a") } }'],
   ["while inside if", 'idha haqq { twala (ghalet) { goul("a") } }'],
+  ["let declaration and reassignment", "khalli x = 10\nx = x + 1"],
+  ["for range", "lkoll (k : 1..3) { goul(k) }"],
+  ["for iterable", "lkoll (city : cities) { goul(city) }"],
+  ["function and return", "daalla add(a, b) { rja3 a + b }"],
+  ["empty return", "daalla ping() { rja3 }"],
+  ["try catch with param", "jarreb { goul(\"ok\") } msak (err) { goul(\"err\") }"],
+  ["try catch without param", "jarreb { goul(\"ok\") } msak { goul(\"err\") }"],
+  ["break and continue", "twala (haqq) { hbess\nkammel }"],
 ];
 
 describe("عقد الشجرة (core/ast.ts)", () => {

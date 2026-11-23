@@ -76,7 +76,9 @@ export class Lexer {
           continue;
         }
 
-        while (NUMBER_REGEX.test(this.currentChar()) || this.currentChar() === '.') {
+        let hasDot = false;
+        while (NUMBER_REGEX.test(this.currentChar()) || (!hasDot && this.currentChar() === "." && NUMBER_REGEX.test(this.input[this.position + 1] || ""))) {
+          if (this.currentChar() === ".") hasDot = true;
           value += this.currentChar();
           this.advance();
         }
