@@ -18,6 +18,7 @@ var LS = {
   fontSize: "baydaFontSize",
   state: "baydaLabState",
   notes: "baydaNotesList",
+  welcome: "baydaWelcome",
 };
 
 /* ---------- عناصر مشتركة ---------- */
@@ -74,7 +75,7 @@ function beep(kind) {
 
 function updateSoundButton() {
   var btn = el("toggle-sound-setting");
-  if (btn) btn.textContent = soundEnabled ? "🔊 مفعل" : "🔇 معطل";
+  if (btn) btn.textContent = soundEnabled ? tx("tsSoundBtnOn", "🔊 مفعل") : tx("tsSoundBtnOff", "🔇 معطل");
 }
 
 function toggleSoundFromSettings() {
@@ -82,7 +83,7 @@ function toggleSoundFromSettings() {
   localStorage.setItem(LS.sound, String(soundEnabled));
   updateSoundButton();
   beep(soundEnabled ? "ok" : "close");
-  toast(soundEnabled ? "المؤثرات الصوتية مفعلة" : "المؤثرات الصوتية معطلة");
+  toast(soundEnabled ? tx("tsSoundOn", "المؤثرات الصوتية مفعلة") : tx("tsSoundOff", "المؤثرات الصوتية معطلة"));
 }
 
 /* ============================================================
@@ -118,7 +119,7 @@ function changeKidTheme() {
   document.body.setAttribute("data-kid-theme", name);
   document.documentElement.style.removeProperty("--primary");
   beep("tap");
-  toast("ثيم الطفل: " + name + " 🎨");
+  toast(tx("tsKidTheme", "ثيم الطفل: {name} 🎨").replace("{name}", name));
 }
 
 /* ============================================================
@@ -151,6 +152,13 @@ function closeModal(id) {
   beep("close");
 }
 
+/* نافذة الترحيب */
+function closeWelcome() {
+  try { localStorage.setItem(LS.welcome, "seen"); } catch (e) {}
+  closeModal("welcome-modal");
+  if (typeof window.blEnter === "function") window.blEnter();
+}
+
 function openSettings() {
   var slider = el("font-size-slider");
   if (slider) slider.value = localStorage.getItem(LS.fontSize) || "16";
@@ -158,7 +166,45 @@ function openSettings() {
   openModal("settings-modal");
 }
 
-function closeSettings() { closeModal("settings-modal"); }
+var settingsClosing = false;
+function closeSettings() {
+  var m = el("settings-modal");
+  if (!m || !m.classList.contains("active") || settingsClosing) return;
+  settingsClosing = true;
+  var box = m.querySelector(".st-modal");
+  m.classList.add("st-closing");
+  setTimeout(function () {
+    m.classList.remove("active", "st-closing");
+    if (box) { box.style.translate = ""; box.style.transition = ""; }
+    settingsClosing = false;
+    beep("close");
+  }, 260);
+}
+
+/* سحب ورقة الإعدادات من الرأس إلى الأسفل للإغلاق */
+(function initSettingsSwipe() {
+  var head = document.querySelector("#settings-modal .st-head");
+  var box = document.querySelector("#settings-modal .st-modal");
+  if (!head || !box) return;
+  var y0 = null;
+  head.addEventListener("pointerdown", function (e) {
+    if (e.target.closest && e.target.closest(".close-btn")) return;
+    y0 = e.clientY; box.style.transition = "none";
+    try { head.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  head.addEventListener("pointermove", function (e) {
+    if (y0 === null) return;
+    box.style.translate = "0 " + Math.max(0, e.clientY - y0) + "px";
+  });
+  function end(e) {
+    if (y0 === null) return;
+    var dy = e.clientY - y0; y0 = null;
+    if (dy > 90) { box.style.transition = "translate .26s cubic-bezier(.4, 0, 1, 1)"; box.style.translate = "0 105%"; closeSettings(); }
+    else { box.style.transition = "translate .25s cubic-bezier(.2, .8, .2, 1)"; box.style.translate = ""; setTimeout(function () { box.style.transition = ""; }, 260); }
+  }
+  head.addEventListener("pointerup", end);
+  head.addEventListener("pointercancel", end);
+})();
 
 function closeDictCard() { closeModal("dict-dock"); if (typeof window.dcRestoreRoom === "function") window.dcRestoreRoom(); }
 
@@ -188,55 +234,96 @@ function confirmNo() {
 
 /* إغلاق النوافذ بالنقر على الخلفية أو زر Escape */
 document.addEventListener("click", function (e) {
-  if (e.target && e.target.classList && e.target.classList.contains("modal-overlay")) {
-    e.target.classList.remove("active");
+  if (e.target && e.target.classList && e.target.classList.contains("modal-overlay") && e.target.id !== "welcome-modal") {
+    if (e.target.id === "settings-modal") closeSettings(); else e.target.classList.remove("active");
   }
 });
 
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape") {
     var open = document.querySelectorAll(".modal-overlay.active");
-    for (var i = 0; i < open.length; i++) open[i].classList.remove("active");
+    for (var i = 0; i < open.length; i++) { if (open[i].id === "settings-modal") closeSettings(); else if (open[i].id !== "welcome-modal") open[i].classList.remove("active"); }
   }
 });
 
 /* ============================================================
    5) التنبيهات (toasts)
    ============================================================ */
+var TOAST_KEY = {
+  "جارٍ تنزيل الحزمة...": "enDlProgress",
+  "✅ تم تنزيل الحزمة وحفظها على جهازك": "enDlOk",
+  "⚠️ تم التنزيل لهذه الجلسة فقط: تعذّر الحفظ على جهازك": "enDlSession",
+  "❌ تعذّر التنزيل": "enDlFail",
+  "انتهت مهلة الاتصال": "enTimeout",
+  "تعذّر الاتصال": "enNoConn",
+  "المصدر يجب أن يكون نصاً.": "enSrcText",
+  "المدخلات مطلوبة (TranslateInput).": "enInput",
+  "معرّف غير صالح": "enBadId",
+  "رقم إصدار غير صالح": "enBadVer",
+  "اسم غير صالح": "enBadName",
+  "الحزمة ليست كائناً": "enPackNotObj",
+  "تعذّر فحص الحزمة": "enPackCheck"
+};
+/* ترجمة إشعارات المحرك المعروفة؛ غير المعروف يبقى كما جاء */
+function toastText(m) {
+  if (typeof m !== "string") return m;
+  var hit = /^(❌ |⚠️ |✅ )?فشل التنزيل \(رمز (\d+)\)$/.exec(m);
+  if (hit) return (hit[1] || "") + tx("enHttp", "فشل التنزيل (رمز {c})").replace("{c}", hit[2]);
+  if (TOAST_KEY[m]) return tx(TOAST_KEY[m], m);
+  var p = /^(❌ |⚠️ |✅ )(.+)$/.exec(m);
+  if (p && TOAST_KEY[p[2]]) return p[1] + tx(TOAST_KEY[p[2]], p[2]);
+  return m;
+}
+
 function toast(message, ms) {
   var container = el("toast-container");
   if (!container) return;
+  message = toastText(message);
+
+  /* إشعار واحد ظاهر في كل لحظة: الجديد يحلّ محلّ القديم، والمطابق يجدّد عمره */
+  var live = container.querySelector(".toast:not(.hiding)");
+  if (live && live.textContent === String(message)) {
+    clearTimeout(live._t);
+    live._t = setTimeout(function () { dismissToast(live); }, ms || 2200);
+    return;
+  }
+  if (live) dismissToast(live, true);
 
   var node = document.createElement("div");
   node.className = "toast";
   node.textContent = message;
   container.appendChild(node);
+  node._t = setTimeout(function () { dismissToast(node); }, ms || 2200);
+}
 
-  setTimeout(function () {
-    node.classList.add("hiding");
-    setTimeout(function () {
-      if (node.parentNode) node.parentNode.removeChild(node);
-    }, 300);
-  }, ms || 2200);
+function dismissToast(node, now) {
+  if (!node || node.classList.contains("hiding")) return;
+  clearTimeout(node._t);
+  if (now) { if (node.parentNode) node.parentNode.removeChild(node); return; }
+  node.classList.add("hiding");
+  setTimeout(function () { if (node.parentNode) node.parentNode.removeChild(node); }, 300);
 }
 
 /* ============================================================
    6) التبويبات والتخطيط
    ============================================================ */
-function switchTab(name) {
-  var lab = el("view-lab");
-  var learn = el("view-learn");
-  var labBtn = el("tab-lab-btn");
-  var learnBtn = el("tab-learn-btn");
-  var footer = el("footer-run");
-
-  var isLab = name === "lab";
-  if (lab) lab.style.display = isLab ? "flex" : "none";
-  if (learn) learn.style.display = isLab ? "none" : "flex";
-  if (footer) footer.style.display = isLab ? "flex" : "none";
-  if (labBtn) labBtn.classList.toggle("active", isLab);
-  if (learnBtn) learnBtn.classList.toggle("active", !isLab);
-
+function isLearnTab(){var v=el("view-learn");return !!(v&&v.style.display!=="none");}
+function switchTab(name){
+  var lab=el("view-lab"),learn=el("view-learn"),labBtn=el("tab-lab-btn"),learnBtn=el("tab-learn-btn"),footer=el("footer-run");
+  var isLab=name==="lab";
+  if(lab)lab.style.display=isLab?"flex":"none";
+  if(learn)learn.style.display=isLab?"none":"flex";
+  if(footer)footer.style.display=isLab?"flex":"none";
+  if(labBtn)labBtn.classList.toggle("active",isLab);
+  if(learnBtn)learnBtn.classList.toggle("active",!isLab);
+  hideDlFloat();
+  var ctx=el("flags-ctx");if(ctx){var cKey=isLab?"flagsCtxLab":"flagsCtxLearn";ctx.setAttribute("data-i18n-key",cKey);ctx.textContent=tx(cKey,isLab?"🧪 حزم اللهجات":"📚 حزم الدروس");ctx.classList.toggle("is-learn",!isLab);}
+  if(typeof window.baydaRefreshFlags==="function")window.baydaRefreshFlags(name);
+  else restoreInstalledPacks(name);
+  if(!isLab){
+    renderLesson();
+  }
+  document.dispatchEvent(new CustomEvent("bayda:tab_changed",{detail:{tab:name}}));
   beep("tap");
   saveState();
 }
@@ -413,39 +500,18 @@ function hideDlFloat() {
   var b = document.querySelector(".dl-float");
   if (b && b.parentNode) b.parentNode.removeChild(b);
 }
-var DL_NAMES = {
-  "tn-latn": "تونسية (لاتيني)",
-  "tn-arab": "تونسية (عربي)",
-  "dz-latn": "جزائرية (لاتيني)",
-  "dz-arab": "جزائرية (عربي)",
-  "ma-latn": "مغربية (لاتيني)",
-  "ma-arab": "مغربية (عربي)",
-  "ly-latn": "ليبية (لاتيني)",
-  "ly-arab": "ليبية (عربي)",
-  "mr-latn": "حسانية (لاتيني)",
-  "mr-arab": "حسانية (عربي)",
-  "kab-latn": "قبائلية (لاتيني)",
-  "kab-tifinagh": "قبائلية (تيفيناغ)",
-  "shi-latn": "شلحية (لاتيني)"
+var DL_IDS = ["tn-latn", "tn-arab", "dz-latn", "dz-arab", "ma-latn", "ma-arab", "ly-latn", "ly-arab", "mr-latn", "mr-arab", "kab-latn", "kab-tifinagh", "shi-latn"];
+var DL_VARIANTS = {
+  "tn": ["arab", "latn"], "dz": ["arab", "latn"], "ma": ["arab", "latn"], "ly": ["arab", "latn"], "mr": ["arab", "latn"],
+  "kab": ["latn", "tifinagh"], "shi": ["latn"]
 };
-var DL_GROUPS = {
-  "tn": [{ id: "tn-arab", label: "تنزيل بالحرف العربي" }, { id: "tn-latn", label: "تنزيل بالحرف اللاتيني" }],
-  "dz": [{ id: "dz-arab", label: "تنزيل بالحرف العربي" }, { id: "dz-latn", label: "تنزيل بالحرف اللاتيني" }],
-  "ma": [{ id: "ma-arab", label: "تنزيل بالحرف العربي" }, { id: "ma-latn", label: "تنزيل بالحرف اللاتيني" }],
-  "ly": [{ id: "ly-arab", label: "تنزيل بالحرف العربي" }, { id: "ly-latn", label: "تنزيل بالحرف اللاتيني" }],
-  "mr": [{ id: "mr-arab", label: "تنزيل بالحرف العربي" }, { id: "mr-latn", label: "تنزيل بالحرف اللاتيني" }],
-  "kab": [{ id: "kab-latn", label: "تنزيل بالحرف اللاتيني" }, { id: "kab-tifinagh", label: "تنزيل بحرف التيفيناغ" }],
-  "shi": [{ id: "shi-latn", label: "تنزيل بالحرف اللاتيني" }]
-};
-var COUNTRY_NAMES = {
-  "tn": "اللهجة التونسية",
-  "dz": "اللهجة الجزائرية",
-  "ma": "الدارجة المغربية",
-  "ly": "اللهجة الليبية",
-  "mr": "اللهجة الموريتانية (الحسانية)",
-  "kab": "اللهجة القبائلية",
-  "shi": "اللهجة الشلحية"
-};
+var VAR_KEY = { arab: ["dlVarArab", "تنزيل بالحرف العربي"], latn: ["dlVarLatn", "تنزيل بالحرف اللاتيني"], tifinagh: ["dlVarTif", "تنزيل بحرف التيفيناغ"] };
+function dlGroup(prefix) {
+  var v = DL_VARIANTS[prefix];
+  if (!v) return null;
+  return v.map(function (s) { return { id: prefix + "-" + s, label: tx(VAR_KEY[s][0], VAR_KEY[s][1]) }; });
+}
+function countryName(p) { return tx("dlCountry_" + p, p); }
 var COUNTRY_FLAGS = {
   "tn": "assets/tn.png",
   "dz": "assets/dz.png",
@@ -456,50 +522,45 @@ var COUNTRY_FLAGS = {
   "shi": "assets/amazigh.png"
 };
 function dlLabel(id) {
-  return Object.prototype.hasOwnProperty.call(DL_NAMES, id) ? DL_NAMES[id] : "هذه اللهجة";
+  if (DL_IDS.indexOf(id) === -1) return tx("dlThisDialect", "هذه اللهجة");
+  var p = String(id).split("-");
+  return tx("dlName_" + p[0], p[0]) + " (" + tx("dlScript_" + p[1], p[1]) + ")";
 }
 
-function saveInstalledPack(dialectId) {
-  try {
-    var raw = localStorage.getItem("bayda_installed_packs");
-    var list = raw ? JSON.parse(raw) : [];
-    if (!Array.isArray(list)) list = [];
-    if (!list.includes(dialectId)) {
-      list.push(dialectId);
-      localStorage.setItem("bayda_installed_packs", JSON.stringify(list));
-    }
-  } catch (e) {
-    console.warn("Could not save installed pack:", e);
-  }
+function saveInstalledPack(dialectId,kind){
+  try{
+    var key=kind==="lessons"?"bayda_installed_lesson_packs":"bayda_installed_packs";
+    var raw=localStorage.getItem(key),list=raw?JSON.parse(raw):[];
+    if(!Array.isArray(list))list=[];
+    if(!list.includes(dialectId)){list.push(dialectId);localStorage.setItem(key,JSON.stringify(list));}
+  }catch(e){}
 }
-
-function restoreInstalledPacks() {
-  try {
-    var raw = localStorage.getItem("bayda_installed_packs");
-    var list = raw ? JSON.parse(raw) : [];
-    if (!Array.isArray(list)) return;
-    list.forEach(function (id) {
-      if (typeof id !== "string") return;
-      var prefix = id.split("-")[0];
-      var flagBtn = document.querySelector(".flag-btn[data-dialect^='" + prefix + "']");
-      if (flagBtn) {
-        flagBtn.classList.add("has-pack");
-        flagBtn.setAttribute("data-dialect", id);
-      }
+function restoreInstalledPacks(tabName){
+  try{
+    var isLes=tabName?tabName==="learn":isLearnTab();
+    var E=window.BaydaEngine;
+    document.querySelectorAll(".flag-btn").forEach(function(b){b.classList.remove("has-pack");});
+    var key=isLes?"bayda_installed_lesson_packs":"bayda_installed_packs";
+    var raw=localStorage.getItem(key),list=raw?JSON.parse(raw):[];
+    if(!Array.isArray(list))list=[];
+    list.forEach(function(id){
+      if(typeof id!=="string")return;
+      if(E&&((isLes&&E.hasLessonsPack&&!E.hasLessonsPack(id))||(!isLes&&E.hasPack&&!E.hasPack(id))))return;
+      var pfx=id.split("-")[0],flagBtn=document.querySelector(".flag-btn[data-dialect^='"+pfx+"']");
+      if(flagBtn){flagBtn.classList.add("has-pack");var keep=flagBtn.classList.contains("active")&&currentDialect.split("-")[0]===pfx&&E&&((isLes&&E.hasLessonsPack&&E.hasLessonsPack(currentDialect))||(!isLes&&E.hasPack&&E.hasPack(currentDialect)));if(!keep){flagBtn.setAttribute("data-dialect",id);if(flagBtn.classList.contains("active")&&currentDialect!==id){currentDialect=id;applyDialect(id);}}}
     });
-  } catch (e) {
-    console.warn("Could not restore installed packs:", e);
-  }
+  }catch(e){}
 }
-
-function askDlConfirm(id) {
+function askDlConfirm(id,kind) {
   try {
     var old = document.querySelector(".dl-confirm-wrap");
     if (old && old.parentNode) old.parentNode.removeChild(old);
 
+    var dlKind = kind || (isLearnTab() ? "lessons" : "dialect");
+    var isLes = dlKind === "lessons";
     var prefix = id.split("-")[0];
-    var countryLabel = COUNTRY_NAMES[prefix] || dlLabel(id);
-    var variants = DL_GROUPS[prefix] || [{ id: id, label: "تنزيل الحزمة" }];
+    var countryLabel = DL_VARIANTS[prefix] ? countryName(prefix) : dlLabel(id);
+    var variants = dlGroup(prefix) || [{ id: id, label: tx("dlGetPackOnly", "تنزيل الحزمة") }];
     var flagSrc = COUNTRY_FLAGS[prefix] || "assets/logo.png";
 
     var wrap = document.createElement("div");
@@ -540,7 +601,7 @@ function askDlConfirm(id) {
     title.style.setProperty("font-weight", "800");
     title.style.setProperty("color", "#ffffff");
     title.style.setProperty("text-shadow", "0 2px 8px rgba(0, 0, 0, 0.8)");
-    title.textContent = "تنزيل حزمة " + countryLabel;
+    title.textContent = tx(isLes ? "dlGetLessonsPack" : "dlGetPack", isLes ? "تنزيل حزمة دروس {name}" : "تنزيل حزمة {name}").replace("{name}", countryLabel);
     content.appendChild(title);
 
     var list = document.createElement("div");
@@ -578,7 +639,8 @@ function askDlConfirm(id) {
           toast("⚠️ " + t("toastOffline", "لا يوجد اتصال بالإنترنت، يرجى التحقق من الشبكة"));
           return;
         }
-        if (typeof window.baydaDownloadDialect !== "function") {
+        var dlFn = isLes ? window.baydaDownloadLessons : window.baydaDownloadDialect;
+        if (typeof dlFn !== "function") {
           toast(t("toastNotConnected", "التنزيل غير متصل بالنواة بعد"));
           close();
           return;
@@ -613,7 +675,7 @@ function askDlConfirm(id) {
         no.style.setProperty("display", "none");
 
         try {
-          await window.baydaDownloadDialect(v.id);
+          await dlFn(v.id);
 
           btn.textContent = "";
           btn.className = "dl-variant-btn dl-success-anim";
@@ -627,7 +689,7 @@ function askDlConfirm(id) {
           chk.style.setProperty("margin-inline-end", "8px");
 
           var msg = document.createElement("span");
-          msg.textContent = t("toastDlSuccess", "تم التنزيل والحفظ بنجاح! 🎉");
+          msg.textContent = t(isLes ? "dlLessonsSuccess" : "toastDlSuccess", isLes ? "تم تنزيل حزمة الدروس! 📚" : "تم التنزيل والحفظ بنجاح! 🎉");
 
           btn.appendChild(chk);
           btn.appendChild(msg);
@@ -641,7 +703,9 @@ function askDlConfirm(id) {
             flagBtn.classList.add("has-pack");
             flagBtn.setAttribute("data-dialect", v.id);
           }
-          saveInstalledPack(v.id);
+          saveInstalledPack(v.id, dlKind);
+          if (v.id !== currentDialect) { currentDialect = v.id; applyDialect(v.id); saveState(); }
+          else if (isLes) renderLesson();
 
           setTimeout(close, 1400);
         } catch (err) {
@@ -668,7 +732,7 @@ function askDlConfirm(id) {
     var no = document.createElement("button");
     no.type = "button";
     no.className = "dl-confirm-no";
-    no.textContent = "إلغاء";
+    no.textContent = tx("dlCancel", "إلغاء");
     /* min-width governed by responsive css */
     no.style.setProperty("min-height", "42px");
     no.style.setProperty("border-radius", "22px");
@@ -713,7 +777,8 @@ function showDlFloat(flag) {
     arrow.className = "dl-arrow";
     arrow.setAttribute("aria-hidden", "true");
     b.appendChild(arrow);
-    b.setAttribute("aria-label", "تنزيل حزمة " + dlLabel(id));
+    var fk = isLearnTab() ? "dlGetLessonsPack" : "dlGetPack";
+    b.setAttribute("aria-label", tx(fk, isLearnTab() ? "تنزيل حزمة دروس {name}" : "تنزيل حزمة {name}").replace("{name}", dlLabel(id)));
     b.style.setProperty("width", size + "px");
     b.style.setProperty("height", size + "px");
     b.style.setProperty("left", (r.left + r.width / 2 - size / 2 - h.left) + "px");
@@ -721,7 +786,7 @@ function showDlFloat(flag) {
     b.addEventListener("click", function (e) {
       e.stopPropagation();
       hideDlFloat();
-      askDlConfirm(id);
+      askDlConfirm(id, isLearnTab() ? "lessons" : "dialect");
     });
     hdr.appendChild(b);
     dlFloatTimer = setTimeout(hideDlFloat, 4000);
@@ -750,8 +815,76 @@ function applyDialect(id) {
       updateLineNumbers();
     }
     if (typeof window.dcRenderChips === "function") window.dcRenderChips();
+    var lfb = el("lesson-feedback"); if (lfb) lfb.classList.add("hidden");
+    renderLesson();
+    document.dispatchEvent(new CustomEvent("bayda:dialect_changed", { detail: { id: id } }));
   } catch (err) { console.error("applyDialect:", err); }
 }
+
+/* عنوان الدرس ووصفه: كلمة الطباعة من حزمة اللهجة الحالية في المحرك */
+var activeLessonId=null,activeLessonMode="beginner",activeLessonHints=[],activeHintIdx=0,activeLessonTpl="";
+function getSolvedMap(){try{return JSON.parse(localStorage.getItem("bayda_solved_lessons")||"{}")||{};}catch(e){return{};}}
+function solvedKey(){return (currentDialect||"tn-latn")+":"+activeLessonMode;}
+function isLessonSolved(id){var m=getSolvedMap()[solvedKey()];return Array.isArray(m)&&m.indexOf(id)>=0;}
+function markLessonSolved(id){if(!id)return;var all=getSolvedMap(),k=solvedKey(),arr=Array.isArray(all[k])?all[k]:[];if(arr.indexOf(id)<0){arr.push(id);all[k]=arr;try{localStorage.setItem("bayda_solved_lessons",JSON.stringify(all));}catch(e){}}}
+function renderLesson(){
+  var t=el("lesson-title"),dsc=el("lesson-desc"),exp=el("lesson-explain"),hb=el("lesson-hint-box"),hbtn=el("lesson-hint-btn"),tbtn=el("lesson-target-btn"),tbox=el("lesson-target-box"),E=window.BaydaEngine;
+  if(!t&&!dsc)return;
+  var card=t?t.parentNode:null,bar=el("lesson-pack-bar"),prog=el("lesson-prog");
+  if(!prog&&card){prog=document.createElement("div");prog.id="lesson-prog";prog.className="lesson-prog hidden";card.insertBefore(prog,bar||t);}
+  if(!bar&&card){bar=document.createElement("div");bar.id="lesson-pack-bar";bar.style.cssText="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;align-items:center";card.insertBefore(bar,t);}
+  var ms=el("mode-select"),lm=(ms&&ms.value==="pro")?"pro":"beginner";
+  activeLessonMode=lm;
+  var view=E&&E.getLessonsView?E.getLessonsView(lm):{installed:false,ready:[],locked:[]};
+  if(bar)bar.textContent="";if(exp){exp.textContent="";exp.classList.add("hidden");}
+  if(hb){hb.textContent="";hb.classList.add("hidden");}if(tbox){tbox.textContent="";tbox.classList.add("hidden");}
+  activeHintIdx=0;activeLessonHints=[];activeLessonTpl="";
+  if(view.installed&&view.ready.length){
+    if(!view.ready.some(function(x){return x.id===activeLessonId;}))activeLessonId=view.ready[0].id;
+    var cur=view.ready.find(function(x){return x.id===activeLessonId;})||view.ready[0];
+    var doneCnt=view.ready.filter(function(x){return isLessonSolved(x.id);}).length;
+    if(prog){prog.classList.remove("hidden");prog.innerHTML="<div class=\"lesson-prog-meta\"><span>"+tx("lrnProgress","التقدم")+": "+doneCnt+" / "+view.ready.length+"</span><span>"+Math.round(doneCnt/view.ready.length*100)+"%</span></div><div class=\"lesson-prog-track\"><div class=\"lesson-prog-fill\" style=\"width:"+Math.round(doneCnt/view.ready.length*100)+"%\"></div></div>";}
+    if(bar){
+      view.ready.forEach(function(l,i){
+        var b=document.createElement("button");b.type="button";
+        b.className=l.id===cur.id?"btn-primary":"btn-secondary";
+        b.style.cssText="padding:5px 10px;font-size:.82rem";
+        b.textContent=(isLessonSolved(l.id)?"✅ ":"")+(i+1)+". "+l.title;
+        b.onclick=function(){activeLessonId=l.id;renderLesson();var fb=el("lesson-feedback");if(fb)fb.classList.add("hidden");};
+        bar.appendChild(b);
+      });
+      if(view.locked.length){var lk=document.createElement("span");lk.style.cssText="font-size:.8rem;color:var(--text-muted)";lk.textContent=tx("lrnNeedDialectPack","🔒 يتطلب تنزيل حزمة اللهجة من المختبر")+" ("+view.locked.length+")";bar.appendChild(lk);}
+    }
+    if(t)t.textContent=(isLessonSolved(cur.id)?"✅ ":"")+cur.title;
+    if(dsc)dsc.textContent=cur.goal;
+    if(exp&&cur.explain&&cur.explain.length){
+      cur.explain.forEach(function(line){var d=document.createElement("div");d.textContent="• "+(E.fillLessonCode?E.fillLessonCode(line).text||line:line);exp.appendChild(d);});
+      exp.classList.remove("hidden");
+    }
+    activeLessonHints=(cur.hints||[]).map(function(h){return E.fillLessonCode?E.fillLessonCode(h).text||h:h;});
+    if(cur.template&&E.fillLessonCode)activeLessonTpl=E.fillLessonCode(cur.template).text||"";
+    if(hbtn){hbtn.classList.toggle("hidden",!activeLessonHints.length);hbtn.textContent=tx("lrnHintBtn","💡 تلميح")+" (0/"+activeLessonHints.length+")";}
+    if(tbtn){tbtn.classList.toggle("hidden",lm!=="pro");}
+    return;
+  }
+  activeLessonId=null;if(prog)prog.classList.add("hidden");if(hbtn)hbtn.classList.add("hidden");if(tbtn)tbtn.classList.add("hidden");
+  if(bar){
+    var note=document.createElement("button");note.type="button";note.className="lrn-pull-notice";
+    note.textContent="\u261D\uFE0F "+tx("lrnPullTopNotice","اضغط مرتين على العلم في الأعلى لتنزيل دروس اللهجة");
+    note.onclick=function(){var af=document.querySelector(".flag-btn.active");if(af){af.scrollIntoView({behavior:"smooth",block:"center"});flagBolt(af);showDlFloat(af);}};
+    bar.appendChild(note);
+  }
+  var kw="print";try{var k=E&&E.getDialect?E.getDialect().keywords:null;if(k){var ws=Object.keys(k).filter(function(w){return k[w]==="print";});if(ws.length)kw=ws[0];}}catch(e){}
+  if(t)t.textContent=tx("lrnTitle","المستوى 0: الطباعة ({kw})").replace(/\{kw\}/g,kw);
+  if(dsc)dsc.textContent=tx("lrnDesc","استخدم الكلمة المفتاحية للطباعة لكتابة \"salam\" على الشاشة.");
+}
+document.addEventListener("bayda:uilang_changed",renderLesson);
+document.addEventListener("bayda:lessons_updated",renderLesson);
+document.addEventListener("DOMContentLoaded",function(){
+  renderLesson();
+  var ms=el("mode-select");
+  if(ms)ms.addEventListener("change",function(){var lfb=el("lesson-feedback");if(lfb)lfb.classList.add("hidden");renderLesson();});
+});
 
 /* أرقام الأسطر: تتبع المحرر (بلا innerHTML، وبحد لحماية الهاتف) */
 function updateLineNumbers() {
@@ -769,14 +902,20 @@ function updateLineNumbers() {
 document.addEventListener("click", function (e) {
   var btn = e.target && e.target.closest ? e.target.closest(".flag-btn") : null;
   if (!btn) return;
+  var wasActive = btn.classList.contains("active");
   currentDialect = btn.getAttribute("data-dialect") || currentDialect;
-
   var all = document.querySelectorAll(".flag-btn");
   for (var i = 0; i < all.length; i++) all[i].classList.remove("active");
   btn.classList.add("active");
   flagBolt(btn);
-  showDlFloat(btn);
   applyDialect(currentDialect);
+  if (isLearnTab()) renderLesson();
+  if (wasActive) {
+    hideDlFloat();
+    askDlConfirm(currentDialect, isLearnTab() ? "lessons" : "dialect");
+  } else {
+    showDlFloat(btn);
+  }
   beep("ok");
   saveState();
 });
@@ -800,7 +939,7 @@ function persistNotes() {
   try {
     localStorage.setItem(LS.notes, JSON.stringify(notes));
   } catch (e) {
-    toast("تعذّر حفظ الملاحظات");
+    toast(tx("tsNotesSaveFail", "تعذّر حفظ الملاحظات"));
   }
 }
 
@@ -811,7 +950,7 @@ function renderNoteSelector() {
   notes.forEach(function (note) {
     var opt = document.createElement("option");
     opt.value = note.id;
-    opt.textContent = note.title || "بدون عنوان";
+    opt.textContent = note.title || tx("tsUntitled", "بدون عنوان");
     if (note.id === currentNoteId) opt.selected = true;
     sel.appendChild(opt);
   });
@@ -876,7 +1015,7 @@ function renderCurrentNote() {
 function createNewNote() {
   var note = {
     id: "n" + Date.now(),
-    title: "ملاحظة " + (notes.length + 1),
+    title: tx("tsNoteN", "ملاحظة {n}").replace("{n}", String(notes.length + 1)),
     html: "",
     content: ""
   };
@@ -886,19 +1025,19 @@ function createNewNote() {
   renderNoteSelector();
   renderCurrentNote();
   beep("ok");
-  toast("ملاحظة جديدة");
+  toast(tx("tsNewNote", "ملاحظة جديدة"));
 }
 
 function deleteCurrentNote() {
   if (!currentNoteId) return;
-  askConfirm("هل تريد حذف هذه الملاحظة نهائيًا؟", function () {
+  askConfirm(tx("tsConfirmNote", "هل تريد حذف هذه الملاحظة نهائيًا؟"), function () {
     notes = notes.filter(function (n) { return n.id !== currentNoteId; });
     currentNoteId = notes.length ? notes[0].id : null;
     persistNotes();
     renderNoteSelector();
     renderCurrentNote();
     beep("err");
-    toast("تم الحذف");
+    toast(tx("tsDeleted", "تم الحذف"));
   });
 }
 
@@ -957,16 +1096,16 @@ function copyOutput() {
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(
-      function () { beep("ok"); toast("تم النسخ 📋"); },
-      function () { beep("err"); toast("تعذّر النسخ"); }
+      function () { beep("ok"); toast(tx("tsCopied", "تم النسخ 📋")); },
+      function () { beep("err"); toast(tx("tsCopyFail", "تعذّر النسخ")); }
     );
   } else {
     var ta = document.createElement("textarea");
     ta.value = text;
     document.body.appendChild(ta);
     ta.select();
-    try { document.execCommand("copy"); toast("تم النسخ 📋"); }
-    catch (e) { toast("تعذّر النسخ"); }
+    try { document.execCommand("copy"); toast(tx("tsCopied", "تم النسخ 📋")); }
+    catch (e) { toast(tx("tsCopyFail", "تعذّر النسخ")); }
     document.body.removeChild(ta);
   }
 }
@@ -983,27 +1122,25 @@ function downloadOutput() {
   document.body.removeChild(a);
   URL.revokeObjectURL(a.href);
   beep("ok");
-  toast("تم التنزيل 💾");
+  toast(tx("tsDownloaded", "تم التنزيل 💾"));
 }
 
 /* ============================================================
    10) وضع الطفل: قراءة النتيجة صوتيًا
    ============================================================ */
-function readOutput() {
-  var out = el("output");
-  if (!out) return;
-  var text = (out.textContent || "").trim();
-  if (!text) { toast("لا يوجد شيء لقراءته"); return; }
-  if (!("speechSynthesis" in window)) { toast("القراءة غير مدعومة"); return; }
-
-  var u = new SpeechSynthesisUtterance(text);
-  u.lang = "ar";
-  u.rate = 0.95;
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(u);
-  beep("tap");
-}
-
+window.baydaSpeak=function(text,opts){
+  var t=(text||"").trim();if(!t)return false;
+  var slow=!!(opts&&opts.slow),hasTif=/[\u2D30-\u2D7F]/.test(t),hasAr=/[\u0600-\u06FF]/.test(t);
+  if(hasTif){beep("tap");toast("🔊 "+tx("uxTifinaghAudio","تيفيناغ: نُطق بتنبيه صوتي لغياب حزمة الصوت"),2400);return false;}
+  if(!("speechSynthesis" in window)){beep("tap");toast(tx("uxNoSpeech","القراءة غير مدعومة"),2200);return false;}
+  try{
+    var ss=window.speechSynthesis,vs=ss.getVoices?ss.getVoices():[],d=(window.currentDialect||""),lang=hasAr||/-arab$/.test(d)?"ar-SA":(d==="kab-latn"||d==="shi-latn"||/-latn$/.test(d)?"fr-FR":"ar-SA");
+    var pick=vs.find(function(v){return v.lang&&v.lang.toLowerCase().indexOf(lang.slice(0,2))===0;})||vs[0];
+    var u=new SpeechSynthesisUtterance(t);if(pick)u.voice=pick;u.lang=pick?pick.lang:lang;u.rate=slow?0.62:0.92;
+    u.onerror=function(){beep("tap");};ss.cancel();ss.speak(u);beep("tap");return true;
+  }catch(e){beep("tap");return false;}
+};
+function readOutput(){var out=el("output"),t=out?(out.textContent||"").trim():"";if(!t){toast(tx("tsNothingRead","لا يوجد شيء لقراءته"));return;}window.baydaSpeak(t,{slow:false});}
 /* ============================================================
    11) مسح البيانات
    ============================================================ */
@@ -1025,7 +1162,7 @@ function clearAllData() {
     renderCurrentNote();
     updateSoundButton();
     beep("ok");
-    toast("تم مسح كل البيانات");
+    toast(tx("uxCleared", "تم مسح كل البيانات"));
   });
 }
 
@@ -1092,6 +1229,7 @@ function syncModeControls(mode) {
 
 document.addEventListener("change", function (e) {
   if (!e.target || e.target.id !== "mode-select") return;
+  if (typeof window.ksGuardModeExit === "function" && !window.ksGuardModeExit(e.target)) return;
   var mode = e.target.value;
   document.body.setAttribute("data-mode", mode);
   syncModeControls(mode);
@@ -1102,14 +1240,15 @@ document.addEventListener("change", function (e) {
 /* ============================================================
    14) ما كان يفعله المحرك — مربوط الآن
    ============================================================ */
+
 function runCode() {
   var out = el("output");
   var ed = el("editor");
   if (!out || !ed) return;
   var E = window.BaydaEngine;
   if (!E) {
-    out.textContent = "❌ المحرك غير محمّل.";
-    toast("❌ المحرك غير محمّل");
+    out.textContent = "❌ " + tx("engineMissing", "المحرك غير محمّل.");
+    toast("❌ " + tx("engineMissing", "المحرك غير محمّل."));
     beep("err");
     return;
   }
@@ -1117,18 +1256,17 @@ function runCode() {
   var r = E.runCode(ed.value, sel ? sel.value : "js");
   if (r.ok) {
     out.textContent = r.code || "";
-    toast("✅ تم التحويل بنجاح.");
     beep("ok");
   } else {
-    out.textContent = "❌ خطأ: " + r.error;
-    toast("❌ " + r.error);
+    out.textContent = "❌ " + tx("errPrefix", "خطأ") + ": " + r.error;
+    toast("❌ " + tx("runFailed", "تعذّر التحويل، راجع المخرجات"));
     beep("err");
   }
 }
 
 function magicCode() {
   beep("tap");
-  toast("✨ الواجهة جاهزة، والمحرك سيُضاف لاحقًا");
+  toast(tx("uxMagic", "✨ الواجهة جاهزة، والمحرك سيُضاف لاحقًا"));
 }
 
 function insertToLesson(sym) {
@@ -1147,15 +1285,32 @@ function resetLesson() {
   beep("tap");
 }
 
+var LESSON_KEY = {
+  "الرجاء كتابة كود أولاً.": "lrnNeedCode",
+  "الكود أطول من الحد المسموح.": "lrnTooLong",
+  "اختر لهجة أولاً.": "lrnPickDialect",
+  "🎉 إجابة صحيحة! لقد تعلمت الطباعة بنجاح.": "lrnOk",
+  "⚠️ الصياغة صحيحة، لكن يجب أن تطبع كلمة 'salam' بالتحديد.": "lrnWrong",
+  "المحرك غير محمّل.": "lrnEngine"
+};
+function lessonMsg(m) {
+  if (typeof m !== "string") return m;
+  var P = "❌ خطأ برمجي: ";
+  if (m.indexOf(P) === 0) return tx("lrnErrPrefix", P) + m.slice(P.length);
+  return LESSON_KEY[m] ? tx(LESSON_KEY[m], m) : m;
+}
+
+function showNextLessonHint(){var hb=el("lesson-hint-box"),hbtn=el("lesson-hint-btn");if(!hb||!activeLessonHints.length)return;if(activeHintIdx<activeLessonHints.length)activeHintIdx++;hb.textContent=activeLessonHints.slice(0,activeHintIdx).map(function(h,i){return (i+1)+". "+h;}).join("\n");hb.style.whiteSpace="pre-wrap";hb.classList.remove("hidden");if(hbtn)hbtn.textContent=tx("lrnHintBtn","💡 تلميح")+" ("+activeHintIdx+"/"+activeLessonHints.length+")";beep("tap");}
+function toggleLessonTarget(){var tb=el("lesson-target-box"),box=el("lesson-editor"),tl=el("target-lang"),E=window.BaydaEngine;if(!tb||!E||!E.previewTarget)return;if(!tb.classList.contains("hidden")){tb.classList.add("hidden");return;}var src=(box&&box.value.trim())?box.value:activeLessonTpl;var res=E.previewTarget(src,tl?tl.value:"js");if(!res.ok){toast(tx("lrnNoTarget","اكتب كوداً للمعاينة"),2200);return;}tb.textContent=(tl?tl.value.toUpperCase():"JS")+":\n"+res.code;tb.classList.remove("hidden");beep("tap");}
 function checkLesson() {
-  var fb = el("lesson-feedback");
-  var box = el("lesson-editor");
-  var E = window.BaydaEngine;
-  var r = E && box ? E.checkLesson(box.value) : { status: "error", message: "المحرك غير محمّل." };
+  var fb = el("lesson-feedback"), box = el("lesson-editor"), E = window.BaydaEngine;
+  var r = E && box ? (activeLessonId && E.checkLessonEntry ? E.checkLessonEntry(activeLessonId, box.value, activeLessonMode) : E.checkLesson(box.value)) : { status: "error", message: "المحرك غير محمّل." };
   if (fb) {
-    fb.textContent = r.message;
-    fb.classList.remove("hidden");
+    fb.textContent = lessonMsg(r.message);
+    fb.classList.remove("hidden", "success", "error");
+    fb.classList.add(r.status === "ok" ? "success" : "error");
   }
+  if (r.status === "ok" && activeLessonId) { markLessonSolved(activeLessonId); renderLesson(); }
   beep(r.status === "ok" ? "ok" : "err");
 }
 
@@ -1206,6 +1361,23 @@ function initUI() {
 
   restoreState();
   applyDialect(currentDialect);
+
+  /* نافذة الترحيب: بعد نافذة اللغة، ومرة واحدة فقط */
+  function welcomePending() {
+    try { return !localStorage.getItem(LS.welcome); } catch (e) { return false; }
+  }
+  function langSeen() {
+    try { return localStorage.getItem("bayda_lang_seen") === "1"; } catch (e) { return true; }
+  }
+  if (welcomePending()) {
+    var showWelcome = function () {
+      setTimeout(function () { if (welcomePending()) openModal("welcome-modal"); }, 350);
+    };
+    if (langSeen()) showWelcome();
+    else document.addEventListener("bayda:lpclosed", showWelcome, { once: true });
+  } else if (!langSeen()) {
+    document.addEventListener("bayda:lpclosed", function () { if (typeof window.blEnter === "function") window.blEnter(); }, { once: true });
+  }
 
   
 
@@ -1272,7 +1444,7 @@ if (document.readyState === "loading") {
         }));
         var badge = document.getElementById("autosave-status");
         if (badge) {
-          badge.textContent = "💾 تم الحفظ " + timeStr;
+          badge.textContent = tx("uxSavedAt", "💾 تم الحفظ {t}").replace("{t}", timeStr);
           badge.style.setProperty("color", "#10b981");
           setTimeout(function() {
             if (badge) badge.style.removeProperty("color");
@@ -1285,8 +1457,10 @@ if (document.readyState === "loading") {
   }, 30000);
 
   // 2. إشعار الاستعادة التفاعلي عند بدء التشغيل
+
   function promptRestoreIfAvailable() {
     try {
+      if (typeof stGet === "function" && !stGet("restore")) return;
       var raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
       var data = JSON.parse(raw);
@@ -1298,69 +1472,70 @@ if (document.readyState === "loading") {
       // إذا كان الكود الحالي هو نفس المحفوظ لا حاجة لإظهار التنبيه
       if (ed.value && ed.value.trim() === data.code.trim()) return;
 
-      // إنشاء بطاقة تنبيه للاستعادة
-      var toastContainer = document.getElementById("toast-container") || document.body;
+      // شريط الاستعادة (الشكل في style.css)
+      if (document.querySelector(".restore-bar")) return;
+      var mk = function (tag, cls, txt) {
+        var e = document.createElement(tag);
+        e.className = cls;
+        e.textContent = txt;
+        return e;
+      };
       var box = document.createElement("div");
-      box.className = "toast auto-restore-toast";
-      box.style.setProperty("display", "flex");
-      box.style.setProperty("flex-direction", "column");
-      box.style.setProperty("gap", "10px");
-      box.style.setProperty("padding", "14px 18px");
-      box.style.setProperty("border-radius", "16px");
-      box.style.setProperty("background", "rgba(15, 76, 117, 0.95)");
-      box.style.setProperty("color", "#fff");
-      box.style.setProperty("box-shadow", "0 10px 30px rgba(0,0,0,0.5)");
+      box.className = "restore-bar";
+      box.setAttribute("role", "alertdialog");
+      box.setAttribute("aria-label", tx("rbAria", "استعادة النسخة المحفوظة"));
+      var ft = document.getElementById("footer-run");
+      var fh = ft ? ft.getBoundingClientRect().height : 0;
+      box.style.setProperty("--rb-bottom", Math.round(fh + 14) + "px");
 
       var msg = document.createElement("div");
-      msg.textContent = "📄 تم العثور على نسخة محفوظة تلقائياً لعملك السابق. هل ترغب في استعادتها؟";
-      msg.style.setProperty("font-size", "0.9rem");
-      msg.style.setProperty("font-weight", "600");
+      msg.className = "rb-msg";
+      msg.appendChild(mk("span", "rb-ic", "📄"));
+      msg.appendChild(mk("span", "rb-tx", tx("rbMsg", "وجدنا نسخة محفوظة من عملك السابق")));
       box.appendChild(msg);
 
-      var actions = document.createElement("div");
-      actions.style.setProperty("display", "flex");
-      actions.style.setProperty("gap", "8px");
+      var timer;
+      var closeBar = function () {
+        clearTimeout(timer);
+        if (!box.parentNode) return;
+        box.classList.add("out");
+        setTimeout(function () { if (box.parentNode) box.parentNode.removeChild(box); }, 260);
+      };
 
-      var btnRestore = document.createElement("button");
+      var actions = document.createElement("div");
+      actions.className = "rb-actions";
+      var btnRestore = mk("button", "rb-yes", tx("rbRestore", "استعادة"));
       btnRestore.type = "button";
-      btnRestore.textContent = "✓ استعادة الكود";
-      btnRestore.style.setProperty("padding", "6px 14px");
-      btnRestore.style.setProperty("border-radius", "8px");
-      btnRestore.style.setProperty("background", "#059669");
-      btnRestore.style.setProperty("color", "#fff");
-      btnRestore.style.setProperty("border", "none");
-      btnRestore.style.setProperty("font-weight", "bold");
-      btnRestore.style.setProperty("cursor", "pointer");
+      var btnDismiss = mk("button", "rb-no", tx("rbDismiss", "تجاهل"));
+      btnDismiss.type = "button";
 
       btnRestore.addEventListener("click", function () {
         ed.value = data.code;
-        if (typeof updateEditorLines === "function") updateEditorLines();
-        if (typeof toast === "function") toast("تمت استعادة الكود بنجاح!");
-        if (box.parentNode) box.parentNode.removeChild(box);
+        if (typeof updateLineNumbers === "function") updateLineNumbers();
+        else if (typeof updateEditorLines === "function") updateEditorLines();
+        if (typeof toast === "function") toast(tx("rbDone", "تمت استعادة الكود بنجاح!"));
+        closeBar();
       });
-
-      var btnDismiss = document.createElement("button");
-      btnDismiss.type = "button";
-      btnDismiss.textContent = "تجاهل";
-      btnDismiss.style.setProperty("padding", "6px 14px");
-      btnDismiss.style.setProperty("border-radius", "8px");
-      btnDismiss.style.setProperty("background", "rgba(255,255,255,0.2)");
-      btnDismiss.style.setProperty("color", "#fff");
-      btnDismiss.style.setProperty("border", "none");
-      btnDismiss.style.setProperty("cursor", "pointer");
-
-      btnDismiss.addEventListener("click", function () {
-        if (box.parentNode) box.parentNode.removeChild(box);
-      });
+      btnDismiss.addEventListener("click", closeBar);
 
       actions.appendChild(btnRestore);
       actions.appendChild(btnDismiss);
       box.appendChild(actions);
-
-      toastContainer.appendChild(box);
+      document.body.appendChild(box);
+      timer = setTimeout(closeBar, 20000);
     } catch (e) {
       console.warn("Restore prompt check failed:", e);
     }
+  }
+
+  // ينتظر انتهاء شاشة البداية وحركة الدخول قبل أي ظهور
+  function whenIntroDone(fn) {
+    var d = document.documentElement, tries = 0;
+    (function check() {
+      if (!d.classList.contains("bl-wait") && !d.classList.contains("bl-intro")) { setTimeout(fn, 700); return; }
+      if (++tries > 240) return;
+      setTimeout(check, 500);
+    })();
   }
 
   // 3. دالة مسح الحفظ التلقائي من الإعدادات
@@ -1370,7 +1545,7 @@ if (document.readyState === "loading") {
       var badge = document.getElementById("autosave-status");
       if (badge) badge.textContent = "";
       if (typeof toast === "function") {
-        toast("🧹 تم مسح النسخة الاحتياطية للكود بنجاح");
+        toast(tx("uxBackupCleared", "🧹 تم مسح النسخة الاحتياطية للكود بنجاح"));
       }
     } catch (e) {
       console.warn("Could not clear auto-save:", e);
@@ -1379,9 +1554,9 @@ if (document.readyState === "loading") {
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", function () {
-      setTimeout(promptRestoreIfAvailable, 600);
+      whenIntroDone(promptRestoreIfAvailable);
     });
   } else {
-    setTimeout(promptRestoreIfAvailable, 600);
+    whenIntroDone(promptRestoreIfAvailable);
   }
 })();

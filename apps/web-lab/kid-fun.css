@@ -125,3 +125,5 @@ body[data-mode="kid"][data-kid-theme="desert"] {
 
 .bb-ov.calm .bb { animation: none !important; bottom: var(--y); transition: none; }
 .bb-ov.calm .bb.hint { outline: 4px dashed var(--primary); outline-offset: 4px; }
+
+.bb{padding:0 6px;font-size:clamp(.78rem,2.6vw,1.05rem);white-space:nowrap;}

@@ -70,7 +70,7 @@ function dcRenderChips() {
     box.textContent = "";
     var none = document.createElement("span");
     none.style.cssText = "color:#64748b;font-size:0.9rem;padding:8px;";
-    none.textContent = "لا توجد مفردات";
+    none.textContent = tx("dcNone", "لا توجد مفردات");
     box.appendChild(none);
     DC.chips = []; return;
   }
@@ -157,7 +157,7 @@ function dcPeek(node, e) {
   var tipW = document.createElement("b");
   tipW.textContent = node.getAttribute("data-w") || "+";
   var tipHint = document.createElement("span");
-  tipHint.textContent = "اضغط مطوّلًا للمعاينة — التفاصيل تُفتح بالنقر";
+  tipHint.textContent = tx("dcHint", "اضغط مطوّلًا للمعاينة — التفاصيل تُفتح بالنقر");
   tip.appendChild(tipW);
   tip.appendChild(tipHint);
 
@@ -246,7 +246,7 @@ window.dcCardState = dcCardState;
 /* نص المعنى في البطاقة: معرّف مفهوم (array_list) يُعنوَن "المفهوم البرمجي"، والمعنى العربي المباشر يُعرض كما هو */
 function dcMeaningText(v) {
   if (typeof v !== "string" || !v) return "";
-  return /^[a-z][a-z0-9_]*$/.test(v) ? "المفهوم البرمجي: " + v : v;
+  return /^[a-z][a-z0-9_]*$/.test(v) ? tx("dcConcept", "المفهوم البرمجي: {v}", { v: v }) : v;
 }
 
 function dcOpenCard(i) {
@@ -264,10 +264,10 @@ function dcOpenCard(i) {
     badges.textContent = "";
     var bMode = document.createElement("span");
     bMode.className = "dc-badge";
-    bMode.textContent = dcIsKid() ? "وضع الطفل" : dcIsPro() ? "وضع المحترف" : "وضع المبتدئ";
+    bMode.textContent = dcIsKid() ? tx("dcModeKid", "وضع الطفل") : dcIsPro() ? tx("dcModePro", "وضع المحترف") : tx("dcModeBeg", "وضع المبتدئ");
     var bDia = document.createElement("span");
     bDia.className = "dc-badge dc-badge-empty";
-    bDia.textContent = window.currentDialect || "عام";
+    bDia.textContent = window.currentDialect || tx("dcGeneral", "عام");
     badges.appendChild(bMode);
     badges.appendChild(bDia);
   }
@@ -283,6 +283,7 @@ function dcOpenCard(i) {
     var mv = window.currentVocab[wName];
     ar.textContent = dcMeaningText(mv);
     ar.classList.toggle("dc-empty", !mv);
+    var rl=document.getElementById("dc-role"),ex=document.getElementById("dc-ex"),ds=window.BaydaEngine&&window.BaydaEngine.getDialect?window.BaydaEngine.getDialect():null;if(rl&&ds&&ds.keywords&&ds.keywords[wName]){rl.textContent=tx("dcConcept","المفهوم البرمجي: {v}").replace("{v}",ds.keywords[wName]);rl.classList.remove("dc-empty");}if(ex&&ex.classList.contains("dc-empty")&&ds&&ds.keywords){var pk=Object.keys(ds.keywords).find(function(k){return ds.keywords[k]==="print";});if(pk){ex.textContent=pk+"(\""+wName+"\")";ex.classList.remove("dc-empty");ex.dataset.src="dc-ex-fallback";}}
   }
   }
 
@@ -313,10 +314,10 @@ function dcResetFields() {
   var slots = document.getElementById("dc-slots");
   if (slots) {
     slots.innerHTML =
-      '<div class="dc-slot dc-empty"><span>الرمز</span><b>—</b></div>' +
-      '<div class="dc-slot dc-empty"><span>القيمة</span><b>—</b></div>' +
-      '<div class="dc-slot dc-empty"><span>تلميح</span><b>—</b></div>' +
-      '<div class="dc-slot dc-empty"><span>بطاقة</span><b>—</b></div>';
+      '<div class="dc-slot dc-empty"><span>' + tx("dcSlotSym", "الرمز") + '</span><b>—</b></div>' +
+      '<div class="dc-slot dc-empty"><span>' + tx("dcSlotVal", "القيمة") + '</span><b>—</b></div>' +
+      '<div class="dc-slot dc-empty"><span>' + tx("dcSlotHint", "تلميح") + '</span><b>—</b></div>' +
+      '<div class="dc-slot dc-empty"><span>' + tx("dcSlotCard", "بطاقة") + '</span><b>—</b></div>';
   }
 }
 
@@ -420,19 +421,8 @@ function dcQuickTheme() {
 }
 
 /* ---------- 7) النطق ---------- */
-function dcSpeak() {
-  var w = document.getElementById("dw-word");
-  var txt = w ? w.textContent : "";
-  if (!txt || txt === "—") { if (typeof toast === "function") toast("لا يوجد نص بعد"); return; }
-  if (!("speechSynthesis" in window)) { if (typeof toast === "function") toast("المتصفح لا يدعم النطق"); return; }
-  try {
-    window.speechSynthesis.cancel();
-    var u = new SpeechSynthesisUtterance(txt);
-    u.lang = "ar"; u.rate = dcIsKid() ? 0.85 : 0.95;
-    window.speechSynthesis.speak(u);
-  } catch (e) {}
-}
-
+function dcSpeak(slow){var w=document.getElementById("dw-word"),txt=w?(w.textContent||"").trim():"";if(!txt||txt==="—"){if(typeof toast==="function")toast(tx("dcNoText","لا يوجد نص بعد"));return;}if(typeof window.baydaSpeak==="function"){window.baydaSpeak(txt,{slow:!!slow});return;}if("speechSynthesis" in window){try{window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(txt);u.lang="ar";u.rate=slow?0.62:0.92;window.speechSynthesis.speak(u);}catch(e){}}}
+function dcInsertWord(){var w=document.getElementById("dw-word"),txt=w?(w.textContent||"").trim():"";if(!txt||txt==="—")return;var lrn=document.getElementById("view-learn"),ed=document.getElementById((lrn&&lrn.style.display!=="none")?"lesson-editor":"editor");if(!ed)return;var s0=ed.selectionStart||0,s1=ed.selectionEnd||0;ed.value=ed.value.slice(0,s0)+txt+ed.value.slice(s1);ed.selectionStart=ed.selectionEnd=s0+txt.length;ed.focus();ed.dispatchEvent(new Event("input"));var dp=document.getElementById("dict-pane");if(dp)dp.removeAttribute("data-drawer");dcSfx("ok");if(typeof toast==="function")toast("📥 "+tx("dcInserted","تم الإدراج في المحرر"),1600);}
 /* ---------- 8) المرشد + البيضة الفصحية (وضع الطفل) ---------- */
 function dcMascotTap() {
   if (!dcIsKid()) { dcSfx("tap"); return; }

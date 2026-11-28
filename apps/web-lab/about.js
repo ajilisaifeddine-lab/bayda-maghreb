@@ -55,7 +55,11 @@
     const old = $('.ab-gate', ov); if (old) old.remove();
     const a = 12 + Math.floor(Math.random() * 8), b = 3 + Math.floor(Math.random() * 7), ans = a * b;
     const g = D.createElement('div'); g.className = 'ab-gate';
-    g.innerHTML = '<span>هذا الرابط يفتح موقعاً خارجياً. اطلب من أحد الكبار حلّ المسألة:</span><b></b><input type="number" inputmode="numeric" aria-label="الجواب"><button type="button">تأكيد</button><small hidden>جواب غير صحيح، حاول مرة أخرى.</small>';
+    g.innerHTML = '<span></span><b></b><input type="number" inputmode="numeric"><button type="button"></button><small hidden></small>';
+    $('span', g).textContent = tr('gtAdultMsg', 'هذا الرابط يفتح موقعاً خارجياً. اطلب من أحد الكبار حلّ المسألة:');
+    $('input', g).setAttribute('aria-label', tr('gtAnswer', 'الجواب'));
+    $('button', g).textContent = tr('gtConfirm', 'تأكيد');
+    $('small', g).textContent = tr('gtWrong', 'جواب غير صحيح، حاول مرة أخرى.');
     $('b', g).textContent = a + ' × ' + b + ' = ?';
     const inp = $('input', g), bad = $('small', g);
     $('button', g).addEventListener('click', () => {
@@ -65,18 +69,26 @@
     host.after(g); inp.focus();
   }
 
+  const tr = (k, fb) => { try { const d = window.BaydaI18n && window.BaydaI18n.dict, l = D.documentElement.lang || 'ar'; return (d && ((d[l] && d[l][k]) || (d.ar && d.ar[k]))) || fb; } catch (e) { return fb; } };
+
   function open() {
     if (ov) return;
     prevFocus = D.activeElement;
     ov = D.createElement('div');
     ov.className = 'ab-ov'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'حول التطبيق والرخصة');
     ov.innerHTML = '<div class="ab-sheet"><button class="ab-x" type="button" aria-label="إغلاق">×</button><h2>حول التطبيق</h2><span class="ab-app"></span><span class="ab-ver"></span><p class="ab-copy"></p><p>برنامج حر: يمكنك إعادة توزيعه وتعديله بموجب رخصة GNU Affero العامة، الإصدار 3 أو أي إصدار لاحق. ويُقدَّم بلا أي ضمان.</p><p class="ab-en">This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under the terms of the GNU Affero General Public License, version 3 or later.</p><p class="ab-priv" hidden></p><div class="ab-links"></div><h3>مكوّنات من أطراف ثالثة</h3><ul class="ab-fonts"></ul></div>';
+    const ttl = $('h2', ov), fr = $('p:not([class])', ov), h3 = $('h3', ov), xb = $('.ab-x', ov);
+    ov.setAttribute('aria-label', tr('abAria', ov.getAttribute('aria-label')));
+    if (ttl) ttl.textContent = tr('abTitle', ttl.textContent);
+    if (fr) fr.textContent = tr('abFree', fr.textContent);
+    if (h3) h3.textContent = tr('abThird', h3.textContent);
+    if (xb) xb.setAttribute('aria-label', tr('close', 'إغلاق'));
     $('.ab-app', ov).textContent = CFG.name;
     $('.ab-ver', ov).textContent = 'v' + CFG.version + ' · AGPL-3.0-or-later';
     $('.ab-copy', ov).textContent = '© ' + CFG.year + ' ' + CFG.holder;
     if (CFG.privacy) { const p = $('.ab-priv', ov); p.textContent = CFG.privacy; p.hidden = false; }
     const links = $('.ab-links', ov);
-    [['الشيفرة المصدرية (GitHub)', CFG.repo], ['نص الرخصة الكامل', CFG.licenseUrl]].forEach(l => {
+    [[tr('abSource', 'الشيفرة المصدرية (GitHub)'), CFG.repo], [tr('abLicense', 'نص الرخصة الكامل'), CFG.licenseUrl]].forEach(l => {
       const a = D.createElement('a'); a.className = 'ab-link'; a.href = l[1]; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = l[0] + ' ↗';
       a.addEventListener('click', e => { if (B.dataset.mode === 'kid') { e.preventDefault(); gate(l[1], a); } });
       links.appendChild(a);
@@ -103,10 +115,11 @@
 
   const sm = $('#settings-modal .st-modal');
   if (sm && !$('#st-about')) {
-    const sec = D.createElement('div'); sec.className = 'st-section'; sec.textContent = 'عن التطبيق';
+    const sec = D.createElement('div'); sec.className = 'st-section'; sec.setAttribute('data-sec', 'about'); sec.setAttribute('data-i18n-key', 'aboutSec'); sec.textContent = 'عن التطبيق';
     const rw = D.createElement('div'); rw.className = 'st-row';
-    rw.innerHTML = '<span class="st-label">حول التطبيق والرخصة</span><button type="button" class="btn-secondary" id="st-about">عرض ›</button>';
+    rw.innerHTML = '<span class="st-label" data-i18n-key="aboutRow">حول التطبيق والرخصة</span><button type="button" class="btn-secondary" id="st-about" data-i18n-key="aboutBtn">عرض ›</button>';
     sm.appendChild(sec); sm.appendChild(rw);
     $('#st-about').addEventListener('click', open);
+    if (window.BaydaI18n && typeof window.BaydaI18n.updateDom === 'function') { try { window.BaydaI18n.updateDom(sm); } catch (e) {} }
   }
 })();

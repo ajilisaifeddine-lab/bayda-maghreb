@@ -368,10 +368,11 @@ body[data-reduce-motion="on"] .bl-stars { display: none; }
 @keyframes blSpinCCW { to { rotate: -360deg; } }
 
 header .hero-card .flag-btn {
-  animation: blSpinCW 18s linear infinite;
+  animation: flagPopRise 0.9s linear backwards, blSpinCW 18s linear infinite;
+  animation-play-state: var(--bl-ps, running);
 }
 header .hero-card > .flags-side:last-child .flag-btn {
-  animation-name: blSpinCCW;
+  animation-name: flagPopRise, blSpinCCW;
 }
 .icon-btn[onclick="openSettings()"] {
   animation: blSpinCW 10s linear infinite;
@@ -504,11 +505,7 @@ body[data-reduce-motion="on"] .bl-dock-btn { animation: none; }
     left: 12px; right: auto;
     transform: scale(.88); transform-origin: top left;
   }
-  body.kid-on[data-tab="learn"] #kid-buddy {
-    top: 232px; bottom: auto;
-    left: auto; right: 10px;
-    inset-inline-start: auto; inset-inline-end: auto;
-  }
+  
 }
 
 /* ===== وضع الطفل + التعلم: توزيع المحتوى حتى الأزرار السفلية ===== */
@@ -644,7 +641,7 @@ body[data-smartbar="on"] { padding-bottom: 160px; }
 .bl-hs button { background: var(--panel); color: var(--primary); border: 2px solid var(--border); font-size: 1.15rem; }
 
 /* ===== زر الإغلاق: زر واضح على اليمين ===== */
-.close-btn,
+.close-btn:not(.st-head .close-btn),
 .dc-card .close-btn {
   right: 10px !important; left: auto !important; top: 10px !important;
   width: 52px !important; height: 52px !important;
@@ -658,7 +655,7 @@ body[data-smartbar="on"] { padding-bottom: 160px; }
   -webkit-user-select: none; user-select: none;
   touch-action: manipulation;
 }
-.close-btn:active { transform: translateY(2px); box-shadow: none; }
+.close-btn:not(.st-head .close-btn):active { transform: translateY(2px); box-shadow: none; }
 
 /* ===== صف التحكم: أزرار أصغر على الشاشات الضيقة ===== */
 .bl-sm { gap: 4px; padding: 6px 6px; }
@@ -914,7 +911,7 @@ body[data-reduce-motion="on"] .st-switch[aria-checked="true"] { animation: none 
 /* ===== وضع الطفل: بدون عنوان وجملة التعلم ===== */
 body.kid-on .learn-container > h1,
 body.kid-on .learn-container > p { display: none !important; }
-body.kid-on .learn-container { padding-top: 140px !important; }
+body.kid-on .learn-container { padding-top: 0 !important; }
 
 /* ===== بدون 📚 وجملة الترحيب في كل الأوضاع ===== */
 .learn-container > h1,
@@ -1019,91 +1016,18 @@ body[data-mode="pro"] #keys-modal {
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   backdrop-filter: blur(14px) saturate(140%);
 }
-body[data-mode="pro"] #settings-modal .st-modal,
-body[data-mode="pro"] #stats-modal .bl-panel,
-body[data-mode="pro"] #keys-modal .bl-panel {
-  color: var(--pro-text); text-align: start;
-  background:
-    radial-gradient(120% 55% at 18% 0%, rgba(255, 255, 255, .14), transparent 60%),
-    linear-gradient(145deg, rgba(var(--pro-rgb), var(--pro-a)), rgba(14, 16, 21, calc(var(--pro-a) + .08)));
-  -webkit-backdrop-filter: blur(28px) saturate(170%);
-  backdrop-filter: blur(28px) saturate(170%);
-  border: 1px solid rgba(255, 255, 255, .26);
-  border-radius: 28px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .38), inset 0 -1px 0 rgba(0, 0, 0, .45), 0 24px 60px rgba(0, 0, 0, .55);
+/* المحترف: ألوان فقط. هيكل الإعدادات من style.css (bl-pro-st) */
+body[data-mode="pro"] #settings-modal {
+  --st-bg: linear-gradient(145deg, rgba(var(--pro-rgb), var(--pro-a)), rgba(14, 16, 21, calc(var(--pro-a) + .08)));
+  --st-fg: var(--pro-text); --st-card: rgba(255, 255, 255, .06); --st-line: rgba(255, 255, 255, .16);
+  --st-accent: var(--pro-on); --st-muted: var(--pro-muted);
 }
-body[data-mode="pro"] #settings-modal .st-modal { width: min(92vw, 440px); max-width: 440px; }
-body[data-mode="pro"] #settings-modal h2,
-body[data-mode="pro"] #stats-modal h2,
-body[data-mode="pro"] #keys-modal h2 { color: var(--pro-text); text-align: center; }
-body[data-mode="pro"] #settings-modal .st-section {
-  color: var(--pro-accent); font-weight: 700; letter-spacing: .02em;
-  padding: 14px 4px 8px; border-bottom: 1px solid rgba(255, 255, 255, .16);
-}
-body[data-mode="pro"] #settings-modal .st-row { min-height: 56px; padding: 6px 4px; border-bottom: 1px solid rgba(255, 255, 255, .1); }
-body[data-mode="pro"] #settings-modal .st-label { color: var(--pro-text); font-size: 1rem; }
-
-/* مفتاح التشغيل */
-body[data-mode="pro"] #settings-modal .st-switch {
-  position: relative; box-sizing: border-box; flex: none;
-  width: 70px; height: 44px; min-width: 70px; padding: 0; border-radius: 22px;
-  direction: var(--pro-switch-dir);
-  border: 2px solid var(--pro-line) !important; cursor: pointer;
-  background: linear-gradient(145deg, #1e2126, #2a2d34) !important;
-  box-shadow: inset 4px 4px 9px rgba(0, 0, 0, .65), inset -4px -4px 9px rgba(255, 255, 255, .07) !important;
-  animation: none !important; transition: background .2s;
-}
-body[data-mode="pro"] #settings-modal .st-switch[aria-checked="true"] {
-  background: linear-gradient(145deg, var(--pro-on-1), var(--pro-on-2)) !important;
-  border-color: var(--pro-on) !important;
-}
-body[data-mode="pro"] #settings-modal .st-switch::before {
-  all: unset; content: ""; position: absolute; top: 3px; inset-inline-start: 3px;
-  width: 34px; height: 34px; border-radius: 50%; box-sizing: border-box;
-  background: linear-gradient(145deg, var(--pro-knob-1), var(--pro-knob-2));
-  border: 2px solid var(--pro-knob-ring);
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, .6), -3px -3px 7px rgba(255, 255, 255, .08);
-  transition: inset-inline-start .2s ease;
-}
-body[data-mode="pro"] #settings-modal .st-switch[aria-checked="true"]::before {
-  inset-inline-start: 29px; border-color: var(--pro-on);
-}
-body[data-mode="pro"] #settings-modal .st-switch::after {
-  all: unset; content: "O"; position: absolute; top: 50%; transform: translateY(-50%);
-  inset-inline-end: 14px; font: 700 15px/1 var(--font-code, monospace); color: var(--pro-muted);
-}
-body[data-mode="pro"] #settings-modal .st-switch[aria-checked="true"]::after {
-  content: "I"; inset-inline-end: auto; inset-inline-start: 14px; color: #b9f5ec;
-}
-body[data-mode="pro"] #settings-modal .st-switch:active {
-  box-shadow: inset 6px 6px 12px rgba(0, 0, 0, .75), inset -3px -3px 7px rgba(255, 255, 255, .05) !important;
-}
-
-/* القوائم والأزرار وزر الإغلاق */
-body[data-mode="pro"] #settings-modal .st-select,
-body[data-mode="pro"] #settings-modal .btn-secondary {
-  min-height: 44px; padding: 0 14px; border-radius: 14px;
-  color: var(--pro-text) !important; color-scheme: dark;
-  background: linear-gradient(145deg, #2d3037, #212429) !important;
-  border: 2px solid var(--pro-line) !important;
-  box-shadow: 5px 5px 11px rgba(0, 0, 0, .55), -4px -4px 9px rgba(255, 255, 255, .06);
-}
-body[data-mode="pro"] #settings-modal .st-select:active,
-body[data-mode="pro"] #settings-modal .btn-secondary:active {
-  box-shadow: inset 4px 4px 9px rgba(0, 0, 0, .65), inset -3px -3px 7px rgba(255, 255, 255, .05);
-}
-body[data-mode="pro"] #settings-modal .st-danger .btn-secondary { color: #ffa3a3 !important; border-color: #ff8a8a !important; }
-body[data-mode="pro"] #settings-modal .close-btn,
-body[data-mode="pro"] #stats-modal .close-btn,
-body[data-mode="pro"] #keys-modal .close-btn {
-  width: 48px; height: 48px; border-radius: 50%; color: var(--pro-text) !important;
-  background: linear-gradient(145deg, #353941, #23262c) !important;
-  border: 2px solid var(--pro-line) !important;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, .55), -3px -3px 7px rgba(255, 255, 255, .07);
-}
-body[data-mode="pro"] #settings-modal :focus-visible,
-body[data-mode="pro"] #stats-modal :focus-visible,
-body[data-mode="pro"] #keys-modal :focus-visible { outline: 3px solid var(--pro-focus); outline-offset: 3px; }
+body[data-mode="pro"] #settings-modal .st-modal { -webkit-backdrop-filter: blur(28px) saturate(170%); backdrop-filter: blur(28px) saturate(170%); border-color: rgba(255, 255, 255, .26); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .3), 0 -16px 60px rgba(0, 0, 0, .55); }
+body[data-mode="pro"] #settings-modal .st-head { background: transparent; }
+body[data-mode="pro"] #settings-modal .st-section { color: var(--pro-accent); }
+body[data-mode="pro"] #settings-modal .st-switch[aria-checked="true"] { background: linear-gradient(145deg, var(--pro-on-1), var(--pro-on-2)) !important; box-shadow: 0 0 0 1.5px var(--pro-on), 0 0 12px rgba(94, 234, 212, .45) !important; animation: none !important; }
+body[data-mode="pro"] #settings-modal :focus-visible { outline: 3px solid var(--pro-focus); outline-offset: 2px; }
+body[data-mode="pro"] #settings-modal .st-danger .btn-secondary { color: #ffa3a3; border-color: #ff8a8a; }
 
 /* ===== (تابع) لوحتا الإحصاءات والاختصارات ===== */
 body[data-mode="pro"] .bs-sec { color: var(--pro-accent); }
@@ -1198,3 +1122,7 @@ body[data-contrast="high"][data-mode="pro"] #bl-smart {
   body[data-mode="pro"] #bl-smart button, body[data-mode="pro"] .bl-tool { border: 2px solid CanvasText !important; forced-color-adjust: auto; }
   body[data-mode="pro"] #settings-modal .st-switch[aria-checked="true"]::before { background: Highlight; }
 }
+
+.flags-ctx{text-align:center;font-size:.72rem;font-weight:700;color:var(--primary);opacity:.88;line-height:1.2;margin:2px auto 4px;pointer-events:none}
+.flags-ctx.is-learn{color:#059669}
+[data-theme="dark"] .flags-ctx.is-learn{color:#34d399}

@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "release": "v2.1.2",
+  "release": "v2.1.3",
   "dialects": {
     "dz-arab": {
       "version": "1.0.0",
@@ -8,6 +8,10 @@
         "keywords.json": {
           "sha256": "6973b00dccc5e04353800b75ff43149372351ae3d6261d10f6b03b07dc30e1ed",
           "bytes": 699
+        },
+        "lessons.json": {
+          "sha256": "87d4223eb3874e49efe119843c39c620ea7b1571137e849513329d235d35fbf9",
+          "bytes": 25928
         },
         "manifest.json": {
           "sha256": "77432b12437ae76c6de1ce1545373e59d30f347f76c8448231a358e5691eed67",
@@ -26,17 +30,17 @@
           "sha256": "bb97d3eb2fd761f99bd7245a870833eec4047e1471d0fe9aa485d7df8721b0a1",
           "bytes": 694
         },
+        "lessons.json": {
+          "sha256": "e34c37493a1d2dd2ce0055256e39a9ae05c141d34b37a197f8456e1085662ba9",
+          "bytes": 25680
+        },
         "manifest.json": {
           "sha256": "9d6d7259823c6947b3fb1846b9e5bb5bef2f81ac1878b243706a83468eb9b467",
           "bytes": 357
         },
-        "symbols.json": {
-          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
-          "bytes": 2
-        },
         "vocabulary.json": {
-          "sha256": "8d42c06c4f956e8057f6d81ca90e63152a03f52df7753f59bf0981e380a214a4",
-          "bytes": 1701
+          "sha256": "f113e393e45329ba70d6d9f80d6d96b9a6f64cb9ff66be3d986dd7bb59a09b04",
+          "bytes": 491
         }
       }
     },
@@ -47,13 +51,17 @@
           "sha256": "261e8c51454e54d2bad32014a14e78520de61e5279ce3d98f5449cfcb4e82f84",
           "bytes": 651
         },
+        "lessons.json": {
+          "sha256": "b63ae20288d638be3be6afac16bf54b11b2854cd8147900e0470446b217c4d5a",
+          "bytes": 25633
+        },
         "manifest.json": {
           "sha256": "d0347882f5eb5a92bfaaaa0c597593f44b4a7017b1cb9207ebe58e3a2f821e3e",
           "bytes": 465
         },
         "vocabulary.json": {
-          "sha256": "8856701062fd0495e938ae4fe1946e468e831af6a531dbfa3cba7687957bc4f9",
-          "bytes": 818
+          "sha256": "cdfecceed570940518cd2b37cbd9014527def0a7bd07267b73c804aabc2ec3cd",
+          "bytes": 929
         }
       }
     },
@@ -63,6 +71,10 @@
         "keywords.json": {
           "sha256": "685887fc710ae88e3864ae52c850ca8bd8669515db1d96fced71fecdca3ed738",
           "bytes": 649
+        },
+        "lessons.json": {
+          "sha256": "0b8c46b0ba3e6d600890140126b526a2158428c5d138d2b21605b1df82132962",
+          "bytes": 26291
         },
         "manifest.json": {
           "sha256": "fe5a3b944b366b915c418f802b67652507879f9d2180c6791f6ab0ff72ba5adf",
@@ -81,6 +93,10 @@
           "sha256": "4348cdd7a57f58b4dc8486b1b39e49156ac2fc8473a2739fd41eec23d0b2eacb",
           "bytes": 660
         },
+        "lessons.json": {
+          "sha256": "a2f669c6e9144e8b10c3860c8c4045511b1ba83e8ebffcd4f2cf1b6db972206b",
+          "bytes": 25898
+        },
         "manifest.json": {
           "sha256": "c371be3660ae33310833c6a2a059b2d9b77331e73ea704f0197abd26a431d61e",
           "bytes": 207
@@ -98,17 +114,17 @@
           "sha256": "ec73868bd76981d6f69203761c65c1e387399a9ec5bab9b87e37127a115aa65a",
           "bytes": 682
         },
+        "lessons.json": {
+          "sha256": "f5294fd9bb8a2bf3e20b578e8e37a5f184dfce8b42cdc011a445177527d34436",
+          "bytes": 25661
+        },
         "manifest.json": {
           "sha256": "2591b6739c706c058de5c1c9980514475bb209813c6d9aa210ce88befe69b708",
           "bytes": 224
         },
-        "symbols.json": {
-          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
-          "bytes": 2
-        },
         "vocabulary.json": {
-          "sha256": "76b71ffca0c3e0d8b14185d2221d145c2888314c0f4cdbf80167ce1177ffdf27",
-          "bytes": 8311
+          "sha256": "13ce9db487428f66f0e34f89b41884bf8912a896982b1303d93425cc396d016c",
+          "bytes": 470
         }
       }
     },
@@ -118,6 +134,10 @@
         "keywords.json": {
           "sha256": "2ea559ff38aaec409853bdd6b64baa8a7d134baac390b22dc16a4d40678c8647",
           "bytes": 673
+        },
+        "lessons.json": {
+          "sha256": "3bde6209421704e515e8d676f57f30e8daa2ce7be0fdbbd89f89ae5ebaf8ddfe",
+          "bytes": 25902
         },
         "manifest.json": {
           "sha256": "a9fe4cb0b0e426b8751cfe56758b61a1b26ea6f5ef6c218252727dd69bec1f78",
@@ -136,6 +156,10 @@
           "sha256": "cd3162ba9bbb646e4d2469e8f8bd411c727103a752e6dba682d4d96b27417161",
           "bytes": 664
         },
+        "lessons.json": {
+          "sha256": "6537ac592f108f9f5bdce2884e854fd864815634844babe087c7a129faec7861",
+          "bytes": 25660
+        },
         "manifest.json": {
           "sha256": "47bc2115067364163c07c0b7ca8bb9f3e8a4e0171a859a1d6579f9abe1b75584",
           "bytes": 210
@@ -152,6 +176,10 @@
         "keywords.json": {
           "sha256": "9a1d22add1d020104b314e734cd817dc828f06f6857d452d78ee0491cd05bb3a",
           "bytes": 659
+        },
+        "lessons.json": {
+          "sha256": "830f732345e5a0ec21086d76805afeda7899087894e8060483819d036abb648b",
+          "bytes": 25902
         },
         "manifest.json": {
           "sha256": "310e8bbd28dcd738c202eed46f5d571b943998b00e2ac2a43fe37563e0cb2144",
@@ -170,13 +198,17 @@
           "sha256": "7e4050ef1d06d10c4a54d17938be21ca57e2df673517903cb1fc8e91a61d9c07",
           "bytes": 667
         },
+        "lessons.json": {
+          "sha256": "9c7389454a7c19cd4ea52aee777bf01fbd3823e7174a430326984e731cc4da23",
+          "bytes": 25674
+        },
         "manifest.json": {
           "sha256": "182929483d2582f8b15846b5615d27ec157e18e2288116b53ea59869aab76fe1",
           "bytes": 256
         },
         "vocabulary.json": {
-          "sha256": "4b718d79413a95c193d241f17534b4838a8cdebbae2adacc55585dd476b03d8f",
-          "bytes": 4818
+          "sha256": "fb150f768d8d180870bc3666a74bf8c10ac05473d1465cb47d6e1c2716e65b5b",
+          "bytes": 427
         }
       }
     },
@@ -186,6 +218,10 @@
         "keywords.json": {
           "sha256": "d0a1e2cb3113ef5f3c6dce56eff72d95c27ee4002277b140aa9af56fc128dd3c",
           "bytes": 583
+        },
+        "lessons.json": {
+          "sha256": "2bb82cd303579398e86fcc9c87d8649bf1e64787637be5c48cbaa71f3fa319e2",
+          "bytes": 25642
         },
         "manifest.json": {
           "sha256": "a7fe83fa7e75b7ffddae80dd8a87d2e686db923296401e6debfcfc864298704e",
@@ -204,6 +240,10 @@
           "sha256": "79e37fd48e1cbcf9fcfb010d6121aa1ee358eb0802510c0cd8824687045dc15a",
           "bytes": 602
         },
+        "lessons.json": {
+          "sha256": "97ed31338b995befbc9c549cf97279c433f9d9f265c6d70c7f7174a0adcebe1b",
+          "bytes": 26074
+        },
         "manifest.json": {
           "sha256": "594b25eb8bb7e50c2a91555e74da102c0dee2327e34aa4f586d19f839a43b95d",
           "bytes": 415
@@ -220,6 +260,10 @@
         "keywords.json": {
           "sha256": "3e5d70f4f9358712728d768f137c5f83ca825a0c0b86b698b647a31bf26d14cf",
           "bytes": 743
+        },
+        "lessons.json": {
+          "sha256": "2878b8d7b7902128ef92f72d4d6fd5c945ad37b7290fdcc518d397f7927b60db",
+          "bytes": 25721
         },
         "manifest.json": {
           "sha256": "ca54dc236cf6785f9948b557d4143d9f0aca2700844db56b74544418225c9ff9",

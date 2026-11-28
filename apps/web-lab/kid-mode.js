@@ -22,6 +22,7 @@
     stickers: "baydaKidStickers"
   };
 
+  function kmTheme(t) { return tx("kmTheme_" + t.id, t.name); }
   var THEMES = [
     { id: "candy",  emoji: "\uD83C\uDF6C", name: "\u062D\u0644\u0648\u064A\u0627\u062A", c1: "#ff8fc7", c2: "#ffd166" },
     { id: "jungle", emoji: "\uD83C\uDF34", name: "\u063A\u0627\u0628\u0629",   c1: "#4ade80", c2: "#facc15" },
@@ -50,13 +51,9 @@
   /* ============================================================
      1) المرشد الكرتوني
      ============================================================ */
-  var TIPS = [
-    "\u0627\u0636\u063A\u0637 \u0639\u0644\u0649 \u0623\u064A \u0628\u0637\u0627\u0642\u0629!",
-    "\u062C\u0631\u0651\u0628 \u0627\u0644\u0633\u062D\u0628 \u064A\u0645\u064A\u0646\u064B\u0627 \u0648\u064A\u0633\u0627\u0631\u064B\u0627",
-    "\u0627\u0636\u063A\u0637 \u0639\u0644\u064A\u0651 \u0628\u0633\u0631\u0639\u0629 5 \u0645\u0631\u0627\u062A!",
-    "\u0627\u062C\u0645\u0639 \u0627\u0644\u0646\u062C\u0648\u0645 \u0644\u062A\u0641\u062A\u062D \u0645\u0644\u0635\u0642\u064B\u0627!",
-    "\u0627\u062E\u062A\u0631 \u0639\u0627\u0644\u0645\u064B\u0627 \u0645\u0646 \u0632\u0631 \u0627\u0644\u0623\u0644\u0648\u0627\u0646"
-  ];
+  function TIPS() {
+    return [tx("kmTip1", "اضغط على أي بطاقة!"), tx("kmTip2", "جرّب السحب يمينًا ويسارًا"), tx("kmTip3", "اضغط عليّ بسرعة 5 مرات!"), tx("kmTip4", "اجمع النجوم لتفتح ملصقًا!"), tx("kmTip5", "اختر عالمًا من زر الألوان")];
+  }
   var tipIndex = 0;
   var buddyTaps = 0;
 
@@ -66,13 +63,13 @@
     b.id = "kid-buddy";
     b.className = "kb-wrap";
     b.innerHTML = ('<div class="kb-bubble" id="kb-bubble"></div>' +
-      '<button class="kb-body" id="kb-body" aria-label="\u0627\u0644\u0645\u0631\u0634\u062F \u0646\u062C\u0645">' +
+      '<button class="kb-body" id="kb-body" aria-expanded="false" aria-controls="kid-dock" aria-label="' + tx("kmGuide", "المرشد نجم") + '">' +
       '  <img src="assets/mascot.webp" alt="" class="kb-img">' +
       '  <span class="kb-star">\u2B50</span>' +
       '</button>');  /* نص ثابت لا يحتاج تنقية؛ أُزيلت مكتبة خارجية */
     document.body.appendChild(b);
-    kEl("kb-body").addEventListener("click", kBuddyTap);
-    setTimeout(function () { kSay(TIPS[0], 2600); }, 900);
+    kEl("kb-body").addEventListener("click", kDockToggle);
+    setTimeout(function () { kSay(TIPS()[0], 2600); }, 900);
   }
 
   function kSay(text, ms) {
@@ -84,6 +81,13 @@
     bb._t = setTimeout(function () { bb.classList.remove("on"); }, ms || 2400);
   }
 
+  function kDockToggle(e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    var open = document.body.classList.toggle("kd-dock-open");
+    var d = kEl("kid-dock"); if (d) d.classList.toggle("is-open", open);
+    var b = kEl("kb-body"); if (b) b.setAttribute("aria-expanded", open ? "true" : "false");
+    kBuddyTap();
+  }
   function kBuddyTap() {
     var body = kEl("kb-body");
     if (!body) return;
@@ -94,15 +98,16 @@
     buddyTaps++;
     kAddStar(1, body);
 
+
     if (buddyTaps % 5 === 0) {
       kConfetti(34);
       kFanfare();
-      kSay("\u0645\u0641\u0627\u062C\u0623\u0629! \uD83C\uDF89", 2200);
+      kSay(tx("kmSurprise", "مفاجأة!") + " \uD83C\uDF89", 2200);
       body.classList.add("kb-spin");
       setTimeout(function () { body.classList.remove("kb-spin"); }, 900);
     } else {
-      tipIndex = (tipIndex + 1) % TIPS.length;
-      kSay(TIPS[tipIndex], 2400);
+      tipIndex = (tipIndex + 1) % TIPS().length;
+      kSay(TIPS()[tipIndex], 2400);
     }
   }
 
@@ -159,7 +164,7 @@
     kSet(KLS.stickers, level);
     kConfetti(40);
     kFanfare();
-    kSay("\u0645\u0644\u0635\u0642 \u062C\u062F\u064A\u062F! " + STICKERS[(level - 1) % STICKERS.length], 3000);
+    kSay(tx("kmNewSticker", "ملصق جديد!") + " " + STICKERS[(level - 1) % STICKERS.length], 3000);
     kStickerPop(level);
   }
 
@@ -167,8 +172,7 @@
     var o = document.createElement("div");
     o.className = "kst-pop";
     o.innerHTML = '<div class="kst-card"><div class="kst-emoji">' +
-      STICKERS[(level - 1) % STICKERS.length] + '</div><div class="kst-txt">\u0645\u0644\u0635\u0642 \u0631\u0642\u0645 ' +
-      level + '</div></div>';
+      STICKERS[(level - 1) % STICKERS.length] + '</div><div class="kst-txt">' + tx("kmStickerN", "ملصق رقم {n}").replace("{n}", String(level)) + '</div></div>';
     document.body.appendChild(o);
     setTimeout(function () { o.classList.add("out"); }, 1700);
     setTimeout(function () { if (o.parentNode) o.parentNode.removeChild(o); }, 2300);
@@ -191,16 +195,16 @@
         'style="--c1:' + t.c1 + ';--c2:' + t.c2 + '">' +
         '  <span class="kp-blob"></span>' +
         '  <span class="kp-emoji">' + t.emoji + '</span>' +
-        '  <span class="kp-name">' + t.name + '</span>' +
+        '  <span class="kp-name">' + kmTheme(t) + '</span>' +
         '  <span class="kp-tick">\u2713</span>' +
         '</button>';
     }
     o.innerHTML =
       '<div class="kp-panel">' +
-      '  <button class="kp-close" aria-label="\u0625\u063A\u0644\u0627\u0642">\u00D7</button>' +
-      '  <div class="kp-title"><span>\uD83C\uDFA8</span> \u062D\u0641\u0644\u0629 \u0627\u0644\u0623\u0644\u0648\u0627\u0646</div>' +
+      '  <button class="kp-close" aria-label="' + tx("uxClose", "إغلاق") + '">\u00D7</button>' +
+      '  <div class="kp-title"><span>\uD83C\uDFA8</span> ' + tx("kmPartyTitle", "حفلة الألوان") + '</div>' +
       '  <div class="kp-grid">' + cards + '</div>' +
-      '  <button class="kp-dice" id="kp-dice">\uD83C\uDFB2 \u0641\u0627\u062C\u0626\u0646\u064A!</button>' +
+      '  <button class="kp-dice" id="kp-dice">\uD83C\uDFB2 ' + tx("kmDice", "فاجئني!") + '</button>' +
       '</div>';
     document.body.appendChild(o);
     requestAnimationFrame(function () { o.classList.add("in"); });
@@ -241,11 +245,11 @@
     kConfetti(26);
     kFanfare();
     kAddStar(1, node);
-    kSay("\u0639\u0627\u0644\u0645 \u062C\u062F\u064A\u062F!", 1800);
+    kSay(tx("kmNewWorld", "عالم جديد!"), 1800);
     if (typeof toast === "function") {
       var t = null;
       for (var k = 0; k < THEMES.length; k++) if (THEMES[k].id === id) t = THEMES[k];
-      if (t) toast("\u062B\u064A\u0645: " + t.name + " " + t.emoji);
+      if (t) toast(tx("kmThemeIs", "ثيم: {name} {emoji}").replace("{name}", kmTheme(t)).replace("{emoji}", t.emoji));
     }
   }
 
@@ -258,10 +262,10 @@
     d.id = "kid-dock";
     d.className = "kd-dock";
     d.innerHTML =
-      '<button class="kd-btn" data-a="top" aria-label="\u0627\u0644\u0623\u0639\u0644\u0649">\uD83C\uDFE0</button>' +
-      '<button class="kd-btn" data-a="dict" aria-label="\u0627\u0644\u0642\u0627\u0645\u0648\u0633">\uD83D\uDCD6</button>' +
-      '<button class="kd-btn kd-main" data-a="party" aria-label="\u0627\u0644\u0623\u0644\u0648\u0627\u0646">\uD83C\uDFA8</button>' +
-      '<button class="kd-btn" data-a="set" aria-label="\u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A">\u2699\uFE0F</button>';
+      '<button class="kd-btn" data-a="learn-lab" aria-label="' + tx("kmNavLearnLab", "تبديل الدروس والمختبر") + '">\uD83D\uDCDA</button>' +
+      '<button class="kd-btn" data-a="dict" aria-label="' + tx("kmNavDict", "القاموس") + '">\uD83D\uDCD6</button>' +
+      '<button class="kd-btn kd-main" data-a="party" aria-label="' + tx("kmNavColors", "الألوان") + '">\uD83C\uDFA8</button>' +
+      '<button class="kd-btn" data-a="set" aria-label="' + tx("kmNavSettings", "الإعدادات") + '">\u2699\uFE0F</button>';
     document.body.appendChild(d);
 
     d.addEventListener("click", function (e) {
@@ -270,10 +274,26 @@
       var a = b.getAttribute("data-a");
       kSfx("tap");
       kAddStar(1, b);
-      if (a === "top") window.scrollTo({ top: 0, behavior: "smooth" });
-      else if (a === "dict" && typeof toggleDictionary === "function") toggleDictionary();
+      if (a === "learn-lab") {
+        var vl = document.getElementById("view-learn");
+        var goLearn = !vl || vl.style.display === "none";
+        var tb = document.getElementById(goLearn ? "tab-learn-btn" : "tab-lab-btn");
+        if (tb) tb.click();
+        b.textContent = goLearn ? "\uD83E\uDDE9" : "\uD83D\uDCDA";
+      }
+      else if (a === "dict") { if (typeof window.ksOpenDictModal === "function") window.ksOpenDictModal(); else if (typeof toggleDictionary === "function") toggleDictionary(); }
       else if (a === "party") kPartyOpen();
       else if (a === "set" && typeof openSettings === "function") openSettings();
+      document.body.classList.remove("kd-dock-open");
+      var dd = kEl("kid-dock"); if (dd) dd.classList.remove("is-open");
+      var kb = kEl("kb-body"); if (kb) kb.setAttribute("aria-expanded", "false");
+    });
+    document.addEventListener("click", function (ev) {
+      if (!document.body.classList.contains("kd-dock-open")) return;
+      if (ev.target.closest("#kid-dock") || ev.target.closest("#kid-buddy")) return;
+      document.body.classList.remove("kd-dock-open");
+      var dd = kEl("kid-dock"); if (dd) dd.classList.remove("is-open");
+      var kb = kEl("kb-body"); if (kb) kb.setAttribute("aria-expanded", "false");
     });
   }
 
@@ -333,7 +353,7 @@
         origOpen.apply(this, arguments);
         if (kKid()) {
           kAddStar(1);
-          kSay("\u0623\u062D\u0633\u0646\u062A!", 1600);
+          kSay(tx("kmWellDone", "أحسنت!"), 1600);
         }
       };
     }

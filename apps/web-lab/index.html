@@ -5,87 +5,276 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, interactive-widget=resizes-content">
     <title>Bayda Lab 2026</title>
     <meta name="theme-color" content="#3b82f6">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Fira+Code:wght@400;600&display=swap" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="kid-fun.css">
-    <link rel="stylesheet" href="kid-ui.css">
-    <link rel="stylesheet" href="polish.css?v=56">
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Bayda Lab">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="assets/icon-192.png">
+    <script>
+    (function () {
+      var d = document.documentElement;
+      d.classList.add("bl-intro");
+      var wait = false;
+      try {
+        wait = localStorage.getItem("bayda_lang_seen") !== "1" || !localStorage.getItem("baydaWelcome");
+      } catch (e) {}
+      function done() { setTimeout(function () { d.classList.remove("bl-intro"); }, 3500); }
+      window.blEnter = function () {
+        if (!d.classList.contains("bl-wait")) return;
+        d.classList.remove("bl-wait");
+        done();
+      };
+      if (wait) {
+        d.classList.add("bl-wait");
+        var tries = 0;
+        var busy = function () { return !!document.querySelector(".lp-ov, .modal-overlay.active"); };
+        var guard = function () {
+          setTimeout(function () {
+            if (!d.classList.contains("bl-wait")) return;
+            if (++tries < 4 || busy()) { guard(); return; }
+            setTimeout(function () {
+              if (!d.classList.contains("bl-wait")) return;
+              if (busy()) { guard(); } else { window.blEnter(); }
+            }, 1200);
+          }, 4000);
+        };
+        guard();
+      } else { done(); }
+    })();
+    </script>
+            <link rel="stylesheet" href="style.css?v=18">
+    <link rel="stylesheet" href="kid-fun.css?v=13">
+    <link rel="stylesheet" href="polish.css?v=13">
+    <link rel="stylesheet" href="kid-ui.css?v=13">
 </head>
 <body data-mode="beginner" data-theme="light">
+    <div id="bl-splash" aria-hidden="true" dir="ltr">
+        <div class="bl-sp-field">
+        </div>
+        <div class="bl-sp-core"><img src="assets/logo.png" alt=""><b>Bayda Lab</b></div>
+    </div>
+<script id="bl-sp-gen">
+(function () {
+  var f = document.querySelector("#bl-splash .bl-sp-field");
+  if (!f) return;
+  try {
+    var W = window.innerWidth || 360, H = window.innerHeight || 640;
+    var n = Math.max(28, Math.min(64, Math.round(W * H / 9000)));
+    var u = Math.max(11, Math.min(22, 0.016 * W + 6));
+    var P = {
+      lang: ["JavaScript", "TypeScript", "Python", "Java", "C", "C++", "C#", "Go", "Rust", "Swift", "Kotlin", "PHP", "Ruby", "Dart", "Scala", "R", "MATLAB", "Julia", "Lua", "Perl", "Haskell", "Bash", "SQL", "HTML", "CSS", "Assembly", "COBOL", "Fortran", "Pascal", "Lisp", "Prolog", "Scratch", "Elixir", "Zig", "Objective-C", "Visual Basic", "F#", "Algo"],
+      kw: ["print", "if", "else", "for", "while", "true", "false", "null", "return", "function", "class", "import", "input", "end", "def", "let", "const", "var", "switch", "try", "catch", "async", "await", "break", "continue", "int", "string", "bool", "void", "new", "this", "self"],
+      sym: ["{ }", "( )", "[ ]", "</>", "=>", "->", "&&", "||", "==", "!=", "++", "::", "//", "/* */", "#", "@", "$", "%", "<>", "?:", "=", "~", "λ", "∑", "π", "01", "10"],
+      code: ["if (x > 0) {", "for i in range(5):", "#include <stdio.h>", 'echo "hi";', "int main()", "while (true)", "def run():", "return x + 1", "let n = 0;", "const y = [ ]", "x = x * 2", "import os", "SELECT * FROM", 'print("hello")', "func main() {", "fn main() {", "console.log(x)", "len(items)"],
+      cmd: ["npm i bayda-maghreb", "npm run dev", 'git commit -m "init"', "git push origin main", "python main.py", "node app.js", "pip install numpy", "cd project/", "ls -la"],
+      file: [".js", ".ts", ".py", ".java", ".cpp", ".c", ".cs", ".go", ".rs", ".php", ".html", ".css", ".sql", ".kt", "main.py", "index.html", "app.js", "style.css", "main.c", "README.md"],
+      ex: ['ktab("Salam")', "ila (sah) {", 'ktab("Marhba")', 'aru("Azul")', "ma (tidett) {", 'aru("Ansuf")', 'kteb("Salam")', "kan (sahih) {", 'goul("Salam")', "ila (s7i7) {", 'goul("Marhba")', "idha (haqq) {", 'skr("Azul")', "ma (tidtt) {", 'goul("Aslema")', "idha (s7i7) {", 'goul("Marhba bik")'],
+      exAr: ['كتب("سلام")', "ايلا (صح) {", 'كتب("مرحبا")', "كان (صحيح) {", 'قول("سلام")', "إلى (بصح) {", 'قول("مرحبا بكم")', "إذا (حق) {", 'قول("عسلامة")', "إذا (صحيح) {", 'قول("مرحبا بيكم")'],
+      exTf: ['ⴽⵜⴰⴱ("ⴰⵣⵓⵍ")', "ⵎⴰ (ⵀⴰⵇⵇ) {", 'ⴽⵜⴰⴱ("ⴰⵏⵙⵓⴼ")'],
+      lat: ["ktab", "ila", "sah", "aru", "ma", "tidett", "kteb", "kan", "sahih", "goul", "s7i7", "idha", "haqq", "skr", "tidtt", "neɣ", "amar", "ulac", "yella", "semsawi", "ameqqran", "ameẓyan", "Salam", "Marhba", "Azul", "Ansuf", "Aslema"],
+      ar: ["كتب", "ايلا", "صح", "كان", "صحيح", "قول", "إلى", "بصح", "إذا", "حق", "واش", "علاش", "بزاف", "شوية", "مليح", "دروك", "وين", "كاين", "سلام", "مرحبا", "عسلامة"],
+      tf: ["ⴽⵜⴰⴱ", "ⵎⴰ", "ⵀⴰⵇⵇ", "ⴰⵣⵓⵍ", "ⴰⵏⵙⵓⴼ"],
+      pairL: [["ktab", "print"], ["ila", "if"], ["sah", "true"], ["aru", "print"], ["ma", "if"], ["tidett", "true"], ["kteb", "print"], ["kan", "if"], ["sahih", "true"], ["goul", "print"], ["s7i7", "true"], ["idha", "if"], ["haqq", "true"], ["skr", "print"], ["tidtt", "true"]],
+      pairA: [["كتب", "print"], ["ايلا", "if"], ["صح", "true"], ["كان", "if"], ["صحيح", "true"], ["قول", "print"], ["إلى", "if"], ["بصح", "true"], ["إذا", "if"], ["حق", "true"]],
+      pairT: [["ⴽⵜⴰⴱ", "print"], ["ⵎⴰ", "if"], ["ⵀⴰⵇⵇ", "true"]],
+      vocA: [["واش", "ماذا"], ["علاش", "لماذا"], ["بزاف", "كثير"], ["شوية", "قليل"], ["مليح", "جيد"], ["دروك", "الآن"], ["وين", "أين"], ["كاين", "موجود"], ["ماشي", "not"], ["ولا", "or"], ["جيب", "input"], ["خلاص", "end"]],
+      vocL: [["neɣ", "or"], ["amar", "and"], ["ur", "not"], ["ulac", "empty"], ["yella", "exists"], ["semsawi", "equal"], ["ameqqran", "greater"], ["ameẓyan", "less"]]
+    };
+    var M = {
+      def: ["float", "drift"],
+      lang: ["float", "float", "orbit", "pulse", "zoom"],
+      kw: ["float", "pulse", "zoom", "orbit"],
+      sym: ["pulse", "spin", "spin", "orbit", "float", "zoom", "zoom"],
+      code: ["drift", "drift", "fall", "fall", "float"],
+      cmd: ["drift", "float"],
+      file: ["float", "pulse", "zoom"],
+      ex: ["drift", "float", "fall"],
+      lat: ["float", "pulse", "zoom", "orbit"],
+      ar: ["float", "drift", "pulse", "zoom"],
+      tf: ["float", "pulse", "zoom", "orbit"],
+      pairL: ["float", "drift", "pulse"],
+      pairA: ["float", "drift", "pulse"],
+      pairT: ["float", "drift", "pulse"],
+      vocA: ["float", "drift", "pulse"],
+      vocL: ["float", "drift", "pulse"]
+    };
+    var TY = { code: 1, ex: 1, cmd: 1 };
+    var KS = [[1, 1, 2], [2, 2, 3], [3, 4, 4, 5]];
+    var KV = { 1: 1, 2: 1.25, 3: 1.7, 4: 2.4, 5: 3.2 };
+    var AB = { 1: 0.62, 2: 0.74, 3: 0.85, 4: 0.92, 5: 0.8 };
+    var DZ = [0.75, 1, 1.15], TS = [1.5, 1, 0.7], MV = [0.6, 1, 1.3];
+    var KINDS = ["lang", "lang", "lang", "lang", "sym", "sym", "kw", "kw", "code", "code", "cmd", "cmd", "file", "file", "ex", "ex", "exAr", "exTf", "pairL", "pairL", "pairA", "pairA", "pairT", "vocA", "vocL", "lat", "ar", "tf"];
+    var rnd = function (lo, hi) { return lo + Math.random() * (hi - lo); };
+    var pick = function (arr) { return arr[Math.floor(Math.random() * arr.length)]; };
+    var sign = function () { return Math.random() < 0.5 ? -1 : 1; };
+    var bag = {};
+    var take = function (kk) {
+      var q = bag[kk];
+      if (!q || !q.length) { q = bag[kk] = P[kk].slice().sort(function () { return Math.random() - 0.5; }); }
+      return q.pop();
+    };
+    var mk = function (tag, cls, txt) {
+      var e = document.createElement(tag);
+      if (cls) e.className = cls;
+      e.textContent = txt;
+      return e;
+    };
+    var cols = Math.max(3, Math.ceil(Math.sqrt(n * W / H)));
+    var rows = Math.max(3, Math.ceil(n / cols));
+    var cells = [], a, b;
+    for (a = 0; a < cols; a++) { for (b = 0; b < rows; b++) { cells.push([a, b]); } }
+    for (a = cells.length - 1; a > 0; a--) {
+      b = Math.floor(Math.random() * (a + 1));
+      var tmp = cells[a]; cells[a] = cells[b]; cells[b] = tmp;
+    }
+    var made = 0, typedLeft = 8, frag = document.createDocumentFragment();
+    for (a = 0; a < cells.length && made < n; a++) {
+      var x = (cells[a][0] + rnd(0.1, 0.9)) / cols * 100;
+      var y = (cells[a][1] + rnd(0.1, 0.9)) / rows * 100;
+      if (Math.abs(x - 50) < 17 && Math.abs(y - 46) < 20) continue;
+      var r = Math.random();
+      var d = r < 0.45 ? 0 : (r < 0.8 ? 1 : 2);
+      var kind = pick(KINDS);
+      var text = take(kind);
+      var isPair = Array.isArray(text);
+      var label = isPair ? text[0] + " → " + text[1] : text;
+      var typed = !!TY[kind] && d > 0 && typedLeft > 0 && /^[\x20-\x7E]{10,}$/.test(label);
+      if (typed) typedLeft--;
+      var k = typed ? pick([2, 2, 3]) : pick(KS[d]);
+      if (label.length > 6 && k > 3) k = 3;
+      var t = (k >= 4 ? rnd(5, 10) : (k === 3 ? rnd(7, 14) : rnd(9, 20))) * TS[d];
+      if (typed) t = rnd(14, 22);
+      var m = typed ? "drift" : pick(M[kind] || M.def);
+      var el = document.createElement("span");
+      el.className = "sp k" + k + " c" + (1 + Math.floor(Math.random() * 6)) + " m-" + m + " z" + (d + 1);
+      var wPct = label.length * u * KV[k] * 0.62 / W * 100;
+      x = Math.min(x, Math.max(1, 98 - wPct));
+      var st = el.style;
+      st.setProperty("--x", x.toFixed(1) + "%");
+      st.setProperty("--y", Math.min(y, 94).toFixed(1) + "%");
+      st.setProperty("--t", t.toFixed(1) + "s");
+      st.setProperty("--o", (-rnd(0, t)).toFixed(1) + "s");
+      st.setProperty("--dx", (rnd(20, 70) * MV[d] * sign()).toFixed(0) + "px");
+      st.setProperty("--dy", (rnd(28, 100) * MV[d]).toFixed(0) + "px");
+      st.setProperty("--r", (rnd(3, 16) * sign()).toFixed(0) + "deg");
+      st.setProperty("--a", (AB[k] * DZ[d]).toFixed(2));
+      if (typed) {
+        var ty = mk("i", "ty", label);
+        ty.style.setProperty("--n", String(label.length));
+        ty.style.setProperty("--ty", Math.max(4, Math.min(9, label.length * 0.3)).toFixed(1) + "s");
+        ty.style.setProperty("--to", (-rnd(0, 4)).toFixed(1) + "s");
+        el.appendChild(ty);
+      } else if (isPair) {
+        if (/[\u0600-\u06FF]/.test(text[1])) {
+          el.appendChild(mk("span", "gl", text[1]));
+          el.appendChild(mk("span", "arw", " ← "));
+          el.appendChild(mk("span", "", text[0]));
+        } else {
+          el.appendChild(mk("span", "", text[0]));
+          el.appendChild(mk("span", "arw", " → "));
+          el.appendChild(mk("span", "gl", text[1]));
+        }
+      } else {
+        el.textContent = text;
+      }
+      frag.appendChild(el);
+      made++;
+    }
+    f.appendChild(frag);
+  } catch (e) {}
+})();
+</script>
+
+
+    <div class="modal-overlay" id="welcome-modal" role="dialog" aria-modal="true" aria-labelledby="wm-title">
+        <div class="modal-content wm-card">
+            <img class="wm-logo" src="assets/logo.png" alt="">
+            <h2 id="wm-title" data-i18n-key="wmTitle">أهلاً بك في Bayda Lab</h2>
+            <p class="wm-sub" data-i18n-key="wmSub">اكتب الكود بلهجتك، وتعلّم البرمجة خطوة بخطوة.</p>
+            <button class="btn-primary wm-start" type="button" data-i18n-key="wmStart" onclick="closeWelcome()">ابدأ</button>
+        </div>
+    </div>
 
     <div class="modal-overlay" id="settings-modal">
         <div class="modal-content st-modal">
-            <button class="close-btn" onclick="closeSettings()">×</button>
-            <h2>⚙️ الإعدادات</h2>
-            <div class="st-section">المحرر</div>
-            <div class="st-row"><span class="st-label">لغة البرنامج</span>
+            <div class="st-head"><i class="st-grab" aria-hidden="true"></i><h2 data-i18n-key="settingsTitle">⚙️ الإعدادات</h2><button class="close-btn" onclick="closeSettings()">×</button></div>
+            <div class="st-section" data-sec="editor" data-i18n-key="editorSec">المحرر</div>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="codeLang">لغة البرنامج</span>
                 <select id="st-lang" class="st-select" onchange="stSetLang(this.value)">
                     <option value="js">JavaScript</option>
                     <option value="py">Python</option>
-                    <option value="algo">خوارزميات (Algo)</option>
+                    <option value="algo" data-i18n-key="langAlgo">خوارزميات (Algo)</option>
                     <option value="c">C</option>
                     <option value="cpp">C++</option>
                     <option value="java">Java</option>
                     <option value="php">PHP</option>
                 </select></div>
-            <div class="st-row"><span class="st-label">حجم الخط</span>
+            <div class="st-row"><span class="st-label" data-i18n-key="fontSize">حجم الخط</span>
                 <select id="st-font" class="st-select" onchange="stSetFont(this.value)">
-                    <option value="14">صغير</option><option value="16">متوسط</option><option value="18">كبير</option><option value="20">كبير جدًا</option><option value="22">ضخم</option></select></div>
-            <div class="st-section">خيارات النص</div>
-            <div class="st-row"><span class="st-label">التفاف النص</span>
+                    <option value="14" data-i18n-key="fontSmall">صغير</option><option value="16" data-i18n-key="fontMedium">متوسط</option><option value="18" data-i18n-key="fontLarge">كبير</option><option value="20" data-i18n-key="fontXL">كبير جدًا</option><option value="22" data-i18n-key="fontHuge">ضخم</option></select></div>
+            <div class="st-section" data-sec="text" data-i18n-key="textSec">خيارات النص</div>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="wordWrap">التفاف النص</span>
                 <button class="st-switch" id="st-wrap" role="switch" aria-checked="true" onclick="stToggle('wrap', this)"></button></div>
-            <div class="st-row"><span class="st-label">إغلاق الأقواس تلقائيًا</span>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="autoBrackets">إغلاق الأقواس تلقائيًا</span>
                 <button class="st-switch" id="st-brackets" role="switch" aria-checked="false" onclick="stToggle('brackets', this)"></button></div>
-            <div class="st-section">التعلّم والصوت</div>
-            <div class="st-row"><span class="st-label">القراءة الصوتية</span>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="restoreSuggest">اقتراح استعادة آخر نسخة محفوظة</span>
+                <button class="st-switch" id="st-restore" role="switch" aria-checked="true" onclick="stToggle('restore', this)"></button></div>
+            <div class="st-section" data-sec="learn" data-i18n-key="learnSec">التعلّم والصوت</div>
+            <div class="st-row"><span class="st-label" data-i18n-key="tts">القراءة الصوتية</span>
                 <button class="st-switch" id="st-tts" role="switch" aria-checked="false" onclick="stToggle('tts', this)"></button></div>
-            <div class="st-row"><span class="st-label">الترجمة الفورية</span>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="realtimeTrans">الترجمة الفورية</span>
                 <button class="st-switch" id="st-translate" role="switch" aria-checked="false" onclick="stToggle('translate', this)"></button></div>
-            <div class="st-row"><span class="st-label">المؤثرات الصوتية</span>
+            <div class="st-row"><span class="st-label" data-i18n-key="soundFx">المؤثرات الصوتية</span>
                 <button class="st-switch" id="st-sound" role="switch" aria-checked="true" onclick="stToggle('sound', this)"></button></div>
-            <div class="st-section">إمكانية الوصول</div>
-            <div class="st-row"><span class="st-label">تقليل الحركة</span>
+            <div class="st-section" data-sec="access" data-i18n-key="accessSec">إمكانية الوصول</div>
+            <div class="st-row"><span class="st-label" data-i18n-key="reduceMotion">تقليل الحركة</span>
                 <button class="st-switch" id="st-motion" role="switch" aria-checked="false" onclick="stToggle('motion', this)"></button></div>
-            <div class="st-row"><span class="st-label">الوضع عالي التباين</span>
+            <div class="st-row"><span class="st-label" data-i18n-key="highContrast">الوضع عالي التباين</span>
                 <button class="st-switch" id="st-contrast" role="switch" aria-checked="false" onclick="stToggle('contrast', this)"></button></div>
-            <div class="st-row"><span class="st-label">خط عسر القراءة</span>
+            <div class="st-row"><span class="st-label" data-i18n-key="dyslexicFont">خط عسر القراءة</span>
                 <button class="st-switch" id="st-dyslexia" role="switch" aria-checked="false" onclick="stToggle('dyslexia', this)"></button></div>
-                        <div class="st-section">التحكم والاختصارات</div>
-            <div class="st-row"><span class="st-label">اختصارات الكيبورد الخارجي (Ctrl / Alt)</span>
+            <div class="st-row"><span class="st-label" data-i18n-key="colorBlindMode">وضع عمى الألوان</span>
+                <button class="st-switch" id="st-colorblind" role="switch" aria-checked="false" onclick="stToggle('colorblind', this)"></button></div>
+            <div class="st-row"><span class="st-label" data-i18n-key="visualCues">إشعارات بصرية بديلة للصوت</span>
+                <button class="st-switch" id="st-visualcues" role="switch" aria-checked="false" onclick="stToggle('visualcues', this)"></button></div>
+                        <div class="st-section" data-sec="control" data-kid="off" data-i18n-key="controlSec">التحكم والاختصارات</div>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="shortcutsKb">اختصارات الكيبورد الخارجي (Ctrl / Alt)</span>
                 <button class="st-switch" id="st-shortcuts" role="switch" aria-checked="false" onclick="stToggle('shortcuts', this)"></button></div>
-            <div class="st-row"><span class="st-label">وضع اليد الواحدة</span>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="oneHand">وضع اليد الواحدة</span>
                 <button class="st-switch" id="st-onehand" role="switch" aria-checked="false" onclick="stToggle('onehand', this)"></button></div>
-            <div class="st-row"><span class="st-label">الاهتزاز عند اللمس</span>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="haptics">الاهتزاز عند اللمس</span>
                 <button class="st-switch" id="st-haptics" role="switch" aria-checked="false" onclick="stToggle('haptics', this)"></button></div>
-            <div class="st-row"><span class="st-label">تشغيل تلقائي بعد التوقف عن الكتابة</span>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="autoRun">تشغيل تلقائي بعد التوقف عن الكتابة</span>
                 <button class="st-switch" id="st-autorun" role="switch" aria-checked="false" onclick="stToggle('autorun', this)"></button></div>
-            <div class="st-section">الشريط الذكي</div>
-            <div class="st-row"><span class="st-label">الشريط الذكي فوق لوحة المفاتيح</span>
+            <div class="st-section" data-sec="smartbar" data-kid="off" data-i18n-key="smartSec">الشريط الذكي</div>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="smartBar">الشريط الذكي فوق لوحة المفاتيح</span>
                 <button class="st-switch" id="st-smartbar" role="switch" aria-checked="false" onclick="stToggle('smartbar', this)"></button></div>
-            <div class="st-row"><span class="st-label">اقتراح الكلمات والرموز</span>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="suggestWords">اقتراح الكلمات والرموز</span>
                 <button class="st-switch" id="st-suggest" role="switch" aria-checked="false" onclick="stToggle('suggest', this)"></button></div>
-            <div class="st-row"><span class="st-label">معاينة مكبّرة للسطر</span>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="lineMagnifier">معاينة مكبّرة للسطر</span>
                 <button class="st-switch" id="st-mag" role="switch" aria-checked="false" onclick="stToggle('mag', this)"></button></div>
-            <div class="st-section">الحركة والتأثيرات</div>
-            <div class="st-row"><span class="st-label">نجوم الهيدر</span>
+            <div class="st-section" data-sec="motion" data-kid="off" data-i18n-key="motionSec">الحركة والتأثيرات</div>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="headerStars">نجوم الهيدر</span>
                 <button class="st-switch" id="st-stars" role="switch" aria-checked="false" onclick="stToggle('stars', this)"></button></div>
-            <div class="st-row"><span class="st-label">دوران الشعار والأعلام والترس</span>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="spinEffect">دوران الشعار والأعلام والترس</span>
                 <button class="st-switch" id="st-spin" role="switch" aria-checked="false" onclick="stToggle('spin', this)"></button></div>
-            <div class="st-section pro-only">وضع المحترف</div>
-            <div class="st-row pro-only"><span class="st-label">وضع الحد الأدنى</span>
+            <div class="st-section pro-only" data-sec="pro" data-kid="off" data-i18n-key="proSec">وضع المحترف</div>
+            <div class="st-row pro-only" data-kid="off"><span class="st-label" data-i18n-key="minimalMode">وضع الحد الأدنى</span>
                 <button class="st-switch" id="st-minimal" role="switch" aria-checked="false" onclick="stToggle('minimal', this)"></button></div>
-            <div class="st-row pro-only"><span class="st-label">أزرار 📊 ⌨️ بجانب الترس</span>
+            <div class="st-row pro-only" data-kid="off"><span class="st-label" data-i18n-key="toolButtons">أزرار 📊 ⌨️ بجانب الترس</span>
                 <button class="st-switch" id="st-tools" role="switch" aria-checked="false" onclick="stToggle('tools', this)"></button></div>
-            <div class="st-section">العرض</div>
-            <div class="st-row"><span class="st-label">الثيم تلقائيًا حسب النظام</span>
+            <div class="st-section" data-sec="view" data-kid="off" data-i18n-key="viewSec">العرض</div>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="autoTheme">الثيم تلقائيًا حسب النظام</span>
                 <button class="st-switch" id="st-autotheme" role="switch" aria-checked="false" onclick="stToggle('autotheme', this)"></button></div>
-            <div class="st-row"><span class="st-label">أرقام الأسطر</span>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="lineNumbers">أرقام الأسطر</span>
                 <button class="st-switch" id="st-lines" role="switch" aria-checked="false" onclick="stToggle('lines', this)"></button></div>
-            <div class="st-row"><span class="st-label">نسخة الكود الاحتياطية</span>
-                <button class="btn-secondary" id="clear-autosave-btn" onclick="clearAutoSave()" style="color:#f59e0b;border-color:#f59e0b">🧹 مسح الحفظ التلقائي</button></div>
-            <div class="st-row st-danger"><span class="st-label">مسح البيانات</span>
-                <button class="btn-secondary" onclick="clearAllData()" style="color:#ef4444;border-color:#ef4444">🗑️ مسح الكل</button></div>
+            <div class="st-row" data-kid="off"><span class="st-label" data-i18n-key="backupCode">نسخة الكود الاحتياطية</span>
+                <button class="btn-secondary" id="clear-autosave-btn" data-i18n-key="clearAutoSaveBtn" onclick="clearAutoSave()" style="color:#f59e0b;border-color:#f59e0b">🧹 مسح الحفظ التلقائي</button></div>
+            <div class="st-row hidden" id="pwa-install-row" data-kid="off"><span class="st-label" data-i18n-key="pwaInstall">تثبيت التطبيق</span><button class="btn-primary" id="pwa-install-btn" data-i18n-key="pwaInstallBtn" type="button">📲 تثبيت على الجهاز</button></div>
+            <div class="st-row st-danger" data-kid="off"><span class="st-label" data-i18n-key="clearData">مسح البيانات</span>
+                <button class="btn-secondary" onclick="clearAllData()" data-i18n-key="clearAllBtn" style="color:#ef4444;border-color:#ef4444">🗑️ مسح الكل</button></div>
         </div>
     </div>
 
@@ -93,7 +282,7 @@
     <div class="modal-overlay" id="stats-modal">
         <div class="modal-content bl-panel">
             <button class="close-btn" onclick="closeModal('stats-modal')">×</button>
-            <h2>📊 الإحصاءات</h2>
+            <h2><span data-i18n-key="ksTitleStatsFull">📊 الإحصاءات</span></h2>
             <div id="bl-stats-body"></div>
         </div>
     </div>
@@ -101,7 +290,7 @@
     <div class="modal-overlay" id="keys-modal">
         <div class="modal-content bl-panel">
             <button class="close-btn" onclick="closeModal('keys-modal')">×</button>
-            <h2>⌨️ الاختصارات</h2>
+            <h2><span data-i18n-key="ksTitleKeysFull">⌨️ الاختصارات</span></h2>
             <div id="bl-keys-body"></div>
         </div>
     </div>
@@ -110,63 +299,65 @@
         <div class="modal-content">
             <h4 id="confirm-message" style="margin-bottom: 20px; font-size: 1.1rem; line-height: 1.5;"></h4>
             <div class="modal-actions">
-                <button class="btn-primary" id="confirm-yes-btn" style="background: #ef4444; border-color: #ef4444;">نعم، احذف</button>
-                <button class="btn-secondary" id="confirm-no-btn">إلغاء</button>
+                <button class="btn-primary" id="confirm-yes-btn" style="background: #ef4444; border-color: #ef4444;" data-i18n-key="cfYes">نعم، احذف</button>
+                <button class="btn-secondary" id="confirm-no-btn" data-i18n-key="cfNo">إلغاء</button>
             </div>
         </div>
     </div>
 
     <header>
         <div class="tabs-nav">
-            <button class="tab-btn active" id="tab-lab-btn" onclick="switchTab('lab')">🧪 المختبر</button>
+            <button class="tab-btn active" id="tab-lab-btn" data-i18n-key="tabLab" onclick="switchTab('lab')">🧪 المختبر</button>
             <div class="logo-container">
                 <img src="assets/logo.png" id="main-logo" class="logo-img" alt="Logo">
             </div>
-            <button class="tab-btn" id="tab-learn-btn" onclick="switchTab('learn')">📚 التعلم</button>
+            <button class="tab-btn" id="tab-learn-btn" data-i18n-key="tabLearn" onclick="switchTab('learn')">📚 التعلم</button>
         </div>
 
+        <div id="flags-ctx" class="flags-ctx" data-i18n-key="flagsCtxLab" aria-live="polite">🧪 حزم اللهجات</div>
         <div class="hero-card">
             <div class="flags-side">
-                <button class="flag-btn" data-dialect="tn-latn"><img src="assets/tn.png" class="flag-img" alt="TN"></button>
-                <button class="flag-btn" data-dialect="dz-latn"><img src="assets/dz.png" class="flag-img" alt="DZ"></button>
-                <button class="flag-btn" data-dialect="ly-latn"><img src="assets/ly.png" class="flag-img" alt="LY"></button>
-                <button class="flag-btn" data-dialect="ma-latn" title="المغرب"><img src="assets/ma.png" class="flag-img" alt="MA"></button>
-                <button class="flag-btn" data-dialect="mr-latn"><img src="assets/mr.png" class="flag-img" alt="MR"></button>
-                <button class="flag-btn" data-dialect="kab-latn"><img src="assets/kabyle.png" class="flag-img" alt="Kabyle"></button>
-                <button class="flag-btn" data-dialect="shi-latn"><img src="assets/amazigh.png" class="flag-img" alt="Shilha"></button>
+                <button class="flag-btn" data-dialect="tn-latn" title="تونسي" data-i18n-title="flagTn"><img src="assets/tn.png" class="flag-img" alt="TN"></button>
+                <button class="flag-btn" data-dialect="dz-latn" title="جزائري" data-i18n-title="flagDz"><img src="assets/dz.png" class="flag-img" alt="DZ"></button>
+                <button class="flag-btn" data-dialect="ly-latn" title="ليبي" data-i18n-title="flagLy"><img src="assets/ly.png" class="flag-img" alt="LY"></button>
+                <button class="flag-btn" data-dialect="ma-latn" title="مغربي" data-i18n-title="flagMa"><img src="assets/ma.png" class="flag-img" alt="MA"></button>
+                <button class="flag-btn" data-dialect="mr-latn" title="حساني" data-i18n-title="flagMr"><img src="assets/mr.png" class="flag-img" alt="MR"></button>
+                <button class="flag-btn" data-dialect="kab-latn" title="قبائلي" data-i18n-title="flagKab"><img src="assets/kabyle.png" class="flag-img" alt="Kabyle"></button>
+                <button class="flag-btn" data-dialect="shi-latn" title="شلحي" data-i18n-title="flagShi"><img src="assets/amazigh.png" class="flag-img" alt="Shilha"></button>
             </div>
         </div>
 
         <div class="tools-row">
-            <button class="icon-btn" onclick="openSettings()" title="الإعدادات">⚙️</button>
+            <button class="icon-btn" onclick="openSettings()" title="الإعدادات" data-i18n-title="toolsSettings">⚙️</button>
+            <button class="icon-btn hidden" id="pwa-top-btn" title="تثبيت التطبيق" data-i18n-title="pwaInstall">📲</button>
         </div>
 
         <div class="controls-card">
-            <button class="icon-btn" id="side-toggle-btn" onclick="toggleDictionary()" title="إخفاء/إظهار">📖</button>
-            <button class="icon-btn" onclick="toggleLayout()" title="تغيير التخطيط">🖥️</button>
+            <button class="icon-btn" id="side-toggle-btn" onclick="toggleDictionary()" title="إخفاء/إظهار" data-i18n-title="toggleDict">📖</button>
+            <button class="icon-btn" onclick="toggleLayout()" title="تغيير التخطيط" data-i18n-title="toggleLayout">🖥️</button>
             <div class="divider"></div>
-            <select id="target-lang" class="custom-select" title="لغة الهدف">
+            <select id="target-lang" class="custom-select" title="لغة الهدف" data-i18n-title="targetLang">
                 <option value="js">JS</option>
                 <option value="py">PY</option>
-                <option value="algo">خوارزميات</option>
+                <option value="algo" data-i18n-key="algo">خوارزميات</option>
                 <option value="c">C</option>
                 <option value="cpp">C++</option>
                 <option value="java">Java</option>
                 <option value="php">PHP</option>
             </select>
-            <select id="mode-select" class="custom-select">
-                <option value="kid">🐻 طـفـل</option>
-                <option value="beginner" selected>🌱 مـبتدئ</option>
-                <option value="pro">👨‍💻 محترف</option>
+            <select id="mode-select" class="custom-select" title="المود" data-i18n-title="tipMode">
+                <option value="kid" data-i18n-key="modeKid">🐻 طـفـل</option>
+                <option value="beginner" selected data-i18n-key="modeBeginner">🌱 مـبتدئ</option>
+                <option value="pro" data-i18n-key="modePro">👨‍💻 محترف</option>
             </select>
             
             <div class="theme-controls" id="standard-theme-controls">
-                <button class="icon-btn" id="theme-toggle-btn" onclick="cycleTheme()">☀️</button>
+                <button class="icon-btn" id="theme-toggle-btn" onclick="cycleTheme()" title="تبديل الثيم" data-i18n-title="tipTheme">☀️</button>
             </div>
             <div class="theme-controls hidden" id="kid-theme-controls">
-                <button class="icon-btn"  onclick="changeKidTheme()">🎨</button>
-                <button class="icon-btn" onclick="readOutput()">🗣️</button>
-                <button class="icon-btn" onclick="magicCode()">🪄</button>
+                <button class="icon-btn"  onclick="changeKidTheme()" title="ثيم الطفل" data-i18n-title="tipKidTheme">🎨</button>
+                <button class="icon-btn" onclick="readOutput()" title="قراءة النتيجة صوتيًا" data-i18n-title="tipRead">🗣️</button>
+                <button class="icon-btn" onclick="magicCode()" title="سحر الكود" data-i18n-title="tipMagic">🪄</button>
             </div>
         </div>
     </header>
@@ -175,10 +366,10 @@
         <div class="pane editor-pane" id="editor-pane">
             <div class="pane-header">
                 <div style="display:flex;align-items:center;gap:8px;">
-                    <span>المحرر</span>
+                    <span data-i18n-key="editorTitle">المحرر</span>
                     <span id="autosave-status" class="autosave-badge" style="font-size:0.75rem;opacity:0.75;font-weight:normal;"></span>
                 </div>
-                <button class="icon-btn" onclick="togglePane('editor-pane', this)">-</button>
+                <button class="icon-btn" onclick="togglePane('editor-pane', this)" title="طيّ/فتح اللوحة" data-i18n-title="tipFold">-</button>
             </div>
             <div class="editor-wrapper">
                 <div id="line-numbers" class="line-numbers">1</div>
@@ -189,18 +380,18 @@
 
         <div class="pane dict-pane" id="dict-pane">
             <div class="pane-header">
-                <span>القاموس التفاعلي</span>
-                <button class="icon-btn" onclick="togglePane('dict-pane', this)">-</button>
+                <span data-i18n-key="dictTitle">القاموس التفاعلي</span>
+                <button class="icon-btn" onclick="togglePane('dict-pane', this)" title="طيّ/فتح اللوحة" data-i18n-title="tipFold">-</button>
             </div>
             <div class="nb-tabs" id="nb-tabs" role="tablist" hidden>
-                <button type="button" class="nb-tab active" id="nb-tab-dict" role="tab" aria-selected="true">📖 القاموس</button>
-                <button type="button" class="nb-tab" id="nb-tab-book" role="tab" aria-selected="false">📒 دفتري <span class="nb-badge" id="nb-due" hidden>0</span></button>
+                <button type="button" class="nb-tab active" id="nb-tab-dict" role="tab" aria-selected="true" data-i18n-key="nbTabDict">📖 القاموس</button>
+                <button type="button" class="nb-tab" id="nb-tab-book" role="tab" aria-selected="false" data-i18n-key="nbTabBook">📒 دفتري <span class="nb-badge" id="nb-due" hidden>0</span></button>
             </div>
             <div class="dict-content">
                 <div class="dc-bar">
-                    <input id="dc-search" type="search" placeholder="🔍 ابحث في المعجم...">
-                    <button id="dc-filter-beginner" class="dc-tab-btn active" onclick="dcSetFilter('beginner')">مبتدئ</button>
-                    <button id="dc-filter-all" class="dc-tab-btn" onclick="dcSetFilter('all')">الكل</button>
+                    <input id="dc-search" type="search" placeholder="🔍 ابحث في المعجم..." data-i18n-placeholder="dictSearch">
+                    <button id="dc-filter-beginner" class="dc-tab-btn active" onclick="dcSetFilter('beginner')" data-i18n-key="filterBeginner">مبتدئ</button>
+                    <button id="dc-filter-all" class="dc-tab-btn" onclick="dcSetFilter('all')" data-i18n-key="filterAll">الكل</button>
                 </div>
                 <div class="dict-chips" id="dict-chips"></div>
                 <div id="dict-dock">
@@ -212,24 +403,26 @@
                         <h4 id="dw-word" class="dc-word">—</h4>
                         <div class="dc-badges" id="dc-badges"></div>
                     </div>
-                    <button class="dc-mascot" id="dc-mascot" onclick="dcMascotTap()" aria-label="المرشد">🐣</button>
+                    <button class="dc-mascot" id="dc-mascot" onclick="dcMascotTap()" aria-label="المرشد" data-i18n-aria="dcGuide">🐣</button>
                 </div>
                 <div class="dc-slots" id="dc-slots"></div>
                 <div class="dc-body">
-                    <div class="dc-field"><span class="dc-k">المعنى</span><p class="dc-v dc-empty" id="dw-ar">—</p></div>
-                    <div class="dc-field"><span class="dc-k">الدور البرمجي</span><p class="dc-v dc-empty" id="dc-role">—</p></div>
+                    <div class="dc-field"><span class="dc-k" data-i18n-key="cardMeaning">المعنى</span><p class="dc-v dc-empty" id="dw-ar">—</p></div>
+                    <div class="dc-field"><span class="dc-k" data-i18n-key="cardRole">الدور البرمجي</span><p class="dc-v dc-empty" id="dc-role">—</p></div>
                     <div class="dc-code" id="dc-code-wrap">
                         <div class="dc-lang"><span>JavaScript</span><code id="dc-js">—</code></div>
                         <div class="dc-lang"><span>Python</span><code id="dc-py">—</code></div>
                     </div>
-                    <div class="dc-field" id="dc-ex-wrap"><span class="dc-k">مثال</span><pre class="dc-v dc-empty" id="dc-ex">—</pre></div>
-                    <div class="dc-field dc-analogy" id="dc-analogy-wrap"><span class="dc-k">تشبيه</span><p class="dc-v dc-empty" id="dc-analogy">—</p></div>
+                    <div class="dc-field" id="dc-ex-wrap"><span class="dc-k" data-i18n-key="cardExample">مثال</span><pre class="dc-v dc-empty" id="dc-ex">—</pre></div>
+                    <div class="dc-field dc-analogy" id="dc-analogy-wrap"><span class="dc-k" data-i18n-key="cardAnalogy">تشبيه</span><p class="dc-v dc-empty" id="dc-analogy">—</p></div>
                 </div>
                 <div class="dc-actions">
-                    <button class="dc-act dc-tap" onclick="dcSpeak()">🔊 نطق</button>
-                    <button class="dc-act dc-tap" onclick="dcQuickTheme()">🎨 ثيم</button>
-                    <button class="dc-act dc-tap" onclick="dcNext()">← التالي</button>
-                    <button type="button" class="dc-act dc-tap" id="nb-pin">📌 احفظ</button>
+                    <button class="dc-act dc-tap" onclick="dcSpeak()" data-i18n-key="actSpeak">🔊 نطق</button>
+                    <button type="button" class="dc-act dc-tap" onclick="dcSpeak(true)" data-i18n-key="actSlow">🐢 بطيء</button>
+                    <button type="button" class="dc-act dc-tap" onclick="dcInsertWord()" data-i18n-key="actInsert">📥 إدراج</button>
+                    <button class="dc-act dc-tap" onclick="dcQuickTheme()" data-i18n-key="actTheme">🎨 ثيم</button>
+                    <button class="dc-act dc-tap" onclick="dcNext()" data-i18n-key="actNext">← التالي</button>
+                    <button type="button" class="dc-act dc-tap" id="nb-pin" data-i18n-key="actPin">📌 احفظ</button>
                 </div>
                 <div class="dc-dots" id="dc-dots"></div>
             </div>
@@ -237,41 +430,41 @@
             </div>
             <div class="nb-panel" id="nb-panel" hidden>
                 <div class="nb-main" id="nb-main">
-                    <button type="button" class="btn-primary nb-start" id="nb-start" hidden>🧠 ابدأ مراجعة اليوم (<span id="nb-start-n">0</span>)</button>
-                    <button type="button" class="dc-act dc-tap" id="nb-save-code">🔖 احفظ كود المحرر</button>
+                    <button type="button" class="btn-primary nb-start" id="nb-start" hidden><span data-i18n-key="nbStartPre">🧠 ابدأ مراجعة اليوم (</span><span id="nb-start-n">0</span><span data-i18n-key="nbStartPost">)</span></button>
+                    <button type="button" class="dc-act dc-tap" id="nb-save-code" data-i18n-key="nbSaveCode">🔖 احفظ كود المحرر</button>
                     <div class="nb-io">
-                        <button type="button" class="dc-act dc-tap" id="nb-export">📤 تصدير</button>
-                        <button type="button" class="dc-act dc-tap" id="nb-import">📥 استيراد</button>
+                        <button type="button" class="dc-act dc-tap" id="nb-export" data-i18n-key="nbExport">📤 تصدير</button>
+                        <button type="button" class="dc-act dc-tap" id="nb-import" data-i18n-key="nbImport">📥 استيراد</button>
                         <input type="file" id="nb-import-file" accept="application/json,.json" hidden>
                     </div>
                     <details class="nb-note-form" id="nb-note-form">
                         <summary>➕ ملاحظة جديدة</summary>
-                        <input id="nb-note-title" type="text" maxlength="80" placeholder="العنوان">
-                        <textarea id="nb-note-body" maxlength="8000" rows="4" placeholder="اكتب ملاحظتك هنا..."></textarea>
-                        <button type="button" class="dc-act dc-tap" id="nb-note-save">حفظ الملاحظة</button>
+                        <input id="nb-note-title" type="text" maxlength="80" placeholder="العنوان" data-i18n-placeholder="nbNoteTitle">
+                        <textarea id="nb-note-body" maxlength="8000" rows="4" placeholder="اكتب ملاحظتك هنا..." data-i18n-placeholder="nbNoteBody"></textarea>
+                        <button type="button" class="dc-act dc-tap" id="nb-note-save" data-i18n-key="nbNoteSave">حفظ الملاحظة</button>
                     </details>
-                    <input id="nb-search" type="search" placeholder="🔍 ابحث في دفتري...">
+                    <input id="nb-search" type="search" placeholder="🔍 ابحث في دفتري..." data-i18n-placeholder="nbSearch">
                     <div class="nb-filters" id="nb-filters">
-                        <button type="button" class="dc-tab-btn active" data-f="">الكل</button>
-                        <button type="button" class="dc-tab-btn" data-f="word">كلمات</button>
-                        <button type="button" class="dc-tab-btn" data-f="code">أكواد</button>
-                        <button type="button" class="dc-tab-btn" data-f="text">ملاحظات</button>
+                        <button type="button" class="dc-tab-btn active" data-f="" data-i18n-key="nbFilterAll">الكل</button>
+                        <button type="button" class="dc-tab-btn" data-f="word" data-i18n-key="filterWords">كلمات</button>
+                        <button type="button" class="dc-tab-btn" data-f="code" data-i18n-key="filterCodes">أكواد</button>
+                        <button type="button" class="dc-tab-btn" data-f="text" data-i18n-key="filterNotes">ملاحظات</button>
                     </div>
                     <div class="nb-list" id="nb-list"></div>
                 </div>
                 <div class="nb-review" id="nb-review" hidden>
                     <div class="nb-rv-top">
                         <span id="nb-rv-count"></span>
-                        <button type="button" class="dc-tab-btn" id="nb-rv-exit">إنهاء المراجعة</button>
+                        <button type="button" class="dc-tab-btn" id="nb-rv-exit" data-i18n-key="nbRvExit">إنهاء المراجعة</button>
                     </div>
                     <div class="nb-rv-card" id="nb-rv-card">
                         <div class="nb-rv-word" id="nb-rv-word"></div>
                         <div class="nb-rv-dia" id="nb-rv-dia"></div>
                         <div class="nb-rv-meaning" id="nb-rv-meaning" hidden></div>
-                        <button type="button" class="dc-act dc-tap" id="nb-rv-show">أظهر المعنى</button>
+                        <button type="button" class="dc-act dc-tap" id="nb-rv-show" data-i18n-key="nbRvShow">أظهر المعنى</button>
                         <div class="nb-rv-btns" id="nb-rv-btns" hidden>
-                            <button type="button" class="dc-act dc-tap" id="nb-rv-no">🔁 أعدها</button>
-                            <button type="button" class="dc-act dc-tap" id="nb-rv-yes">✅ عرفتها</button>
+                            <button type="button" class="dc-act dc-tap" id="nb-rv-no" data-i18n-key="nbRvNo">🔁 أعدها</button>
+                            <button type="button" class="dc-act dc-tap" id="nb-rv-yes" data-i18n-key="nbRvYes">✅ عرفتها</button>
                         </div>
                     </div>
                     <p class="nb-rv-done" id="nb-rv-done" hidden></p>
@@ -282,8 +475,8 @@
 
         <div class="pane notes-pane hidden" id="notes-pane">
             <div class="pane-header notes-header">
-                <span>الملاحظات</span>
-                <button class="icon-btn" onclick="togglePane('notes-pane', this)">-</button>
+                <span data-i18n-key="notesTitle">الملاحظات</span>
+                <button class="icon-btn" onclick="togglePane('notes-pane', this)" title="طيّ/فتح اللوحة" data-i18n-title="tipFold">-</button>
             </div>
             <div class="notes-toolbar">
                 <select id="note-selector" class="custom-select" onchange="loadSelectedNote()"></select>
@@ -310,11 +503,11 @@
 
         <div class="pane output-pane" id="output-pane">
             <div class="pane-header">
-                <span>النتيجة (Output)</span>
+                <span data-i18n-key="outputTitle">النتيجة (Output)</span>
                 <div class="output-actions">
-                    <button class="icon-btn" onclick="copyOutput()">📋</button>
-                    <button class="icon-btn" onclick="downloadOutput()">💾</button>
-                    <button class="icon-btn" onclick="togglePane('output-pane', this)">-</button>
+                    <button class="icon-btn" onclick="copyOutput()" title="نسخ النتيجة" data-i18n-title="tipCopy">📋</button>
+                    <button class="icon-btn" onclick="downloadOutput()" title="حفظ النتيجة" data-i18n-title="tipSave">💾</button>
+                    <button class="icon-btn" onclick="togglePane('output-pane', this)" title="طيّ/فتح اللوحة" data-i18n-title="tipFold">-</button>
                 </div>
             </div>
             <pre id="output">// النتيجة هنا...</pre>
@@ -324,17 +517,19 @@
     <main class="workspace layout-col" id="view-learn" style="display: none; padding: 20px; align-items: center; justify-content: center;">
         <div class="learn-container">
             <h1 style="color: var(--primary); margin-bottom: 10px;">📚</h1>
-            <p style="margin-bottom: 20px; color: var(--text-muted);">مرحباً بك في مسار التعلم. هنا ستتعلم البرمجة خطوة بخطوة.</p>
+            <p data-i18n-key="lrnWelcome" style="margin-bottom: 20px; color: var(--text-muted);">مرحباً بك في مسار التعلم. هنا ستتعلم البرمجة خطوة بخطوة.</p>
             
             <div class="lesson-card">
                 <h3 id="lesson-title">المستوى 0: الطباعة (ktab)</h3>
                 <p id="lesson-desc">استخدم الكلمة المفتاحية للطباعة لكتابة "salam" على الشاشة.</p>
+                <div id="lesson-explain" class="lesson-explain hidden"></div>
+                <div id="lesson-hint-box" class="lesson-hint-box hidden"></div>
                 
 
 
-                <textarea id="lesson-editor" class="lesson-editor" spellcheck="false" placeholder="اكتب الكود هنا..."></textarea>
+                <textarea id="lesson-editor" class="lesson-editor" spellcheck="false" placeholder="اكتب الكود هنا..." data-i18n-placeholder="lrnPlaceholder"></textarea>
            <!-- شريط الرموز البرمجية للتعلم -->
-                <div class="symbols-container" style="margin-top: 15px; border-radius: 8px; border;">
+                <div class="symbols-container" style="margin-top: 15px; border-radius: 8px; border: 1px solid var(--border); padding: 8px; background: var(--panel);">
                     <div class="sym-row">
                         <button class="sym-btn" onclick="insertToLesson('(')">(</button>
                         <button class="sym-btn" onclick="insertToLesson(')')">)</button>
@@ -347,30 +542,57 @@
                     </div>
                 </div>
                 <div style="display: flex; gap: 10px; margin-top: 15px; width: 100%;">
-                    <button class="btn-primary" style="flex: 1;" onclick="checkLesson()">✅ تحقق من الحل</button>
-                    <button class="btn-secondary" onclick="resetLesson()">↺ إعادة</button>
+                    <button class="btn-primary" style="flex: 1;" data-i18n-key="lrnCheck" onclick="checkLesson()">✅ تحقق من الحل</button>
+                    <button type="button" class="btn-secondary hidden" id="lesson-hint-btn" onclick="showNextLessonHint()">💡 تلميح</button>
+                    <button type="button" class="btn-secondary hidden" id="lesson-target-btn" onclick="toggleLessonTarget()">🔄 اللغة الهدف</button>
+                    <button class="btn-secondary" data-i18n-key="lrnReset" onclick="resetLesson()">↺ إعادة</button>
                 </div>
                 
+                <pre id="lesson-target-box" class="lesson-target-box hidden"></pre>
                 <div id="lesson-feedback" class="lesson-feedback hidden"></div>
             </div>
         </div>
     </main>
 
     <footer class="footer-run" id="footer-run" style="display: flex;">
-        <button class="btn-run" id="run-btn">▶ تشغيل الكود</button>
+        <button class="btn-run" id="run-btn" data-i18n-key="runBtn">▶ تشغيل الكود</button>
     </footer>
 
+    <div id="offline-badge" class="offline-badge hidden" role="status" aria-live="polite" data-i18n-key="pwaOffline">وضع عدم الاتصال — يعمل التطبيق بالبيانات المخزنة</div>
     <div id="toast-container" class="toast-container"></div>
 
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});});if(window.caches){caches.keys().then(function(ks){ks.forEach(function(k){caches.delete(k);});});}
+        if ("serviceWorker" in navigator && location.protocol !== "file:") {
+            window.addEventListener("load", function () {
+                navigator.serviceWorker.register("./service-worker.js").catch(function () {});
             });
         }
+        (function () {
+            var dp = null, standalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+            var isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+            var row = document.getElementById("pwa-install-row"), btn = document.getElementById("pwa-install-btn"), topBtn = document.getElementById("pwa-top-btn"), off = document.getElementById("offline-badge");
+            function syncInstallUi() {
+                var show = !standalone && (!!dp || isIos);
+                if (row) row.classList.toggle("hidden", !show);
+                if (topBtn) topBtn.classList.toggle("hidden", !show);
+            }
+            function doInstall() {
+                if (dp) { dp.prompt(); dp.userChoice.then(function (r) { if (r && r.outcome === "accepted") { dp = null; standalone = true; syncInstallUi(); } }); return; }
+                if (isIos && typeof toast === "function" && typeof tx === "function") toast("📲 " + tx("pwaIosHint", "في سفاري: اضغط مشاركة ثم إضافة إلى الشاشة الرئيسية"), 4200);
+            }
+            window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); dp = e; syncInstallUi(); });
+            window.addEventListener("appinstalled", function () { dp = null; standalone = true; syncInstallUi(); });
+            if (btn) btn.addEventListener("click", doInstall);
+            if (topBtn) topBtn.addEventListener("click", doInstall);
+            function syncNet() { if (off) off.classList.toggle("hidden", navigator.onLine !== false); }
+            window.addEventListener("online", function () { syncNet(); if (typeof toast === "function" && typeof tx === "function") toast("🌐 " + tx("pwaOnline", "تمت استعادة الاتصال بالإنترنت"), 2500); });
+            window.addEventListener("offline", syncNet);
+            syncInstallUi(); syncNet();
+        })();
     </script>
     <script>
 (function () {
+  if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) return;
   function show(t) {
     var d = document.getElementById("bl-err");
     if (!d) {
@@ -386,14 +608,15 @@
 })();
 </script>
 <script src="engine.bundle.js"></script>
-<script src="i18n.js"></script>
+<script src="i18n.js?v=16"></script>
   <script src="tooltip.js"></script>
-<script src="ui.js"></script>
+<script src="ui.js?v=18"></script>
     <script src="settings.js?v=37"></script>
-    <script src="dict-ui.js"></script>
+    <script src="dict-ui.js?v=18"></script>
     <script src="notebook-ui.js"></script>
-    <script src="kid-mode.js"></script>
-    <script src="kid-fun.js"></script>
+    <script src="kid-mode.js?v=13"></script>
+    <script src="kid-fun.js?v=20"></script>
+    <script src="kid-studio.js?v=20"></script>
     <script src="kid-ui.js"></script>
     <script src="lang-picker.js"></script>
     <script src="about.js"></script>

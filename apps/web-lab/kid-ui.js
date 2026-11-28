@@ -24,29 +24,4 @@
   place();
   [400, 1500].forEach(t => setTimeout(place, t));
   new MutationObserver(place).observe(B, { childList: true });
-
-  let closing = false, bypass = false;
-  const orig = window.closeSettings;
-  function slideClose(done) {
-    const m = $('#settings-modal');
-    if (closing || !m || B.dataset.mode !== 'kid' || !m.classList.contains('active')) return false;
-    closing = true; m.classList.add('kf-closing');
-    setTimeout(() => { m.classList.remove('kf-closing'); closing = false; done(); }, 320);
-    return true;
-  }
-  if (typeof orig === 'function') {
-    window.closeSettings = function () {
-      const a = arguments;
-      if (!slideClose(() => orig.apply(window, a))) return orig.apply(this, a);
-    };
-  }
-  D.addEventListener('click', e => {
-    if (bypass) return;
-    const m = $('#settings-modal');
-    if (!m || !m.classList.contains('active')) return;
-    const t = e.target;
-    if (!(t === m || (t.closest && t.closest('#settings-modal .close-btn')))) return;
-    const go = () => { bypass = true; try { typeof orig === 'function' ? orig() : t.click(); } finally { bypass = false; } };
-    if (slideClose(go)) { e.stopImmediatePropagation(); e.preventDefault(); }
-  }, true);
 })();

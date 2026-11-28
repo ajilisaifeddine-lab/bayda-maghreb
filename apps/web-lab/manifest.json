@@ -1,21 +1,32 @@
 {
+  "id": "./",
   "name": "Bayda Lab",
-  "short_name": "Bayda",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#3b82f6",
+  "short_name": "Bayda Lab",
   "description": "A programming language for North African dialects.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "dir": "auto",
+  "background_color": "#f8fafc",
+  "theme_color": "#3b82f6",
   "icons": [
     {
-      "src": "assets/icon.png",
+      "src": "assets/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "assets/icon-large.png",
+      "src": "assets/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

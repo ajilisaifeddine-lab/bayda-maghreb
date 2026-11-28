@@ -1,6 +1,7 @@
 // تخزين حزم اللهجات المنزَّلة على جهاز المستخدم فقط. بلا شبكة ولا DOM، فيُختبر بلا متصفح.
 // الجهاز غير موثوق أيضاً: كل قراءة تُفحص من جديد بـ core/pack.ts، والمعطوب يُحذف ولا يُستعمل.
 import { validateDialectPack, type DialectPack } from "../../core/pack.js";
+import { validateLessons, type LessonsData } from "../../core/lessons.js";
 import type { Catalog } from "./downloader.js";
 
 const DIALECT_ID = /^[a-z0-9][a-z0-9-]*$/i;
@@ -202,7 +203,7 @@ export function createMemoryBackend(
 }
 
 /** منفذ IndexedDB الحقيقي، أو null إن لم يتوفر. يُختبر في المتصفح لا في Node. */
-export function createIndexedDbBackend(): StoreBackend | null {
+export function createIndexedDbBackend(dbName: string = DB_NAME, storeName: string = STORE_NAME): StoreBackend | null {
   let idb: IDBFactory | null = null;
   try {
     idb = typeof indexedDB === "undefined" ? null : indexedDB;
@@ -215,10 +216,10 @@ export function createIndexedDbBackend(): StoreBackend | null {
   const open = (): Promise<IDBDatabase> => {
     if (dbp) return dbp;
     dbp = new Promise<IDBDatabase>((resolve, reject) => {
-      const req = factory.open(DB_NAME, 1);
+      const req = factory.open(dbName, 1);
       req.onupgradeneeded = () => {
         const db = req.result;
-        if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME);
+        if (!db.objectStoreNames.contains(storeName)) db.createObjectStore(storeName);
       };
       req.onsuccess = () => {
         const db = req.result;
@@ -243,8 +244,8 @@ export function createIndexedDbBackend(): StoreBackend | null {
     const db = await open();
     return new Promise<T>((resolve, reject) => {
       let result: T;
-      const tx = db.transaction(STORE_NAME, mode);
-      const req = fn(tx.objectStore(STORE_NAME));
+      const tx = db.transaction(storeName, mode);
+      const req = fn(tx.objectStore(storeName));
       req.onsuccess = () => {
         result = req.result;
       };
@@ -260,3 +261,51 @@ export function createIndexedDbBackend(): StoreBackend | null {
     keys: () => run("readonly", (s) => s.getAllKeys()).then((k) => k.filter((x): x is string => typeof x === "string")),
   };
 }
+
+export interface StoredLessons { id: string; lessons: LessonsData; release: string; version: string; savedAt: number; }
+function parseLessonRec(id: string, raw: unknown): StoredLessons | null {
+  if (!isRecord(raw) || raw.id !== id) return null;
+  const { release, version, savedAt } = raw;
+  if (typeof release !== "string" || !RELEASE.test(release)) return null;
+  if (typeof version !== "string" || !SEMVER.test(version)) return null;
+  if (typeof savedAt !== "number" || !Number.isFinite(savedAt)) return null;
+  const check = validateLessons(raw.lessons);
+  return check.ok ? { id, lessons: check.data, release, version, savedAt } : null;
+}
+export class LessonStore {
+  private readonly mem = new Map<string, StoredLessons>();
+  constructor(private readonly backend: StoreBackend | null) {}
+  async save(id: string, lessons: unknown, release: string, version: string): Promise<SaveResult> {
+    if (typeof id !== "string" || !DIALECT_ID.test(id)) return { ok: false, error: "اسم لهجة غير صالح" };
+    if (typeof release !== "string" || !RELEASE.test(release) || typeof version !== "string" || !SEMVER.test(version)) return { ok: false, error: "بيانات الإصدار غير صالحة" };
+    const check = validateLessons(lessons);
+    if (!check.ok) return { ok: false, error: "حزمة الدروس مرفوضة: " + check.error };
+    const rec: StoredLessons = { id, lessons: check.data, release, version, savedAt: Date.now() };
+    if (this.backend) {
+      try {
+        const keys = await this.backend.keys();
+        if (!keys.includes(id) && keys.length >= MAX_STORED) return { ok: false, error: "بلغ الحد الأقصى للتخزين" };
+        await this.backend.put(id, rec);
+        this.mem.delete(id);
+        return { ok: true, persistent: true };
+      } catch {}
+    }
+    this.mem.set(id, rec);
+    return { ok: true, persistent: false };
+  }
+  async loadAll(): Promise<StoredLessons[]> {
+    const out: StoredLessons[] = Array.from(this.mem.values());
+    if (!this.backend) return out;
+    try {
+      const keys = await this.backend.keys();
+      for (const k of keys.slice(0, MAX_STORED)) {
+        if (!DIALECT_ID.test(k) || this.mem.has(k)) continue;
+        const raw = await this.backend.get(k);
+        const rec = parseLessonRec(k, raw);
+        if (rec) out.push(rec); else await this.backend.remove(k);
+      }
+    } catch {}
+    return out;
+  }
+}
+export const createLessonsIndexedDbBackend = (): StoreBackend | null => createIndexedDbBackend("bayda_lab_lessons", "lessons");

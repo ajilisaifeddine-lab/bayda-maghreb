@@ -35,14 +35,14 @@ export const examples: Record<string, DialectExample> = {
       "sah": "true"
     },
     "vocabulary": {
-      "خلاص": "end",
-      "كمل": "end",
-      "و": "and",
-      "ولا": "or",
-      "ماشي": "not",
-      "جيب": "input",
-      "دخل": "input",
-      "أقرا": "input"
+      "wach": "ماذا",
+      "3lach": "لماذا",
+      "bezzaf": "كثير",
+      "chwiya": "قليل",
+      "mlih": "جيد",
+      "dork": "الآن",
+      "win": "أين",
+      "kayen": "موجود"
     }
   },
   "kab-latn": {
@@ -53,14 +53,14 @@ export const examples: Record<string, DialectExample> = {
       "tidett": "true"
     },
     "vocabulary": {
-      "neɣ": "or",
-      "amar": "and",
-      "ur": "not",
-      "ulac": "empty",
-      "semsawi": "equal",
-      "ameqqran": "greater",
-      "ameẓyan": "less",
-      "yella": "exists"
+      "azul": "أهلاً",
+      "neɣ": "أو",
+      "amar": "و",
+      "ur": "ليس",
+      "ulac": "فارغ",
+      "semsawi": "يساوي",
+      "ameqqran": "أكبر",
+      "ameẓyan": "أصغر"
     }
   },
   "kab-tifinagh": {
@@ -104,14 +104,14 @@ export const examples: Record<string, DialectExample> = {
       "sahih": "true"
     },
     "vocabulary": {
-      "و": "and",
-      "ولا": "or",
-      "مش": "not",
-      "موش": "not",
-      "أو": "or",
-      "لكل": "foreach",
-      "لكل واحد": "foreach",
-      "حاجة وتخلاص": "variable"
+      "chno": "ماذا",
+      "shni": "ماذا",
+      "3lach": "لماذا",
+      "halba": "كثير",
+      "wajed": "كثير",
+      "chwiya": "قليل",
+      "bahi": "جيد",
+      "9nen": "جميل"
     }
   },
   "ma-arab": {
@@ -176,14 +176,14 @@ export const examples: Record<string, DialectExample> = {
       "haqq": "true"
     },
     "vocabulary": {
-      "أهلا": "hello",
-      "هلا": "hi",
-      "سلام": "salam",
-      "باي": "bye",
-      "ميرسي": "thanks",
-      "واخا": "ok",
-      "أيه": "yes",
-      "نو": "no"
+      "ach7al": "كم",
+      "yaser": "كثير",
+      "chway": "قليل",
+      "zayn": "جميل",
+      "dherk": "الآن",
+      "win": "أين",
+      "kifach": "كيف",
+      "lah": "لماذا"
     }
   },
   "shi-latn": {

@@ -2,6 +2,7 @@
 // لا ثقة بما يأتي من الشبكة: لا يُقبل ملف قبل أن يطابق الحجم والبصمة (sha256) المعلنين في الفهرس،
 // ثم تُفحص الحزمة كاملة بـ core/pack.ts. لا يُرفع أي شيء: طلبات GET فقط، بلا كوكيز ولا مرجع.
 import { validateDialectPack, type DialectPack } from "../../core/pack.js";
+import { validateLessons, type LessonsData } from "../../core/lessons.js";
 
 /** يُعرَّف وقت البناء فقط (esbuild --define). false في البناء العادي فيُحذف المصدر المحلي من الحزمة. */
 declare const __LOCAL_SOURCES__: boolean | undefined;
@@ -260,6 +261,38 @@ export async function downloadDialect(id: string, deps: DownloadDeps = {}): Prom
     const cat = await fetchCatalog(deps);
     if (!cat.ok) return fail(cat.error);
     return await downloadFromCatalog(cat.catalog, id, d);
+  } catch (e) {
+    return fail(messageOf(e));
+  }
+}
+
+export type LessonsDownloadResult =
+  | { ok: true; lessons: LessonsData; release: string; version: string }
+  | { ok: false; error: string };
+
+export async function downloadLessonsFromCatalog(catalog: Catalog, id: string, d: Deps): Promise<LessonsDownloadResult> {
+  try {
+    if (typeof id !== "string" || !DIALECT_ID.test(id)) return fail("اسم لهجة غير صالح");
+    const entry = has(catalog.dialects, id) ? catalog.dialects[id] : undefined;
+    if (!entry) return fail("اللهجة غير موجودة في الإصدار الحالي");
+    const meta = entry.files["lessons.json"];
+    if (!meta) return fail("حزمة الدروس غير متوفرة لهذه اللهجة بعد");
+    const raw = await fetchVerifiedPart(catalog, id, "lessons.json", meta, d);
+    const check = validateLessons(raw);
+    if (!check.ok) return fail("حزمة الدروس مرفوضة: " + check.error);
+    return { ok: true, lessons: check.data, release: catalog.release, version: entry.version };
+  } catch (e) {
+    return fail(messageOf(e));
+  }
+}
+
+export async function downloadDialectLessons(id: string, deps: DownloadDeps = {}): Promise<LessonsDownloadResult> {
+  try {
+    if (typeof id !== "string" || !DIALECT_ID.test(id)) return fail("اسم لهجة غير صالح");
+    const d = withDefaults(deps);
+    const cat = await fetchCatalog(deps);
+    if (!cat.ok) return fail(cat.error);
+    return await downloadLessonsFromCatalog(cat.catalog, id, d);
   } catch (e) {
     return fail(messageOf(e));
   }

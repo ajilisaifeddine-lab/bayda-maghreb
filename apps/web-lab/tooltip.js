@@ -58,8 +58,9 @@
     // التأكد من عدم الخروج عن حواف الشاشة أفقياً
     var winW = window.innerWidth || document.documentElement.clientWidth;
     var margin = 12;
-    if (left < 60) left = 60;
-    if (left > winW - 60) left = winW - 60;
+    var half = Math.min(tipRect.width, winW - margin * 2) / 2;
+    if (left < half + margin) left = half + margin;
+    if (left > winW - half - margin) left = winW - half - margin;
 
     tip.style.setProperty("top", top + "px");
     tip.style.setProperty("left", left + "px");
@@ -89,7 +90,16 @@
 
   function findTooltipTarget(node) {
     if (!node || !node.closest) return null;
-    return node.closest("[data-tooltip], [data-tooltip-key]");
+    var t = node.closest("[data-tooltip], [data-tooltip-key], [data-i18n-title]");
+    if (t && !t.hasAttribute("data-tooltip") && !t.hasAttribute("data-tooltip-key")) {
+      var ti = t.getAttribute("title");
+      if (ti) {
+        t.setAttribute("data-tooltip", ti);
+        if (!t.hasAttribute("aria-label")) t.setAttribute("aria-label", ti);
+        t.removeAttribute("title");
+      }
+    }
+    return t;
   }
 
   // أحداث اللمس (Long-Press للهاتف والتابلت)
@@ -139,6 +149,11 @@
     if (target && target === currentTarget) {
       hideTooltip();
     }
+  });
+
+  // منع قائمة المتصفح (حفظ الصورة، تحديد النص) على عناصر التلميح عند الضغط المطوّل
+  document.addEventListener("contextmenu", function (e) {
+    if (findTooltipTarget(e.target)) e.preventDefault();
   });
 
   window.BaydaTooltip = {
