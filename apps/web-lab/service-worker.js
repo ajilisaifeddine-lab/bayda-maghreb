@@ -1,6 +1,7 @@
-const CACHE_NAME="bayda-cache-v5";
+const CACHE_NAME="bayda-cache-v7";
 const ASSETS=["./","./about.js","./dict-ui.js","./engine.bundle.js","./i18n.js","./index.html","./kid-fun.css","./kid-fun.js","./kid-mode.js","./kid-studio.js","./kid-ui.css","./kid-ui.js","./lang-picker.js","./manifest.json","./notebook-ui.js","./polish.css","./settings.js","./style.css","./tooltip.js","./ui.js","./assets/amazigh.png","./assets/apple-touch-icon.png","./assets/dz.png","./assets/icon-192.png","./assets/icon-512.png","./assets/icon-maskable-512.png","./assets/kabyle.png","./assets/logo.png","./assets/ly.png","./assets/ma.png","./assets/mascot.webp","./assets/mr.png","./assets/tn.png"];
-self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(ASSETS)));});
+const CORE=ASSETS.filter(a=>!/512|apple-touch|mascot/.test(a));
+self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(CORE)));});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>k!==CACHE_NAME?caches.delete(k):null))).then(()=>self.clients.claim()));});
 self.addEventListener("message",e=>{if(e.data&&e.data.type==="SKIP_WAITING")self.skipWaiting();});
-self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;e.respondWith(fetch(e.request).then(r=>{if(r&&r.ok&&new URL(e.request.url).origin===self.location.origin){const cp=r.clone();caches.open(CACHE_NAME).then(c=>c.put(e.request,cp));}return r;}).catch(()=>caches.match(e.request,{ignoreSearch:true})));});
+self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;const u=new URL(e.request.url);if(u.origin!==self.location.origin)return;e.respondWith(caches.open(CACHE_NAME).then(c=>c.match(e.request,{ignoreSearch:true}).then(cached=>{const net=fetch(e.request).then(r=>{if(r&&r.ok)c.put(e.request,r.clone());return r;}).catch(()=>cached);if(cached){e.waitUntil(net);return cached;}return net;})));});

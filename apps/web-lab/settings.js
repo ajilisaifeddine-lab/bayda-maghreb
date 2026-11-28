@@ -27,7 +27,7 @@ var ST_DEFAULTS = {
   brackets: false,
   tts: false,
   translate: false,
-  motion: false,
+  motion: true,
   contrast: false,
   dyslexia: false,
   colorblind: false,

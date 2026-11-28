@@ -1126,3 +1126,14 @@ body[data-contrast="high"][data-mode="pro"] #bl-smart {
 .flags-ctx{text-align:center;font-size:.72rem;font-weight:700;color:var(--primary);opacity:.88;line-height:1.2;margin:2px auto 4px;pointer-events:none}
 .flags-ctx.is-learn{color:#059669}
 [data-theme="dark"] .flags-ctx.is-learn{color:#34d399}
+
+body[data-reduce-motion="on"] .modal-overlay,
+body[data-reduce-motion="on"] .wm-card,
+body[data-reduce-motion="on"] .lp-ov,
+body[data-reduce-motion="on"] .toast,
+body[data-reduce-motion="on"] .restore-bar,
+body[data-reduce-motion="on"] .dc-card,
+body[data-reduce-motion="on"] #settings-modal .st-modal,
+body[data-reduce-motion="on"] .ks-dict-overlay{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;}
+body[data-reduce-motion="on"] .dc-glow,body[data-reduce-motion="on"] .logo-img{filter:none!important;}
+html:not(.bl-intro) #bl-splash{display:none!important;}
