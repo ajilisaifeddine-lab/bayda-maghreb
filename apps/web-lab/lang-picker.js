@@ -9,101 +9,26 @@
   const rd = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } };
   const wr = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
 
-  const AR = { d: 'rtl', k: 'ar', l: ['أهلا بك', 'في'], b: 'بـيـضــاء', s: 'مختبر البرمجة', h: 'مرحباً', v: 'ar-SA',
-    q: 'هل تسمح لنا باكتشاف لهجتك تلقائياً؟', y: 'نعم، بالطبع', n: 'لا، سأختار بنفسي' };
-  const LW = (k, l, h, v, q, y, n) => ({ d: 'ltr', k: k, l: l, b: 'bayda-lab', s: '', h: h, v: v, q: q, y: y, n: n });
-  const DIAL = [
-    { id: 'tn-latn', n: 'تونسية', s: 'Tounsi', w: { l: ['أهلا بيك', 'في'], h: 'أهلا بيك' } },
-    { id: 'dz-latn', n: 'جزائرية', s: 'Dziri', w: { l: ['مرحبا بيك', 'في'], h: 'مرحبا بيك' } },
-    { id: 'ly-latn', n: 'ليبية', s: 'Libi', w: { l: ['أهلا بيك', 'في'], h: 'أهلا بيك' } },
-    { id: 'mr-latn', n: 'حسانية', s: 'Hassaniya', w: { l: ['مرحبا بيك', 'في'], h: 'مرحبا بيك' } },
-    { id: 'kab-latn', n: 'قبائلية', s: 'Taqbaylit', w: { k: 'kab', l: ['Ansuf', 'ɣer'], b: 'bayda-lab', s: '', h: 'Ansuf', v: '' } },
-    { id: 'shi-latn', n: 'شلحية', s: 'Tacelḥit', w: { k: 'shi', l: ['Ansuf', 'ɣ'], b: 'bayda-lab', s: '', h: 'Ansuf', v: '' } }
-  ];
+  const AR = { d: 'rtl', k: 'ar', h: 'مرحباً', v: 'ar-SA' };
+  const LW = (k, h, v) => ({ d: 'ltr', k: k, h: h, v: v });
   const WORLD = [
     { id: 'ar', n: 'العربية', s: 'Arabic', c: 'ع', w: {} },
-    { id: 'en', n: 'English', s: 'الإنجليزية', c: 'EN', w: LW('en', ['Welcome', 'to'], 'Hello', 'en-US', 'May we detect your dialect automatically?', 'Yes, of course', "No, I'll choose myself") },
-    { id: 'fr', n: 'Français', s: 'الفرنسية', c: 'FR', w: LW('fr', ['Bienvenue', 'dans'], 'Salut', 'fr-FR', 'Pouvons-nous détecter votre dialecte automatiquement ?', 'Oui, bien sûr', 'Non, je choisirai moi-même') },
-    { id: 'es', n: 'Español', s: 'الإسبانية', c: 'ES', w: LW('es', ['Bienvenido', 'a'], 'Hola', 'es-ES', '¿Nos permites detectar tu dialecto automáticamente?', 'Sí, claro', 'No, elegiré yo') },
-    { id: 'ru', n: 'Русский', s: 'الروسية', c: 'RU', w: LW('ru', ['Добро пожаловать', 'в'], 'Привет', 'ru-RU', 'Разрешите определить ваш диалект автоматически?', 'Да, конечно', 'Нет, выберу сам') },
-    { id: 'zh', n: '中文', s: 'الصينية', c: '中', w: LW('zh', ['欢迎', '来到'], '你好', 'zh-CN', '是否允许我们自动识别您的方言？', '好的', '不，我自己选择') }
+    { id: 'fr', n: 'Français', s: 'الفرنسية', c: 'FR', w: LW('fr', 'Salut', 'fr-FR') },
+    { id: 'en', n: 'English', s: 'الإنجليزية', c: 'EN', w: LW('en', 'Hello', 'en-US') },
+    { id: 'es', n: 'Español', s: 'الإسبانية', c: 'ES', w: LW('es', 'Hola', 'es-ES') },
+    { id: 'it', n: 'Italiano', s: 'الإيطالية', c: 'IT', w: LW('it', 'Ciao', 'it-IT') },
+    { id: 'de', n: 'Deutsch', s: 'الألمانية', c: 'DE', w: LW('de', 'Hallo', 'de-DE') },
+    { id: 'nl', n: 'Nederlands', s: 'الهولندية', c: 'NL', w: LW('nl', 'Hallo', 'nl-NL') }
   ];
-  const ALL = DIAL.concat(WORLD);
+  const ALL = WORLD;
   const W = id => Object.assign({}, AR, (ALL.find(o => o.id === id) || {}).w);
   const isKid = () => B.dataset.mode === 'kid';
 
-  const css = `
-.logo-container{position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.logo-container::after{content:"🌐";position:absolute;bottom:4px;inset-inline-end:8px;width:24px;height:24px;display:grid;place-items:center;font-size:14px;background:var(--panel,#fff);border:2px solid var(--border,#e2e8f0);border-radius:50%;pointer-events:none}
-body.lp-new .logo-container::after{animation:lpPulse 1.6s ease-in-out infinite}
-.lp-ov{position:fixed;inset:0;z-index:1300;display:flex;align-items:flex-end;justify-content:center;background:rgba(15,23,42,.45);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);animation:lpFade .25s ease-out}
-.lp-ov.out{animation:lpFadeOut .3s ease-in forwards}
-.lp-sheet{width:100%;max-width:520px;max-height:88dvh;overflow-y:auto;background:var(--panel,#fff);color:var(--text,#0f172a);border:2px solid var(--border,#e2e8f0);border-bottom:0;border-radius:28px 28px 0 0;padding:6px 16px 26px;box-shadow:0 -12px 40px rgba(0,0,0,.2);animation:lpUp .45s cubic-bezier(.3,1.2,.5,1)}
-.lp-ov.out .lp-sheet{animation:lpDown .3s cubic-bezier(.5,0,.9,.5) forwards}
-.lp-head{position:sticky;top:0;z-index:2;background:var(--panel,#fff);padding:6px 0 10px;touch-action:none}
-.lp-grab{display:block;width:46px;height:5px;border-radius:9px;background:var(--border,#cbd5e1);margin:2px auto 10px}
-.lp-brand{display:flex;align-items:center;gap:12px}
-.lp-logo,.wl-logo{width:48px;height:48px;object-fit:contain;animation:lpSpin 14s linear infinite;filter:drop-shadow(0 0 6px var(--primary,#3b82f6))}
-.lp-brand h2{font-size:1.2rem}
-.lp-brand p{margin-top:2px;font-size:.85rem;color:var(--text-muted,#64748b)}
-.lp-sec{font-size:.9rem;font-weight:800;color:var(--text-muted,#64748b);margin:14px 4px 8px}
-.lp-sec small{font-weight:600;opacity:.8}
-.lp-row{display:grid;grid-template-columns:48px 1fr 28px;align-items:center;gap:12px;width:100%;min-height:60px;padding:8px 12px;margin-bottom:8px;background:var(--bg,#f8fafc);color:inherit;border:2px solid var(--border,#e2e8f0);border-radius:var(--radius,14px);cursor:pointer;text-align:start;font:inherit;transition:transform .12s,box-shadow .12s;position:relative}
-.lp-row:active{transform:scale(.98)}
-.lp-row.on{border-color:var(--primary,#3b82f6);background:color-mix(in srgb,var(--primary,#3b82f6) 12%,var(--panel,#fff))}
-.lp-ico{position:relative;width:48px;height:48px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:var(--primary,#3b82f6);color:var(--on-primary,#fff);font-weight:800;font-size:1.05rem;border:2px solid var(--border,#e2e8f0)}
-.lp-ico img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.lp-nm b{display:block;font-size:1.1rem}
-.lp-nm small{display:block;font-size:.85rem;color:var(--text-muted,#64748b)}
-.lp-soon{display:inline-block;margin-top:2px;font-style:normal;font-size:.7rem;font-weight:700;padding:0 7px;border-radius:99px;background:var(--border,#e2e8f0);color:var(--text-muted,#64748b)}
-.lp-ck{visibility:hidden;color:var(--primary,#3b82f6);font-weight:900;font-size:1.3rem;text-align:center}
-.lp-row.on .lp-ck{visibility:visible}
-.lp-grp.w{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.lp-grp.w .lp-row{grid-template-columns:36px 1fr 18px;gap:8px;min-height:52px;padding:6px 10px;margin:0}
-.lp-grp.w .lp-ico{width:36px;height:36px;font-size:.85rem}
-.lp-grp.w .lp-nm b{font-size:1rem}
-.lp-grp.w .lp-nm small{font-size:.75rem}
-.lp-note{margin:10px 4px 0;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--primary,#3b82f6) 10%,var(--panel,#fff));font-size:.9rem;text-align:center}
-[data-mode="kid"] .lp-sheet{border-width:4px;border-radius:34px 34px 0 0}
-[data-mode="kid"] .lp-grp{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-[data-mode="kid"] .lp-grp .lp-row{grid-template-columns:1fr;justify-items:center;align-content:center;text-align:center;gap:6px;min-height:118px;padding:10px 6px;margin:0;min-width:0;border-width:3px;border-radius:22px;box-shadow:0 4px 0 var(--border);animation:lpPop .4s cubic-bezier(.34,1.56,.64,1) both;animation-delay:calc(var(--i) * 45ms)}
-[data-mode="kid"] .lp-grp .lp-row:active{transform:translateY(4px);box-shadow:none}
-[data-mode="kid"] .lp-grp .lp-ico{width:64px;height:64px;font-size:1.3rem}
-[data-mode="kid"] .lp-grp .lp-nm b{font-size:1rem}
-[data-mode="kid"] .lp-grp .lp-nm small,[data-mode="kid"] .lp-soon{display:none}
-[data-mode="kid"] .lp-grp .lp-ck{position:absolute;top:6px;inset-inline-end:8px;width:24px;height:24px;line-height:24px;border-radius:50%;background:var(--primary,#3b82f6);color:#fff;font-size:.9rem}
-body.lp-open #consent-modal{visibility:hidden}
-#consent-modal .modal-content{text-align:center}
-#consent-modal h2{display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.25;margin-bottom:10px}
-body:not([data-mode="kid"]) #consent-modal.active .modal-content{animation:lpPop .45s cubic-bezier(.34,1.56,.64,1)}
-.wl-top{display:flex;justify-content:center;margin-bottom:6px}
-.wl-mascot{display:none}
-.wl-hand{font-size:1.7rem;display:inline-block;transform-origin:70% 70%;animation:wlWave 2.4s ease-in-out infinite}
-.wl-a{font-size:1.15rem;font-weight:700}
-.wl-b{font-size:.85rem;font-weight:600;color:var(--text-muted,#64748b)}
-.wl-brand{font-size:2.1rem;font-weight:900;color:var(--primary,#3b82f6);line-height:1.3}
-.wl-brand.lat{letter-spacing:.03em}
-.wl-s{font-size:1rem;font-weight:600;color:var(--text-muted,#64748b)}
-[data-mode="kid"] .wl-logo{display:none}
-[data-mode="kid"] .wl-mascot{display:flex;align-items:flex-end;gap:8px}
-[data-mode="kid"] .wl-mascot img{width:84px;height:84px;object-fit:contain;animation:kbFloat 3.2s ease-in-out infinite;filter:drop-shadow(0 8px 10px rgba(0,0,0,.2))}
-[data-mode="kid"] .wl-say{position:relative;margin-bottom:46px;background:#fff;color:#2a1a5e;border:3px solid var(--primary);border-radius:16px;padding:6px 14px;font-weight:800;font-size:1.05rem}
-[data-mode="kid"] .wl-brand{font-size:2.5rem}
-.st-lang-btn{min-width:120px}
-body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .wl-logo,body[data-reduce-motion="on"] .wl-hand,body[data-reduce-motion="on"] .lp-row,body[data-reduce-motion="on"] .wl-mascot img,body.lp-new[data-reduce-motion="on"] .logo-container::after{animation:none}
-@keyframes lpFade{from{opacity:0}to{opacity:1}}
-@keyframes lpFadeOut{to{opacity:0}}
-@keyframes lpUp{0%{transform:translateY(100%)}70%{transform:translateY(-8px)}100%{transform:none}}
-@keyframes lpDown{to{transform:translateY(105%)}}
-@keyframes lpSpin{to{transform:rotate(-360deg)}}
-@keyframes lpPop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
-@keyframes lpPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
-@keyframes wlWave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(16deg)}20%,40%{transform:rotate(-10deg)}}`;
-  const st = D.createElement('style'); st.id = 'lp-css'; st.textContent = css; D.head.appendChild(st);
-
   let ov = null, prevFocus = null;
-  const cur = () => rd('bayda_ui_lang', '') || ($('.flag-btn.active') ? $('.flag-btn.active').dataset.dialect : 'tn-latn');
-  const nameOf = id => { const o = ALL.find(x => x.id === id); return o ? o.n : 'تونسية'; };
+  const cur = () => { const v = rd('bayda_ui_lang', ''); return WORLD.some(w => w.id === v) ? v : 'ar'; };
+  const tr = (k, fb) => { try { const d = window.BaydaI18n && window.BaydaI18n.dict, l = H.lang || 'ar'; return (d && ((d[l] && d[l][k]) || (d.ar && d.ar[k]))) || fb; } catch (e) { return fb; } };
+  const wsub = o => { try { const v = new Intl.DisplayNames([H.lang || 'ar'], { type: 'language' }).of(o.id); return v && v !== o.n ? v : ''; } catch (e) { return o.s; } };
+  const nameOf = id => { const o = WORLD.find(x => x.id === id); return o ? o.n : 'العربية'; };
   const applyWorld = id => { if (WORLD.some(w => w.id === id)) { H.lang = id; B.dataset.uiLang = id; } };
   applyWorld(rd('bayda_ui_lang', ''));
   if (rd('bayda_lang_seen', '') !== '1') B.classList.add('lp-new');
@@ -131,35 +56,51 @@ body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .wl-logo,bo
     const sb = $('#st-uilang'); if (sb) sb.textContent = nameOf(cur()) + ' ›';
   }
 
-  function pick(o, isD) {
-    seen(); wr('bayda_ui_lang', o.id);
+  async function pick(o, rowBtn) {
+    seen();
+    wr("bayda_ui_lang", o.id);
     if (isKid()) say(o);
-    if (isD) {
-      const fb = $('.flag-btn[data-dialect="' + o.id + '"]');
-      if (fb) fb.click();
-    } else applyWorld(o.id);
-    D.dispatchEvent(new CustomEvent('bayda:uilang', { detail: { id: o.id, dialect: isD } }));
-    mark();
-    if (isD || o.id === 'ar') { setTimeout(close, 260); return; }
-    const note = $('.lp-note', ov);
-    note.textContent = 'اخترت «' + o.n + '». ستُفعَّل ترجمة الواجهة عند ربط ملف اللغة.';
-    note.hidden = false;
-    setTimeout(close, 1500);
+    let ck = null;
+    if (rowBtn) {
+      rowBtn.classList.add("loading");
+      ck = rowBtn.querySelector(".lp-ck");
+      if (ck) {
+        ck.textContent = "";
+        const sp = D.createElement("span");
+        sp.className = "lp-spin-loader";
+        ck.appendChild(sp);
+      }
+    }
+    try {
+      applyWorld(o.id);
+      if (window.BaydaI18n) {
+        if (typeof window.BaydaI18n.loadAndApply === "function") {
+          await window.BaydaI18n.loadAndApply(o.id);
+        } else if (typeof window.BaydaI18n.apply === "function") {
+          window.BaydaI18n.apply(o.id);
+        }
+      }
+      D.dispatchEvent(new CustomEvent("bayda:uilang", { detail: { id: o.id, dialect: false } }));
+    } catch (e) {
+      console.warn("Language change failed:", e);
+    } finally {
+      mark();
+      if (rowBtn) {
+        rowBtn.classList.remove("loading");
+        if (ck) ck.textContent = "\u2713";
+      }
+      setTimeout(close, 260);
+    }
   }
 
-  function row(o, i, isD) {
+  function row(o, i) {
     const b = D.createElement('button');
     b.type = 'button'; b.className = 'lp-row'; b.dataset.id = o.id; b.style.setProperty('--i', i);
-    b.innerHTML = '<span class="lp-ico"></span><span class="lp-nm"><b></b><small></small></span><span class="lp-ck">✓</span>';
-    $('b', b).textContent = o.n; $('small', b).textContent = o.s;
-    if (!isD && o.id !== 'ar') { const e = D.createElement('em'); e.className = 'lp-soon'; e.textContent = 'قريباً'; $('.lp-nm', b).appendChild(e); }
-    const ic = $('.lp-ico', b);
-    if (isD) {
-      ic.textContent = o.s.charAt(0);
-      const im = $('.flag-btn[data-dialect="' + o.id + '"] img');
-      if (im) { const x = D.createElement('img'); x.src = im.getAttribute('src'); x.alt = ''; x.onerror = () => x.remove(); ic.appendChild(x); }
-    } else ic.textContent = o.c;
-    b.addEventListener('click', () => pick(o, isD));
+    b.innerHTML = '<span class="lp-ico"></span><span class="lp-nm"><b></b><small></small></span><span class="lp-ck">\u2713</span>';
+    $('b', b).textContent = o.n;
+    const sn = $('small', b); sn.textContent = wsub(o); sn.hidden = !sn.textContent;
+    $('.lp-ico', b).textContent = o.c;
+    b.addEventListener('click', () => pick(o, b));
     return b;
   }
 
@@ -170,20 +111,16 @@ body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .wl-logo,bo
     prevFocus = D.activeElement;
     B.classList.add('lp-open');
     ov = D.createElement('div');
-    ov.className = 'lp-ov'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'اللهجة ولغة الواجهة');
+    ov.className = 'lp-ov'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', tr('uiLangRow', 'لغة الواجهة'));
     ov.innerHTML = '<div class="lp-sheet"><div class="lp-head"><i class="lp-grab"></i><div class="lp-brand"><img class="lp-logo" alt=""><div><h2>اختر لهجتك ولغة التطبيق</h2><p dir="ltr">Choose your dialect &amp; language</p></div></div></div><div class="lp-list"></div><p class="lp-note" hidden></p></div>';
     const logo = $('#main-logo');
     $('.lp-logo', ov).src = logo ? logo.getAttribute('src') : 'assets/logo.png';
     const list = $('.lp-list', ov);
-    let i = 0;
-    const sec = (t, sub, cls, arr, isD) => {
-      const h = D.createElement('h3'); h.className = 'lp-sec'; h.textContent = t + ' ';
-      const s = D.createElement('small'); s.textContent = sub; h.appendChild(s); list.appendChild(h);
-      const g = D.createElement('div'); g.className = 'lp-grp ' + cls; list.appendChild(g);
-      arr.forEach(o => g.appendChild(row(o, i++, isD)));
-    };
-    sec('🗣️ لهجتك', '(كلمات البرمجة)', 'd', DIAL, true);
-    sec('🌍 لغة الواجهة', '', 'w', WORLD, false);
+    const hh = $('h2', ov), hs = $('.lp-brand p', ov);
+    if (hh) hh.textContent = tr('lpTitle', 'اختر لغة التطبيق');
+    if (hs) hs.remove();
+    const g = D.createElement('div'); g.className = 'lp-grp w'; list.appendChild(g);
+    WORLD.forEach((o, i) => g.appendChild(row(o, i)));
     B.appendChild(ov);
     mark();
     ov.addEventListener('click', e => { if (e.target === ov) close(); });
@@ -191,13 +128,13 @@ body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .wl-logo,bo
 
     const head = $('.lp-head', ov), sheet = $('.lp-sheet', ov);
     let y0 = null;
-    head.addEventListener('pointerdown', e => { y0 = e.clientY; sheet.style.animation = 'none'; head.setPointerCapture(e.pointerId); });
-    head.addEventListener('pointermove', e => { if (y0 !== null) sheet.style.transform = 'translateY(' + Math.max(0, e.clientY - y0) + 'px)'; });
+    head.addEventListener('pointerdown', e => { y0 = e.clientY; sheet.style.transition = 'none'; head.setPointerCapture(e.pointerId); });
+    head.addEventListener('pointermove', e => { if (y0 !== null) sheet.style.translate = '0 ' + Math.max(0, e.clientY - y0) + 'px'; });
     const end = e => {
       if (y0 === null) return;
       const dy = e.clientY - y0; y0 = null;
-      if (dy > 90) { sheet.style.transform = ''; sheet.style.animation = ''; close(); }
-      else { sheet.style.transition = 'transform .25s'; sheet.style.transform = ''; setTimeout(() => { sheet.style.transition = ''; }, 260); }
+      if (dy > 90) { sheet.style.transition = 'translate .3s cubic-bezier(.4, 0, 1, 1)'; sheet.style.translate = '0 105%'; close(); }
+      else { sheet.style.transition = 'translate .25s cubic-bezier(.2, .8, .2, 1)'; sheet.style.translate = ''; setTimeout(() => { sheet.style.transition = ''; }, 260); }
     };
     head.addEventListener('pointerup', end); head.addEventListener('pointercancel', end);
     const a = $('.lp-row.on', ov); if (a) a.focus({ preventScroll: true });
@@ -211,14 +148,14 @@ body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .wl-logo,bo
       o.remove(); if (ov === o) ov = null;
       D.removeEventListener('keydown', onKey);
       B.classList.remove('lp-open');
-      D.dispatchEvent(new CustomEvent('bayda:lpclosed'));
+      try { D.dispatchEvent(new CustomEvent('bayda:lpclosed')); } catch (e) {}
       if (prevFocus && prevFocus.focus) prevFocus.focus();
     }, 300);
   }
 
   const lc = $('.logo-container');
   if (lc) {
-    lc.setAttribute('role', 'button'); lc.tabIndex = 0; lc.setAttribute('aria-label', 'اللهجة ولغة الواجهة');
+    lc.setAttribute('role', 'button'); lc.tabIndex = 0; lc.setAttribute('aria-label', tr('uiLangRow', 'لغة الواجهة'));
     lc.addEventListener('click', open);
     lc.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
   }
@@ -226,53 +163,15 @@ body[data-reduce-motion="on"] .lp-logo,body[data-reduce-motion="on"] .wl-logo,bo
   const sm = $('#settings-modal .st-modal');
   if (sm && !$('#st-uilang')) {
     const first = $('.st-section', sm);
-    const sec = D.createElement('div'); sec.className = 'st-section'; sec.textContent = 'اللغة';
+    const sec = D.createElement('div'); sec.className = 'st-section'; sec.setAttribute('data-sec', 'lang'); sec.setAttribute('data-i18n-key', 'langSec'); sec.textContent = 'اللغة';
     const rw = D.createElement('div'); rw.className = 'st-row';
-    rw.innerHTML = '<span class="st-label">اللهجة ولغة الواجهة</span><button type="button" class="btn-secondary st-lang-btn" id="st-uilang"></button>';
+    rw.innerHTML = '<span class="st-label" data-i18n-key="uiLangRow">لغة الواجهة</span><button type="button" class="btn-secondary st-lang-btn" id="st-uilang"></button>';
     sm.insertBefore(sec, first); sm.insertBefore(rw, first);
     $('#st-uilang').addEventListener('click', open);
-    sm.querySelectorAll('.st-label').forEach(l => { if (l.textContent.trim() === 'لغة البرنامج') l.textContent = 'لغة البرمجة'; });
+    if (window.BaydaI18n && typeof window.BaydaI18n.updateDom === 'function') { try { window.BaydaI18n.updateDom(sm); } catch (e) {} }
     mark();
   }
 
-  D.addEventListener('click', e => {
-    const f = e.target.closest && e.target.closest('.flag-btn');
-    if (f && f.dataset.dialect) { wr('bayda_ui_lang', f.dataset.dialect); apply(f.dataset.dialect); mark(); }
-  });
-
-  function apply(id) {
-    const t = W(id);
-    const m = $('#consent-modal .modal-content');
-    if (!m) return;
-    const h = $('h2', m), p = $('p', m), bs = m.querySelectorAll('.modal-actions button');
-    m.dir = t.d; m.lang = t.k;
-    let top = $('.wl-top', m);
-    if (!top) {
-      top = D.createElement('div'); top.className = 'wl-top';
-      top.innerHTML = '<img class="wl-logo" alt=""><div class="wl-mascot"><img src="assets/mascot.webp" alt=""><span class="wl-say"></span></div>';
-      const lg = $('#main-logo'); $('.wl-logo', top).src = lg ? lg.getAttribute('src') : 'assets/logo.png';
-      m.insertBefore(top, h);
-    }
-    $('.wl-say', top).textContent = t.h + '!';
-    h.textContent = '';
-    const add = (cls, txt) => { const s = D.createElement('span'); s.className = cls; s.textContent = txt; s.dir = 'auto'; h.appendChild(s); return s; };
-    add('wl-hand', '👋').removeAttribute('dir');
-    add('wl-a', t.l[0]); add('wl-b', t.l[1]);
-    const br = add('wl-brand' + (t.b === 'bayda-lab' ? ' lat' : ''), t.b);
-    if (t.b !== 'bayda-lab') br.setAttribute('aria-label', 'بيضاء');
-    if (t.s) add('wl-s', t.s);
-    p.textContent = t.q;
-    if (bs[0]) bs[0].textContent = t.y;
-    if (bs[1]) bs[1].textContent = t.n;
-  }
-  apply(rd('bayda_ui_lang', ''));
-  D.addEventListener('bayda:uilang', e => apply(e.detail && e.detail.id));
-  D.addEventListener('bayda:lpclosed', () => {
-    const o = $('#consent-modal'), m = $('#consent-modal .modal-content');
-    if (!o || !m) return;
-    o.style.animation = 'none'; m.style.animation = 'none'; void o.offsetWidth;
-    o.style.animation = 'lpFade .3s ease-out'; m.style.animation = '';
-  });
-
+  D.addEventListener('bayda:uilang_changed', () => { mark(); });
   if (rd('bayda_lang_seen', '') !== '1') setTimeout(open, 900);
 })();

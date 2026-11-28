@@ -1,0 +1,10 @@
+{
+  "id": "ma-latn",
+  "code": "ma-latn",
+  "name": "الدارجة المغربية",
+  "version": "1.0.0",
+  "script": "latn",
+  "country": "المغرب",
+  "iso639_3": "ary",
+  "reviewStatus": "verified"
+}

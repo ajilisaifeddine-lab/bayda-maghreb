@@ -1,11 +1,10 @@
 import type { Token } from "../core/lexer.js";
-import type { Arg } from "../core/program.js";
+import type { Arg } from "../core/ast.js";
 
 const wordy = (t: Token) => t.type === "IDENT" || t.type === "KEYWORD" || t.type === "NUMBER";
 
 export const quote = (s: string) => JSON.stringify(s);
 export const LOG = new Set(["print", "log", "console.log"]);
-export const jsWord = (t: { type: string; value: string }) => t.value;
 export const arg = (a: Arg, word: (t: Token) => string): string =>
   a.type === "String" ? quote(a.value) : a.type === "Raw" ? renderTokens(a.tokens, word) : a.value;
 

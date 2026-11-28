@@ -1,6 +1,6 @@
 {
   "name": "bayda-maghreb",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "A programming language for North African dialects — transpiles to JavaScript & Python.",
   "type": "module",
   "author": "Ajili Saifeddine",
@@ -62,8 +62,9 @@
     "build:all": "npm run build && npm run lab:build",
     "dialects": "node scripts/build-dialects.cjs",
     "audit": "node scripts/audit.cjs",
-    "lab:build": "npm run dialects && esbuild apps/web-lab/main.ts --bundle --format=esm --outfile=apps/web-lab/main.js --platform=browser",
-    "lab:check": "node scripts/check-lab-build.cjs",
+    "catalog": "node scripts/build-catalog.cjs",
+    "lab:build": "npm run dialects && esbuild apps/web-lab/app.ts --bundle --minify --format=iife --target=es2019 --platform=browser --define:__LOCAL_SOURCES__=false --outfile=apps/web-lab/engine.bundle.js",
+    "lab:build:local": "npm run dialects && esbuild apps/web-lab/app.ts --bundle --minify --format=iife --target=es2019 --platform=browser --define:__LOCAL_SOURCES__=true --outfile=apps/web-lab/engine.bundle.js",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {

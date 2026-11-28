@@ -4,5 +4,7 @@
   "version": "1.0.0",
   "requiresConsent": true,
   "description": "اللغة التشلحيتية بالحروف اللاتينية",
-  "reviewStatus": "pending"
+  "reviewStatus": "pending",
+  "script": "Latin",
+  "country": "المغرب"
 }

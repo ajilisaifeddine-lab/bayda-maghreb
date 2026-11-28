@@ -1,0 +1,10 @@
+{
+  "id": "ly-arab",
+  "code": "ly-arab",
+  "name": "ليبية (حرف عربي)",
+  "version": "1.0.0",
+  "script": "Arabic",
+  "country": "ليبيا",
+  "iso639_3": "ayl",
+  "reviewStatus": "verified"
+}

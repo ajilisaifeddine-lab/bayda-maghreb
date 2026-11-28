@@ -11,6 +11,9 @@ if (!fs.existsSync(packagesDir)) {
 }
 
 const dirs = fs.readdirSync(packagesDir).filter(f => fs.statSync(path.join(packagesDir, f)).isDirectory() && fs.existsSync(path.join(packagesDir, f, "manifest.json")));
+const conceptsFile = path.join(process.cwd(), "core/concepts.json");
+const conceptsJson = fs.existsSync(conceptsFile) ? JSON.parse(fs.readFileSync(conceptsFile, "utf8")) : {};
+const tierList = conceptsJson.tiers ? [...(conceptsJson.tiers.tier1_basic||[]), ...(conceptsJson.tiers.tier2_flow_vars||[]), ...(conceptsJson.tiers.tier3_pro||[])] : [];
 let successCount = 0;
 let errorCount = 0;
 let totalKeywords = 0;
@@ -36,11 +39,13 @@ dirs.forEach(dir => {
         
         const kwCount = Object.keys(keywords).length;
         const vocabCount = Object.keys(vocab).length;
+        const kwVals = new Set(Object.values(keywords));
+        const tierInfo = tierList.length ? " | Tiers: " + tierList.filter(c => kwVals.has(c)).length + "/" + tierList.length : "";
         
         totalKeywords += kwCount;
         totalVocab += vocabCount;
         
-        console.log(`${messages.success} ${dir.padEnd(15)} | ID: ${manifest.id.padEnd(15)} | Keywords: ${kwCount.toString().padEnd(4)} | Vocabulary: ${vocabCount}`);
+        console.log(`${messages.success} ${dir.padEnd(15)} | ID: ${manifest.id.padEnd(15)} | Keywords: ${kwCount.toString().padEnd(4)} | Vocabulary: ${vocabCount.toString().padEnd(4)}${tierInfo}`);
         successCount++;
     } catch (e) {
         console.error(`${messages.error} ${dir.padEnd(15)} | ${e.message}`);

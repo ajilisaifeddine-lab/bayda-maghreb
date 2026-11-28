@@ -1,13 +1,19 @@
 import { Lexer, Token } from "./lexer.js";
 import { normalize } from "./normalizer.js";
-import { parseProgram, Program } from "./program.js";
+import { parseProgram } from "./program.js";
+import type { Program } from "./ast.js";
 import { toJS } from "../writers/js-writer.js";
 import { toPython } from "../writers/python-writer.js";
+import { toC } from "../writers/c-writer.js";
+import { toCpp } from "../writers/cpp-writer.js";
+import { toJava } from "../writers/java-writer.js";
+import { toPHP } from "../writers/php-writer.js";
+import { toAlgo } from "../writers/algo-writer.js";
 import { BaydaError, MAX_SOURCE_BYTES } from "./errors.js";
 
-export type Target = "js" | "py";
+export type Target = "js" | "py" | "c" | "cpp" | "java" | "php" | "algo";
 
-const VALID_TARGETS: readonly Target[] = ["js", "py"];
+const VALID_TARGETS: readonly Target[] = ["js", "py", "c", "cpp", "java", "php", "algo"];
 
 /** الحد الأدنى المطلوب لتشغيل المسار: خريطة كلمات اللهجة. */
 export interface TranslateInput {
@@ -15,7 +21,7 @@ export interface TranslateInput {
   keywords: Record<string, string>;
   /** معرّف اللهجة (للتوثيق فقط). */
   id?: string;
-  /** الهدف: JavaScript أو Python. الافتراضي "js". */
+  /** الهدف: js, py, c, cpp, java, php, algo. الافتراضي "js". */
   target?: Target;
 }
 
@@ -63,11 +69,7 @@ function assertSource(source: unknown): asserts source is string {
  *   packages/*.json → loader → lexer → normalizer → program.ts → writers
  *
  * تستقبل خريطة الكلمات جاهزة (من loader في Node، أو من fetch في المتصفح)
- * ثم تنفّذ: lex → normalize → parseProgram → toJS/toPython.
- *
- * @example
- *   translate('goul("salam")', { keywords: { goul: "print" }, target: "js" }).code
- *   // => 'console.log("salam");'
+ * ثم تنفّذ: lex → normalize → parseProgram → writers.
  */
 export function translate(source: string, input: TranslateInput): TranslateResult {
   assertSource(source);
@@ -91,7 +93,31 @@ export function translate(source: string, input: TranslateInput): TranslateResul
     const ast = parseProgram(normalized);
 
     // 4) الكتابة إلى الهدف
-    const code = target === "py" ? toPython(ast, keywords) : toJS(ast, keywords);
+    let code: string;
+    switch (target) {
+      case "py":
+        code = toPython(ast, keywords);
+        break;
+      case "c":
+        code = toC(ast, keywords);
+        break;
+      case "cpp":
+        code = toCpp(ast, keywords);
+        break;
+      case "java":
+        code = toJava(ast, keywords);
+        break;
+      case "php":
+        code = toPHP(ast, keywords);
+        break;
+      case "algo":
+        code = toAlgo(ast, keywords);
+        break;
+      case "js":
+      default:
+        code = toJS(ast, keywords);
+        break;
+    }
 
     return { code, target, dialect: input.id, tokens: normalized, ast, keywords };
   } catch (e) {

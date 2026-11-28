@@ -1,0 +1,12 @@
+{
+  "id": "ma-arab",
+  "code": "ma-arab",
+  "name": "مغربية (حرف عربي)",
+  "version": "1.0.0",
+  "script": "Arabic",
+  "country": "المغرب",
+  "iso639_3": "ary",
+  "tribute": "Dedicated to Darija-Lang community pioneers",
+  "description": "الدارجة المغربية بالحرف العربي - مستلهمة من مبادرة Darija-Lang",
+  "reviewStatus": "verified"
+}

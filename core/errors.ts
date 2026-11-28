@@ -14,6 +14,7 @@ export type BaydaErrorCode =
   | "INVALID_SOURCE"
   | "SOURCE_TOO_LARGE"
   | "PARSE_ERROR"
+  | "UNSUPPORTED_NODE"
   | "SCHEMA_ERROR";
 
 /** الحد الأقصى لحجم المصدر (بالبايت) لمنع الاستهلاك المفرط. */

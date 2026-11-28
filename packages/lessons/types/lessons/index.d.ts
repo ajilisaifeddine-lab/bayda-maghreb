@@ -44,7 +44,7 @@ export interface LessonsToolkitConfig {
  * achievements, kid companion guides, and pronunciation data from one call.
  */
 export declare function createLessonsToolkit(config?: LessonsToolkitConfig): {
-    version: '1.0.0';
+    version: '1.0.1';
     curriculum: LessonTemplate[];
     dialects: DialectPack[];
     starterDialects: DialectPack[];

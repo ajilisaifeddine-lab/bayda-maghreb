@@ -67,10 +67,22 @@ function dcRenderChips() {
     words = words.slice(0, 30);
   }
   if (!words.length) {
-    box.innerHTML = '<span style="color:#64748b;font-size:0.9rem;padding:8px;">لا توجد مفردات</span>';
+    box.textContent = "";
+    var none = document.createElement("span");
+    none.style.cssText = "color:#64748b;font-size:0.9rem;padding:8px;";
+    none.textContent = tx("dcNone", "لا توجد مفردات");
+    box.appendChild(none);
     DC.chips = []; return;
   }
-  box.innerHTML = words.map((w, i) => '<button class="chip dc-chip dc-tap" data-w="' + w + '" data-i="' + i + '">' + w + '</button>').join('');
+  box.textContent = "";
+  words.forEach(function (w, i) {
+    var b = document.createElement("button");
+    b.className = "chip dc-chip dc-tap";
+    b.setAttribute("data-w", w);
+    b.setAttribute("data-i", String(i));
+    b.textContent = w;
+    box.appendChild(b);
+  });
   DC.chips = box.querySelectorAll(".dc-chip");
   DC.currentWords = words;
   dcBindChips();
@@ -142,8 +154,12 @@ function dcPeek(node, e) {
   var tip = document.createElement("div");
   tip.className = "dc-peek";
   tip.id = "dc-peek";
-  tip.innerHTML = '<b>' + (node.getAttribute("data-w") || "+") + "</b>" +
-                  '<span>اضغط مطوّلًا للمعاينة — التفاصيل تُفتح بالنقر</span>';
+  var tipW = document.createElement("b");
+  tipW.textContent = node.getAttribute("data-w") || "+";
+  var tipHint = document.createElement("span");
+  tipHint.textContent = tx("dcHint", "اضغط مطوّلًا للمعاينة — التفاصيل تُفتح بالنقر");
+  tip.appendChild(tipW);
+  tip.appendChild(tipHint);
 
   var rect = node.getBoundingClientRect();
   tip.style.left = Math.max(8, rect.left) + "px";
@@ -160,6 +176,79 @@ function dcPeek(node, e) {
 }
 
 /* ---------- 4) البطاقة ---------- */
+/* مساحة للبطاقة (هاتف): تُصغَّر لوحتا المحرر والنتيجة بآلية اللوحات نفسها، وتعودان عند إغلاق البطاقة */
+var dcShrunk = [];
+var dcRoomMade = false;
+function dcMakeRoom() {
+  try {
+    if (dcRoomMade) return;
+    if (typeof isDrawerMode === "function" && isDrawerMode()) return;
+    if (!window.matchMedia || !window.matchMedia("(max-width: 768px)").matches) return;
+    if (typeof window.togglePane !== "function") return;
+    var dp = document.getElementById("dict-pane");
+    if (!dp || dp.classList.contains("hidden") || dp.classList.contains("pane-minimized")) return;
+    dcRoomMade = true;
+    ["editor-pane", "output-pane"].forEach(function (id) {
+      var p = document.getElementById(id);
+      if (!p || p.classList.contains("pane-minimized")) return;
+      var b = p.querySelector('.icon-btn[onclick^="togglePane"]');
+      if (!b) return;
+      window.togglePane(id, b);
+      dcShrunk.push([id, b]);
+    });
+  } catch (err) { console.error("dcMakeRoom:", err); }
+}
+function dcRestoreRoom() {
+  try {
+    dcCardState(false);
+    dcRoomMade = false;
+    var list = dcShrunk;
+    dcShrunk = [];
+    list.forEach(function (it) {
+      var p = document.getElementById(it[0]);
+      if (p && p.classList.contains("pane-minimized")) window.togglePane(it[0], it[1]);
+    });
+  } catch (err) { console.error("dcRestoreRoom:", err); }
+}
+window.dcRestoreRoom = dcRestoreRoom;
+
+/* حالة البطاقة على لوحة القاموس: data-card="open" يفعّل (عبر CSS) شريط الكلمات الأفقي والبطاقة الممتدة */
+function dcCardState(open) {
+  try {
+    var pane = document.getElementById("dict-pane");
+    if (!pane) return;
+    if (open) pane.setAttribute("data-card", "open");
+    else pane.removeAttribute("data-card");
+  } catch (err) { console.error("dcCardState:", err); }
+}
+/* الكلمة الحالية في الشريط: تُعلَّم وتُمرَّر إلى الوسط */
+function dcMarkActive() {
+  try {
+    var chips = DC.chips || [];
+    for (var i = 0; i < chips.length; i++) {
+      if (i === DC.index) chips[i].setAttribute("aria-current", "true");
+      else chips[i].removeAttribute("aria-current");
+    }
+    var cur = chips[DC.index];
+    if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+  } catch (err) { console.error("dcMarkActive:", err); }
+}
+window.dcCardState = dcCardState;
+(function () {
+  var w = document.getElementById("dw-word");
+  if (!w || !window.MutationObserver) return;
+  new MutationObserver(function () {
+    var pane = document.getElementById("dict-pane");
+    if (pane && pane.getAttribute("data-card") === "open") dcMarkActive();
+  }).observe(w, { childList: true, characterData: true, subtree: true });
+})();
+
+/* نص المعنى في البطاقة: معرّف مفهوم (array_list) يُعنوَن "المفهوم البرمجي"، والمعنى العربي المباشر يُعرض كما هو */
+function dcMeaningText(v) {
+  if (typeof v !== "string" || !v) return "";
+  return /^[a-z][a-z0-9_]*$/.test(v) ? tx("dcConcept", "المفهوم البرمجي: {v}", { v: v }) : v;
+}
+
 function dcOpenCard(i) {
   var card = document.getElementById("dc-card");
   if (!card) return;
@@ -172,11 +261,15 @@ function dcOpenCard(i) {
   /* شارة الوضع */
   var badges = document.getElementById("dc-badges");
   if (badges) {
-    badges.innerHTML =
-      '<span class="dc-badge">' +
-      (dcIsKid() ? "وضع الطفل" : dcIsPro() ? "وضع المحترف" : "وضع المبتدئ") +
-      "</span>" +
-      '<span class="dc-badge dc-badge-empty">' + (window.currentDialect || 'عام') + '</span>';
+    badges.textContent = "";
+    var bMode = document.createElement("span");
+    bMode.className = "dc-badge";
+    bMode.textContent = dcIsKid() ? tx("dcModeKid", "وضع الطفل") : dcIsPro() ? tx("dcModePro", "وضع المحترف") : tx("dcModeBeg", "وضع المبتدئ");
+    var bDia = document.createElement("span");
+    bDia.className = "dc-badge dc-badge-empty";
+    bDia.textContent = window.currentDialect || tx("dcGeneral", "عام");
+    badges.appendChild(bMode);
+    badges.appendChild(bDia);
   }
 
   /* عنوان الشريحة */
@@ -186,7 +279,12 @@ function dcOpenCard(i) {
     var wName = (DC.currentWords && DC.currentWords[DC.index]) || (chip ? chip.getAttribute("data-w") : "");
   w.textContent = wName;
   var ar = document.getElementById("dw-ar");
-  if (ar && window.currentVocab) { ar.textContent = "المفهوم البرمجي: " + (window.currentVocab[wName] || "عام"); ar.classList.remove("dc-empty"); }
+  if (ar && window.currentVocab) {
+    var mv = window.currentVocab[wName];
+    ar.textContent = dcMeaningText(mv);
+    ar.classList.toggle("dc-empty", !mv);
+    var rl=document.getElementById("dc-role"),ex=document.getElementById("dc-ex"),ds=window.BaydaEngine&&window.BaydaEngine.getDialect?window.BaydaEngine.getDialect():null;if(rl&&ds&&ds.keywords&&ds.keywords[wName]){rl.textContent=tx("dcConcept","المفهوم البرمجي: {v}").replace("{v}",ds.keywords[wName]);rl.classList.remove("dc-empty");}if(ex&&ex.classList.contains("dc-empty")&&ds&&ds.keywords){var pk=Object.keys(ds.keywords).find(function(k){return ds.keywords[k]==="print";});if(pk){ex.textContent=pk+"(\""+wName+"\")";ex.classList.remove("dc-empty");ex.dataset.src="dc-ex-fallback";}}
+  }
   }
 
   /* حركة الدخول حسب الوضع */
@@ -194,7 +292,11 @@ function dcOpenCard(i) {
   void card.offsetWidth;
   card.classList.add("dc-in-" + dcMode());
 
-  if (typeof openModal === "function") openModal("dict-popup");
+  if (typeof openModal === "function") openModal("dict-dock");
+  dcMakeRoom();
+  dcCardState(true);
+  var dk = document.getElementById("dict-dock");
+  if (dk && dk.scrollIntoView) dk.scrollIntoView({ behavior: "smooth", block: "nearest" });
   dcSfx("open");
   dcRenderDots();
   dcApplyScale(1);
@@ -212,10 +314,10 @@ function dcResetFields() {
   var slots = document.getElementById("dc-slots");
   if (slots) {
     slots.innerHTML =
-      '<div class="dc-slot dc-empty"><span>الرمز</span><b>—</b></div>' +
-      '<div class="dc-slot dc-empty"><span>القيمة</span><b>—</b></div>' +
-      '<div class="dc-slot dc-empty"><span>تلميح</span><b>—</b></div>' +
-      '<div class="dc-slot dc-empty"><span>بطاقة</span><b>—</b></div>';
+      '<div class="dc-slot dc-empty"><span>' + tx("dcSlotSym", "الرمز") + '</span><b>—</b></div>' +
+      '<div class="dc-slot dc-empty"><span>' + tx("dcSlotVal", "القيمة") + '</span><b>—</b></div>' +
+      '<div class="dc-slot dc-empty"><span>' + tx("dcSlotHint", "تلميح") + '</span><b>—</b></div>' +
+      '<div class="dc-slot dc-empty"><span>' + tx("dcSlotCard", "بطاقة") + '</span><b>—</b></div>';
   }
 }
 
@@ -319,19 +421,8 @@ function dcQuickTheme() {
 }
 
 /* ---------- 7) النطق ---------- */
-function dcSpeak() {
-  var w = document.getElementById("dw-word");
-  var txt = w ? w.textContent : "";
-  if (!txt || txt === "—") { if (typeof toast === "function") toast("لا يوجد نص بعد"); return; }
-  if (!("speechSynthesis" in window)) { if (typeof toast === "function") toast("المتصفح لا يدعم النطق"); return; }
-  try {
-    window.speechSynthesis.cancel();
-    var u = new SpeechSynthesisUtterance(txt);
-    u.lang = "ar"; u.rate = dcIsKid() ? 0.85 : 0.95;
-    window.speechSynthesis.speak(u);
-  } catch (e) {}
-}
-
+function dcSpeak(slow){var w=document.getElementById("dw-word"),txt=w?(w.textContent||"").trim():"";if(!txt||txt==="—"){if(typeof toast==="function")toast(tx("dcNoText","لا يوجد نص بعد"));return;}if(typeof window.baydaSpeak==="function"){window.baydaSpeak(txt,{slow:!!slow});return;}if("speechSynthesis" in window){try{window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(txt);u.lang="ar";u.rate=slow?0.62:0.92;window.speechSynthesis.speak(u);}catch(e){}}}
+function dcInsertWord(){var w=document.getElementById("dw-word"),txt=w?(w.textContent||"").trim():"";if(!txt||txt==="—")return;var lrn=document.getElementById("view-learn"),ed=document.getElementById((lrn&&lrn.style.display!=="none")?"lesson-editor":"editor");if(!ed)return;var s0=ed.selectionStart||0,s1=ed.selectionEnd||0;ed.value=ed.value.slice(0,s0)+txt+ed.value.slice(s1);ed.selectionStart=ed.selectionEnd=s0+txt.length;ed.focus();ed.dispatchEvent(new Event("input"));var dp=document.getElementById("dict-pane");if(dp)dp.removeAttribute("data-drawer");dcSfx("ok");if(typeof toast==="function")toast("📥 "+tx("dcInserted","تم الإدراج في المحرر"),1600);}
 /* ---------- 8) المرشد + البيضة الفصحية (وضع الطفل) ---------- */
 function dcMascotTap() {
   if (!dcIsKid()) { dcSfx("tap"); return; }
@@ -351,7 +442,7 @@ function dcMascotTap() {
 }
 
 function dcConfetti() {
-  var host = document.getElementById("dict-popup");
+  var host = document.getElementById("dict-dock");
   if (!host) return;
   var colors = ["#f43f5e", "#f59e0b", "#22c55e", "#0ea5e9", "#a855f7", "#ec4899"];
   for (var i = 0; i < 26; i++) {
@@ -400,11 +491,11 @@ function dcInit() {
 
   /* دعم لوحة المفاتيح داخل البطاقة */
   document.addEventListener("keydown", function (e) {
-    var modal = document.getElementById("dict-popup");
+    var modal = document.getElementById("dict-dock");
     if (!modal || !modal.classList.contains("active")) return;
     if (e.key === "ArrowLeft") dcNext();
     if (e.key === "ArrowRight") dcPrev();
-    if (e.key === "Escape" && typeof closeDictPopup === "function") closeDictPopup();
+    if (e.key === "Escape" && typeof closeDictCard === "function") closeDictCard();
   });
 }
 
@@ -415,3 +506,7 @@ if (document.readyState === "loading") {
 }
 
 document.getElementById("dc-search")?.addEventListener("input", () => dcRenderChips());
+
+window.dcForceRender = function() {
+    if (typeof dcRenderChips === "function") dcRenderChips();
+};

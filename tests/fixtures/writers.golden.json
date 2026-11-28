@@ -1,0 +1,442 @@
+{
+ "about": "مخرجات الأهداف السبعة كما أنتجتها الكتّاب قبل المحرك المشترك (c12d920). تغييرها المقصود يعني تحديث هذا الملف عمداً.",
+ "keywords": {
+  "goul": "print",
+  "lg": "log",
+  "cl": "console.log",
+  "idha": "if",
+  "idha ken": "else if",
+  "sinon": "else",
+  "twala": "while",
+  "haqq": "true",
+  "ghalet": "false"
+ },
+ "cases": [
+  {
+   "src": "goul(\"a\")",
+   "js": "console.log(\"a\");",
+   "py": "print(\"a\")",
+   "c": "printf(\"a\\n\");",
+   "cpp": "std::cout << \"a\" << std::endl;",
+   "java": "System.out.println(\"a\");",
+   "php": "echo \"a\";",
+   "algo": "اطبع(\"a\");"
+  },
+  {
+   "src": "goul()",
+   "js": "console.log();",
+   "py": "print()",
+   "c": "printf(\"%s\\n\", );",
+   "cpp": "std::cout <<  << std::endl;",
+   "java": "System.out.println();",
+   "php": "echo ;",
+   "algo": "اطبع();"
+  },
+  {
+   "src": "goul(\"a\", \"b\")",
+   "js": "console.log(\"a\", \"b\");",
+   "py": "print(\"a\", \"b\")",
+   "c": "printf(\"%s\\n\", \"a\", \"b\");",
+   "cpp": "std::cout << \"a\" << \" \" << \"b\" << std::endl;",
+   "java": "System.out.println(\"a\", \"b\");",
+   "php": "echo \"a\", \"b\";",
+   "algo": "اطبع(\"a\"، \"b\");"
+  },
+  {
+   "src": "goul(7)",
+   "js": "console.log(7);",
+   "py": "print(7)",
+   "c": "printf(\"%s\\n\", 7);",
+   "cpp": "std::cout << 7 << std::endl;",
+   "java": "System.out.println(7);",
+   "php": "echo 7;",
+   "algo": "اطبع(7);"
+  },
+  {
+   "src": "goul(1.5)",
+   "js": "console.log(1.5);",
+   "py": "print(1.5)",
+   "c": "printf(\"%s\\n\", 1.5);",
+   "cpp": "std::cout << 1.5 << std::endl;",
+   "java": "System.out.println(1.5);",
+   "php": "echo 1.5;",
+   "algo": "اطبع(1.5);"
+  },
+  {
+   "src": "goul(\"a\", 2, haqq)",
+   "js": "console.log(\"a\", 2, true);",
+   "py": "print(\"a\", 2, True)",
+   "c": "printf(\"%s\\n\", \"a\", 2, true);",
+   "cpp": "std::cout << \"a\" << \" \" << 2 << \" \" << true << std::endl;",
+   "java": "System.out.println(\"a\", 2, true);",
+   "php": "echo \"a\", 2, true;",
+   "algo": "اطبع(\"a\"، 2، صحيح);"
+  },
+  {
+   "src": "goul(x + 1, f(2, 3))",
+   "js": "console.log(x+1, f(2,3));",
+   "py": "print(x+1, f(2,3))",
+   "c": "printf(\"%s\\n\", x+1, f(2,3));",
+   "cpp": "std::cout << x+1 << \" \" << f(2,3) << std::endl;",
+   "java": "System.out.println(x+1, f(2,3));",
+   "php": "echo x+1, f(2,3);",
+   "algo": "اطبع(x+1، f(2,3));"
+  },
+  {
+   "src": "goul(haqq)",
+   "js": "console.log(true);",
+   "py": "print(True)",
+   "c": "printf(\"%s\\n\", true);",
+   "cpp": "std::cout << true << std::endl;",
+   "java": "System.out.println(true);",
+   "php": "echo true;",
+   "algo": "اطبع(صحيح);"
+  },
+  {
+   "src": "goul(ghalet)",
+   "js": "console.log(false);",
+   "py": "print(False)",
+   "c": "printf(\"%s\\n\", false);",
+   "cpp": "std::cout << false << std::endl;",
+   "java": "System.out.println(false);",
+   "php": "echo false;",
+   "algo": "اطبع(خطأ);"
+  },
+  {
+   "src": "lg(\"x\")",
+   "js": "console.log(\"x\");",
+   "py": "print(\"x\")",
+   "c": "printf(\"x\\n\");",
+   "cpp": "std::cout << \"x\" << std::endl;",
+   "java": "System.out.println(\"x\");",
+   "php": "echo \"x\";",
+   "algo": "اطبع(\"x\");"
+  },
+  {
+   "src": "cl(\"x\")",
+   "js": "console.log(\"x\");",
+   "py": "print(\"x\")",
+   "c": "printf(\"x\\n\");",
+   "cpp": "std::cout << \"x\" << std::endl;",
+   "java": "System.out.println(\"x\");",
+   "php": "echo \"x\";",
+   "algo": "اطبع(\"x\");"
+  },
+  {
+   "src": "foo(\"x\", 2)",
+   "js": "foo(\"x\", 2);",
+   "py": "foo(\"x\", 2)",
+   "c": "foo(\"x\", 2);",
+   "cpp": "foo(\"x\", 2);",
+   "java": "foo(\"x\", 2);",
+   "php": "foo(\"x\", 2);",
+   "algo": "foo(\"x\"، 2);"
+  },
+  {
+   "src": "foo()",
+   "js": "foo();",
+   "py": "foo()",
+   "c": "foo();",
+   "cpp": "foo();",
+   "java": "foo();",
+   "php": "foo();",
+   "algo": "foo();"
+  },
+  {
+   "src": "9oul(1)",
+   "js": "9oul(1);",
+   "py": "9oul(1)",
+   "c": "9oul(1);",
+   "cpp": "9oul(1);",
+   "java": "9oul(1);",
+   "php": "9oul(1);",
+   "algo": "9oul(1);"
+  },
+  {
+   "src": "goul('say \"hi\"')",
+   "js": "console.log(\"say \\\"hi\\\"\");",
+   "py": "print(\"say \\\"hi\\\"\")",
+   "c": "printf(\"say \"hi\"\\n\");",
+   "cpp": "std::cout << \"say \\\"hi\\\"\" << std::endl;",
+   "java": "System.out.println(\"say \\\"hi\\\"\");",
+   "php": "echo \"say \\\"hi\\\"\";",
+   "algo": "اطبع(\"say \\\"hi\\\"\");"
+  },
+  {
+   "src": "goul('100%')",
+   "js": "console.log(\"100%\");",
+   "py": "print(\"100%\")",
+   "c": "printf(\"100%\\n\");",
+   "cpp": "std::cout << \"100%\" << std::endl;",
+   "java": "System.out.println(\"100%\");",
+   "php": "echo \"100%\";",
+   "algo": "اطبع(\"100%\");"
+  },
+  {
+   "src": "goul(\"a\");\ngoul(\"b\")",
+   "js": "console.log(\"a\");\nconsole.log(\"b\");",
+   "py": "print(\"a\")\nprint(\"b\")",
+   "c": "printf(\"a\\n\");\nprintf(\"b\\n\");",
+   "cpp": "std::cout << \"a\" << std::endl;\nstd::cout << \"b\" << std::endl;",
+   "java": "System.out.println(\"a\");\nSystem.out.println(\"b\");",
+   "php": "echo \"a\";\necho \"b\";",
+   "algo": "اطبع(\"a\");\nاطبع(\"b\");"
+  },
+  {
+   "src": "",
+   "js": "",
+   "py": "",
+   "c": "",
+   "cpp": "",
+   "java": "",
+   "php": "",
+   "algo": ""
+  },
+  {
+   "src": "idha haqq { goul(\"a\") }",
+   "js": "if (true) {\n  console.log(\"a\");\n}",
+   "py": "if True:\n    print(\"a\")",
+   "c": "if (true) {\n  printf(\"a\\n\");\n}",
+   "cpp": "if (true) {\n  std::cout << \"a\" << std::endl;\n}",
+   "java": "if (true) {\n  System.out.println(\"a\");\n}",
+   "php": "if (true) {\n  echo \"a\";\n}",
+   "algo": "إذا (صحيح) إذن\n  اطبع(\"a\");\nنهاية إذا"
+  },
+  {
+   "src": "idha ghalet { }",
+   "js": "if (false) {\n\n}",
+   "py": "if False:\n    pass",
+   "c": "if (false) {\n\n}",
+   "cpp": "if (false) {\n\n}",
+   "java": "if (false) {\n\n}",
+   "php": "if (false) {\n\n}",
+   "algo": "إذا (خطأ) إذن\n  // لا شيء\nنهاية إذا"
+  },
+  {
+   "src": "idha haqq { goul(\"a\") } sinon { goul(\"b\") }",
+   "js": "if (true) {\n  console.log(\"a\");\n} else {\n  console.log(\"b\");\n}",
+   "py": "if True:\n    print(\"a\")\nelse:\n    print(\"b\")",
+   "c": "if (true) {\n  printf(\"a\\n\");\n} else {\n  printf(\"b\\n\");\n}",
+   "cpp": "if (true) {\n  std::cout << \"a\" << std::endl;\n} else {\n  std::cout << \"b\" << std::endl;\n}",
+   "java": "if (true) {\n  System.out.println(\"a\");\n} else {\n  System.out.println(\"b\");\n}",
+   "php": "if (true) {\n  echo \"a\";\n} else {\n  echo \"b\";\n}",
+   "algo": "إذا (صحيح) إذن\n  اطبع(\"a\");\nوإلا\n  اطبع(\"b\");\nنهاية إذا"
+  },
+  {
+   "src": "idha haqq { goul(\"a\") } sinon { goul(\"b\") goul(\"c\") }",
+   "js": "if (true) {\n  console.log(\"a\");\n} else {\n  console.log(\"b\");\n  console.log(\"c\");\n}",
+   "py": "if True:\n    print(\"a\")\nelse:\n    print(\"b\")\n    print(\"c\")",
+   "c": "if (true) {\n  printf(\"a\\n\");\n} else {\n  printf(\"b\\n\");\n  printf(\"c\\n\");\n}",
+   "cpp": "if (true) {\n  std::cout << \"a\" << std::endl;\n} else {\n  std::cout << \"b\" << std::endl;\n  std::cout << \"c\" << std::endl;\n}",
+   "java": "if (true) {\n  System.out.println(\"a\");\n} else {\n  System.out.println(\"b\");\n  System.out.println(\"c\");\n}",
+   "php": "if (true) {\n  echo \"a\";\n} else {\n  echo \"b\";\n  echo \"c\";\n}",
+   "algo": "إذا (صحيح) إذن\n  اطبع(\"a\");\nوإلا\n  اطبع(\"b\");\n  اطبع(\"c\");\nنهاية إذا"
+  },
+  {
+   "src": "idha a { goul(1) } idha ken b { goul(2) }",
+   "js": "if (a) {\n  console.log(1);\n} else if (b) {\n  console.log(2);\n}",
+   "py": "if a:\n    print(1)\nelif b:\n    print(2)",
+   "c": "if (a) {\n  printf(\"%s\\n\", 1);\n} else if (b) {\n  printf(\"%s\\n\", 2);\n}",
+   "cpp": "if (a) {\n  std::cout << 1 << std::endl;\n} else if (b) {\n  std::cout << 2 << std::endl;\n}",
+   "java": "if (a) {\n  System.out.println(1);\n} else if (b) {\n  System.out.println(2);\n}",
+   "php": "if (a) {\n  echo 1;\n} elseif (b) {\n  echo 2;\n}",
+   "algo": "إذا (a) إذن\n  اطبع(1);\nوإلا إذا (b) إذن\n  اطبع(2);\nنهاية إذا"
+  },
+  {
+   "src": "idha a { goul(1) } idha ken b { goul(2) } sinon { goul(3) }",
+   "js": "if (a) {\n  console.log(1);\n} else if (b) {\n  console.log(2);\n} else {\n  console.log(3);\n}",
+   "py": "if a:\n    print(1)\nelif b:\n    print(2)\nelse:\n    print(3)",
+   "c": "if (a) {\n  printf(\"%s\\n\", 1);\n} else if (b) {\n  printf(\"%s\\n\", 2);\n} else {\n  printf(\"%s\\n\", 3);\n}",
+   "cpp": "if (a) {\n  std::cout << 1 << std::endl;\n} else if (b) {\n  std::cout << 2 << std::endl;\n} else {\n  std::cout << 3 << std::endl;\n}",
+   "java": "if (a) {\n  System.out.println(1);\n} else if (b) {\n  System.out.println(2);\n} else {\n  System.out.println(3);\n}",
+   "php": "if (a) {\n  echo 1;\n} elseif (b) {\n  echo 2;\n} else {\n  echo 3;\n}",
+   "algo": "إذا (a) إذن\n  اطبع(1);\nوإلا إذا (b) إذن\n  اطبع(2);\nوإلا\n  اطبع(3);\nنهاية إذا"
+  },
+  {
+   "src": "idha a { goul(1) } idha ken b { goul(2) } idha ken c { goul(3) } idha ken d { goul(4) } sinon { goul(5) }",
+   "js": "if (a) {\n  console.log(1);\n} else if (b) {\n  console.log(2);\n} else if (c) {\n  console.log(3);\n} else if (d) {\n  console.log(4);\n} else {\n  console.log(5);\n}",
+   "py": "if a:\n    print(1)\nelif b:\n    print(2)\nelif c:\n    print(3)\nelif d:\n    print(4)\nelse:\n    print(5)",
+   "c": "if (a) {\n  printf(\"%s\\n\", 1);\n} else if (b) {\n  printf(\"%s\\n\", 2);\n} else if (c) {\n  printf(\"%s\\n\", 3);\n} else if (d) {\n  printf(\"%s\\n\", 4);\n} else {\n  printf(\"%s\\n\", 5);\n}",
+   "cpp": "if (a) {\n  std::cout << 1 << std::endl;\n} else if (b) {\n  std::cout << 2 << std::endl;\n} else if (c) {\n  std::cout << 3 << std::endl;\n} else if (d) {\n  std::cout << 4 << std::endl;\n} else {\n  std::cout << 5 << std::endl;\n}",
+   "java": "if (a) {\n  System.out.println(1);\n} else if (b) {\n  System.out.println(2);\n} else if (c) {\n  System.out.println(3);\n} else if (d) {\n  System.out.println(4);\n} else {\n  System.out.println(5);\n}",
+   "php": "if (a) {\n  echo 1;\n} elseif (b) {\n  echo 2;\n} elseif (c) {\n  echo 3;\n} elseif (d) {\n  echo 4;\n} else {\n  echo 5;\n}",
+   "algo": "إذا (a) إذن\n  اطبع(1);\nوإلا إذا (b) إذن\n  اطبع(2);\nوإلا إذا (c) إذن\n  اطبع(3);\nوإلا إذا (d) إذن\n  اطبع(4);\nوإلا\n  اطبع(5);\nنهاية إذا"
+  },
+  {
+   "src": "idha a { } idha ken b { } sinon { }",
+   "js": "if (a) {\n\n} else if (b) {\n\n}",
+   "py": "if a:\n    pass\nelif b:\n    pass",
+   "c": "if (a) {\n\n} else if (b) {\n\n}",
+   "cpp": "if (a) {\n\n} else if (b) {\n\n}",
+   "java": "if (a) {\n\n} else if (b) {\n\n}",
+   "php": "if (a) {\n\n} elseif (b) {\n\n}",
+   "algo": "إذا (a) إذن\n  // لا شيء\nوإلا إذا (b) إذن\n  // لا شيء\nنهاية إذا"
+  },
+  {
+   "src": "idha a { goul(1) } sinon { }",
+   "js": "if (a) {\n  console.log(1);\n}",
+   "py": "if a:\n    print(1)",
+   "c": "if (a) {\n  printf(\"%s\\n\", 1);\n}",
+   "cpp": "if (a) {\n  std::cout << 1 << std::endl;\n}",
+   "java": "if (a) {\n  System.out.println(1);\n}",
+   "php": "if (a) {\n  echo 1;\n}",
+   "algo": "إذا (a) إذن\n  اطبع(1);\nنهاية إذا"
+  },
+  {
+   "src": "idha a { goul(1) } sinon { idha b { goul(2) } }",
+   "js": "if (a) {\n  console.log(1);\n} else if (b) {\n  console.log(2);\n}",
+   "py": "if a:\n    print(1)\nelif b:\n    print(2)",
+   "c": "if (a) {\n  printf(\"%s\\n\", 1);\n} else if (b) {\n  printf(\"%s\\n\", 2);\n}",
+   "cpp": "if (a) {\n  std::cout << 1 << std::endl;\n} else if (b) {\n  std::cout << 2 << std::endl;\n}",
+   "java": "if (a) {\n  System.out.println(1);\n} else if (b) {\n  System.out.println(2);\n}",
+   "php": "if (a) {\n  echo 1;\n} elseif (b) {\n  echo 2;\n}",
+   "algo": "إذا (a) إذن\n  اطبع(1);\nوإلا إذا (b) إذن\n  اطبع(2);\nنهاية إذا"
+  },
+  {
+   "src": "idha a { goul(1) } sinon { idha b { goul(2) } goul(3) }",
+   "js": "if (a) {\n  console.log(1);\n} else {\n  if (b) {\n    console.log(2);\n  }\n  console.log(3);\n}",
+   "py": "if a:\n    print(1)\nelse:\n    if b:\n        print(2)\n    print(3)",
+   "c": "if (a) {\n  printf(\"%s\\n\", 1);\n} else {\n  if (b) {\n    printf(\"%s\\n\", 2);\n  }\n  printf(\"%s\\n\", 3);\n}",
+   "cpp": "if (a) {\n  std::cout << 1 << std::endl;\n} else {\n  if (b) {\n    std::cout << 2 << std::endl;\n  }\n  std::cout << 3 << std::endl;\n}",
+   "java": "if (a) {\n  System.out.println(1);\n} else {\n  if (b) {\n    System.out.println(2);\n  }\n  System.out.println(3);\n}",
+   "php": "if (a) {\n  echo 1;\n} else {\n  if (b) {\n    echo 2;\n  }\n  echo 3;\n}",
+   "algo": "إذا (a) إذن\n  اطبع(1);\nوإلا\n  إذا (b) إذن\n    اطبع(2);\n  نهاية إذا\n  اطبع(3);\nنهاية إذا"
+  },
+  {
+   "src": "idha haqq { idha ghalet { goul(1) } sinon { goul(2) } } sinon { goul(3) }",
+   "js": "if (true) {\n  if (false) {\n    console.log(1);\n  } else {\n    console.log(2);\n  }\n} else {\n  console.log(3);\n}",
+   "py": "if True:\n    if False:\n        print(1)\n    else:\n        print(2)\nelse:\n    print(3)",
+   "c": "if (true) {\n  if (false) {\n    printf(\"%s\\n\", 1);\n  } else {\n    printf(\"%s\\n\", 2);\n  }\n} else {\n  printf(\"%s\\n\", 3);\n}",
+   "cpp": "if (true) {\n  if (false) {\n    std::cout << 1 << std::endl;\n  } else {\n    std::cout << 2 << std::endl;\n  }\n} else {\n  std::cout << 3 << std::endl;\n}",
+   "java": "if (true) {\n  if (false) {\n    System.out.println(1);\n  } else {\n    System.out.println(2);\n  }\n} else {\n  System.out.println(3);\n}",
+   "php": "if (true) {\n  if (false) {\n    echo 1;\n  } else {\n    echo 2;\n  }\n} else {\n  echo 3;\n}",
+   "algo": "إذا (صحيح) إذن\n  إذا (خطأ) إذن\n    اطبع(1);\n  وإلا\n    اطبع(2);\n  نهاية إذا\nوإلا\n  اطبع(3);\nنهاية إذا"
+  },
+  {
+   "src": "idha haqq { idha a { goul(1) } idha ken b { goul(2) } }",
+   "js": "if (true) {\n  if (a) {\n    console.log(1);\n  } else if (b) {\n    console.log(2);\n  }\n}",
+   "py": "if True:\n    if a:\n        print(1)\n    elif b:\n        print(2)",
+   "c": "if (true) {\n  if (a) {\n    printf(\"%s\\n\", 1);\n  } else if (b) {\n    printf(\"%s\\n\", 2);\n  }\n}",
+   "cpp": "if (true) {\n  if (a) {\n    std::cout << 1 << std::endl;\n  } else if (b) {\n    std::cout << 2 << std::endl;\n  }\n}",
+   "java": "if (true) {\n  if (a) {\n    System.out.println(1);\n  } else if (b) {\n    System.out.println(2);\n  }\n}",
+   "php": "if (true) {\n  if (a) {\n    echo 1;\n  } elseif (b) {\n    echo 2;\n  }\n}",
+   "algo": "إذا (صحيح) إذن\n  إذا (a) إذن\n    اطبع(1);\n  وإلا إذا (b) إذن\n    اطبع(2);\n  نهاية إذا\nنهاية إذا"
+  },
+  {
+   "src": "idha (x == 2) { goul(\"a\") }",
+   "js": "if (x==2) {\n  console.log(\"a\");\n}",
+   "py": "if x==2:\n    print(\"a\")",
+   "c": "if (x==2) {\n  printf(\"a\\n\");\n}",
+   "cpp": "if (x==2) {\n  std::cout << \"a\" << std::endl;\n}",
+   "java": "if (x==2) {\n  System.out.println(\"a\");\n}",
+   "php": "if (x==2) {\n  echo \"a\";\n}",
+   "algo": "إذا (x==2) إذن\n  اطبع(\"a\");\nنهاية إذا"
+  },
+  {
+   "src": "idha ghalet { goul(haqq) }",
+   "js": "if (false) {\n  console.log(true);\n}",
+   "py": "if False:\n    print(True)",
+   "c": "if (false) {\n  printf(\"%s\\n\", true);\n}",
+   "cpp": "if (false) {\n  std::cout << true << std::endl;\n}",
+   "java": "if (false) {\n  System.out.println(true);\n}",
+   "php": "if (false) {\n  echo true;\n}",
+   "algo": "إذا (خطأ) إذن\n  اطبع(صحيح);\nنهاية إذا"
+  },
+  {
+   "src": "idha a && b { goul(1) }",
+   "js": "if (a&&b) {\n  console.log(1);\n}",
+   "py": "if a&&b:\n    print(1)",
+   "c": "if (a&&b) {\n  printf(\"%s\\n\", 1);\n}",
+   "cpp": "if (a&&b) {\n  std::cout << 1 << std::endl;\n}",
+   "java": "if (a&&b) {\n  System.out.println(1);\n}",
+   "php": "if (a&&b) {\n  echo 1;\n}",
+   "algo": "إذا (a&&b) إذن\n  اطبع(1);\nنهاية إذا"
+  },
+  {
+   "src": "twala (haqq) { goul(1) }",
+   "js": "while (true) {\n  console.log(1);\n}",
+   "py": "while True:\n    print(1)",
+   "c": "while (true) {\n  printf(\"%s\\n\", 1);\n}",
+   "cpp": "while (true) {\n  std::cout << 1 << std::endl;\n}",
+   "java": "while (true) {\n  System.out.println(1);\n}",
+   "php": "while (true) {\n  echo 1;\n}",
+   "algo": "طالما (صحيح) كرر\n  اطبع(1);\nنهاية طالما"
+  },
+  {
+   "src": "twala (x < 3) { }",
+   "js": "while (x<3) {\n\n}",
+   "py": "while x<3:\n",
+   "c": "while (x<3) {\n\n}",
+   "cpp": "while (x<3) {\n\n}",
+   "java": "while (x<3) {\n\n}",
+   "php": "while (x<3) {\n\n}",
+   "algo": "طالما (x<3) كرر\n\nنهاية طالما"
+  },
+  {
+   "src": "twala (a) { twala (b) { goul(1) } goul(2) }",
+   "js": "while (a) {\n  while (b) {\n    console.log(1);\n  }\n  console.log(2);\n}",
+   "py": "while a:\n    while b:\n        print(1)\n    print(2)",
+   "c": "while (a) {\n  while (b) {\n    printf(\"%s\\n\", 1);\n  }\n  printf(\"%s\\n\", 2);\n}",
+   "cpp": "while (a) {\n  while (b) {\n    std::cout << 1 << std::endl;\n  }\n  std::cout << 2 << std::endl;\n}",
+   "java": "while (a) {\n  while (b) {\n    System.out.println(1);\n  }\n  System.out.println(2);\n}",
+   "php": "while (a) {\n  while (b) {\n    echo 1;\n  }\n  echo 2;\n}",
+   "algo": "طالما (a) كرر\n  طالما (b) كرر\n    اطبع(1);\n  نهاية طالما\n  اطبع(2);\nنهاية طالما"
+  },
+  {
+   "src": "twala (a) { idha b { goul(1) } sinon { goul(2) } }",
+   "js": "while (a) {\n  if (b) {\n    console.log(1);\n  } else {\n    console.log(2);\n  }\n}",
+   "py": "while a:\n    if b:\n        print(1)\n    else:\n        print(2)",
+   "c": "while (a) {\n  if (b) {\n    printf(\"%s\\n\", 1);\n  } else {\n    printf(\"%s\\n\", 2);\n  }\n}",
+   "cpp": "while (a) {\n  if (b) {\n    std::cout << 1 << std::endl;\n  } else {\n    std::cout << 2 << std::endl;\n  }\n}",
+   "java": "while (a) {\n  if (b) {\n    System.out.println(1);\n  } else {\n    System.out.println(2);\n  }\n}",
+   "php": "while (a) {\n  if (b) {\n    echo 1;\n  } else {\n    echo 2;\n  }\n}",
+   "algo": "طالما (a) كرر\n  إذا (b) إذن\n    اطبع(1);\n  وإلا\n    اطبع(2);\n  نهاية إذا\nنهاية طالما"
+  },
+  {
+   "src": "idha a { twala (b) { goul(1) } } sinon { twala (c) { goul(2) } }",
+   "js": "if (a) {\n  while (b) {\n    console.log(1);\n  }\n} else {\n  while (c) {\n    console.log(2);\n  }\n}",
+   "py": "if a:\n    while b:\n        print(1)\nelse:\n    while c:\n        print(2)",
+   "c": "if (a) {\n  while (b) {\n    printf(\"%s\\n\", 1);\n  }\n} else {\n  while (c) {\n    printf(\"%s\\n\", 2);\n  }\n}",
+   "cpp": "if (a) {\n  while (b) {\n    std::cout << 1 << std::endl;\n  }\n} else {\n  while (c) {\n    std::cout << 2 << std::endl;\n  }\n}",
+   "java": "if (a) {\n  while (b) {\n    System.out.println(1);\n  }\n} else {\n  while (c) {\n    System.out.println(2);\n  }\n}",
+   "php": "if (a) {\n  while (b) {\n    echo 1;\n  }\n} else {\n  while (c) {\n    echo 2;\n  }\n}",
+   "algo": "إذا (a) إذن\n  طالما (b) كرر\n    اطبع(1);\n  نهاية طالما\nوإلا\n  طالما (c) كرر\n    اطبع(2);\n  نهاية طالما\nنهاية إذا"
+  },
+  {
+   "src": "twala (ghalet) { goul(ghalet, haqq) }",
+   "js": "while (false) {\n  console.log(false, true);\n}",
+   "py": "while False:\n    print(False, True)",
+   "c": "while (false) {\n  printf(\"%s\\n\", false, true);\n}",
+   "cpp": "while (false) {\n  std::cout << false << \" \" << true << std::endl;\n}",
+   "java": "while (false) {\n  System.out.println(false, true);\n}",
+   "php": "while (false) {\n  echo false, true;\n}",
+   "algo": "طالما (خطأ) كرر\n  اطبع(خطأ، صحيح);\nنهاية طالما"
+  },
+  {
+   "src": "idha haqq { goul(1) }\nidha ghalet { goul(2) }\ntwala (haqq) { goul(3) }",
+   "js": "if (true) {\n  console.log(1);\n}\nif (false) {\n  console.log(2);\n}\nwhile (true) {\n  console.log(3);\n}",
+   "py": "if True:\n    print(1)\nif False:\n    print(2)\nwhile True:\n    print(3)",
+   "c": "if (true) {\n  printf(\"%s\\n\", 1);\n}\nif (false) {\n  printf(\"%s\\n\", 2);\n}\nwhile (true) {\n  printf(\"%s\\n\", 3);\n}",
+   "cpp": "if (true) {\n  std::cout << 1 << std::endl;\n}\nif (false) {\n  std::cout << 2 << std::endl;\n}\nwhile (true) {\n  std::cout << 3 << std::endl;\n}",
+   "java": "if (true) {\n  System.out.println(1);\n}\nif (false) {\n  System.out.println(2);\n}\nwhile (true) {\n  System.out.println(3);\n}",
+   "php": "if (true) {\n  echo 1;\n}\nif (false) {\n  echo 2;\n}\nwhile (true) {\n  echo 3;\n}",
+   "algo": "إذا (صحيح) إذن\n  اطبع(1);\nنهاية إذا\nإذا (خطأ) إذن\n  اطبع(2);\nنهاية إذا\nطالما (صحيح) كرر\n  اطبع(3);\nنهاية طالما"
+  },
+  {
+   "src": "goul(\"a\"",
+   "error": "[PARSE_ERROR] Unexpected \"\" at line 1, col 9"
+  },
+  {
+   "src": "idha haqq {",
+   "error": "[PARSE_ERROR] Unexpected \"\" at line 1, col 12"
+  },
+  {
+   "src": "let x = 5",
+   "error": "[PARSE_ERROR] Unexpected \"x\" at line 1, col 5"
+  },
+  {
+   "src": "}",
+   "error": "[PARSE_ERROR] Unexpected \"}\" at line 1, col 1"
+  }
+ ]
+}

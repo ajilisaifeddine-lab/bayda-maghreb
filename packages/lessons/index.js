@@ -1438,17 +1438,7 @@ function isDigit(ch) {
   return ch >= "0" && ch <= "9";
 }
 function isLetterOrUnicodeWord(ch) {
-  if (!ch) return false;
-  const code = ch.charCodeAt(0);
-  if (code >= 65 && code <= 90 || code >= 97 && code <= 122 || code === 95) {
-    return true;
-  }
-  if (code >= 192 && code <= 591) return true;
-  if (code >= 1536 && code <= 1791 || code >= 1872 && code <= 1919 || code >= 2208 && code <= 2303) {
-    return true;
-  }
-  if (code >= 11568 && code <= 11647) return true;
-  return false;
+  return Boolean(ch) && (ch === "_" || /[\p{L}\p{M}]/u.test(ch));
 }
 function lex(source) {
   if (source.length > MAX_SOURCE_CHARS) {
@@ -9481,7 +9471,7 @@ function createLessonsToolkit(config = {}) {
   const initialPack = config.pack ? adaptDialectPack(config.pack) : config.dialectId ? findDialectById(config.dialectId) : customDialects[0] ?? STARTER_DIALECT_PACKS[0];
   const uiLang = config.uiLang ?? "en";
   return {
-    version: "1.0.0",
+    version: "1.0.1",
     curriculum: LESSONS_CURRICULUM,
     dialects: customDialects.length > 0 ? customDialects : STARTER_DIALECT_PACKS,
     starterDialects: STARTER_DIALECT_PACKS,

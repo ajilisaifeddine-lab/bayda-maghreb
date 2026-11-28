@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import os from "os";
 /**
  * bayda — واجهة سطر الأوامر.
  * يقرأ ملف .bayda، يحمّل اللهجة، ويمرّر الكل عبر translate().
@@ -59,18 +60,15 @@ try {
   }
 
   if (shouldRun) {
-    if (target === "js") {
-      const tmp = path.join(process.cwd(), ".bayda-run.mjs");
-      fs.writeFileSync(tmp, result.code + "\n", "utf8");
-      const r = spawnSync(process.execPath, [tmp], { stdio: "inherit" });
-      fs.rmSync(tmp, { force: true });
+    const ext = target === "js" ? ".mjs" : ".py";
+    const tmp = path.join(os.tmpdir(), `.bayda-${Date.now()}-${process.pid}${ext}`);
+    fs.writeFileSync(tmp, result.code + "\n", "utf8");
+    try {
+      const cmd = target === "js" ? process.execPath : "python3";
+      const r = spawnSync(cmd, [tmp], { stdio: "inherit" });
       process.exit(r.status ?? 0);
-    } else {
-      const tmp = path.join(process.cwd(), ".bayda-run.py");
-      fs.writeFileSync(tmp, result.code + "\n", "utf8");
-      const r = spawnSync("python3", [tmp], { stdio: "inherit" });
+    } finally {
       fs.rmSync(tmp, { force: true });
-      process.exit(r.status ?? 0);
     }
   }
 } catch (e) {

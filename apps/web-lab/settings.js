@@ -17,6 +17,8 @@ var ST_KEYS = {
   motion: "baydaReduceMotion",
   contrast: "baydaHighContrast",
   dyslexia: "baydaDyslexia",
+  colorblind: "baydaColorBlind",
+  visualcues: "baydaVisualCues",
   sound: "baydaSound"
 };
 
@@ -27,10 +29,13 @@ var ST_DEFAULTS = {
   translate: false,
   motion: false,
   contrast: false,
-  dyslexia: false
+  dyslexia: false,
+  colorblind: false,
+  visualcues: false
 };
 
 var ST_PAIRS = { "(": ")", "[": "]", "{": "}", "\"": "\"", "'": "'" };
+
 
 function stGet(k) {
   var v = localStorage.getItem(ST_KEYS[k]);
@@ -92,17 +97,17 @@ function stReadOutput() {
   var out = document.getElementById("output");
   if (!out) return;
   var text = (out.textContent || "").trim();
-  if (!text) { toast("لا يوجد نص للقراءة"); return; }
-  if (!("speechSynthesis" in window)) { toast("المتصفح لا يدعم القراءة الصوتية"); return; }
+  if (!text) { toast(tx("stNoText", "لا يوجد نص للقراءة")); return; }
+  if (!("speechSynthesis" in window)) { toast(tx("stNoSpeech", "المتصفح لا يدعم القراءة الصوتية")); return; }
   try {
     window.speechSynthesis.cancel();
     var u = new SpeechSynthesisUtterance(text);
     u.lang = "ar";
     u.rate = 0.95;
     window.speechSynthesis.speak(u);
-    toast("🔊 يقرأ النتيجة");
+    toast(tx("stReading", "🔊 يقرأ النتيجة"));
   } catch (e) {
-    toast("تعذّرت القراءة الصوتية");
+    toast(tx("stSpeechFail", "تعذّرت القراءة الصوتية"));
   }
 }
 
@@ -111,7 +116,7 @@ function stApplyTTS(on) {
     window.readOutput = stReadOutput;
   } else {
     window.readOutput = function () {
-      toast("القراءة الصوتية معطّلة — فعّلها من الإعدادات");
+      toast(tx("stSpeechOff", "القراءة الصوتية معطّلة — فعّلها من الإعدادات"));
     };
   }
 }
@@ -124,6 +129,8 @@ function stApplyA11y() {
   document.body.setAttribute("data-reduce-motion", motion ? "on" : "off");
   document.body.setAttribute("data-contrast", contrast ? "high" : "normal");
   document.body.setAttribute("data-dyslexia", dys ? "on" : "off");
+  document.body.setAttribute("data-colorblind", stGet("colorblind") ? "on" : "off");
+  document.body.setAttribute("data-visual-cues", stGet("visualcues") ? "on" : "off");
 }
 
 /* ---------- مزامنة كل شيء ---------- */
@@ -140,6 +147,8 @@ function stApplyAll() {
   stPaintSwitch("motion", stGet("motion"));
   stPaintSwitch("contrast", stGet("contrast"));
   stPaintSwitch("dyslexia", stGet("dyslexia"));
+  stPaintSwitch("colorblind", stGet("colorblind"));
+  stPaintSwitch("visualcues", stGet("visualcues"));
   stPaintSwitch("sound", typeof soundEnabled === "boolean" ? soundEnabled : true);
 
   var lang = localStorage.getItem(ST_KEYS.lang) || "js";
@@ -165,13 +174,13 @@ function stToggle(k, btn) {
   if (k === "wrap") stApplyWrap(v);
   else if (k === "brackets") stApplyBrackets(v);
   else if (k === "tts") stApplyTTS(v);
-  else if (k === "motion" || k === "contrast" || k === "dyslexia") stApplyA11y();
+  else if (k === "motion" || k === "contrast" || k === "dyslexia" || k === "colorblind" || k === "visualcues") stApplyA11y();
   else if (k === "sound") {
     window.soundEnabled = v;
     try { localStorage.setItem("baydaSound", String(v)); } catch (e) {}
     if (typeof updateSoundButton === "function") updateSoundButton();
   } else if (k === "translate") {
-    toast(v ? "الترجمة الفورية: مفعّلة (المحرك جاهز)" : "الترجمة الفورية: معطّلة");
+    toast(v ? tx("stTransOn", "الترجمة الفورية: مفعّلة (المحرك جاهز)") : tx("stTransOff", "الترجمة الفورية: معطّلة"));
   }
 
   if (k !== "translate") beep(v ? "ok" : "close");
@@ -182,7 +191,8 @@ function stSetLang(v) {
   var tl = document.getElementById("target-lang");
   if (tl) tl.value = v;
   beep("tap");
-  toast("لغة البرنامج: " + (v === "py" ? "Python" : "JavaScript"));
+  var names = { js: "JavaScript", py: "Python", algo: tx("langAlgo", "خوارزميات (Algo)"), c: "C", cpp: "C++", java: "Java", php: "PHP" };
+  toast(tx("stLangIs", "لغة البرنامج: {name}").replace("{name}", names[v] || v));
 }
 
 function stSetFont(v) {
@@ -326,7 +336,7 @@ var stOrigToggle2 = stToggle;
 stToggle = function (k, btn) {
   stOrigToggle2(k, btn);
   if (k === "autorun" && stGet("autorun")) {
-    toast("⚠️ التشغيل التلقائي مفعّل: حلقة لا نهائية قد تجمّد الصفحة");
+    toast(tx("stAutoRunWarn", "⚠️ التشغيل التلقائي مفعّل: حلقة لا نهائية قد تجمّد الصفحة"));
   }
 };
 
@@ -503,49 +513,10 @@ stApplyLines(stGet("lines"));
   setInterval(spawn, 260);
 })();
 
-/* ===== نقل زر الإعدادات إلى الفراغ تحت الشعار (هاتف) ===== */
-(function () {
-  var hdr = document.querySelector("header");
-  var ctrl = document.querySelector(".controls-card");
-  var logo = document.querySelector(".logo-container");
-  var btn = document.querySelector('.controls-card > .icon-btn[onclick="openSettings()"]');
-  if (!hdr || !ctrl || !logo || !btn) return;
-  var anchor = btn.nextElementSibling;
-  var mq = window.matchMedia("(max-width: 768px)");
-
-  function place() {
-    var mobile = mq.matches && document.body.getAttribute("data-mode") !== "kid";
-    if (!mobile) {
-      if (btn.parentNode !== ctrl) ctrl.insertBefore(btn, anchor);
-      btn.classList.remove("bl-set-fab");
-      btn.style.top = ""; btn.style.left = ""; ctrl.style.marginTop = "";
-      return;
-    }
-    if (btn.parentNode !== hdr) {
-      hdr.appendChild(btn);
-      btn.classList.add("bl-set-fab");
-    }
-    var hr = hdr.getBoundingClientRect();
-    var lr = logo.getBoundingClientRect();
-    var cr = ctrl.getBoundingClientRect();
-    var cur = parseFloat(ctrl.style.marginTop) || 0;
-    var need = Math.max(0, cur + (52 - (cr.top - lr.bottom)));
-    if (Math.abs(need - cur) > 1) {
-      ctrl.style.marginTop = need + "px";
-      cr = ctrl.getBoundingClientRect();
-    }
-    var mid = (lr.bottom + cr.top) / 2 - hr.top;
-    btn.style.top = (mid - 22) + "px";
-    btn.style.left = (hr.width / 2 - 22) + "px";
-  }
-  window.addEventListener("resize", place);
-  setInterval(place, 500);
-  place();
-})();
 
 /* ===== تصغير اللوحات إلى دوائر ===== */
 (function () {
-  var MAIN = [["output-pane", "📟", "النتيجة"], ["editor-pane", "📝", "المحرر"], ["dict-pane", "📖", "القاموس"]];
+  function MAIN() { return [["output-pane", "📟", tx("stPaneOut", "النتيجة")], ["editor-pane", "📝", tx("stPaneEd", "المحرر")], ["dict-pane", "📖", tx("stPaneDict", "القاموس")]]; }
   var hdr = document.querySelector("header");
   var ctrl = document.querySelector(".controls-card");
   if (!hdr || !ctrl) return;
@@ -565,7 +536,7 @@ stApplyLines(stGet("lines"));
     var on = active();
     document.body.setAttribute("data-dock", on ? "on" : "off");
     if (on) {
-      var mins = MAIN.filter(function (it) { return isMin(document.getElementById(it[0])); });
+      var mins = MAIN().filter(function (it) { return isMin(document.getElementById(it[0])); });
       if (mins.length >= 3) {
         var p0 = document.getElementById(mins[0][0]);
         p0.classList.remove("pane-minimized");
@@ -576,14 +547,14 @@ stApplyLines(stGet("lines"));
     var hr = hdr.getBoundingClientRect();
     var cr = ctrl.getBoundingClientRect();
     var top = Math.round(cr.top - hr.top + cr.height / 2 - 23);
-    var state = MAIN.map(function (it) { return isMin(document.getElementById(it[0])) ? 1 : 0; }).join("");
+    var state = MAIN().map(function (it) { return isMin(document.getElementById(it[0])) ? 1 : 0; }).join("");
     var s = (on ? "1" : "0") + state + top;
     if (s === sig) return;
     sig = s;
     dock.innerHTML = "";
     if (!on) return;
     var slot = 0;
-    MAIN.forEach(function (it) {
+    MAIN().forEach(function (it) {
       var p = document.getElementById(it[0]);
       if (!isMin(p) || slot > 1) return;
       var b = document.createElement("button");
@@ -606,14 +577,16 @@ stApplyLines(stGet("lines"));
   var origTP = window.togglePane;
   window.togglePane = function (id, btn) {
     var pane = document.getElementById(id);
-    var isMain = MAIN.some(function (it) { return it[0] === id; });
+    var drawer = typeof isDrawerMode === "function" && isDrawerMode();
+    if (drawer && id === "dict-pane") { setDrawer(false); return; }
+    var isMain = MAIN().some(function (it) { return it[0] === id; });
     if (isMain && pane && !isMin(pane)) {
-      var open = MAIN.filter(function (it) {
+      var open = MAIN().filter(function (it) {
         var p = document.getElementById(it[0]);
-        return p && !isMin(p) && !p.classList.contains("hidden");
+        return p && !isMin(p) && !p.classList.contains("hidden") && !(drawer && it[0] === "dict-pane");
       });
       if (open.length <= 1) {
-        toast("يجب أن تبقى لوحة واحدة مفتوحة");
+        toast(tx("stKeepOne", "يجب أن تبقى لوحة واحدة مفتوحة"));
         return;
       }
     }
@@ -623,7 +596,27 @@ stApplyLines(stGet("lines"));
   };
 
   window.addEventListener("resize", render);
-  setInterval(render, 500);
+  /* بدل الاستعلام الدوري كل 500 مللي ثانية: يُعاد الرسم عند تغيّر اللوحات أو حجم الواجهة فقط */
+  var raf = 0;
+  function schedule() {
+    if (raf) return;
+    raf = requestAnimationFrame(function () { raf = 0; render(); });
+  }
+  window.addEventListener("orientationchange", schedule);
+  if (window.MutationObserver) {
+    var mo = new MutationObserver(schedule);
+    MAIN().forEach(function (it) {
+      var p = document.getElementById(it[0]);
+      if (p) mo.observe(p, { attributes: true, attributeFilter: ["class"] });
+    });
+  }
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(schedule);
+    ro.observe(hdr);
+    ro.observe(ctrl);
+  } else {
+    setInterval(render, 1500);
+  }
   render();
 })();
 
@@ -669,7 +662,7 @@ ST_EXTRA.push("smartbar", "suggest");
   var cur = null, symSig = "", raf = 0, holdT = null, holdI = null;
 
   function mode() { return document.body.getAttribute("data-mode") || "beginner"; }
-  function lang() { var t = document.getElementById("target-lang"); return t && t.value === "py" ? "py" : "js"; }
+  function lang() { var t = document.getElementById("target-lang"); return t ? t.value : "js"; }
   function isEd(e) { return !!e && (e.id === "editor" || e.id === "lesson-editor"); }
 
   var bar = document.createElement("div");
@@ -1275,10 +1268,12 @@ stApplyLines(stGet("lines"));
 ST_KEYS.mag = "baydaMag";
 ST_KEYS.stars = "baydaStars";
 ST_KEYS.spin = "baydaSpin";
+ST_KEYS.restore = "baydaRestore";
 ST_DEFAULTS.mag = true;
 ST_DEFAULTS.stars = true;
 ST_DEFAULTS.spin = true;
-ST_EXTRA.push("mag", "stars", "spin");
+ST_DEFAULTS.restore = true;
+ST_EXTRA.push("mag", "stars", "spin", "restore");
 
 var stOrigApplyExtra = stApplyExtra;
 stApplyExtra = function () {
@@ -1344,7 +1339,7 @@ stToggle = function (k, btn) {
 /* ===== لوحة الإحصاءات ===== */
 ST_KEYS.stats = "baydaStats";
 window.blStats = (function () {
-  var DAYS = ["أحد", "اثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"];
+  function dayName(i) { return tx("bsDay" + i, ["أحد", "اثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"][i]); }
   var S = null, tick = 0;
 
   function pad(n) { return (n < 10 ? "0" : "") + n; }
@@ -1368,7 +1363,7 @@ window.blStats = (function () {
     if (!s.d[k]) s.d[k] = { r: 0, s: 0 };
     return s.d[k];
   }
-  function mins(sec) { return sec < 60 ? sec + " ث" : Math.round(sec / 60) + " د"; }
+  function mins(sec) { return sec < 60 ? sec + " " + tx("bsSecUnit", "ث") : Math.round(sec / 60) + " " + tx("bsMinUnit", "د"); }
 
   function live() {
     var ed = document.getElementById("editor");
@@ -1403,7 +1398,7 @@ window.blStats = (function () {
     for (var i = 6; i >= 0; i--) {
       var d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
       var kk = key(d), x = s.d[kk] || { r: 0, s: 0 };
-      arr.push({ k: kk, w: DAYS[d.getDay()], r: x.r, s: x.s });
+      arr.push({ k: kk, w: dayName(d.getDay()), r: x.r, s: x.s });
       if (x.r > max) max = x.r;
     }
     arr.forEach(function (a) {
@@ -1415,14 +1410,14 @@ window.blStats = (function () {
     var last = s.last ? new Date(s.last) : null;
     var lastTxt = last ? pad(last.getHours()) + ":" + pad(last.getMinutes()) : "—";
     body.innerHTML =
-      '<div class="bs-sec">الكود الحالي</div><div class="bs-grid">' +
-      card("bs-lines", 0, "سطر") + card("bs-words", 0, "كلمة") +
-      card("bs-chars", 0, "حرف") + card("bs-pos", "1:1", "المؤشر") +
-      '</div><div class="bs-sec">الاستخدام</div><div class="bs-grid">' +
-      card("bs-runs", t.r, "تشغيل اليوم") + card("bs-total", total, "تشغيل كلي") +
-      card("bs-time", mins(t.s), "وقت اليوم") + card("bs-last", lastTxt, "آخر تشغيل") +
-      '</div><div class="bs-sec">آخر 7 أيام (اضغط عموداً)</div><div class="bs-chart">' + bars +
-      '</div><div class="bs-detail" id="bs-detail">أيام النشاط: ' + active + "</div>";
+      '<div class="bs-sec">' + tx("bsCurrent", "الكود الحالي") + '</div><div class="bs-grid">' +
+      card("bs-lines", 0, tx("bsLines", "سطر")) + card("bs-words", 0, tx("bsWords", "كلمة")) +
+      card("bs-chars", 0, tx("bsChars", "حرف")) + card("bs-pos", "1:1", tx("bsCursor", "المؤشر")) +
+      '</div><div class="bs-sec">' + tx("bsUsage", "الاستخدام") + '</div><div class="bs-grid">' +
+      card("bs-runs", t.r, tx("bsRunsToday", "تشغيل اليوم")) + card("bs-total", total, tx("bsRunsAll", "تشغيل كلي")) +
+      card("bs-time", mins(t.s), tx("bsTimeToday", "وقت اليوم")) + card("bs-last", lastTxt, tx("bsLastRun", "آخر تشغيل")) +
+      '</div><div class="bs-sec">' + tx("bsLast7", "آخر 7 أيام (اضغط عموداً)") + '</div><div class="bs-chart">' + bars +
+      '</div><div class="bs-detail" id="bs-detail">' + tx("bsActiveDays", "أيام النشاط: {n}").replace("{n}", active) + "</div>";
     live();
   }
 
@@ -1449,7 +1444,7 @@ window.blStats = (function () {
     b.classList.add("sel");
     var det = document.getElementById("bs-detail");
     if (det) det.textContent = b.getAttribute("data-w") + " " + b.getAttribute("data-k").slice(5) +
-      " — " + b.getAttribute("data-r") + " تشغيل، " + mins(+b.getAttribute("data-s"));
+      tx("bsRunsN", "{r} تشغيل، {t}").replace("{r}", b.getAttribute("data-r")).replace("{t}", mins(+b.getAttribute("data-s")));
   });
 
   return { render: render };
@@ -1457,35 +1452,35 @@ window.blStats = (function () {
 
 /* ===== ورقة الاختصارات + فتح اللوحات ===== */
 (function () {
-  var KEYS = [
-    [["Ctrl", "Enter"], "تشغيل الكود"],
-    [["Ctrl", "/"], "إظهار / إخفاء القاموس"],
-    [["Alt", "T"], "تبديل الثيم"],
-    [["Alt", "C"], "نسخ النتيجة"],
-    [["Alt", "I"], "لوحة الإحصاءات"],
-    [["Alt", "K"], "ورقة الاختصارات"],
-    [["Alt", "S"], "الإعدادات"]
-  ];
-  var TOUCH = [
-    ["▲ ▼ ◀ ▶", "تحريك المؤشر، والضغط المطوّل يكرر"],
-    ["« »", "بداية السطر / نهايته، ثم السطر السابق / التالي"],
-    ["↶ ↷", "القفز إلى المسافة السابقة / التالية"],
-    ["⌫", "حذف حرف، والضغط المطوّل يكرر"],
-    ["⇥", "إدراج مسافات الإزاحة"]
-  ];
+  function KEYS() { return [
+    [["Ctrl", "Enter"], tx("ksRun", "تشغيل الكود")],
+    [["Ctrl", "/"], tx("ksDict", "إظهار / إخفاء القاموس")],
+    [["Alt", "T"], tx("ksTheme", "تبديل الثيم")],
+    [["Alt", "C"], tx("ksCopy", "نسخ النتيجة")],
+    [["Alt", "I"], tx("ksStats", "لوحة الإحصاءات")],
+    [["Alt", "K"], tx("ksKeys", "ورقة الاختصارات")],
+    [["Alt", "S"], tx("ksSettings", "الإعدادات")]
+  ]; }
+  function TOUCH() { return [
+    ["▲ ▼ ◀ ▶", tx("ksMove", "تحريك المؤشر، والضغط المطوّل يكرر")],
+    ["« »", tx("ksLineEnds", "بداية السطر / نهايته، ثم السطر السابق / التالي")],
+    ["↶ ↷", tx("ksJump", "القفز إلى المسافة السابقة / التالية")],
+    ["⌫", tx("ksDel", "حذف حرف، والضغط المطوّل يكرر")],
+    ["⇥", tx("ksTab", "إدراج مسافات الإزاحة")]
+  ]; }
   function row(keys, txt) {
     return '<div class="bk-row"><span class="bk-keys">' + keys + "</span><span>" + txt + "</span></div>";
   }
   function renderKeys() {
     var body = document.getElementById("bl-keys-body");
     if (!body) return;
-    var h = '<div class="bs-sec">لوحة المفاتيح</div>';
-    KEYS.forEach(function (r) {
+    var h = '<div class="bs-sec">' + tx("ksSecKeys", "لوحة المفاتيح") + '</div>';
+    KEYS().forEach(function (r) {
       h += row(r[0].map(function (x) { return "<kbd>" + x + "</kbd>"; }).join("+"), r[1]);
     });
-    h += '<div class="bs-sec">شريط اللمس</div>';
-    TOUCH.forEach(function (r) { h += row("<kbd>" + r[0] + "</kbd>", r[1]); });
-    h += '<div class="bs-note">اختصارات لوحة المفاتيح تعمل عند تفعيل «اختصارات الكيبورد الخارجي» في الإعدادات.</div>';
+    h += '<div class="bs-sec">' + tx("ksSecTouch", "شريط اللمس") + '</div>';
+    TOUCH().forEach(function (r) { h += row("<kbd>" + r[0] + "</kbd>", r[1]); });
+    h += '<div class="bs-note">' + tx("ksNote", "اختصارات لوحة المفاتيح تعمل عند تفعيل «اختصارات الكيبورد الخارجي» في الإعدادات.") + '</div>';
     body.innerHTML = h;
   }
   window.stOpenPanel = function (id) {
@@ -1529,35 +1524,82 @@ stApplyExtra();
     b.addEventListener("click", function () { stOpenPanel(panel); });
     return b;
   }
-  var keys = mk("\u2328\uFE0F", "الاختصارات", "keys-modal");
-  var stat = mk("\uD83D\uDCCA", "الإحصاءات", "stats-modal");
-  hdr.appendChild(keys);
-  hdr.appendChild(stat);
-  var mq = window.matchMedia("(max-width: 768px)");
+  var keys = mk("\u2328\uFE0F", tx("ksTitleKeys", "الاختصارات"), "keys-modal");
+  var stat = mk("\uD83D\uDCCA", tx("ksTitleStats", "الإحصاءات"), "stats-modal");
+  var gear0 = document.querySelector('.tools-row .icon-btn[onclick="openSettings()"]');
+  if (gear0) { gear0.before(keys); gear0.after(stat); }
+  
+})();
 
-  function place() {
-    var fab = document.querySelector(".bl-set-fab");
-    if (mq.matches && fab && fab.parentNode === hdr) {
-      [keys, stat].forEach(function (b) {
-        if (b.parentNode !== hdr) hdr.appendChild(b);
-        b.classList.add("bl-tool-fab");
-        b.style.top = (fab.offsetTop - 1) + "px";
-      });
-      keys.style.left = (fab.offsetLeft - 113) + "px";
-      stat.style.left = (fab.offsetLeft + 111) + "px";
+/* ===== إمكانية الوصول للنوافذ: حوار + Esc + حبس التركيز (موحّد) ===== */
+(function () {
+  if (window.__blA11y) return;
+  window.__blA11y = true;
+  function MODALS() { return {
+    "settings-modal": { box: ".st-modal", label: tx("ksSettings", "الإعدادات"), close: tx("uxCloseSettings", "إغلاق الإعدادات") },
+    "stats-modal": { box: ".bl-panel", label: tx("ksTitleStats", "الإحصاءات"), close: tx("uxClose", "إغلاق") },
+    "keys-modal": { box: ".bl-panel", label: tx("ksTitleKeys", "الاختصارات"), close: tx("uxClose", "إغلاق") }
+  }; }
+  var openers = {};
+  function has(id) { return Object.prototype.hasOwnProperty.call(MODALS(), id); }
+  function focusables(box) {
+    return Array.prototype.slice.call(box.querySelectorAll("button, select, input, a[href], [tabindex]:not([tabindex='-1'])"))
+      .filter(function (e) { return !e.disabled && e.getClientRects().length > 0; });
+  }
+  function closeIt(id) {
+    if (id === "settings-modal" && typeof closeSettings === "function") closeSettings();
+    else if (typeof closeModal === "function") closeModal(id);
+  }
+  function setup(id) {
+    var m = document.getElementById(id);
+    var box = m && m.querySelector(MODALS()[id].box);
+    if (!m || !box) return;
+    box.setAttribute("role", "dialog");
+    box.setAttribute("aria-modal", "true");
+    box.setAttribute("aria-label", MODALS()[id].label);
+    var cb = box.querySelector(".close-btn");
+    if (cb) cb.setAttribute("aria-label", MODALS()[id].close);
+    box.querySelectorAll(".st-row").forEach(function (row, i) {
+      var lab = row.querySelector(".st-label");
+      var ctl = row.querySelector(".st-switch, .st-select");
+      if (!lab || !ctl) return;
+      if (!lab.id) lab.id = id + "-l" + i;
+      ctl.setAttribute("aria-labelledby", lab.id);
+    });
+    new MutationObserver(function () {
+      var on = m.classList.contains("active");
+      if (on && !openers[id]) {
+        openers[id] = document.activeElement;
+        setTimeout(function () { var f = focusables(box); if (f.length) f[0].focus(); }, 60);
+      } else if (!on && openers[id]) {
+        var o = openers[id];
+        openers[id] = null;
+        if (o.focus && document.contains(o)) { try { o.focus(); } catch (e) {} }
+      }
+    }).observe(m, { attributes: true, attributeFilter: ["class"] });
+  }
+  Object.keys(MODALS()).forEach(setup);
+  function top() {
+    var a = document.querySelectorAll(".modal-overlay.active");
+    return a.length ? a[a.length - 1] : null;
+  }
+  document.addEventListener("keydown", function (e) {
+    var m = top();
+    if (!m) return;
+    if (m.id === "confirm-modal") {
+      if (e.key === "Escape" && typeof confirmNo === "function") { e.preventDefault(); confirmNo(); }
       return;
     }
-    [keys, stat].forEach(function (b) {
-      b.classList.remove("bl-tool-fab");
-      b.style.top = "";
-      b.style.left = "";
-    });
-    var gear = ctrl.querySelector('.icon-btn[onclick="openSettings()"]');
-    if (gear) {
-      if (keys.nextSibling !== gear) ctrl.insertBefore(keys, gear);
-      if (gear.nextSibling !== stat) ctrl.insertBefore(stat, gear.nextSibling);
-    }
-  }
-  setInterval(place, 500);
-  place();
+    if (!has(m.id)) return;
+    var box = m.querySelector(MODALS()[m.id].box);
+    if (!box) return;
+    if (e.key === "Escape") { e.preventDefault(); closeIt(m.id); return; }
+    if (e.key !== "Tab") return;
+    var f = focusables(box);
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1], a = document.activeElement;
+    if (!box.contains(a)) { e.preventDefault(); first.focus(); }
+    else if (e.shiftKey && a === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && a === last) { e.preventDefault(); first.focus(); }
+  });
 })();

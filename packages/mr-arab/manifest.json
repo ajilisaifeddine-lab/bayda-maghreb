@@ -1,0 +1,10 @@
+{
+  "id": "mr-arab",
+  "code": "mr-arab",
+  "name": "حسانية (حرف عربي)",
+  "version": "1.0.0",
+  "script": "Arabic",
+  "country": "موريتانيا",
+  "iso639_3": "mey",
+  "reviewStatus": "verified"
+}
